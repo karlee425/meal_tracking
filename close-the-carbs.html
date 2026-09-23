@@ -1,0 +1,1677 @@
+<title>Close the Carbs</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#EEF0EE; --surface:#FFFFFF; --surface-2:#F6F7F5; --surface-3:#E8EBE8;
+  --ink:#15191A; --ink-2:#5C6663; --ink-3:#8A9490; --line:#DBE0DC; --line-2:#C6CDC8;
+  --carb:#8C6104; --carb-fill:#E5A82B; --carb-track:#EADFC6; --carb-soft:#FBF3E0;
+  --pro:#3D6B60; --fat:#665C7E;
+  --ok:#2E7350; --warn:#9E4B0C; --warn-soft:#FBEADC;
+  --shadow:0 1px 2px rgba(20,30,28,.06), 0 6px 18px rgba(20,30,28,.05);
+  --r:14px;
+  --f-disp:"IBM Plex Sans Condensed", "Helvetica Neue", Arial, sans-serif;
+  --f-body:"IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --f-data:"IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#101314; --surface:#191D1E; --surface-2:#202526; --surface-3:#262C2D;
+    --ink:#E9EDEA; --ink-2:#98A29E; --ink-3:#6B7571; --line:#2A3032; --line-2:#3A4244;
+    --carb:#F0B429; --carb-fill:#E5A82B; --carb-track:#3A3218; --carb-soft:#241D0C;
+    --pro:#7DBFAE; --fat:#AEA1CB;
+    --ok:#5FB582; --warn:#E08A45; --warn-soft:#2B1E12;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 6px 18px rgba(0,0,0,.28);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#101314; --surface:#191D1E; --surface-2:#202526; --surface-3:#262C2D;
+  --ink:#E9EDEA; --ink-2:#98A29E; --ink-3:#6B7571; --line:#2A3032; --line-2:#3A4244;
+  --carb:#F0B429; --carb-fill:#E5A82B; --carb-track:#3A3218; --carb-soft:#241D0C;
+  --pro:#7DBFAE; --fat:#AEA1CB;
+  --ok:#5FB582; --warn:#E08A45; --warn-soft:#2B1E12;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 6px 18px rgba(0,0,0,.28);
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.45;-webkit-text-size-adjust:100%}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer;background:none;border:none;padding:0}
+:focus-visible{outline:2px solid var(--carb-fill);outline-offset:2px;border-radius:6px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+.wrap{max-width:560px;margin:0 auto;padding:14px 14px 150px}
+.mono{font-family:var(--f-data);font-variant-numeric:tabular-nums}
+.eyebrow{font-family:var(--f-disp);font-weight:600;font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3)}
+
+header{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:12px}
+.datewrap{display:flex;flex-direction:column;gap:1px;min-width:0}
+.dateline{font-family:var(--f-disp);font-weight:700;font-size:20px;letter-spacing:-.01em}
+.tabs{display:flex;gap:2px;background:var(--surface-3);border-radius:10px;padding:3px;flex:none}
+.tabs button{font-family:var(--f-disp);font-weight:600;font-size:13px;padding:6px 10px;border-radius:8px;color:var(--ink-2)}
+.tabs button[aria-selected="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.12)}
+
+.syncchip{display:block;width:100%;text-align:left;font-family:var(--f-data);font-size:11.5px;padding:7px 11px;border-radius:8px;margin-bottom:12px;border:1px solid var(--line);color:var(--ink-3);background:var(--surface)}
+.syncchip::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;margin-right:8px;vertical-align:1px;background:var(--line-2)}
+.syncchip[data-state="ok"]::before{background:var(--ok)}
+.syncchip[data-state="busy"]::before{background:var(--carb-fill)}
+.syncchip[data-state="bad"]{color:var(--warn);border-color:var(--warn);background:var(--warn-soft)}
+.syncchip[data-state="bad"]::before{background:var(--warn)}
+.typerow{display:flex;gap:6px;margin-bottom:14px;align-items:center;flex-wrap:wrap}
+.chip{font-family:var(--f-disp);font-weight:600;font-size:12.5px;letter-spacing:.02em;padding:6px 11px;border-radius:999px;border:1px solid var(--line-2);color:var(--ink-2);background:var(--surface)}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.chip.small{font-size:11.5px;padding:4px 9px}
+.chip.go{background:var(--carb-fill);border-color:var(--carb-fill);color:#231703}
+.chip:disabled{opacity:.4}
+
+.alert{display:flex;gap:10px;background:var(--warn-soft);border-left:3px solid var(--warn);border-radius:8px;padding:10px 12px;margin-bottom:12px;font-size:13.5px;line-height:1.4}
+.alert b{color:var(--warn)}
+
+.carbcard{background:var(--surface);border-radius:var(--r);padding:18px 18px 16px;box-shadow:var(--shadow);margin-bottom:10px;position:relative;overflow:hidden}
+.carbcard::before{content:"";position:absolute;inset:0 auto 0 0;width:4px;background:var(--carb-fill)}
+.carbtop{display:flex;align-items:baseline;justify-content:space-between;gap:8px}
+.carbnum{font-family:var(--f-disp);font-weight:700;font-size:66px;line-height:.9;letter-spacing:-.035em;font-variant-numeric:tabular-nums;color:var(--carb)}
+.carbof{font-family:var(--f-disp);font-weight:600;font-size:18px;color:var(--ink-3);font-variant-numeric:tabular-nums;white-space:nowrap}
+.carblabel{margin-top:6px;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.gapline{font-family:var(--f-disp);font-weight:600;font-size:15px;color:var(--warn)}
+.gapline.done{color:var(--ok)}
+.rail{height:12px;border-radius:6px;background:var(--carb-track);margin-top:13px;overflow:hidden}
+.rail > i{display:block;height:100%;background:var(--carb-fill);border-radius:6px;transition:width .35s ease}
+.rail.over > i{background:var(--ok)}
+
+.pfrow{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.pfcard{background:var(--surface);border-radius:12px;padding:11px 13px;box-shadow:var(--shadow)}
+.pfcard .eyebrow{font-size:10px}
+.pfval{font-family:var(--f-disp);font-weight:700;font-size:26px;letter-spacing:-.02em;font-variant-numeric:tabular-nums;line-height:1.1}
+.pfval span{font-size:14px;font-weight:600;color:var(--ink-3)}
+.pf-p .pfval{color:var(--pro)} .pf-f .pfval{color:var(--fat)}
+.minirail{height:5px;border-radius:3px;background:var(--surface-3);margin-top:7px;overflow:hidden}
+.minirail > i{display:block;height:100%;border-radius:3px}
+.pf-p .minirail > i{background:var(--pro)} .pf-f .minirail > i{background:var(--fat)}
+
+.sectitle{display:flex;align-items:baseline;justify-content:space-between;margin:0 2px 8px;gap:10px}
+.slots{display:flex;flex-direction:column;gap:8px}
+.slot{background:var(--surface);border-radius:12px;box-shadow:var(--shadow);overflow:hidden}
+.slothead{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;width:100%;text-align:left;padding:12px 14px}
+.slotname{font-family:var(--f-disp);font-weight:600;font-size:15.5px;display:flex;align-items:center;gap:7px}
+.dot{width:7px;height:7px;border-radius:50%;flex:none}
+.dot.ok{background:var(--ok)} .dot.short{background:var(--carb-fill)} .dot.empty{background:var(--line-2)}
+.slotsub{font-size:12px;color:var(--ink-3);margin-top:2px;font-family:var(--f-data)}
+.slotcarb{font-family:var(--f-disp);font-weight:700;font-size:23px;font-variant-numeric:tabular-nums;text-align:right;letter-spacing:-.02em;color:var(--carb);white-space:nowrap}
+.slotcarb small{font-size:13px;color:var(--ink-3);font-weight:600}
+.slotbar{height:4px;background:var(--carb-track)}
+.slotbar > i{display:block;height:100%;background:var(--carb-fill)}
+.slotbar.full > i{background:var(--ok)}
+.slotbody{border-top:1px solid var(--line);padding:12px 14px 14px;display:flex;flex-direction:column;gap:11px;background:var(--surface-2)}
+.entries{display:flex;flex-direction:column;gap:1px}
+.entry{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:center;padding:6px 0;border-bottom:1px dashed var(--line)}
+.entry:last-child{border-bottom:none}
+.ename{font-size:13.5px}
+.ename em{font-style:normal;color:var(--ink-3);font-size:11.5px}
+.emac{font-family:var(--f-data);font-size:11.5px;color:var(--ink-2);white-space:nowrap;font-variant-numeric:tabular-nums}
+.del{color:var(--ink-3);font-size:17px;line-height:1;padding:2px 4px}
+.locked{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;font-family:var(--f-disp);color:var(--ink-3);border:1px solid var(--line-2);border-radius:5px;padding:1px 5px}
+
+.fix{background:var(--carb-soft);border-radius:10px;padding:11px 12px;font-size:13.5px;line-height:1.45}
+.fix .verdict{font-family:var(--f-disp);font-weight:700;font-size:14px;margin-bottom:2px;color:var(--carb)}
+.fix .verdict.ok{color:var(--ok)}
+.ctx{font-size:11.5px;color:var(--ink-3);margin-bottom:7px}
+.fixopts{display:flex;flex-direction:column;gap:5px;margin:7px 0 0}
+.fixopt{display:flex;justify-content:space-between;gap:10px;align-items:baseline;background:var(--surface);border-radius:8px;padding:7px 10px;font-size:13px}
+.fixopt b{font-weight:600}
+.why{color:var(--ink-2);font-size:12.5px;margin-top:8px;line-height:1.45}
+.note{font-size:12.5px;color:var(--ink-2);background:var(--surface-3);border-radius:8px;padding:9px 11px;line-height:1.45}
+.est{font-size:10px;letter-spacing:.08em;text-transform:uppercase;font-family:var(--f-disp);color:var(--warn)}
+
+.snackopts{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+.snackopt{font-size:12px;padding:5px 9px;border-radius:999px;background:var(--surface);border:1px solid var(--line);color:var(--ink-2)}
+.snackopt.kit{border-color:var(--carb-fill);color:var(--carb);font-weight:600}
+
+/* ---- builder ---- */
+.bcard{background:var(--surface);border-radius:12px;box-shadow:var(--shadow);padding:14px;margin-bottom:10px}
+.bcard h3{font-family:var(--f-disp);font-weight:700;font-size:16px;margin:0 0 3px}
+.bcard p.lede{font-size:13px;color:var(--ink-2);margin:0 0 11px;line-height:1.45}
+.field{display:flex;gap:8px;margin-bottom:8px}
+.field input, .field textarea{flex:1;background:var(--surface-2);border:1px solid var(--line-2);border-radius:10px;padding:10px 12px;font-size:16px;min-width:0}
+.field textarea{resize:vertical;min-height:52px;line-height:1.4}
+.btwrap{overflow-x:auto;margin-top:4px}
+.btable{width:100%;border-collapse:collapse;font-size:13px}
+.btable th{font-family:var(--f-disp);font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);text-align:right;padding:0 0 6px;font-weight:600}
+.btable th:first-child{text-align:left}
+.btable td{padding:8px 0;border-top:1px solid var(--line);text-align:right;font-family:var(--f-data);font-variant-numeric:tabular-nums;white-space:nowrap;vertical-align:top}
+.btable td:first-child{text-align:left;font-family:var(--f-body);white-space:normal;line-height:1.35;padding-right:10px}
+.btable td.w{color:var(--ink);padding-right:10px}
+.btable td.w b{font-weight:600}
+.btable td.w span{display:block;color:var(--ink-3);font-size:11.5px}
+.btable tr.tot td{border-top:2px solid var(--line-2);font-weight:600}
+.btable tr.tot td:first-child{font-family:var(--f-disp)}
+.btable .rowbtns{margin-top:3px;display:flex;gap:5px}
+.lockb{font-size:11px;color:var(--ink-3);padding:2px 5px;border:1px solid var(--line);border-radius:6px;margin-left:6px}
+.lockb[aria-pressed="true"]{border-color:var(--carb-fill);color:var(--carb)}
+.bres{background:var(--carb-soft);border-radius:10px;padding:11px 12px;margin-top:11px;font-size:13.5px;line-height:1.45}
+.ingchips{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:9px}
+.ingchip{display:flex;align-items:center;gap:6px;background:var(--surface-2);border:1px solid var(--line-2);border-radius:999px;padding:4px 6px 4px 11px;font-size:12.5px}
+.ingchip button{color:var(--ink-3);font-size:15px;line-height:1;padding:0 3px}
+.spin{display:inline-block;width:11px;height:11px;border:2px solid var(--line-2);border-top-color:var(--carb-fill);border-radius:50%;animation:sp .8s linear infinite;vertical-align:-1px;margin-right:6px}
+@keyframes sp{to{transform:rotate(360deg)}}
+
+/* ---- logger ---- */
+.logbar{position:fixed;left:0;right:0;bottom:0;background:var(--surface);border-top:1px solid var(--line);padding:10px 14px calc(12px + env(safe-area-inset-bottom));box-shadow:0 -6px 22px rgba(0,0,0,.08);z-index:30}
+.loginner{max-width:560px;margin:0 auto}
+.slotpick{display:flex;gap:4px;overflow-x:auto;padding-bottom:8px;scrollbar-width:none}
+.slotpick::-webkit-scrollbar{display:none}
+.logrow{display:flex;gap:8px}
+.logrow input{flex:1;background:var(--surface-2);border:1px solid var(--line-2);border-radius:10px;padding:11px 12px;font-size:16px;min-width:0}
+.addbtn{background:var(--ink);color:var(--bg);border-radius:10px;padding:0 17px;font-family:var(--f-disp);font-weight:600;font-size:15px}
+.addbtn:disabled{opacity:.35}
+.ac{list-style:none;margin:0 0 8px;padding:0;max-height:200px;overflow-y:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+.ac li button{display:flex;justify-content:space-between;gap:10px;width:100%;text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);font-size:14px}
+.ac li:last-child button{border-bottom:none}
+.ac .acmac{font-family:var(--f-data);font-size:11px;color:var(--ink-3);white-space:nowrap}
+.basisrow{display:flex;align-items:center;gap:6px;margin-bottom:8px;font-size:12.5px;color:var(--ink-2);flex-wrap:wrap}
+.hint{font-size:12px;color:var(--ink-3);margin-top:6px;line-height:1.4}
+
+/* ---- trend ---- */
+.tgrid{display:grid;grid-template-columns:1fr;gap:10px;margin-bottom:12px}
+.tile{background:var(--surface);border-radius:12px;padding:13px 14px;box-shadow:var(--shadow)}
+.tval{font-family:var(--f-disp);font-weight:700;font-size:34px;letter-spacing:-.025em;line-height:1.05;font-variant-numeric:tabular-nums;margin-top:2px}
+.tval small{font-size:15px;color:var(--ink-3);font-weight:600}
+.tsub{font-size:12px;color:var(--ink-2);margin-top:5px;line-height:1.4}
+.bars{display:flex;align-items:stretch;gap:3px;height:96px;margin-top:12px;position:relative}
+.bars .target{position:absolute;left:0;right:0;border-top:1px dashed var(--line-2);top:22px;z-index:1}
+.bars .b{flex:1;background:var(--surface-3);border-radius:2px;position:relative}
+.bars .b > i{display:block;position:absolute;left:0;right:0;bottom:0;background:var(--carb-fill);border-radius:2px}
+.bars .b.hit > i{background:var(--ok)}
+.bars .b.none{opacity:.45}
+.barlabels{display:flex;justify-content:space-between;font-size:10.5px;color:var(--ink-3);margin-top:5px;font-family:var(--f-data)}
+.ticks{display:grid;grid-template-columns:repeat(21,1fr);gap:3px;margin-top:10px}
+.tick{aspect-ratio:1;border-radius:3px;background:var(--surface-3)}
+.tick.yes{background:var(--ok)} .tick.no{background:var(--carb-fill);opacity:.55}
+.leaktable{width:100%;border-collapse:collapse;margin-top:8px;font-size:13px}
+.leaktable td{padding:5px 0;border-bottom:1px solid var(--line)}
+.leaktable td:last-child{text-align:right;font-family:var(--f-data);font-variant-numeric:tabular-nums;color:var(--ink-2)}
+.leaktable tr:last-child td{border-bottom:none}
+
+.sheet{margin-top:10px;background:var(--surface);border-radius:12px;box-shadow:var(--shadow);overflow:hidden}
+.sheet > summary{padding:12px 14px;font-family:var(--f-disp);font-weight:600;font-size:14px;cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.sheet > summary::-webkit-details-marker{display:none}
+.sheet > summary::after{content:"+";color:var(--ink-3);font-size:18px}
+.sheet[open] > summary::after{content:"–"}
+.sheetbody{padding:0 14px 14px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:12px;padding-top:12px}
+.yrow{display:grid;grid-template-columns:1fr 78px auto;gap:9px;align-items:center;font-size:13px}
+.yrow input{width:100%;background:var(--surface-2);border:1px solid var(--line-2);border-radius:8px;padding:6px 8px;font-family:var(--f-data);font-size:13.5px;text-align:right}
+.yrow .measured{font-size:10.5px;color:var(--ink-3);white-space:nowrap}
+.cfrow{display:grid;grid-template-columns:1fr 46px 46px 46px auto;gap:6px;align-items:center}
+.cfrow input{width:100%;background:var(--surface-2);border:1px solid var(--line-2);border-radius:8px;padding:7px 6px;font-family:var(--f-data);font-size:13px;min-width:0}
+.sync{font-size:11.5px;color:var(--ink-3);text-align:center;margin-top:14px;font-family:var(--f-data)}
+.mealist{display:flex;flex-direction:column;gap:6px;max-height:340px;overflow-y:auto;margin:2px 0 4px;padding-right:2px}
+.mealrow{display:flex;flex-direction:column;gap:3px;width:100%;text-align:left;background:var(--surface-2);border:1px solid var(--line);border-radius:10px;padding:9px 11px}
+.mealrow:hover{border-color:var(--carb-fill)}
+.mealrow .mtop{display:flex;gap:8px;align-items:baseline}
+.mealrow .mid{font-family:var(--f-data);font-size:10.5px;color:var(--ink-3);flex:none}
+.mealrow .mname{font-family:var(--f-disp);font-weight:600;font-size:14.5px;color:var(--ink);line-height:1.25}
+.mealrow .mbase{font-size:12px;color:var(--ink-2);line-height:1.35}
+.mealrow .mmac{font-family:var(--f-data);font-size:11.5px;color:var(--ink-3);font-variant-numeric:tabular-nums}
+.mealrow .mmac b{color:var(--carb)}
+.mealhead{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;background:var(--carb-soft);border-radius:9px;padding:9px 11px;margin:8px 0 2px;font-size:13.5px}
+.mealhead b{font-family:var(--f-disp);font-size:14px;color:var(--ink);display:block;line-height:1.25}
+.mealhead span{display:block;font-size:12px;color:var(--ink-2);margin-top:2px}
+.ginwrap{display:inline-flex;align-items:baseline;gap:3px}
+.ginp{width:54px;background:var(--surface-2);border:1px solid var(--line-2);border-radius:7px;padding:4px 5px;font-family:var(--f-data);font-size:13.5px;text-align:right;font-variant-numeric:tabular-nums}
+.ginwrap i{font-style:normal;font-size:11.5px;color:var(--ink-3)}
+.chg{font-family:var(--f-data);font-size:10.5px;color:var(--warn);white-space:nowrap}
+.mealtag{font-family:var(--f-disp);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--carb);padding:7px 0 3px}
+.pickbtn{width:100%;text-align:center;padding:9px}
+.hidden{display:none!important}
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="datewrap">
+      <div class="eyebrow" id="dowLabel">—</div>
+      <div class="dateline" id="dateLabel">—</div>
+    </div>
+    <div class="tabs" role="tablist">
+      <button role="tab" id="tabToday" aria-selected="true">Today</button>
+      <button role="tab" id="tabBuild" aria-selected="false">Meals</button>
+      <button role="tab" id="tabTrend" aria-selected="false">Trend</button>
+    </div>
+  </header>
+
+  <button class="syncchip" id="syncChip" data-state="local">Checking where this is saved…</button>
+
+  <section id="viewToday">
+    <div class="typerow" id="typeRow"></div>
+    <div id="alerts"></div>
+
+    <div class="carbcard">
+      <div class="eyebrow">Carbohydrate · the number</div>
+      <div class="carbtop">
+        <div class="carbnum" id="carbNum">0</div>
+        <div class="carbof">of <span id="carbTgt">293</span> g</div>
+      </div>
+      <div class="carblabel"><span class="gapline" id="carbGap">—</span></div>
+      <div class="rail" id="carbRail"><i style="width:0%"></i></div>
+    </div>
+
+    <div class="pfrow">
+      <div class="pfcard pf-p">
+        <div class="eyebrow">Protein</div>
+        <div class="pfval" id="proVal">0 <span>/ 150 g</span></div>
+        <div class="minirail"><i style="width:0%"></i></div>
+      </div>
+      <div class="pfcard pf-f">
+        <div class="eyebrow">Fat</div>
+        <div class="pfval" id="fatVal">0 <span>/ 70 g</span></div>
+        <div class="minirail"><i style="width:0%"></i></div>
+      </div>
+    </div>
+
+    <div class="sectitle"><div class="eyebrow">Slots</div><div class="eyebrow" id="dayFixHint"></div></div>
+    <div class="slots" id="slots"></div>
+
+    <details class="sheet">
+      <summary>Cooked yields</summary>
+      <div class="sheetbody">
+        <div class="note"><b>Every one of these is an assumption until you weigh it.</b> Cooked weight ÷ raw or dry weight. Overwrite one and it stops being flagged.</div>
+        <div id="yields"></div>
+        <div class="note"><b>Two worth knowing.</b> Published ranges put cooked rice at ×2.5–3.0 of dry weight, so your ×2.9 sits near the top and ×3.14 sits outside it — the disputed value is the less likely one. And ×0.78 for potato is a <em>roasting</em> yield; a boiled potato barely loses weight, closer to ×1.0. If you boil and log cooked, ×0.78 credits you about 28% more carbohydrate than you actually ate.</div>
+      </div>
+    </details>
+
+    <details class="sheet">
+      <summary>My added foods</summary>
+      <div class="sheetbody">
+        <div class="eyebrow">Add by hand · per 100 g</div>
+        <div class="cfrow">
+          <input id="cfName" placeholder="name" aria-label="food name">
+          <input id="cfP" inputmode="decimal" placeholder="P" aria-label="protein per 100 g">
+          <input id="cfF" inputmode="decimal" placeholder="F" aria-label="fat per 100 g">
+          <input id="cfC" inputmode="decimal" placeholder="C" aria-label="carbs per 100 g">
+          <button class="chip small" id="cfAdd">Add</button>
+        </div>
+        <div id="customList"></div>
+      </div>
+    </details>
+
+  </section>
+
+  <section id="viewBuild" class="hidden"></section>
+  <section id="viewTrend" class="hidden"></section>
+</div>
+
+<div class="logbar" id="logbar">
+  <div class="loginner">
+    <ul class="ac hidden" id="ac"></ul>
+    <div class="basisrow hidden" id="basisRow"></div>
+    <div class="slotpick" id="slotPick"></div>
+    <div class="logrow">
+      <input id="logInput" placeholder="sweet potato 270" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="log a food and gram weight">
+      <button class="addbtn" id="addBtn" disabled>Add</button>
+    </div>
+    <div class="hint" id="logHint">Type a food, then grams. Weights are grams, always.</div>
+  </div>
+</div>
+
+<script>
+(function(){
+"use strict";
+
+/* ================= reference data =================
+   Per 100 g on the stated basis. y = cooked weight / raw-or-dry weight.
+   cat drives plausible portion bounds; tags drive which fixes get offered. */
+const CAT = {
+  dairy:      {min:100, typ:170, max:350, step:25},
+  cereal:     {min:20,  typ:45,  max:90,  step:5},
+  grain:      {min:30,  typ:70,  max:160, step:5},
+  bread:      {min:30,  typ:60,  max:180, step:10},
+  tortilla:   {min:31,  typ:62,  max:186, step:31},
+  cracker:    {min:15,  typ:30,  max:80,  step:5},
+  starchveg:  {min:80,  typ:200, max:500, step:10},
+  fruit:      {min:40,  typ:120, max:350, step:10},
+  driedfruit: {min:15,  typ:30,  max:80,  step:5},
+  syrup:      {min:5,   typ:15,  max:45,  step:5},
+  meat:       {min:90,  typ:170, max:280, step:5},
+  egg:        {min:50,  typ:100, max:250, step:50},
+  legume:     {min:50,  typ:120, max:300, step:10},
+  nut:        {min:10,  typ:25,  max:60,  step:5},
+  nutbutter:  {min:7,   typ:20,  max:45,  step:1},
+  oil:        {min:3,   typ:10,  max:25,  step:1},
+  cheese:     {min:10,  typ:25,  max:70,  step:5},
+  sauce:      {min:15,  typ:40,  max:120, step:5},
+  veg:        {min:50,  typ:120, max:250, step:10}
+};
+// n, p, f, c, cat, tags, y (optional), basis label
+const FOODS = [
+ // dairy & sweet bases
+ {n:"Fage 0% Greek yogurt",p:10.3,f:0,c:3.6,cat:"dairy",t:["sweet"],swap:"Fage 5% Greek yogurt"},
+ {n:"Fage 2% Greek yogurt",p:9.8,f:2.7,c:3.7,cat:"dairy",t:["sweet"]},
+ {n:"Fage 5% Greek yogurt",p:9.0,f:5.0,c:3.8,cat:"dairy",t:["sweet"]},
+ {n:"Cottage cheese 2%",p:11.0,f:2.3,c:4.3,cat:"dairy",t:["sweet","savory"],swap:"Cottage cheese 4%"},
+ {n:"Cottage cheese 4%",p:11.5,f:4.3,c:3.4,cat:"dairy",t:["sweet","savory"]},
+ {n:"Skim milk",p:3.4,f:0.2,c:5.0,cat:"dairy",t:["sweet"],swap:"Whole milk"},
+ {n:"Whole milk",p:3.2,f:3.3,c:4.8,cat:"dairy",t:["sweet"]},
+ {n:"Chocolate milk",p:3.2,f:3.0,c:10.4,cat:"dairy",t:["sweet"],carb:1},
+ {n:"Kefir, plain",p:3.3,f:1.0,c:4.7,cat:"dairy",t:["sweet"]},
+ {n:"Ricotta, part-skim",p:11.4,f:8.0,c:5.1,cat:"dairy",t:["sweet","med"]},
+ // cereals & sweet carbs
+ {n:"Rolled oats, dry",p:13.2,f:6.5,c:67.7,cat:"grain",t:["sweet"],y:2.4,carb:1},
+ {n:"Steel-cut oats, dry",p:13.5,f:6.5,c:68.0,cat:"grain",t:["sweet"],y:3.0,carb:1},
+ {n:"Granola",p:9.2,f:16.7,c:65.1,cat:"cereal",t:["sweet"],carb:1,brandy:1},
+ {n:"Three Wishes cereal",p:23,f:13,c:54,cat:"cereal",t:["sweet"],carb:1},
+ {n:"One Degree brown rice crisps",p:7.0,f:2.5,c:89,cat:"cereal",t:["sweet"],carb:1},
+ {n:"Rice cakes",p:7.9,f:2.8,c:81.5,cat:"cracker",t:["sweet","savory"],carb:1},
+ {n:"Honey",p:0.3,f:0,c:82.4,cat:"syrup",t:["sweet"],carb:1},
+ {n:"Hot honey",p:0.3,f:0,c:78.0,cat:"syrup",t:["sweet","amer"],carb:1},
+ {n:"Maple syrup",p:0,f:0,c:67.0,cat:"syrup",t:["sweet"],carb:1},
+ {n:"Chia seeds",p:16.5,f:30.7,c:42.1,cat:"nut",t:["sweet"],fat:1},
+ // fruit
+ {n:"Banana",p:1.1,f:0.3,c:22.8,cat:"fruit",t:["sweet"],carb:1,step:60},
+ {n:"Blueberries, frozen",p:0.7,f:0.3,c:14.5,cat:"fruit",t:["sweet"],carb:1},
+ {n:"Strawberries",p:0.7,f:0.3,c:7.7,cat:"fruit",t:["sweet"]},
+ {n:"Raspberries",p:1.2,f:0.7,c:11.9,cat:"fruit",t:["sweet"]},
+ {n:"Grapes",p:0.7,f:0.2,c:18.1,cat:"fruit",t:["sweet"],carb:1},
+ {n:"Apple",p:0.3,f:0.2,c:13.8,cat:"fruit",t:["sweet"],carb:1},
+ {n:"Mango",p:0.8,f:0.4,c:15.0,cat:"fruit",t:["sweet"],carb:1},
+ {n:"Pineapple",p:0.5,f:0.1,c:13.1,cat:"fruit",t:["sweet"],carb:1},
+ {n:"Orange",p:0.9,f:0.1,c:11.8,cat:"fruit",t:["sweet"]},
+ {n:"Applesauce, unsweetened",p:0.2,f:0.1,c:11.3,cat:"fruit",t:["sweet"],carb:1},
+ {n:"Dates, Medjool",p:1.8,f:0.2,c:75.0,cat:"driedfruit",t:["sweet"],carb:1},
+ {n:"Raisins",p:3.1,f:0.5,c:79.2,cat:"driedfruit",t:["sweet"],carb:1},
+ // savory starches
+ {n:"White rice, dry",p:6.5,f:0.6,c:79.0,cat:"grain",t:["savory"],y:2.9,yk:"rice",carb:1},
+ {n:"Jasmine rice, dry",p:6.7,f:0.7,c:79.3,cat:"grain",t:["savory","asian"],y:2.9,yk:"rice",carb:1},
+ {n:"Brown rice, dry",p:7.5,f:2.7,c:76.0,cat:"grain",t:["savory"],y:2.7,carb:1},
+ {n:"Quinoa, dry",p:14.1,f:6.1,c:64.2,cat:"grain",t:["savory","med"],y:2.9,carb:1},
+ {n:"Couscous, dry",p:12.8,f:0.6,c:77.4,cat:"grain",t:["savory","med"],y:2.8,carb:1},
+ {n:"Farro, dry",p:13.5,f:2.0,c:72.0,cat:"grain",t:["savory","med"],y:2.7,carb:1},
+ {n:"Orzo, dry",p:12.5,f:1.5,c:74.0,cat:"grain",t:["savory","med"],y:2.3,carb:1},
+ {n:"Pasta, dry",p:13.0,f:1.5,c:74.7,cat:"grain",t:["savory"],y:2.3,carb:1},
+ {n:"Rice noodles, dry",p:5.9,f:0.6,c:80.2,cat:"grain",t:["savory","asian"],y:2.6,carb:1},
+ {n:"Sourdough",p:9.0,f:1.8,c:50.0,cat:"bread",t:["sweet","savory"],carb:1},
+ {n:"Whole wheat bread",p:12.5,f:3.5,c:43.0,cat:"bread",t:["sweet","savory"],carb:1},
+ {n:"Bagel, plain",p:10.5,f:1.7,c:53.0,cat:"bread",t:["sweet","savory"],carb:1},
+ {n:"English muffin",p:9.0,f:1.8,c:46.0,cat:"bread",t:["sweet","savory"],carb:1},
+ {n:"Tortilla, large flour",p:8.0,f:8.0,c:50.0,cat:"tortilla",t:["savory","mex"],carb:1},
+ {n:"Tortilla, corn",p:5.7,f:1.8,c:44.6,cat:"tortilla",t:["savory","mex"],carb:1,step:25},
+ {n:"Pita, white",p:9.1,f:1.2,c:55.7,cat:"bread",t:["savory","med"],carb:1},
+ {n:"Naan",p:8.7,f:5.7,c:48.0,cat:"bread",t:["savory","med"],carb:1},
+ {n:"Tortilla chips",p:6.7,f:24.0,c:64.0,cat:"cracker",t:["savory","mex"],carb:1},
+ {n:"Pretzels",p:10.0,f:3.0,c:78.0,cat:"cracker",t:["savory","sweet"],carb:1},
+ {n:"Popcorn, popped",p:12.0,f:4.5,c:74.0,cat:"cracker",t:["savory","sweet"],carb:1},
+ {n:"Potato, raw",p:2.0,f:0.1,c:17.5,cat:"starchveg",t:["savory"],y:0.78,yk:"potato",carb:1},
+ {n:"Sweet potato, raw",p:1.6,f:0.1,c:20.1,cat:"starchveg",t:["savory"],y:0.78,carb:1},
+ {n:"Corn",p:3.3,f:1.2,c:19.0,cat:"veg",t:["savory","mex"],carb:1},
+ {n:"Peas, frozen",p:5.2,f:0.4,c:14.5,cat:"veg",t:["savory"]},
+ // proteins
+ {n:"Chicken breast, raw",p:22.5,f:2.6,c:0,cat:"meat",t:["savory"],y:0.72,yk:"chicken"},
+ {n:"Chicken thigh, raw",p:18.6,f:8.0,c:0,cat:"meat",t:["savory"],y:0.75},
+ {n:"Rotisserie chicken meat",p:25.0,f:8.0,c:0,cat:"meat",t:["savory"]},
+ {n:"Ground turkey 93/7",p:19.7,f:8.0,c:0,cat:"meat",t:["savory"],y:0.69},
+ {n:"Ground beef 93/7",p:21.4,f:7.0,c:0,cat:"meat",t:["savory"],y:0.77},
+ {n:"Sirloin steak, raw",p:21.0,f:6.0,c:0,cat:"meat",t:["savory"],y:0.75},
+ {n:"Pork tenderloin, raw",p:20.9,f:3.4,c:0,cat:"meat",t:["savory"],y:0.80},
+ {n:"Salmon, raw",p:20.4,f:13.4,c:0,cat:"meat",t:["savory"],y:0.79,yk:"salmon"},
+ {n:"Shrimp, raw",p:20.1,f:0.5,c:0,cat:"meat",t:["savory","asian"],y:0.72},
+ {n:"Tuna steak, raw",p:24.4,f:0.5,c:0,cat:"meat",t:["savory"]},
+ {n:"Tuna, canned in water",p:25.5,f:0.8,c:0,cat:"meat",t:["savory"]},
+ {n:"Deli turkey, low sodium",p:17.0,f:2.0,c:2.0,cat:"meat",t:["savory"]},
+ {n:"Beef jerky",p:33.0,f:7.0,c:11.0,cat:"cracker",t:["savory"]},
+ {n:"Bacon, raw",p:12.6,f:45.0,c:0.7,cat:"meat",t:["savory"],y:0.42,fat:1},
+ {n:"Turkey bacon",p:20.0,f:22.0,c:2.5,cat:"meat",t:["savory"],fat:1},
+ {n:"Egg, whole",p:12.6,f:9.5,c:0.7,cat:"egg",t:["sweet","savory"]},
+ {n:"Egg white",p:10.9,f:0.2,c:0.7,cat:"egg",t:["savory"]},
+ {n:"Tofu, extra firm",p:17.3,f:10.0,c:2.7,cat:"meat",t:["savory","asian"]},
+ {n:"Edamame, shelled",p:11.9,f:5.2,c:8.9,cat:"legume",t:["savory","asian"]},
+ {n:"Black beans, canned drained",p:6.0,f:0.3,c:16.6,cat:"legume",t:["savory","mex"],carb:1},
+ {n:"Pinto beans, canned drained",p:5.9,f:0.5,c:16.4,cat:"legume",t:["savory","mex"],carb:1},
+ {n:"Refried beans",p:5.0,f:2.0,c:13.0,cat:"legume",t:["savory","mex"],carb:1},
+ {n:"Chickpeas, canned drained",p:7.0,f:2.6,c:17.8,cat:"legume",t:["savory","med"],carb:1},
+ // fats & extras
+ {n:"Peanut butter",p:25.1,f:50.8,c:20.0,cat:"nutbutter",t:["sweet"],fat:1},
+ {n:"Almond butter",p:21.0,f:55.5,c:18.8,cat:"nutbutter",t:["sweet"],fat:1},
+ {n:"Almonds",p:21.2,f:49.9,c:21.6,cat:"nut",t:["sweet","savory"],fat:1},
+ {n:"Walnuts",p:15.2,f:65.2,c:13.7,cat:"nut",t:["sweet"],fat:1},
+ {n:"Cashews",p:18.2,f:43.9,c:30.2,cat:"nut",t:["sweet"],fat:1},
+ {n:"Avocado",p:2.0,f:14.7,c:8.5,cat:"veg",t:["savory","mex"],fat:1},
+ {n:"Olive oil",p:0,f:100,c:0,cat:"oil",t:["savory","med"],fat:1},
+ {n:"Butter",p:0.9,f:81.1,c:0.1,cat:"oil",t:["sweet","savory"],fat:1},
+ {n:"Feta",p:14.2,f:21.3,c:4.1,cat:"cheese",t:["savory","med"],fat:1},
+ {n:"Cheddar",p:23.0,f:33.1,c:3.1,cat:"cheese",t:["savory"],fat:1},
+ {n:"Mozzarella, part-skim",p:24.3,f:15.9,c:2.8,cat:"cheese",t:["savory","med"]},
+ {n:"Parmesan",p:35.8,f:25.8,c:3.2,cat:"cheese",t:["savory","med"],fat:1},
+ {n:"Cream cheese",p:6.2,f:34.2,c:5.5,cat:"cheese",t:["sweet","savory"],fat:1},
+ {n:"Sour cream",p:2.4,f:19.4,c:4.6,cat:"sauce",t:["savory","mex"],fat:1},
+ {n:"Guacamole",p:2.0,f:14.0,c:8.5,cat:"sauce",t:["savory","mex"],fat:1},
+ {n:"Salsa",p:1.5,f:0.2,c:7.0,cat:"sauce",t:["savory","mex"]},
+ {n:"Hummus",p:7.9,f:17.1,c:14.3,cat:"sauce",t:["savory","med"],fat:1},
+ {n:"Marinara sauce",p:1.6,f:2.0,c:8.5,cat:"sauce",t:["savory","med"]},
+ {n:"Soy sauce",p:8.1,f:0,c:4.9,cat:"sauce",t:["savory","asian"]},
+ // vegetables
+ {n:"Broccoli, raw",p:2.8,f:0.4,c:6.6,cat:"veg",t:["savory"],y:0.9},
+ {n:"Bell pepper",p:1.0,f:0.3,c:6.0,cat:"veg",t:["savory","mex"]},
+ {n:"Zucchini",p:1.2,f:0.3,c:3.1,cat:"veg",t:["savory","med"]},
+ {n:"Spinach",p:2.9,f:0.4,c:3.6,cat:"veg",t:["savory"]},
+ {n:"Onion",p:1.1,f:0.1,c:9.3,cat:"veg",t:["savory"]},
+ {n:"Mushrooms",p:3.1,f:0.3,c:3.3,cat:"veg",t:["savory"]},
+ {n:"Asparagus",p:2.2,f:0.1,c:3.9,cat:"veg",t:["savory"]},
+ {n:"Green beans",p:1.8,f:0.2,c:7.0,cat:"veg",t:["savory"]},
+ {n:"Tomato",p:0.9,f:0.2,c:3.9,cat:"veg",t:["savory","med"]},
+ {n:"Cucumber",p:0.7,f:0.1,c:3.6,cat:"veg",t:["savory","med"]},
+ {n:"Romaine",p:1.2,f:0.3,c:3.3,cat:"veg",t:["savory"]},
+ {n:"Cabbage slaw mix",p:1.3,f:0.1,c:5.8,cat:"veg",t:["savory","mex"]},
+ // ---- brought across from Karlee's Meal Bank, so every bank ingredient costs here ----
+ {n:"Panko/breadcrumbs",p:12,f:2,c:72,cat:"cracker",t:["savory"],carb:1},
+ {n:"Milk 2%",p:3.3,f:2,c:4.8,cat:"dairy",t:["sweet"]},
+ {n:"Whole-grain crackers",p:10.4,f:11.1,c:66,cat:"cracker",t:["savory","sweet"],carb:1},
+ {n:"Whole-wheat pita",p:9.8,f:1.7,c:55,cat:"bread",t:["savory","med"],carb:1},
+ {n:"Kalamata olives",p:1,f:15.3,c:6.3,cat:"sauce",t:["savory","med"],fat:1},
+ {n:"Mayonnaise",p:1,f:75,c:0.6,cat:"oil",t:["savory"],fat:1},
+ {n:"Dijon mustard",p:4.4,f:3.6,c:5.3,cat:"sauce",t:["savory"]},
+ {n:"Lemon juice",p:0.4,f:0.2,c:6.9,cat:"sauce",t:["savory","med"]},
+ {n:"Lime juice",p:0.4,f:0.2,c:8.4,cat:"sauce",t:["savory","mex"]},
+ {n:"Garlic",p:6.4,f:0.5,c:33.1,cat:"veg",t:["savory"]},
+ {n:"Ginger",p:1.8,f:0.8,c:17.8,cat:"veg",t:["savory","asian"]},
+ {n:"Basil",p:3.2,f:0.6,c:2.7,cat:"veg",t:["savory","med"]},
+ {n:"Scallions",p:1.8,f:0.2,c:7.3,cat:"veg",t:["savory","asian"]},
+ {n:"Celery",p:0.7,f:0.2,c:3,cat:"veg",t:["savory"]},
+ {n:"Carrot",p:0.9,f:0.2,c:9.6,cat:"veg",t:["savory"]},
+ {n:"Baby carrots",p:0.6,f:0.1,c:8.2,cat:"veg",t:["savory"]},
+ {n:"Everything bagel seasoning",p:15,f:25,c:25,cat:"nut",t:["savory"]},
+ {n:"White wine",p:0.1,f:0,c:2.6,cat:"sauce",t:["savory"]},
+ {n:"Chicken stock",p:1,f:0.4,c:0.9,cat:"sauce",t:["savory"]},
+ {n:"Crushed tomatoes",p:1.6,f:0.3,c:7.3,cat:"sauce",t:["savory","med"]},
+ {n:"Tomato paste",p:4.3,f:0.5,c:18.9,cat:"sauce",t:["savory","med"]},
+ {n:"Pesto",p:4,f:44,c:6,cat:"sauce",t:["savory","med"],fat:1},
+ {n:"Tzatziki",p:3,f:6,c:4,cat:"sauce",t:["savory","med"]},
+ {n:"BBQ sauce",p:0.8,f:0.4,c:40.8,cat:"sauce",t:["savory","amer"],carb:1},
+ {n:"Ketchup",p:1,f:0.1,c:25.8,cat:"sauce",t:["savory","amer"]},
+ {n:"Buffalo sauce",p:0.5,f:1.5,c:2,cat:"sauce",t:["savory","amer"]},
+ {n:"Oyster sauce",p:2,f:0.3,c:22,cat:"sauce",t:["savory","asian"]},
+ {n:"Sriracha",p:1.9,f:0.9,c:19.2,cat:"sauce",t:["savory","asian"]},
+ {n:"Balsamic vinegar",p:0.5,f:0,c:17,cat:"sauce",t:["savory","med"]},
+ {n:"Balsamic glaze",p:0.6,f:0,c:46,cat:"sauce",t:["savory","med"]},
+ {n:"Brown sugar",p:0,f:0,c:98.1,cat:"syrup",t:["sweet"],carb:1},
+ {n:"Cornstarch",p:0.3,f:0.1,c:91.3,cat:"syrup",t:["savory","asian"]},
+ {n:"All-purpose flour",p:10.3,f:1,c:76.3,cat:"grain",t:["sweet","savory"],carb:1},
+ {n:"Cocoa powder",p:19.6,f:13.7,c:57.9,cat:"nut",t:["sweet"]},
+ {n:"Sesame oil",p:0,f:100,c:0,cat:"oil",t:["savory","asian"],fat:1},
+ {n:"Sesame seeds",p:17.7,f:49.7,c:23.4,cat:"nut",t:["savory","asian"],fat:1},
+ {n:"Protein powder",p:71.4,f:6.6,c:9.7,cat:"nut",t:["sweet"],brandy:1},
+ {n:"Protein cereal",p:22.7,f:6.6,c:61.7,cat:"cereal",t:["sweet"],carb:1,brandy:1},
+ {n:"Oats overnight packet",p:26.3,f:6.3,c:54.3,cat:"cereal",t:["sweet"],carb:1,brandy:1},
+ {n:"Graham crackers",p:6,f:8.2,c:80.5,cat:"cracker",t:["sweet"],carb:1},
+ {n:"Turkey jerky",p:32.8,f:3,c:15.5,cat:"cracker",t:["savory"]},
+ {n:"Dried mango",p:2,f:1,c:78.6,cat:"driedfruit",t:["sweet"],carb:1},
+ {n:"Dried cranberries",p:0.1,f:1.4,c:82.8,cat:"driedfruit",t:["sweet"],carb:1},
+ {n:"Frozen mixed berries",p:0.8,f:0.4,c:12,cat:"fruit",t:["sweet"]},
+ {n:"Cotija",p:22,f:26,c:4,cat:"cheese",t:["savory","mex"],fat:1},
+ {n:"Provolone",p:25.6,f:26.6,c:2.1,cat:"cheese",t:["savory"],fat:1},
+ {n:"Gruyere",p:30,f:32.3,c:0.4,cat:"cheese",t:["savory"],fat:1},
+ {n:"Blue cheese",p:21.4,f:28.7,c:2.3,cat:"cheese",t:["savory"],fat:1},
+ {n:"American cheese",p:18,f:26,c:7,cat:"cheese",t:["savory","amer"],fat:1},
+ {n:"Light cream cheese",p:8,f:15,c:8,cat:"cheese",t:["savory","sweet"],fat:1},
+ {n:"Fresh mozzarella",p:18,f:17,c:2.5,cat:"cheese",t:["savory","med"],fat:1},
+ {n:"Burger bun",p:9,f:4,c:47,cat:"bread",t:["savory","amer"],carb:1},
+ {n:"Hoagie roll",p:9.5,f:3.5,c:51,cat:"bread",t:["savory","amer"],carb:1},
+ {n:"Frozen hash browns",p:2.5,f:4.5,c:18,cat:"starchveg",t:["savory","amer"],carb:1},
+ {n:"Butternut squash",p:1,f:0.1,c:11.7,cat:"starchveg",t:["savory"],carb:1},
+ {n:"Broccolini",p:2.8,f:0.4,c:6.6,cat:"veg",t:["savory"],y:0.9},
+ {n:"Sugar snap peas",p:2.8,f:0.1,c:7.6,cat:"veg",t:["savory","asian"]},
+ {n:"Wild rice, dry",p:14.7,f:1.1,c:74.9,cat:"grain",t:["savory"],y:3,carb:1},
+ {n:"Ground beef 90/10",p:20,f:10,c:0,cat:"meat",t:["savory"],y:0.75},
+ {n:"Roasted red pepper",p:1,f:0.2,c:5,cat:"veg",t:["savory","med"]},
+ {n:"Chipotle in adobo",p:2,f:1.5,c:15,cat:"sauce",t:["savory","mex"]},
+ // ---- added 12 Sep 2026 for the Instagram-derived options L22, D27, D28 ----
+ {n:"Potato gnocchi",p:6.0,f:1.0,c:33.0,cat:"grain",t:["savory","med"],carb:1},
+ {n:"Croutons",p:9.0,f:15.0,c:65.0,cat:"cracker",t:["savory"],carb:1},
+ {n:"Kale",p:4.3,f:0.9,c:8.8,cat:"veg",t:["savory"]},
+ {n:"Peanuts",p:25.8,f:49.2,c:16.1,cat:"nut",t:["savory","sweet","asian"],fat:1},
+ {n:"Rice vinegar",p:0,f:0,c:0.5,cat:"sauce",t:["savory","asian"]},
+ {n:"Sweet chilli sauce",p:1.0,f:0.3,c:72.0,cat:"sauce",t:["savory","asian"],carb:1,swap:"Sweet chilli sauce"},
+  {n:"Enchilada sauce",p:1.0,f:2.0,c:8.0,cat:"sauce",t:["savory","mexican"],swap:"Salsa"},
+  {n:"Cilantro",p:2.1,f:0.5,c:3.7,cat:"vegetable",t:["savory"],swap:"Parsley"},
+  /* ---- added 19 Sep 2026: branded snack items, read off the published panels ---- */
+  {n:"Parmesan snack cheese",p:33.3,f:28.6,c:4.8,cat:"cheese",t:["savory"],fat:1,brandy:1,swap:"Parmesan"},
+  {n:"Turkey snack stick",p:36.8,f:10.7,c:0,cat:"meat",t:["savory"],brandy:1,swap:"Turkey jerky"},
+  {n:"Protein bar, high fibre",p:26.7,f:26.7,c:28.9,cat:"cracker",t:["sweet"],fat:1,brandy:1}
+];
+
+/* ================= Karlee's Meal Bank =================
+   Synced 9 Sep 2026 from the Meal Bank page: 71 options, every ingredient
+   with its bank weight. Each row is [bank wording, grams, food it costs from].
+   Bank p/f/c are what the page states; this app re-adds them from the
+   ingredients and says so when the two disagree. */
+const BANK_SEED = [{"id":"B1","s":"breakfast","n":"Big Oat Jar with chia","l":"jar","b":"70 g dry oats + 10 g chia + banana","w":"440 g jar + banana on the side","p":37.1,"f":18,"c":99.6,"nat":"lift","i":[["rolled oats",70,"Rolled oats, dry"],["cottage cheese 2%",175,"Cottage cheese 2%"],["milk 2%",100,"Milk 2%"],["chia seeds",10,"Chia seeds"],["blueberries",75,"Blueberries, frozen"],["banana",100,"Banana"],["peanut butter",8,"Peanut butter"]]},{"id":"B2","s":"breakfast","n":"Protein Pancakes","l":"griddle","b":"55 g dry oats + banana","w":"~250 g plus toppings","p":38.5,"f":17.2,"c":98.6,"nat":"lift","i":[["rolled oats",55,"Rolled oats, dry"],["cottage cheese 2%",120,"Cottage cheese 2%"],["egg",50,"Egg, whole"],["protein powder",10,"Protein powder"],["peanut butter",10,"Peanut butter"],["banana",110,"Banana"],["maple syrup",25,"Maple syrup"],["blueberries",75,"Blueberries, frozen"]]},{"id":"B3","s":"breakfast","n":"Greek Yogurt Bowl","l":"no cook","b":"50 g protein cereal + banana","w":"~560 g","p":40.8,"f":16.5,"c":97.4,"nat":"lift","i":[["greek yogurt nonfat",200,"Fage 0% Greek yogurt"],["protein cereal",50,"Protein cereal"],["blueberries",100,"Blueberries, frozen"],["banana",120,"Banana"],["peanut butter",25,"Peanut butter"],["honey",15,"Honey"]]},{"id":"B4","s":"breakfast","n":"Banana-PB Overnight Oats","l":"jar","b":"70 g dry oats + banana","w":"~470 g jar","p":35.9,"f":17.6,"c":97.8,"nat":"lift","i":[["rolled oats",70,"Rolled oats, dry"],["greek yogurt nonfat",170,"Fage 0% Greek yogurt"],["milk 2%",100,"Milk 2%"],["banana",120,"Banana"],["peanut butter",20,"Peanut butter"],["honey",10,"Honey"]]},{"id":"B5","s":"breakfast","n":"Freezer Breakfast Burrito","l":"savoury · handheld","b":"72 g tortilla + 170 g raw potato","w":"1 burrito + yogurt + banana","p":37.6,"f":16.9,"c":97.2,"nat":"lift","i":[["flour tortilla",72,"Tortilla, large flour"],["egg",75,"Egg, whole"],["potato",170,"Potato, raw"],["cheddar",10,"Cheddar"],["salsa",40,"Salsa"],["greek yogurt nonfat",150,"Fage 0% Greek yogurt"],["banana",100,"Banana"]]},{"id":"B6","s":"breakfast","n":"Blueberry Baked Oatmeal, 2 squares","l":"grab and go","b":"75 g dry oats per serving","w":"2 squares ~195 g + 60 g yogurt","p":37,"f":17.5,"c":96.7,"nat":"lift","i":[["rolled oats",75,"Rolled oats, dry"],["egg",25,"Egg, whole"],["milk 2%",75,"Milk 2%"],["greek yogurt nonfat",110,"Fage 0% Greek yogurt"],["banana",50,"Banana"],["blueberries",75,"Blueberries, frozen"],["peanut butter",15,"Peanut butter"],["honey",15,"Honey"],["protein powder",8,"Protein powder"]]},{"id":"B7","s":"breakfast","n":"Cottage Cheese French Toast","l":"sat down","b":"100 g sourdough","w":"2 thick slices + fruit","p":36.5,"f":17.3,"c":98.6,"nat":"lift","i":[["sourdough",100,"Sourdough"],["egg",50,"Egg, whole"],["cottage cheese 2%",140,"Cottage cheese 2%"],["milk 2%",50,"Milk 2%"],["maple syrup",20,"Maple syrup"],["blueberries",100,"Blueberries, frozen"],["peanut butter",12,"Peanut butter"],["banana",40,"Banana"]]},{"id":"B8","s":"breakfast","n":"Oats Overnight, cottage cheese base","l":"packet","b":"packet + 20 g dry oats + banana","w":"shaker + banana on the side","p":40.7,"f":15.5,"c":100.6,"nat":"lift","i":[["oats overnight packet",76,"Oats overnight packet"],["cottage cheese 2%",120,"Cottage cheese 2%"],["rolled oats",20,"Rolled oats, dry"],["frozen blueberries",75,"Blueberries, frozen"],["peanut butter",12,"Peanut butter"],["banana",120,"Banana"]]},{"id":"B9","s":"breakfast","n":"Saturday run window","l":"long run only","b":"40 g dry oats pre · honey during · yogurt bowl post","w":"three servings across the morning","p":40.6,"f":14.8,"c":118.7,"nat":"long","i":[["rolled oats",40,"Rolled oats, dry"],["milk 2%",100,"Milk 2%"],["banana",130,"Banana"],["honey",25,"Honey"],["greek yogurt nonfat",200,"Fage 0% Greek yogurt"],["protein cereal",25,"Protein cereal"],["blueberries",75,"Blueberries, frozen"],["peanut butter",15,"Peanut butter"]]},{"id":"L1","s":"lunch","n":"Chipotle-Honey Chicken & Rice Bowl","l":"Mexican","b":"150 g cooked white rice","w":"~470 g","p":43,"f":17.5,"c":74.5,"nat":"lift","i":[["chicken breast",133,"Chicken breast, raw"],["white rice dry",50,"White rice, dry"],["black beans canned",50,"Black beans, canned drained"],["corn frozen",40,"Corn"],["bell pepper",60,"Bell pepper"],["olive oil",4,"Olive oil"],["honey",8,"Honey"],["chipotle in adobo",5,"Chipotle in adobo"],["lime juice",10,"Lime juice"],["cheddar",10,"Cheddar"],["pico de gallo",50,"Salsa"],["avocado",35,"Avocado"]]},{"id":"L2","s":"lunch","n":"Greek Orzo Salad + Turkey Meatballs","l":"Mediterranean","b":"156 g cooked orzo","w":"~530 g","p":43,"f":21.5,"c":71.2,"nat":"lift","i":[["ground turkey 93/7",136,"Ground turkey 93/7"],["panko",13,"Panko/breadcrumbs"],["egg",20,"Egg, whole"],["orzo dry",65,"Orzo, dry"],["cucumber",100,"Cucumber"],["cherry tomatoes",100,"Tomato"],["red onion",20,"Onion"],["kalamata olives",8,"Kalamata olives"],["feta",15,"Feta"],["olive oil",4,"Olive oil"],["lemon juice",15,"Lemon juice"],["garlic",5,"Garlic"]]},{"id":"L3","s":"lunch","n":"Chicken Burrito Bowl","l":"Mexican","b":"174 g cooked white rice","w":"~490 g","p":43,"f":19.8,"c":69.8,"nat":"lift","i":[["chicken breast",123,"Chicken breast, raw"],["white rice dry",58,"White rice, dry"],["black beans canned",80,"Black beans, canned drained"],["cheddar",15,"Cheddar"],["pico de gallo",60,"Salsa"],["avocado",45,"Avocado"],["olive oil",4,"Olive oil"],["lime juice",10,"Lime juice"]]},{"id":"L4","s":"lunch","n":"Mediterranean Chicken & Couscous","l":"Mediterranean","b":"162 g cooked pearl couscous","w":"~510 g","p":43,"f":19.1,"c":69.6,"nat":"lift","i":[["chicken breast",120,"Chicken breast, raw"],["pearl couscous dry",65,"Couscous, dry"],["chickpeas canned",50,"Chickpeas, canned drained"],["cucumber",80,"Cucumber"],["cherry tomatoes",80,"Tomato"],["feta",20,"Feta"],["kalamata olives",12,"Kalamata olives"],["olive oil",8,"Olive oil"],["lemon juice",15,"Lemon juice"]]},{"id":"L6","s":"lunch","n":"Turkey Pesto Pasta Salad","l":"Mediterranean","b":"192 g cooked pasta","w":"~480 g","p":43,"f":20.7,"c":68.5,"nat":"lift","i":[["pasta dry",80,"Pasta, dry"],["ground turkey 93/7",111,"Ground turkey 93/7"],["pesto",18,"Pesto"],["greek yogurt nonfat",40,"Fage 0% Greek yogurt"],["cherry tomatoes",100,"Tomato"],["mozzarella",20,"Mozzarella, part-skim"],["spinach",20,"Spinach"],["lemon juice",10,"Lemon juice"]]},{"id":"L7","s":"lunch","n":"BBQ Chicken & Baked Potato Bowl","l":"American","b":"203 g roasted potato","w":"~450 g","p":43,"f":18.5,"c":72.9,"nat":"lift","i":[["chicken breast",129,"Chicken breast, raw"],["potato",260,"Potato, raw"],["bbq sauce",35,"BBQ sauce"],["cheddar",15,"Cheddar"],["corn frozen",50,"Corn"],["red onion",25,"Onion"],["olive oil",9,"Olive oil"],["greek yogurt nonfat",30,"Fage 0% Greek yogurt"]]},{"id":"L8","s":"lunch","n":"Adult Lunchable","l":"bento · no cook","b":"40 g crackers + 20 g pretzels","w":"bento ~505 g","p":43,"f":21.2,"c":69.7,"nat":"lift","i":[["deli turkey",134,"Deli turkey, low sodium"],["cheddar",25,"Cheddar"],["whole-grain crackers",40,"Whole-grain crackers"],["egg",50,"Egg, whole"],["grapes",100,"Grapes"],["cucumber",80,"Cucumber"],["cherry tomatoes",80,"Tomato"],["pretzels",20,"Pretzels"]]},{"id":"L9","s":"lunch","n":"Turkey & Provolone on Sourdough + Grapes","l":"sandwich","b":"100 g sourdough","w":"sandwich + sides","p":43,"f":19.1,"c":76.5,"nat":"lift","i":[["deli turkey",150,"Deli turkey, low sodium"],["sourdough",100,"Sourdough"],["provolone",25,"Provolone"],["mayonnaise",10,"Mayonnaise"],["dijon mustard",8,"Dijon mustard"],["romaine",20,"Romaine"],["cherry tomatoes",40,"Tomato"],["cucumber",60,"Cucumber"],["grapes",100,"Grapes"]]},{"id":"L10","s":"lunch","n":"Bruschetta Chicken + Sourdough","l":"Mediterranean","b":"110 g sourdough","w":"~500 g","p":43,"f":16.7,"c":75.1,"nat":"lift","i":[["chicken breast",116,"Chicken breast, raw"],["sourdough",110,"Sourdough"],["cherry tomatoes",130,"Tomato"],["mozzarella",20,"Mozzarella, part-skim"],["olive oil",8,"Olive oil"],["balsamic vinegar",10,"Balsamic vinegar"],["garlic",5,"Garlic"],["basil",5,"Basil"],["grapes",60,"Grapes"]]},{"id":"L11","s":"lunch","n":"No-Cook Mezze Box","l":"bento · no cook","b":"75 g whole-wheat pita","w":"bento ~510 g","p":43,"f":19,"c":68.9,"nat":"lift","i":[["whole-wheat pita",75,"Whole-wheat pita"],["hummus",35,"Hummus"],["chickpeas canned",50,"Chickpeas, canned drained"],["feta",25,"Feta"],["cucumber",100,"Cucumber"],["cherry tomatoes",100,"Tomato"],["kalamata olives",12,"Kalamata olives"],["deli turkey",144,"Deli turkey, low sodium"]]},{"id":"L12","s":"lunch","n":"Steak & Potato Salad","l":"American","b":"265 g boiled potato","w":"~600 g","p":43,"f":20,"c":69.4,"nat":"lift","i":[["sirloin steak",126,"Sirloin steak, raw"],["potato",340,"Potato, raw"],["olive oil",8,"Olive oil"],["dijon mustard",12,"Dijon mustard"],["greek yogurt nonfat",40,"Fage 0% Greek yogurt"],["parmesan",10,"Parmesan"],["red onion",25,"Onion"],["cherry tomatoes",80,"Tomato"],["romaine",40,"Romaine"],["lemon juice",10,"Lemon juice"]]},{"id":"L13","s":"lunch","n":"Chicken, Wild Rice & Roasted Squash","l":"American","b":"135 g cooked wild rice","w":"~450 g","p":43,"f":17.5,"c":72.5,"nat":"lift","i":[["chicken breast",141,"Chicken breast, raw"],["wild rice dry",45,"Wild rice, dry"],["butternut squash",180,"Butternut squash"],["olive oil",9,"Olive oil"],["dried cranberries",15,"Dried cranberries"],["sliced almonds",8,"Almonds"],["spinach",40,"Spinach"],["balsamic vinegar",10,"Balsamic vinegar"]]},{"id":"L14","s":"lunch","n":"Chicken, Sweet Potato & Black Bean Bowl","l":"Mexican","b":"188 g roasted sweet potato","w":"~480 g","p":43,"f":20.7,"c":71.2,"nat":"lift","i":[["chicken breast",133,"Chicken breast, raw"],["sweet potato",250,"Sweet potato, raw"],["black beans canned",70,"Black beans, canned drained"],["olive oil",8,"Olive oil"],["avocado",35,"Avocado"],["salsa",50,"Salsa"],["cheddar",10,"Cheddar"],["lime juice",10,"Lime juice"]]},{"id":"L15","s":"lunch","n":"Honey-Mustard Chicken & Farro Salad","l":"Mediterranean","b":"143 g cooked farro","w":"~440 g","p":43,"f":17.4,"c":71.5,"nat":"lift","i":[["farro dry",55,"Farro, dry"],["chicken breast",130,"Chicken breast, raw"],["apple",90,"Apple"],["spinach",40,"Spinach"],["red onion",20,"Onion"],["feta",18,"Feta"],["sliced almonds",8,"Almonds"],["dijon mustard",12,"Dijon mustard"],["honey",14,"Honey"],["olive oil",4,"Olive oil"],["lemon juice",10,"Lemon juice"]]},{"id":"L16","s":"lunch","n":"Chicken Tinga Rice Bowl","l":"Mexican","b":"174 g cooked white rice","w":"~500 g","p":43,"f":19.8,"c":73,"nat":"lift","i":[["chicken breast",118,"Chicken breast, raw"],["white rice dry",58,"White rice, dry"],["crushed tomatoes",90,"Crushed tomatoes"],["chipotle in adobo",12,"Chipotle in adobo"],["onion",50,"Onion"],["olive oil",7,"Olive oil"],["black beans canned",50,"Black beans, canned drained"],["cotija",12,"Cotija"],["greek yogurt nonfat",30,"Fage 0% Greek yogurt"],["avocado",35,"Avocado"],["lime juice",8,"Lime juice"]]},{"id":"L17","s":"lunch","n":"Turkey, Hummus & Roasted Veg Wrap","l":"Mediterranean","b":"70 g wrap + 10 g pretzels","w":"wrap + fruit","p":43,"f":19.3,"c":73.2,"nat":"lift","i":[["large tortilla wrap",70,"Tortilla, large flour"],["deli turkey",162,"Deli turkey, low sodium"],["hummus",40,"Hummus"],["roasted red pepper",50,"Roasted red pepper"],["zucchini",60,"Zucchini"],["spinach",25,"Spinach"],["feta",18,"Feta"],["grapes",90,"Grapes"],["pretzels",10,"Pretzels"]]},{"id":"L18","s":"lunch","n":"Hot Honey Turkey & Sweet Potato Bowl","l":"bowl · hot honey","b":"180 g roasted sweet potato","w":"~445 g","p":43,"f":21.7,"c":69.2,"nat":"lift","i":[["ground turkey 93/7",115,"Ground turkey 93/7"],["sweet potato",240,"Sweet potato, raw"],["cottage cheese 2%",110,"Cottage cheese 2%"],["avocado",40,"Avocado"],["hot honey",14,"Hot honey"],["olive oil",5,"Olive oil"],["spinach",30,"Spinach"],["lime juice",8,"Lime juice"]]},{"id":"L19","s":"lunch","n":"Hot Honey Chicken & Cheddar Bento","l":"bento","b":"65 g sourdough","w":"~440 g","p":43,"f":21.5,"c":69.3,"nat":"lift","i":[["chicken breast",131,"Chicken breast, raw"],["olive oil",6,"Olive oil"],["hot honey",18,"Hot honey"],["cheddar",20,"Cheddar"],["sourdough",65,"Sourdough"],["apple",70,"Apple"],["grapes",40,"Grapes"],["cucumber",80,"Cucumber"],["almonds",8,"Almonds"]]},{"id":"L20","s":"lunch","n":"Caprese Turkey Bento","l":"bento · no cook","b":"80 g sourdough","w":"~470 g","p":43,"f":19.1,"c":69.5,"nat":"lift","i":[["deli turkey",154,"Deli turkey, low sodium"],["fresh mozzarella",45,"Fresh mozzarella"],["cherry tomatoes",120,"Tomato"],["balsamic glaze",12,"Balsamic glaze"],["sourdough",80,"Sourdough"],["olive oil",5,"Olive oil"],["grapes",70,"Grapes"],["kalamata olives",12,"Kalamata olives"],["basil",4,"Basil"]]},{"id":"L21","s":"lunch","n":"Turkey, Provolone & Hot Honey on Sourdough","l":"sandwich","b":"90 g sourdough (2 slices)","w":"~415 g","p":43,"f":18.2,"c":69.2,"nat":"lift","i":[["deli turkey",158,"Deli turkey, low sodium"],["provolone",25,"Provolone"],["sourdough",90,"Sourdough"],["hot honey",12,"Hot honey"],["dijon mustard",8,"Dijon mustard"],["mayonnaise",8,"Mayonnaise"],["romaine",20,"Romaine"],["cherry tomatoes",40,"Tomato"],["red onion",10,"Onion"],["baby carrots",80,"Baby carrots"]]},{"id":"S1","s":"snack","n":"Yogurt, protein cereal, banana & PB","l":"spoon · sweet","b":"25 g protein cereal + banana","w":"~160 g","p":16.4,"f":7.9,"c":30.6,"nat":"lift","i":[["greek yogurt nonfat",80,"Fage 0% Greek yogurt"],["protein cereal",25,"Protein cereal"],["banana",45,"Banana"],["peanut butter",12,"Peanut butter"]]},{"id":"S2","s":"snack","n":"Cottage cheese, pineapple & crackers","l":"spoon · sweet","b":"12 g crackers + pineapple","w":"~230 g","p":15.5,"f":8.3,"c":29.5,"nat":"lift","i":[["cottage cheese 2%",110,"Cottage cheese 2%"],["pineapple",100,"Pineapple"],["whole-grain crackers",12,"Whole-grain crackers"],["cashews",10,"Cashews"]]},{"id":"S3","s":"snack","n":"Turkey, pretzels & grapes","l":"desk · savoury","b":"22 g pretzels + grapes","w":"~155 g","p":15.1,"f":7.5,"c":31.7,"nat":"lift","i":[["deli turkey",60,"Deli turkey, low sodium"],["pretzels",22,"Pretzels"],["grapes",60,"Grapes"],["almonds",11,"Almonds"]]},{"id":"S4","s":"snack","n":"Apple, peanut butter & a yogurt cup","l":"spoon · sweet","b":"apple + 6 g honey","w":"~270 g","p":14.9,"f":7.7,"c":31,"nat":"lift","i":[["apple",140,"Apple"],["peanut butter",14,"Peanut butter"],["greek yogurt nonfat",110,"Fage 0% Greek yogurt"],["honey",6,"Honey"]]},{"id":"S6","s":"snack","n":"Desk-drawer kit","l":"desk · shelf-stable","b":"30 g pretzels","w":"three small bags","p":15.4,"f":7.8,"c":31.1,"nat":"lift","i":[["pretzels",30,"Pretzels"],["turkey jerky",30,"Turkey jerky"],["almonds",12,"Almonds"]]},{"id":"S10","s":"snack","n":"PB & honey on sourdough + yogurt","l":"desk · sweet","b":"42 g sourdough","w":"1 slice + cup","p":16.3,"f":8,"c":30.7,"nat":"lift","i":[["sourdough",42,"Sourdough"],["peanut butter",14,"Peanut butter"],["greek yogurt nonfat",90,"Fage 0% Greek yogurt"],["honey",4,"Honey"]]},{"id":"S11","s":"snack","n":"Hot honey cottage cheese & pretzels","l":"spoon · sweet-savoury","b":"25 g pretzels","w":"~150 g","p":16.3,"f":7.2,"c":31.8,"nat":"lift","i":[["cottage cheese 2%",110,"Cottage cheese 2%"],["pretzels",25,"Pretzels"],["hot honey",6,"Hot honey"],["almonds",8,"Almonds"]]},{"id":"S12","s":"snack","n":"Popcorn, jerky & grapes","l":"desk · high volume","b":"20 g popcorn","w":"~105 g","p":15.1,"f":7.9,"c":29.7,"nat":"lift","i":[["air-popped popcorn",20,"Popcorn, popped"],["turkey jerky",30,"Turkey jerky"],["grapes",40,"Grapes"],["almonds",12,"Almonds"]]},{"id":"S13","s":"snack","n":"Chocolate cottage cheese pudding","l":"spoon · dessert","b":"9 g graham crackers + banana","w":"~180 g","p":15.9,"f":8,"c":31.6,"nat":"lift","i":[["cottage cheese 2%",110,"Cottage cheese 2%"],["cocoa powder",4,"Cocoa powder"],["honey",8,"Honey"],["banana",40,"Banana"],["graham crackers",9,"Graham crackers"],["peanut butter",8,"Peanut butter"]]},{"id":"S14","s":"snack","n":"Chia pudding, granola & berries","l":"spoon · make ahead","b":"24 g granola + strawberries","w":"~270 g","p":16.9,"f":7.4,"c":31.1,"nat":"lift","i":[["greek yogurt nonfat",110,"Fage 0% Greek yogurt"],["milk 2%",50,"Milk 2%"],["chia seeds",7,"Chia seeds"],["granola",24,"Granola"],["strawberries",80,"Strawberries"]]},{"id":"S16","s":"snack","n":"Everything-bagel cottage cheese rice cakes","l":"desk · savoury","b":"24 g rice cakes","w":"~225 g","p":15.1,"f":7.9,"c":29.7,"nat":"lift","i":[["rice cakes",24,"Rice cakes"],["cottage cheese 2%",110,"Cottage cheese 2%"],["cherry tomatoes",60,"Tomato"],["avocado",32,"Avocado"],["everything bagel seasoning",2,"Everything bagel seasoning"]]},{"id":"S17","s":"snack","n":"Mango, yogurt & cashews","l":"spoon · fruit-forward","b":"16 g dried mango + pineapple","w":"~220 g","p":16.3,"f":7.4,"c":29.5,"nat":"lift","i":[["greek yogurt nonfat",130,"Fage 0% Greek yogurt"],["dried mango",16,"Dried mango"],["cashews",15,"Cashews"],["pineapple",60,"Pineapple"]]},{"id":"S18","s":"snack","n":"Edamame & apple","l":"desk · no dairy","b":"apple + 5 g pretzels","w":"~245 g","p":15.1,"f":6.9,"c":30.9,"nat":"lift","i":[["shelled edamame frozen",130,"Edamame, shelled"],["apple",110,"Apple"],["pretzels",5,"Pretzels"]]},{"id":"S19","s":"snack","n":"Berry smoothie in a thermos","l":"drinkable","b":"frozen berries + 10 g oats","w":"~300 ml","p":15.4,"f":7.3,"c":30.8,"nat":"lift","i":[["greek yogurt nonfat",90,"Fage 0% Greek yogurt"],["frozen mixed berries",110,"Frozen mixed berries"],["milk 2%",80,"Milk 2%"],["almond butter",8,"Almond butter"],["rolled oats",10,"Rolled oats, dry"]]},{"id":"S20","s":"snack","n":"Stuffed dates & jerky","l":"desk · shelf-stable · treat","b":"30 g medjool dates","w":"~80 g","p":15,"f":8.6,"c":29.9,"nat":"lift","i":[["medjool dates",30,"Dates, Medjool"],["peanut butter",12,"Peanut butter"],["turkey jerky",33,"Turkey jerky"],["almonds",3,"Almonds"]]},{"id":"S21","s":"snack","n":"Caprese plate","l":"desk · savoury","b":"45 g sourdough","w":"~210 g","p":15.6,"f":8.1,"c":31.3,"nat":"lift","i":[["fresh mozzarella",40,"Fresh mozzarella"],["cherry tomatoes",100,"Tomato"],["sourdough",45,"Sourdough"],["deli turkey",20,"Deli turkey, low sodium"],["balsamic glaze",5,"Balsamic glaze"]]},{"id":"D1","s":"dinner","n":"Honey-Garlic Salmon, Jasmine Rice, Broccolini","l":"American","b":"210 g cooked jasmine rice","w":"~455 g","p":37,"f":23.2,"c":80.9,"nat":"lift","i":[["salmon",128,"Salmon, raw"],["jasmine rice dry",70,"Jasmine rice, dry"],["broccolini",150,"Broccolini"],["olive oil",5,"Olive oil"],["honey",15,"Honey"],["soy sauce low sodium",15,"Soy sauce"],["garlic",6,"Garlic"]]},{"id":"D2","s":"dinner","n":"Blackstone Smash Burgers + Griddled Wedges","l":"burgers","b":"60 g bun + 179 g roasted wedges","w":"~500 g","p":37,"f":24.3,"c":79.2,"nat":"lift","i":[["ground beef 90/10",119,"Ground beef 90/10"],["burger bun",60,"Burger bun"],["american cheese",15,"American cheese"],["potato",230,"Potato, raw"],["olive oil",5,"Olive oil"],["ketchup",15,"Ketchup"],["onion",30,"Onion"],["romaine",25,"Romaine"],["cherry tomatoes",40,"Tomato"]]},{"id":"D3","s":"dinner","n":"Pineapple Chicken Stir Fry + Jasmine Rice","l":"stir fry","b":"135 g cooked jasmine rice","w":"~530 g","p":39.2,"f":22.6,"c":82.7,"nat":"lift","i":[["chicken breast",118,"Chicken breast, raw"],["jasmine rice dry",45,"Jasmine rice, dry"],["pineapple",90,"Pineapple"],["bell pepper",80,"Bell pepper"],["sugar snap peas",60,"Sugar snap peas"],["red onion",40,"Onion"],["cashews",22,"Cashews"],["soy sauce low sodium",20,"Soy sauce"],["honey",10,"Honey"],["sesame oil",9,"Sesame oil"],["cornstarch",4,"Cornstarch"],["garlic",6,"Garlic"],["ginger",5,"Ginger"]]},{"id":"D4","s":"dinner","n":"Chicken Souvlaki + Greek Lemon Potatoes","l":"Mediterranean","b":"312 g Greek lemon potatoes","w":"~580 g","p":37.4,"f":20.1,"c":78.3,"nat":"lift","i":[["chicken breast",118,"Chicken breast, raw"],["potato",400,"Potato, raw"],["olive oil",14,"Olive oil"],["tzatziki",60,"Tzatziki"],["cucumber",60,"Cucumber"],["cherry tomatoes",60,"Tomato"],["lemon juice",20,"Lemon juice"]]},{"id":"D5","s":"dinner","n":"Blackstone Breakfast-for-Dinner","l":"breakfast-for-dinner","b":"100 g sourdough + 150 g hash browns","w":"~380 g","p":37,"f":25.3,"c":78.3,"nat":"lift","i":[["egg",100,"Egg, whole"],["liquid egg white",42,"Egg white"],["turkey bacon",30,"Turkey bacon"],["sourdough",100,"Sourdough"],["butter",4,"Butter"],["frozen hash browns",150,"Frozen hash browns"]]},{"id":"D6","s":"dinner","n":"Ground Turkey Taco Skillet + Rice","l":"Mexican","b":"195 g cooked white rice","w":"~490 g","p":37,"f":23.8,"c":79.2,"nat":"lift","i":[["ground turkey 93/7",109,"Ground turkey 93/7"],["white rice dry",65,"White rice, dry"],["black beans canned",80,"Black beans, canned drained"],["bell pepper",60,"Bell pepper"],["onion",40,"Onion"],["olive oil",4,"Olive oil"],["salsa",50,"Salsa"],["cheddar",12,"Cheddar"],["avocado",45,"Avocado"]]},{"id":"D7","s":"dinner","n":"Garlic-Parm Chicken & Crispy Potatoes","l":"American","b":"226 g roasted potato","w":"~390 g","p":39,"f":22.2,"c":57.8,"nat":"rest","i":[["chicken breast",97,"Chicken breast, raw"],["potato",290,"Potato, raw"],["olive oil",9,"Olive oil"],["milk 2%",40,"Milk 2%"],["light cream cheese",25,"Light cream cheese"],["parmesan",12,"Parmesan"],["mozzarella",15,"Mozzarella, part-skim"],["garlic",8,"Garlic"]]},{"id":"D8","s":"dinner","n":"Shrimp Fajita Bowls + Cilantro-Lime Rice","l":"Mexican","b":"225 g cooked white rice","w":"~630 g","p":39.3,"f":21.1,"c":77.7,"nat":"lift","i":[["shrimp",140,"Shrimp, raw"],["white rice dry",75,"White rice, dry"],["bell pepper",90,"Bell pepper"],["onion",50,"Onion"],["olive oil",8,"Olive oil"],["avocado",45,"Avocado"],["pico de gallo",50,"Salsa"],["cheddar",12,"Cheddar"],["lime juice",10,"Lime juice"]]},{"id":"D9","s":"dinner","n":"Ground Turkey Bolognese over Rigatoni","l":"Italian","b":"168 g cooked rigatoni","w":"~560 g","p":37.9,"f":19.8,"c":79.1,"nat":"lift","i":[["ground turkey 93/7",100,"Ground turkey 93/7"],["rigatoni dry",70,"Pasta, dry"],["crushed tomatoes",150,"Crushed tomatoes"],["tomato paste",20,"Tomato paste"],["onion",40,"Onion"],["carrot",40,"Carrot"],["celery",30,"Celery"],["olive oil",7,"Olive oil"],["parmesan",12,"Parmesan"],["milk 2%",30,"Milk 2%"],["garlic",6,"Garlic"]]},{"id":"D10","s":"dinner","n":"Honey-Garlic Chicken Thighs + Sweet Potato","l":"American","b":"210 g roasted sweet potato","w":"~470 g","p":37,"f":22.9,"c":81,"nat":"lift","i":[["chicken thigh",155,"Chicken thigh, raw"],["sweet potato",280,"Sweet potato, raw"],["green beans",130,"Green beans"],["olive oil",6,"Olive oil"],["honey",15,"Honey"],["soy sauce low sodium",12,"Soy sauce"],["garlic",8,"Garlic"]]},{"id":"D11","s":"dinner","n":"Blackstone Steak & Loaded Baked Potato","l":"American","b":"296 g baked potato","w":"~570 g","p":37.5,"f":21.2,"c":77.6,"nat":"lift","i":[["sirloin steak",85,"Sirloin steak, raw"],["potato",380,"Potato, raw"],["butter",6,"Butter"],["greek yogurt nonfat",40,"Fage 0% Greek yogurt"],["cheddar",18,"Cheddar"],["scallions",10,"Scallions"],["olive oil",4,"Olive oil"],["broccoli",120,"Broccoli, raw"]]},{"id":"D12","s":"dinner","n":"Spicy Salmon Rice Bowls with Cucumber","l":"bowls","b":"240 g cooked jasmine rice","w":"~520 g","p":37,"f":23.3,"c":77.3,"nat":"lift","i":[["salmon",112,"Salmon, raw"],["jasmine rice dry",80,"Jasmine rice, dry"],["cucumber",100,"Cucumber"],["avocado",25,"Avocado"],["edamame frozen",50,"Edamame, shelled"],["mayonnaise",4,"Mayonnaise"],["sriracha",10,"Sriracha"],["soy sauce low sodium",12,"Soy sauce"],["sesame seeds",3,"Sesame seeds"],["scallions",10,"Scallions"]]},{"id":"D13","s":"dinner","n":"Turkey Smash Burger Tacos + Street-Corn Rice","l":"burgers × Mexican","b":"78 g corn tortillas + 99 g cooked rice","w":"3 tacos + rice","p":38,"f":20.6,"c":77.5,"nat":"lift","i":[["ground turkey 93/7",110,"Ground turkey 93/7"],["corn tortillas",78,"Tortilla, corn"],["american cheese",15,"American cheese"],["white rice dry",33,"White rice, dry"],["corn frozen",60,"Corn"],["cotija",12,"Cotija"],["greek yogurt nonfat",30,"Fage 0% Greek yogurt"],["mayonnaise",4,"Mayonnaise"],["onion",25,"Onion"],["lime juice",8,"Lime juice"]]},{"id":"D14","s":"dinner","n":"Pesto Chicken Pasta","l":"Mediterranean","b":"221 g cooked pasta","w":"~450 g","p":39.3,"f":19.2,"c":78,"nat":"lift","i":[["chicken breast",80,"Chicken breast, raw"],["pasta dry",92,"Pasta, dry"],["pesto",20,"Pesto"],["cherry tomatoes",110,"Tomato"],["parmesan",12,"Parmesan"],["greek yogurt nonfat",30,"Fage 0% Greek yogurt"],["olive oil",3,"Olive oil"],["garlic",6,"Garlic"]]},{"id":"D15","s":"dinner","n":"Ground Turkey Pasta Bake","l":"Italian","b":"180 g cooked pasta","w":"~490 g","p":40.2,"f":19.7,"c":78.6,"nat":"lift","i":[["ground turkey 93/7",85,"Ground turkey 93/7"],["pasta dry",75,"Pasta, dry"],["marinara",130,"Marinara sauce"],["cottage cheese 2%",40,"Cottage cheese 2%"],["zucchini",80,"Zucchini"],["broccoli",80,"Broccoli, raw"],["mozzarella",20,"Mozzarella, part-skim"],["olive oil",6,"Olive oil"]]},{"id":"D16","s":"dinner","n":"Buffalo Chicken & Sweet Potato Bowl","l":"American","b":"188 g sweet potato + 84 g cooked rice","w":"~590 g","p":40.1,"f":20.1,"c":80.8,"nat":"lift","i":[["chicken breast",110,"Chicken breast, raw"],["sweet potato",250,"Sweet potato, raw"],["white rice dry",28,"White rice, dry"],["buffalo sauce",30,"Buffalo sauce"],["greek yogurt nonfat",45,"Fage 0% Greek yogurt"],["blue cheese",18,"Blue cheese"],["olive oil",11,"Olive oil"],["celery",40,"Celery"],["carrot",40,"Carrot"],["scallions",10,"Scallions"]]},{"id":"D17","s":"dinner","n":"Sheet-Pan Chicken Fajitas + Tortillas & Rice","l":"Mexican","b":"2 corn tortillas + 150 g cooked rice","w":"~570 g","p":37,"f":20.2,"c":81.1,"nat":"lift","i":[["chicken breast",99,"Chicken breast, raw"],["corn tortillas",52,"Tortilla, corn"],["white rice dry",50,"White rice, dry"],["bell pepper",100,"Bell pepper"],["onion",60,"Onion"],["olive oil",7,"Olive oil"],["pico de gallo",50,"Salsa"],["avocado",35,"Avocado"],["cheddar",10,"Cheddar"],["greek yogurt nonfat",30,"Fage 0% Greek yogurt"]]},{"id":"D18","s":"dinner","n":"Teriyaki Salmon & Broccoli Rice Bowl","l":"stir fry","b":"174 g cooked jasmine rice","w":"~490 g","p":37,"f":23.6,"c":80,"nat":"lift","i":[["salmon",124,"Salmon, raw"],["jasmine rice dry",58,"Jasmine rice, dry"],["broccoli",150,"Broccoli, raw"],["soy sauce low sodium",25,"Soy sauce"],["honey",16,"Honey"],["ginger",6,"Ginger"],["garlic",6,"Garlic"],["cornstarch",5,"Cornstarch"],["sesame oil",4,"Sesame oil"],["sesame seeds",4,"Sesame seeds"],["scallions",10,"Scallions"]]},{"id":"D19","s":"dinner","n":"Chicken Parmesan with Spaghetti","l":"Italian","b":"173 g cooked spaghetti","w":"~460 g","p":38.3,"f":20.1,"c":78.5,"nat":"lift","i":[["chicken breast",70,"Chicken breast, raw"],["panko",16,"Panko/breadcrumbs"],["egg",15,"Egg, whole"],["spaghetti dry",72,"Pasta, dry"],["marinara",130,"Marinara sauce"],["mozzarella",20,"Mozzarella, part-skim"],["parmesan",8,"Parmesan"],["olive oil",8,"Olive oil"]]},{"id":"D20","s":"dinner","n":"Blackstone Chicken Quesadillas + Mexican Rice","l":"Mexican","b":"90 g flour tortillas + 84 g cooked rice","w":"~470 g","p":36.8,"f":19.6,"c":79.9,"nat":"lift","i":[["chicken breast",75,"Chicken breast, raw"],["flour tortillas",90,"Tortilla, large flour"],["cheddar",20,"Cheddar"],["white rice dry",28,"White rice, dry"],["crushed tomatoes",40,"Crushed tomatoes"],["onion",30,"Onion"],["bell pepper",50,"Bell pepper"],["olive oil",4,"Olive oil"],["greek yogurt nonfat",40,"Fage 0% Greek yogurt"],["pico de gallo",40,"Salsa"]]},{"id":"D21","s":"dinner","n":"Shrimp Scampi with Linguine","l":"Mediterranean","b":"221 g cooked linguine","w":"~500 g","p":38.2,"f":20,"c":79.9,"nat":"lift","i":[["shrimp",100,"Shrimp, raw"],["linguine dry",92,"Pasta, dry"],["butter",8,"Butter"],["olive oil",8,"Olive oil"],["garlic",10,"Garlic"],["white wine",30,"White wine"],["lemon juice",15,"Lemon juice"],["parmesan",10,"Parmesan"],["cherry tomatoes",80,"Tomato"],["spinach",40,"Spinach"]]},{"id":"D22","s":"dinner","n":"Turkey Sloppy Joes with Oven Fries","l":"burgers","b":"60 g bun + 136 g oven fries","w":"~480 g","p":37,"f":23.2,"c":82.3,"nat":"lift","i":[["ground turkey 93/7",124,"Ground turkey 93/7"],["burger bun",60,"Burger bun"],["ketchup",30,"Ketchup"],["tomato paste",15,"Tomato paste"],["brown sugar",6,"Brown sugar"],["onion",40,"Onion"],["bell pepper",40,"Bell pepper"],["potato",175,"Potato, raw"],["olive oil",7,"Olive oil"],["cheddar",12,"Cheddar"]]},{"id":"D23","s":"dinner","n":"Beef & Broccoli Stir Fry with Rice","l":"stir fry","b":"162 g cooked jasmine rice","w":"~520 g","p":37,"f":22.3,"c":80.8,"nat":"lift","i":[["sirloin steak",107,"Sirloin steak, raw"],["jasmine rice dry",54,"Jasmine rice, dry"],["broccoli",180,"Broccoli, raw"],["soy sauce low sodium",25,"Soy sauce"],["oyster sauce",20,"Oyster sauce"],["honey",10,"Honey"],["cornstarch",6,"Cornstarch"],["sesame oil",9,"Sesame oil"],["cashews",12,"Cashews"],["garlic",8,"Garlic"],["ginger",6,"Ginger"],["scallions",15,"Scallions"]]},{"id":"D24","s":"dinner","n":"Garlic Butter Steak Bites & Crispy Potatoes","l":"American","b":"292 g roasted potato","w":"~570 g","p":37,"f":22.6,"c":79,"nat":"lift","i":[["sirloin steak",108,"Sirloin steak, raw"],["potato",375,"Potato, raw"],["butter",8,"Butter"],["olive oil",6,"Olive oil"],["garlic",12,"Garlic"],["parmesan",10,"Parmesan"],["green beans",130,"Green beans"]]},{"id":"D25","s":"dinner","n":"Blackstone Philly Cheesesteak + Oven Fries","l":"American","b":"100 g hoagie roll + 70 g oven fries","w":"~440 g","p":37,"f":24.1,"c":80.3,"nat":"lift","i":[["sirloin steak",96,"Sirloin steak, raw"],["hoagie roll",100,"Hoagie roll"],["provolone",18,"Provolone"],["green bell pepper",80,"Bell pepper"],["onion",80,"Onion"],["olive oil",10,"Olive oil"],["potato",90,"Potato, raw"]]},{"id":"D26","s":"dinner","n":"French Onion Smothered Chicken + Garlic Mash","l":"American","b":"250 g garlic mashed potato","w":"~590 g","p":37,"f":22.5,"c":80.6,"nat":"lift","i":[["chicken breast",89,"Chicken breast, raw"],["potato",275,"Potato, raw"],["onion",150,"Onion"],["gruyere",15,"Gruyere"],["butter",12,"Butter"],["olive oil",4,"Olive oil"],["all-purpose flour",4,"All-purpose flour"],["chicken stock",100,"Chicken stock"],["milk 2%",50,"Milk 2%"],["garlic",6,"Garlic"],["green beans",150,"Green beans"]]}];
+
+/* The bank the app actually uses. BANK_SEED is the 9 Sep snapshot and is only
+   a fallback: once a block is imported from the Meal Bank page it is stored in
+   settings, syncs to every device, and wins. */
+let BANK_MEALS = BANK_SEED.slice();
+let bankMeta = {source:"seed", n:BANK_SEED.length, at:0};
+function applyBank(list, meta){
+  if(!Array.isArray(list) || !list.length) return false;
+  const clean = list.filter(function(m){
+    return m && m.id && m.s && m.n && Array.isArray(m.i);
+  });
+  if(!clean.length) return false;
+  BANK_MEALS = clean;
+  bankMeta = {source:"imported", n:clean.length, at:(meta&&meta.at)||Date.now()};
+  return true;
+}
+const BANK_ALIAS = {"black beans canned":"Black beans, canned drained","chickpeas canned":"Chickpeas, canned drained","blueberries":"Blueberries, frozen","frozen blueberries":"Blueberries, frozen","chicken breast":"Chicken breast, raw","chicken thigh":"Chicken thigh, raw","corn frozen":"Corn","deli turkey":"Deli turkey, low sodium","egg":"Egg, whole","liquid egg white":"Egg white","flour tortilla":"Tortilla, large flour","flour tortillas":"Tortilla, large flour","large tortilla wrap":"Tortilla, large flour","corn tortillas":"Tortilla, corn","greek yogurt nonfat":"Fage 0% Greek yogurt","potato":"Potato, raw","sweet potato":"Sweet potato, raw","rolled oats":"Rolled oats, dry","salmon":"Salmon, raw","shrimp":"Shrimp, raw","sirloin steak":"Sirloin steak, raw","soy sauce low sodium":"Soy sauce","spaghetti dry":"Pasta, dry","linguine dry":"Pasta, dry","rigatoni dry":"Pasta, dry","pearl couscous dry":"Couscous, dry","mozzarella":"Mozzarella, part-skim","red onion":"Onion","green bell pepper":"Bell pepper","cherry tomatoes":"Tomato","broccoli":"Broccoli, raw","edamame frozen":"Edamame, shelled","shelled edamame frozen":"Edamame, shelled","sliced almonds":"Almonds","pico de gallo":"Salsa","marinara":"Marinara sauce","panko":"Panko/breadcrumbs","air-popped popcorn":"Popcorn, popped","medjool dates":"Dates, Medjool"};
+
+const DEFAULT_YIELDS = {};
+FOODS.forEach(function(f){ if(f.y) DEFAULT_YIELDS[f.n]=f.y; });
+
+const SLOTS = [
+  {k:"breakfast", n:"Breakfast", ctx:"sweet"},
+  {k:"lunch",     n:"Lunch", ctx:"savory"},
+  {k:"snack",     n:"Afternoon snack", ctx:"any"},
+  {k:"dinner",    n:"Dinner", ctx:"savory"},
+  {k:"night",     n:"Night snack", ctx:"sweet"}
+];
+const TARGETS = {
+  lifting:{breakfast:[37,17,99], lunch:[43,19,68], snack:[15,8,30], dinner:[37,22,78], night:[18,4,18]},
+  longrun:{breakfast:[37,17,117],lunch:[43,19,80], snack:[15,8,35], dinner:[37,22,93], night:[18,4,18]},
+  rest:   {breakfast:[37,17,72], lunch:[43,19,50], snack:[15,8,22], dinner:[37,22,56], night:[18,4,18]}
+};
+const TYPE_NAME = {lifting:"Lifting day", longrun:"Long run", rest:"Rest day"};
+const NIGHT = {name:"Yogurt 150 g · blueberries 75 g · peanut butter 7 g", p:18, f:4, c:18};
+
+const SNACK_OPTIONS = ["Desk-drawer kit — pretzels, jerky, almonds","Yogurt, protein cereal, banana, peanut butter","Cottage cheese, pineapple, crackers","Turkey, pretzels, grapes","Apple, peanut butter, yogurt cup","Peanut butter and honey on sourdough, yogurt","Hot honey cottage cheese with pretzels","Popcorn, jerky, grapes","Chocolate cottage cheese pudding","Chia pudding, granola, berries","Everything-bagel cottage cheese rice cakes","Mango, yogurt, cashews","Edamame and apple","Berry smoothie in a thermos","Stuffed dates and jerky","Caprese plate"];
+
+/* ================= state ================= */
+const LS="closethecarbs.v2";
+let state={days:{}, settings:{yields:{}, measured:{}, customFoods:[], updatedAt:0}};
+let dbDoc=null, saveTimer=null, sampleFn=null;
+let today=isoToday(), view="today";
+let pendingSlot=null, pendingBasis="raw", pendingFood=null;
+const openSlots={};
+
+function isoToday(){const d=new Date();return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate());}
+function pad(n){return n<10?"0"+n:""+n;}
+function defaultType(iso){const w=new Date(iso+"T12:00:00").getDay();return w===0?"rest":(w===6?"longrun":"lifting");}
+function allFoods(){return FOODS.concat(state.settings.customFoods||[]);}
+function findFood(name){const s=String(name||"").toLowerCase();return allFoods().filter(function(f){return f.n.toLowerCase()===s})[0]||null;}
+function yieldOf(f){ if(!f||!f.y) return null; const v=(state.settings.yields||{})[f.n]; return (typeof v==="number"&&v>0)?v:f.y; }
+function isMeasured(n){return !!(state.settings.measured||{})[n];}
+function bounds(f){
+  const c=CAT[f.cat]||CAT.grain;
+  return {min:f.min!=null?f.min:c.min, typ:f.typ!=null?f.typ:c.typ, max:f.max!=null?f.max:c.max, step:f.step!=null?f.step:c.step};
+}
+function r1(x){return Math.round(x*10)/10;} function r0(x){return Math.round(x);}
+function clamp(x,a,b){return x<a?a:(x>b?b:x);}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});}
+
+/* updatedAt 0 means "opened but never edited". An untouched empty day must never
+   win a merge against a real day logged on another device. */
+function day(iso,create){ if(!state.days[iso]&&create) state.days[iso]={type:defaultType(iso),entries:[],updatedAt:0}; return state.days[iso]; }
+function dayType(iso){const d=state.days[iso];return (d&&d.type)||defaultType(iso);}
+function entriesFor(iso){const d=state.days[iso];return (d&&d.entries)||[];}
+function slotTotals(iso,slot){
+  if(slot==="night") return [NIGHT.p,NIGHT.f,NIGHT.c];
+  let t=[0,0,0];
+  entriesFor(iso).forEach(function(e){if(e.slot===slot){t[0]+=e.p;t[1]+=e.f;t[2]+=e.c;}});
+  return [r1(t[0]),r1(t[1]),r1(t[2])];
+}
+function dayTotals(iso){let t=[0,0,0];SLOTS.forEach(function(s){const v=slotTotals(iso,s.k);t[0]+=v[0];t[1]+=v[1];t[2]+=v[2];});return [r1(t[0]),r1(t[1]),r1(t[2])];}
+function dayTargets(iso){const T=TARGETS[dayType(iso)];let t=[0,0,0];SLOTS.forEach(function(s){t[0]+=T[s.k][0];t[1]+=T[s.k][1];t[2]+=T[s.k][2];});return t;}
+
+/* ================= persistence ================= */
+function loadLocal(){try{const raw=localStorage.getItem(LS);if(raw){const p=JSON.parse(raw);if(p&&p.days)state=merge(state,p);}}catch(e){}}
+function saveLocal(){try{localStorage.setItem(LS,JSON.stringify(state));}catch(e){}}
+function merge(a,b){
+  const out={days:{},settings:null},keys={};
+  Object.keys(a.days||{}).forEach(function(k){keys[k]=1});Object.keys(b.days||{}).forEach(function(k){keys[k]=1});
+  Object.keys(keys).forEach(function(k){
+    const x=(a.days||{})[k],y=(b.days||{})[k];
+    out.days[k]=!x?y:(!y?x:pickDay(x,y));
+  });
+  const sa=a.settings||{updatedAt:0},sb=b.settings||{updatedAt:0};
+  out.settings=((sb.updatedAt||0)>(sa.updatedAt||0))?sb:sa;
+  if(!out.settings.yields)out.settings.yields={};
+  if(!out.settings.measured)out.settings.measured={};
+  if(!out.settings.customFoods)out.settings.customFoods=[];
+  return out;
+}
+function pickDay(x,y){
+  const xe=((x.entries)||[]).length, ye=((y.entries)||[]).length;
+  const xu=x.updatedAt||0, yu=y.updatedAt||0;
+  if(!xu&&!yu) return xe>=ye?x:y;   // neither was ever edited
+  if(!xu) return y;                 // an untouched day never beats an edited one
+  if(!yu) return x;
+  return yu>xu?y:x;
+}
+const RETAIN=45;
+function prune(){Object.keys(state.days).sort().reverse().slice(RETAIN).forEach(function(k){delete state.days[k];});}
+
+/* ---- saving ----
+   One document per day, never one document for everything. The page only ever
+   writes days it changed in this session, so a blank startup state cannot
+   overwrite what is already stored — the failure that lost the earlier days.
+   Nothing is written at all until the store's own copy has arrived. */
+let writing=false, retries=0, dbReady=false, hydrated=false, lastCode=null;
+let dbDays=null, dbSettings=null, dbLegacy=null;
+const dirtyDays={}; let settingsDirty=false;
+
+function commit(iso){
+  if(iso){ const d=day(iso,true); d.updatedAt=Date.now(); dirtyDays[iso]=true; }
+  else { settingsDirty=true; }
+  prune(); saveLocal(); renderSync(); schedule(120); render();
+}
+function touch(){ settingsDirty=true; saveLocal(); renderSync(); schedule(120); }
+function pending(){ return Object.keys(dirtyDays).length + (settingsDirty?1:0); }
+function schedule(ms){ clearTimeout(saveTimer); saveTimer=setTimeout(flush,ms); }
+
+function flush(){
+  if(!dbDays||!hydrated||writing) return;
+  const isos=Object.keys(dirtyDays);
+  if(!isos.length && !settingsDirty){ renderSync(); return; }
+  writing=true; renderSync();
+  const jobs=[];
+  isos.forEach(function(iso){
+    const d=state.days[iso];
+    if(!d){ delete dirtyDays[iso]; return; }
+    const stamp=d.updatedAt;
+    jobs.push(dbDays.doc(iso).set({type:d.type,entries:d.entries||[],updatedAt:stamp}).then(function(){
+      // only clear the flag if nothing changed again while this write was out
+      if(state.days[iso] && state.days[iso].updatedAt===stamp) delete dirtyDays[iso];
+    }));
+  });
+  if(settingsDirty){
+    const s=state.settings, stamp=s.updatedAt;
+    jobs.push(dbSettings.set({yields:s.yields||{},measured:s.measured||{},customFoods:s.customFoods||[],bank:(s.bank||null),updatedAt:stamp}).then(function(){
+      if(state.settings.updatedAt===stamp) settingsDirty=false;
+    }));
+  }
+  Promise.all(jobs).then(function(){
+    writing=false; retries=0; renderSync(null);
+    if(pending()) schedule(200);
+  }).catch(function(e){
+    writing=false; retries++;
+    const code=(e&&e.code)||"unavailable";
+    renderSync(code);
+    if(code!=="not_granted"&&code!=="revoked"&&retries<=10) schedule(Math.min(20000,500*Math.pow(2,retries)));
+  });
+}
+function syncText(code){
+  if(!dbReady) return ["local","On this device only — not syncing"];
+  if(!hydrated) return ["busy","Loading your saved days…"];
+  if(code==="quota_exceeded") return ["bad","Storage full — kept on this device"];
+  if(code) return ["bad","Not saved yet · retrying — tap to retry now"];
+  if(writing||pending()) return ["busy","Saving…"];
+  return ["ok","Saved · synced across devices"];
+}
+function renderSync(code){
+  if(code!==undefined) lastCode=code;
+  const el=document.getElementById("syncChip"); if(!el) return;
+  const s=syncText(lastCode);
+  el.textContent=s[1]; el.setAttribute("data-state",s[0]);
+}
+let prunedRemote=false;
+function pruneRemote(){
+  if(prunedRemote||!dbDays) return; prunedRemote=true;
+  Object.keys(state.days).sort().reverse().slice(RETAIN).forEach(function(k){ dbDays.doc(k).delete().catch(function(){}); });
+}
+function absorbDays(map){
+  state=merge(state,{days:map,settings:state.settings});
+  saveLocal();
+}
+function initCaps(){
+  renderSync();
+  if(!window.claude||!window.claude.use){ renderBuild(); return; }
+  window.claude.use("db").then(function(d){
+    if(!d){ renderSync(); return; }
+    dbReady=true;
+    dbDays=d.collection("days"); dbSettings=d.doc("meta/settings"); dbLegacy=d.doc("checkin/state");
+    renderSync();
+
+    dbDays.onSnapshot(function(snap){
+      const map={};
+      snap.docs.forEach(function(doc){
+        const v=doc.data(); if(!v) return;
+        map[doc.id]={type:v.type||defaultType(doc.id),entries:v.entries||[],updatedAt:v.updatedAt||0};
+      });
+      absorbDays(map);
+      hydrated=true; renderSync(); render();
+      if(!snap.metadata.fromCache) pruneRemote();
+      if(pending()) schedule(150);
+    },function(){ dbReady=false; renderSync(); });
+
+    dbSettings.onSnapshot(function(snap){
+      if(snap.exists){
+        const v=snap.data()||{};
+        state=merge(state,{days:{},settings:{yields:v.yields||{},measured:v.measured||{},customFoods:v.customFoods||[],updatedAt:v.updatedAt||0}});
+        if(v.bank && Array.isArray(v.bank.meals)) applyBank(v.bank.meals, {at:v.bank.at});
+        saveLocal(); render();
+      }
+    },function(){});
+
+    // one-time rescue: pull anything the old single-document layout still holds
+    dbLegacy.get().then(function(snap){
+      if(!snap.exists) return;
+      const v=snap.data()||{};
+      let found=0;
+      if(v.days){ Object.keys(v.days).forEach(function(k){ if((v.days[k].entries||[]).length){ dirtyDays[k]=true; found++; } }); absorbDays(v.days); }
+      if(v.settings&&(v.settings.customFoods||[]).length){ state=merge(state,{days:{},settings:v.settings}); settingsDirty=true; }
+      if(found||settingsDirty){ saveLocal(); render(); schedule(400); }
+    }).catch(function(){});
+
+    // if the store never answers, stop blocking writes rather than losing them
+    setTimeout(function(){ if(!hydrated&&dbReady){ hydrated=true; renderSync(); flush(); } },12000);
+  }).catch(function(){ renderSync(); });
+  window.claude.use("sample").then(function(s){ sampleFn=s||null; renderBuild(); }).catch(function(){ sampleFn=null; renderBuild(); });
+}
+/* Closing the tab, switching apps, or backgrounding the page all get a final
+   write. visibilitychange is the one that actually fires on a phone. */
+function flushNow(){ if(pending()){ clearTimeout(saveTimer); writing=false; flush(); } }
+document.addEventListener("visibilitychange",function(){ if(document.visibilityState==="hidden") flushNow(); });
+window.addEventListener("pagehide",flushNow);
+window.addEventListener("blur",flushNow);
+setInterval(function(){ if(pending()) flush(); },6000);
+
+/* ================= context inference =================
+   What kind of meal is this? Decides which carbs are rational to suggest. */
+function slotContext(iso, slotKey){
+  const items=entriesFor(iso).filter(function(e){return e.slot===slotKey;}).map(function(e){return findFood(e.name);}).filter(Boolean);
+  return contextOf(items, slotKey);
+}
+function contextOf(items, slotKey){
+  let sweet=0, savory=0; const cuisine={};
+  items.forEach(function(f){
+    const t=f.t||[];
+    if(t.indexOf("sweet")>=0 && t.indexOf("savory")<0) sweet+=2;
+    else if(t.indexOf("savory")>=0 && t.indexOf("sweet")<0) savory+=2;
+    else { sweet+=0.5; savory+=0.5; }
+    ["mex","med","asian","amer"].forEach(function(c){ if(t.indexOf(c)>=0) cuisine[c]=(cuisine[c]||0)+1; });
+  });
+  let kind;
+  if(sweet===0&&savory===0){ const s=SLOTS.filter(function(x){return x.k===slotKey})[0]; kind=(s&&s.ctx)||"any"; if(kind==="any")kind="either"; }
+  else if(sweet>savory*1.3) kind="sweet";
+  else if(savory>sweet*1.3) kind="savory";
+  else kind="either";
+  let cui=null,best=0;
+  Object.keys(cuisine).forEach(function(c){ if(cuisine[c]>best){best=cuisine[c];cui=c;} });
+  return {kind:kind, cuisine:cui, empty:items.length===0};
+}
+function contextLabel(ctx){
+  const names={sweet:"a sweet plate",savory:"a savory plate",either:"either way"};
+  const cui={mex:"Mexican-leaning",med:"Mediterranean-leaning",asian:"stir-fry-leaning",amer:"American-leaning"};
+  return (ctx.empty?"nothing logged yet · assuming ":"reading as ")+(names[ctx.kind]||"either way")+(ctx.cuisine?" · "+cui[ctx.cuisine]:"");
+}
+function fitsContext(f, ctx){
+  const t=f.t||[];
+  if(ctx.kind==="sweet") return t.indexOf("sweet")>=0;
+  if(ctx.kind==="savory") return t.indexOf("savory")>=0;
+  return true;
+}
+/* What kind of thing belongs on this plate, in order. A yogurt bowl takes
+   granola before fruit before honey; a burrito bowl takes a tortilla or rice.
+   Nothing outside the matching list is ever offered. */
+const CAT_PREF={
+  sweet:  ["cereal","fruit","syrup","bread","grain","driedfruit","cracker","dairy","nutbutter","nut"],
+  savory: ["grain","starchveg","tortilla","bread","legume","cracker","veg","sauce","cheese","oil"],
+  either: ["bread","fruit","cereal","grain","cracker","starchveg","legume","nut","nutbutter","syrup"]
+};
+const MAXG={"Honey":60,"Hot honey":60,"Maple syrup":50,"Banana":300,"Grapes":350,"Apple":350,"Mango":350,"Pineapple":350,"Dates, Medjool":80,"Raisins":80,"Pretzels":150,"Tortilla chips":90,"Granola":120,"Chia seeds":45,"Tortilla, large flour":190,"Corn":250,"Olive oil":30,"Butter":30};
+function sourceFixes(gap, n, ctx, macro){
+  const key = macro==="fat" ? "fat" : "carb";
+  const pref = CAT_PREF[ctx.kind] || CAT_PREF.either;
+  const cands=[];
+  allFoods().forEach(function(f){
+    if(!f[key] || !fitsContext(f,ctx)) return;
+    const per = macro==="fat" ? f.f : f.c;
+    if(!per) return;
+    const b=bounds(f);
+    let g=Math.round((gap/per*100)/b.step)*b.step;
+    if(g<b.step) g=b.step;
+    if(g > Math.min(b.max*1.5, (MAXG[f.n]||9999))) return;   // not a portion anyone plates
+    let pi=pref.indexOf(f.cat); if(pi<0) pi=pref.length;
+    const natural=Math.abs(g-b.typ)/b.typ;                    // how close to a normal serving
+    const cui=(ctx.cuisine&&(f.t||[]).indexOf(ctx.cuisine)>=0)?-100:0;
+    cands.push({f:f,cat:f.cat,g:g,score:cui+pi*10+natural,
+      P:r1(f.p*g/100),F:r1(f.f*g/100),C:r1(f.c*g/100),label:f.n,cooked:yieldOf(f)?Math.round(g*yieldOf(f)):null});
+  });
+  cands.sort(function(a,b){return a.score-b.score;});
+  const out=[],seen={};
+  cands.forEach(function(o){ if(out.length<n && !seen[o.cat]){ seen[o.cat]=1; out.push(o); } });
+  return out;
+}
+
+/* ================= the portion solver =================
+   Coordinate descent on an asymmetric squared penalty. Undershoot costs more
+   than overshoot in every macro, hardest on carbohydrate: the targets are
+   floors, so the solver is never allowed to prefer a smaller plate. */
+const W={p:[1.4,0.55], f:[1.0,0.7], c:[3.0,0.9]}; // [under, over]
+function totalsOf(items,gs){let t=[0,0,0];for(let i=0;i<items.length;i++){t[0]+=items[i].p*gs[i]/100;t[1]+=items[i].f*gs[i]/100;t[2]+=items[i].c*gs[i]/100;}return t;}
+function costOf(items,gs,target){
+  const t=totalsOf(items,gs);let s=0;
+  const ks=["p","f","c"];
+  for(let i=0;i<3;i++){const d=t[i]-target[i];const w=d<0?W[ks[i]][0]:W[ks[i]][1];s+=(w*d)*(w*d);}
+  return s;
+}
+function solve(items,target){
+  if(!items.length) return [];
+  const gs=items.map(function(it){return it.locked?it.g:clamp(it.typ,it.min,it.max);});
+  const probe=gs.slice();
+  for(let sweep=0;sweep<40;sweep++){
+    let moved=false;
+    for(let i=0;i<items.length;i++){
+      if(items[i].locked) continue;
+      let lo=items[i].min, hi=items[i].max;
+      for(let k=0;k<40;k++){
+        const m1=lo+(hi-lo)/3, m2=hi-(hi-lo)/3;
+        probe[i]=m1; const c1=costOf(items,probe,target);
+        probe[i]=m2; const c2=costOf(items,probe,target);
+        if(c1<c2) hi=m2; else lo=m1;
+      }
+      const best=(lo+hi)/2;
+      if(Math.abs(best-gs[i])>0.4) moved=true;
+      gs[i]=best; probe[i]=best;
+    }
+    if(!moved) break;
+  }
+  // snap to weighable increments
+  for(let i=0;i<items.length;i++){
+    if(items[i].locked) continue;
+    gs[i]=clamp(Math.round(gs[i]/items[i].step)*items[i].step, items[i].min, items[i].max);
+  }
+  // floors, not ceilings: if rounding left carbohydrate short, push the densest carb up
+  for(let guard=0; guard<300; guard++){
+    const t=totalsOf(items,gs);
+    if(t[2] >= target[2]-0.4) break;
+    let bi=-1, bd=0;
+    for(let i=0;i<items.length;i++){
+      if(items[i].locked||gs[i]>=items[i].max||items[i].c<=0) continue;
+      if(items[i].c>bd){bd=items[i].c;bi=i;}
+    }
+    if(bi<0) break;
+    gs[bi]=clamp(gs[bi]+items[bi].step, items[bi].min, items[bi].max);
+  }
+  return gs;
+}
+function toSolverItem(f, locked, g){
+  const b=bounds(f);
+  return {name:f.n,p:f.p,f:f.f,c:f.c,y:yieldOf(f),food:f,min:b.min,typ:b.typ,max:b.max,step:b.step,locked:!!locked,g:g||b.typ};
+}
+
+/* ================= builder ================= */
+let build={slot:null, mode:"slot", items:[], gs:[], idea:"", busy:false, msg:"", meal:null, picking:true, q:"", bankMsg:""};
+function buildTarget(){
+  const T=TARGETS[dayType(today)][build.slot];
+  if(build.mode==="slot") return T.slice();
+  const tot=dayTotals(today), tgt=dayTargets(today);
+  return [Math.max(0,r1(tgt[0]-tot[0])), Math.max(0,r1(tgt[1]-tot[1])), Math.max(0,r1(tgt[2]-tot[2]))];
+}
+function resolveBuild(){ build.gs=solve(build.items, buildTarget()); }
+function bankFor(slot,q){
+  const s=(q||"").trim().toLowerCase();
+  return BANK_MEALS.filter(function(m){
+    if(m.s!==slot) return false;
+    if(!s) return true;
+    return (m.n+" "+m.l+" "+m.b+" "+m.id).toLowerCase().indexOf(s)>=0;
+  });
+}
+/* Load a bank meal at exactly the weights the bank holds. Everything arrives
+   held, so nothing moves until she moves it. */
+function loadMeal(m){
+  build.meal={id:m.id,name:m.n,p:m.p,f:m.f,c:m.c,base:m.b,wt:m.w,nat:m.nat};
+  build.items=[]; build.gs=[];
+  const missing=[];
+  m.i.forEach(function(row){
+    const disp=row[0], g=row[1], canon=row[2];
+    const f=findFood(canon)||findFood(disp);
+    if(!f){ missing.push(disp); return; }
+    const it=toSolverItem(f,true,g);
+    it.disp=disp.charAt(0).toUpperCase()+disp.slice(1);
+    it.bankG=g;
+    it.min=Math.max(1,Math.round(g*0.3));
+    it.max=Math.max(it.max,Math.round(g*2.2));
+    build.items.push(it); build.gs.push(g);
+  });
+  build.picking=false;
+  build.msg=missing.length?("No macros on file for: "+esc(missing.join(", "))+". Everything else loaded."):"";
+  renderBuild();
+}
+function changeMeal(){ build.picking=true; build.msg=""; renderBuild(); }
+function clearBuild(){ build.items=[];build.gs=[];build.meal=null;build.msg="";build.picking=true;renderBuild(); }
+function setGram(i,val){
+  const v=parseFloat(String(val).replace(/[^0-9.]/g,""));
+  if(!(v>=0)){ renderBuild(); return; }
+  build.items[i].locked=true; build.items[i].g=v; build.gs[i]=v;
+  build.msg=""; renderBuild();
+}
+/* Rescale a bank meal to a different day type the way the bank's own notes do
+   it: move the starch base, nothing else. Aromatics, sauces, nut butter and
+   cheese are the recipe — a carbohydrate target has no business moving them. */
+const SCALE_CATS={grain:1,bread:1,tortilla:1,starchveg:1,cereal:1,cracker:1};
+function scaleToSlot(){
+  const pick=function(test){
+    return build.items.map(function(it,i){return {it:it,i:i};}).filter(function(o){
+      return o.it.food && o.it.food.carb && test(o.it.food);
+    });
+  };
+  let movers=pick(function(f){return SCALE_CATS[f.cat];}), what="starch";
+  if(!movers.length){ movers=pick(function(f){return f.cat==="fruit";}); what="fruit"; }
+  if(!movers.length){
+    build.msg="Nothing in this meal is a starch or a fruit, so there is no base to scale. It needs one added rather than the rest of it stretched.";
+    renderBuild(); return;
+  }
+  build.items.forEach(function(it,i){ it.g=build.gs[i]; it.locked=true; });
+  movers.forEach(function(o){
+    const base=o.it.bankG||build.gs[o.i]||o.it.typ;
+    o.it.locked=false;
+    o.it.min=Math.max(o.it.step, Math.round(base*0.3));
+    o.it.max=Math.round(base*2.5);
+  });
+  build.gs=solve(build.items, buildTarget());
+  const moved=[];
+  build.items.forEach(function(it,i){
+    if(it.bankG && Math.abs(it.bankG-build.gs[i])>0.5){
+      moved.push(esc(it.disp||it.name).toLowerCase()+" "+r0(it.bankG)+" → "+r0(build.gs[i])+" g"+
+        (it.y?" ("+Math.round(build.gs[i]*it.y)+" g cooked)":""));
+    }
+    it.g=build.gs[i]; it.locked=true;
+  });
+  const gap=r1(buildTarget()[2]-totalsOf(build.items,build.gs)[2]);
+  build.msg="Scaled to "+esc(TYPE_NAME[dayType(today)].toLowerCase())+" by moving the "+what+" only: "+
+    (moved.length?moved.join(", "):"nothing needed to move")+"."+
+    (gap>1?" Still "+r0(gap)+" g of carbohydrate short — the base is at the top of what this recipe can carry, so the rest has to be added alongside.":"");
+  renderBuild();
+}
+/* Paste an ingredient line straight out of the Meal Bank page. */
+function pasteIngredients(text){
+  const parts=String(text||"").split(/[;\n]+/).map(function(s){return s.trim()}).filter(Boolean);
+  if(!parts.length) return;
+  let added=0; const missing=[];
+  parts.forEach(function(s){
+    const mm=s.match(/^(.*?)[\s,]*([0-9]+(?:\.[0-9]+)?)\s*(?:g|grams?|ml)?$/i);
+    if(!mm||!mm[1].trim()) return;
+    const disp=mm[1].trim(), g=parseFloat(mm[2]);
+    const canon=BANK_ALIAS[disp.toLowerCase()];
+    const f=(canon&&findFood(canon))||findFood(disp)||matchFoods(disp)[0];
+    if(!f){ missing.push(disp); return; }
+    const it=toSolverItem(f,true,g);
+    it.disp=disp.charAt(0).toUpperCase()+disp.slice(1); it.bankG=g;
+    it.min=Math.max(1,Math.round(g*0.3)); it.max=Math.max(it.max,Math.round(g*2.2));
+    build.items.push(it); build.gs.push(g); added++;
+  });
+  build.picking=false;
+  build.msg=(added?added+" ingredients added at the weights you pasted. ":"")+
+    (missing.length?("No macros on file for: "+esc(missing.join(", "))+" — add them under My added foods, or let Claude look them up."):"");
+  renderBuild();
+}
+function addIngredient(f){
+  if(build.items.some(function(i){return i.name===f.n})) return;
+  build.items.push(toSolverItem(f)); build.gs.push(bounds(f).typ);
+  build.picking=false; build.msg="";
+  resolveBuild(); renderBuild();
+}
+function commitBuild(){
+  const d=day(today,true);
+  const mealName=build.meal?(build.meal.id+" · "+build.meal.name):null;
+  build.items.forEach(function(it,i){
+    const g=build.gs[i]||0; if(g<=0) return;
+    d.entries.push({id:String(Date.now())+Math.random().toString(36).slice(2,6),name:it.name,disp:it.disp||null,
+      g:r0(g), basis:it.y?(/dry/.test(it.name)?"dry":"raw"):"",
+      cooked:it.y?Math.round(g*it.y):null, est:!!(it.y&&!isMeasured(it.name)),
+      slot:build.slot, meal:mealName,
+      p:it.p*g/100,f:it.f*g/100,c:it.c*g/100,swapTo:(it.food&&it.food.swap)||null});
+  });
+  openSlots[build.slot]=true;
+  clearBuild(); build.idea="";
+  commit(today);
+  setView("today");
+}
+
+/* Replace the whole bank from a block exported by the Meal Bank page.
+   Returns a human-readable outcome; never throws at the caller. */
+function importBank(raw){
+  let list;
+  try{ list = JSON.parse(String(raw||"").trim()); }
+  catch(e){ return {ok:false, msg:"That does not parse as a bank block. Copy it again from the Meal Bank page — it should start with [ and end with ]."}; }
+  if(!Array.isArray(list) || !list.length) return {ok:false, msg:"That block is empty."};
+  const before = BANK_MEALS.length;
+  if(!applyBank(list, {at:Date.now()})) return {ok:false, msg:"No usable meals in that block."};
+  const unknown = {};
+  let ingCount = 0;
+  BANK_MEALS.forEach(function(m){
+    (m.i||[]).forEach(function(row){
+      ingCount++;
+      if(!findFood(row[2]) && !findFood(row[0])) unknown[row[0]] = 1;
+    });
+  });
+  state.settings.bank = {meals:BANK_MEALS, at:bankMeta.at};
+  state.settings.updatedAt = Date.now();
+  settingsDirty = true; saveLocal(); schedule(120);
+  const u = Object.keys(unknown);
+  let msg = "Bank replaced — <b>" + BANK_MEALS.length + " options</b> (was " + before + "), " + ingCount + " ingredient lines.";
+  if(u.length) msg += " <b style=\"color:var(--warn)\">" + u.length + " ingredient" + (u.length>1?"s":"") + " this app cannot cost yet:</b> " + u.join(", ") + ". Add them under <em>My added foods</em> on the Today tab, then import again.";
+  else msg += " Every ingredient costs against a food this app already knows.";
+  return {ok:true, msg:msg};
+}
+
+function renderBuild(){
+  const v=document.getElementById("viewBuild");
+  if(view!=="build"){ return; }
+  if(!build.slot) build.slot=currentSlotGuess();
+  const target=buildTarget();
+  const tot=build.items.length?totalsOf(build.items,build.gs):[0,0,0];
+  const slotName=SLOTS.filter(function(s){return s.k===build.slot})[0].n;
+  const showPicker=build.picking||!build.items.length;
+
+  let h='<div class="bcard">'+
+    '<h3>'+(build.items.length?'Working '+esc(slotName.toLowerCase()):'Pull a meal from the bank')+'</h3>'+
+    '<p class="lede">'+(build.items.length
+      ? 'Every weight is editable — type over one and it holds. Scale moves only the starch and fruit, so the recipe stays the recipe.'
+      : 'Your Meal Bank, ingredient by ingredient. Pick one and its weights land here to adjust before they go into the day.')+'</p>'+
+    '<div class="typerow" id="bSlot"></div>'+
+    '<div class="typerow" id="bMode"></div>';
+
+  if(build.msg) h+='<div class="note" style="margin-bottom:9px">'+build.msg+'</div>';
+  if(build.busy) h+='<div class="note" style="margin-bottom:9px"><span class="spin"></span>Asking Claude…</div>';
+
+  if(showPicker){
+    const list=bankFor(build.slot,build.q);
+    h+='<div class="field"><input id="bQ" placeholder="search '+list.length+' '+esc(slotName.toLowerCase())+' options" value="'+esc(build.q)+'" aria-label="search the bank"></div>';
+    h+='<details class="sheet" style="margin:0 0 10px"><summary>Replace bank from Meal Bank</summary><div class="sheetbody">'+
+      '<div class="note">This app keeps its own copy of the bank — two artifacts cannot share a database, so the copy drifts every time a meal changes on the Meal Bank page. On that page, open <b>Bank → Sync to Close the Carbs → Copy the whole bank</b>, then paste it here. It replaces every option at once.</div>'+
+      '<div class="field"><textarea id="bankIn" placeholder="paste the block here" aria-label="bank block"></textarea></div>'+
+      '<div class="typerow"><button class="chip go" id="bankGo">Replace the bank</button>'+
+      '<span class="est">'+(bankMeta.source==="seed" ? "currently the 9 Sep built-in snapshot" : "imported "+new Date(bankMeta.at).toLocaleDateString()+" · "+bankMeta.n+" options")+'</span></div>'+
+      (build.bankMsg ? '<div class="note">'+build.bankMsg+'</div>' : '')+
+    '</div></details>';
+    h+='<div class="mealist">';
+    if(!list.length) h+='<div class="note">Nothing matches that.</div>';
+    list.forEach(function(m){
+      h+='<button class="mealrow" data-meal="'+m.id+'">'+
+         '<span class="mtop"><span class="mid">'+m.id+'</span><span class="mname">'+esc(m.n)+'</span></span>'+
+         '<span class="mbase">'+esc(m.b||m.l)+'</span>'+
+         '<span class="mmac">'+r0(m.p)+' P · '+r0(m.f)+' F · <b>'+r0(m.c)+' C</b></span>'+
+         '</button>';
+    });
+    h+='</div>';
+  }
+
+  if(build.items.length){
+    if(build.meal) h+='<div class="mealhead"><div><b>'+esc(build.meal.id+' · '+build.meal.name)+'</b>'+
+      (build.meal.base?'<span>base · '+esc(build.meal.base)+'</span>':'')+'</div>'+
+      '<button class="chip small" id="bChange">Change</button></div>';
+    h+='<div class="btwrap"><table class="btable"><thead><tr><th>Ingredient</th><th>Weigh</th><th>P / F / C</th></tr></thead><tbody>';
+    build.items.forEach(function(it,i){
+      const g=build.gs[i]||0;
+      const basis=/dry/.test(it.name)?"dry":"raw";
+      h+='<tr><td>'+esc(it.disp||it.name)+
+        (it.bankG&&Math.abs(it.bankG-g)>0.5?' <span class="chg">bank '+r0(it.bankG)+' g</span>':'')+
+        '<span class="rowbtns"><button class="lockb" data-rm="'+i+'" aria-label="remove '+esc(it.disp||it.name)+'">remove</button></span></td>'+
+        '<td class="w"><span class="ginwrap"><input class="ginp" data-g="'+i+'" inputmode="decimal" value="'+r0(g)+'" aria-label="grams of '+esc(it.disp||it.name)+'"><i>g'+(it.y?' '+basis:'')+'</i></span>'+
+        (it.y?'<span>→ '+Math.round(g*it.y)+' g cooked'+(isMeasured(it.name)?'':' ·&nbsp;est')+'</span>':'')+'</td>'+
+        '<td>'+r1(it.p*g/100)+' / '+r1(it.f*g/100)+' / <b>'+r1(it.c*g/100)+'</b></td></tr>';
+    });
+    h+='<tr class="tot"><td>Plated total</td><td></td><td>'+r0(tot[0])+' / '+r0(tot[1])+' / <b>'+r0(tot[2])+'</b></td></tr>'+
+       '<tr class="tot" style="border:0"><td style="color:var(--ink-3)">Target · '+(build.mode==="slot"?esc(slotName.toLowerCase()):"rest of the day")+'</td><td></td><td style="color:var(--ink-3)">'+r0(target[0])+' / '+r0(target[1])+' / '+r0(target[2])+'</td></tr>'+
+       '</tbody></table></div>';
+    h+=buildVerdict(tot,target);
+    h+='<div class="field" style="margin-top:11px;flex-wrap:wrap">'+
+       '<button class="chip go" id="bCommit" style="flex:1;min-width:150px;padding:10px">Log this to '+esc(slotName.toLowerCase())+'</button>'+
+       '<button class="chip" id="bScale">Scale to '+esc(TYPE_NAME[dayType(today)].toLowerCase())+'</button>'+
+       '<button class="chip" id="bClear">Clear</button></div>';
+  }
+  h+='</div>';
+
+  h+='<details class="sheet"><summary>Build one from scratch, or paste a list</summary><div class="sheetbody">'+
+     '<div class="field"><input id="bIdea" placeholder="chicken burrito bowl · yogurt bowl" value="'+esc(build.idea)+'" aria-label="meal idea"><button class="chip go" id="bAsk"'+(sampleFn?'':' disabled')+'>Ideas</button></div>'+
+     '<div class="field"><input id="bIng" placeholder="add one ingredient by name" autocomplete="off" aria-label="add ingredient"><button class="chip" id="bAdd">Add</button></div>'+
+     '<ul class="ac hidden" id="bAc"></ul>'+
+     '<div class="eyebrow">Paste from the Meal Bank</div>'+
+     '<div class="field"><textarea id="bPaste" placeholder="chicken breast 133 g; white rice dry 50 g; avocado 35 g" aria-label="paste an ingredient list"></textarea></div>'+
+     '<button class="chip" id="bPasteGo">Add pasted ingredients</button>'+
+     '<div class="hint">Copy the ingredient line out of a Meal Bank recipe and paste it here. Semicolons or new lines, weight after the name.</div>'+
+     '</div></details>';
+
+  v.innerHTML=h;
+
+  const sr=document.getElementById("bSlot");
+  SLOTS.filter(function(s){return s.k!=="night"}).forEach(function(s){
+    const b=document.createElement("button");b.className="chip small";b.textContent=s.n;
+    b.setAttribute("aria-pressed",build.slot===s.k?"true":"false");
+    b.onclick=function(){ build.slot=s.k; if(build.meal||!build.items.length){build.picking=true;} renderBuild(); };
+    sr.appendChild(b);
+  });
+  const mr=document.getElementById("bMode");
+  [["slot","Hit this slot"],["day","Hit the rest of the day"]].forEach(function(m){
+    const b=document.createElement("button");b.className="chip small";b.textContent=m[1];
+    b.setAttribute("aria-pressed",build.mode===m[0]?"true":"false");
+    b.onclick=function(){build.mode=m[0];renderBuild();};
+    mr.appendChild(b);
+  });
+
+  const q=document.getElementById("bQ");
+  if(q) q.addEventListener("change",function(e){ build.q=e.target.value; renderBuild(); });
+  const bg=document.getElementById("bankGo");
+  if(bg) bg.onclick=function(){
+    const ta=document.getElementById("bankIn");
+    const res=importBank(ta?ta.value:"");
+    build.bankMsg=res.msg; build.q=""; renderBuild();
+  };
+  v.querySelectorAll("[data-meal]").forEach(function(b){
+    b.onclick=function(){ const m=BANK_MEALS.filter(function(x){return x.id===b.getAttribute("data-meal")})[0]; if(m) loadMeal(m); };
+  });
+  v.querySelectorAll(".ginp").forEach(function(inp){
+    inp.addEventListener("change",function(){ setGram(+inp.getAttribute("data-g"), inp.value); });
+  });
+  v.querySelectorAll("[data-rm]").forEach(function(b){
+    b.onclick=function(){ const i=+b.getAttribute("data-rm"); build.items.splice(i,1); build.gs.splice(i,1); renderBuild(); };
+  });
+  const bc=document.getElementById("bChange"); if(bc) bc.onclick=changeMeal;
+  const bs=document.getElementById("bScale"); if(bs) bs.onclick=scaleToSlot;
+  const bcl=document.getElementById("bClear"); if(bcl) bcl.onclick=clearBuild;
+  const bcm=document.getElementById("bCommit"); if(bcm) bcm.onclick=commitBuild;
+
+  const idea=document.getElementById("bIdea");
+  if(idea) idea.addEventListener("input",function(e){build.idea=e.target.value;});
+  const ask=document.getElementById("bAsk"); if(ask) ask.onclick=askForMeal;
+  const pg=document.getElementById("bPasteGo");
+  if(pg) pg.onclick=function(){ pasteIngredients(document.getElementById("bPaste").value); };
+
+  const ing=document.getElementById("bIng"), bac=document.getElementById("bAc");
+  if(ing){
+    ing.addEventListener("input",function(){
+      const qq=ing.value.trim(); bac.innerHTML="";
+      const ms=qq?matchFoods(qq):[];
+      if(!ms.length){ bac.classList.add("hidden"); return; }
+      ms.forEach(function(f){
+        const li=document.createElement("li"),b=document.createElement("button");
+        b.innerHTML='<span>'+esc(f.n)+'</span><span class="acmac">'+f.p+' / '+f.f+' / '+f.c+' per 100 g</span>';
+        b.onclick=function(){ addIngredient(f); };
+        li.appendChild(b); bac.appendChild(li);
+      });
+      bac.classList.remove("hidden");
+    });
+    document.getElementById("bAdd").onclick=function(){
+      const qq=ing.value.trim(); if(!qq) return;
+      const f=matchFoods(qq)[0];
+      if(f) addIngredient(f);
+      else lookupFood(qq,function(nf){ if(nf) addIngredient(nf); });
+    };
+  }
+}
+function buildVerdict(tot,target){
+  const gapC=r1(target[2]-tot[2]), gapF=r1(target[1]-tot[1]), gapP=r1(target[0]-tot[0]);
+  const ctx=contextOf(build.items.map(function(i){return i.food;}).filter(Boolean), build.slot);
+  let h='<div class="bres">';
+  if(gapC<=1){
+    h+='<b>Lands on target.</b> '+(gapC<-1?'Carbohydrate is '+r0(-gapC)+' g over, which is fine — the number is a floor.':'')+
+       (gapP<-2?' Protein runs '+r0(-gapP)+' g over; leave it.':'');
+  } else {
+    h+='<b>'+r0(gapC)+' g of carbohydrate short of '+(build.mode==="slot"?"this slot":"the rest of the day")+'.</b>';
+    if(build.meal&&build.meal.nat&&build.meal.nat!=="lift"&&dayType(today)!=="longrun"){
+      h+=' This one is written for the long run.';
+    }
+    h+='<div class="ctx" style="margin-top:6px">'+contextLabel(ctx)+'</div>';
+    const opts=sourceFixes(gapC,2,ctx);
+    h+='<div class="fixopts">';
+    opts.forEach(function(o){
+      h+='<div class="fixopt"><b>add '+o.g+' g '+o.label.toLowerCase()+(o.cooked?' <span class="est">≈'+o.cooked+' g cooked</span>':'')+'</b><span class="mono">'+o.P+' / '+o.F+' / '+o.C+'</span></div>';
+    });
+    h+='</div>';
+    if(build.meal) h+='<div class="why">Or tap Scale — it moves this meal\'s own starch instead of bolting something on.</div>';
+  }
+  if(gapF>3 && gapC<=1) h+='<div class="why">Fat is '+r0(gapF)+' g light. Carbohydrate is closed, so this is the moment to add it.</div>';
+  // her rule: cost bottom-up, and say so when it disagrees with a published figure
+  if(build.meal){
+    const unchanged=build.items.every(function(it,i){return it.bankG&&Math.abs(it.bankG-build.gs[i])<0.5;});
+    const d=[tot[0]-build.meal.p,tot[1]-build.meal.f,tot[2]-build.meal.c];
+    if(unchanged&&Math.max(Math.abs(d[0]),Math.abs(d[1]),Math.abs(d[2]))>2){
+      h+='<div class="why"><b>Costing note.</b> The bank lists this at '+r0(build.meal.p)+' / '+r0(build.meal.f)+' / '+r0(build.meal.c)+
+         '. Added up from the ingredients here it comes to '+r0(tot[0])+' / '+r0(tot[1])+' / '+r0(tot[2])+
+         ' — a difference of '+d.map(function(x){return (x>0?"+":"")+r1(x)}).join(" / ")+
+         '. Most likely a branded item whose panel differs from the reference value.</div>';
+    }
+  }
+  h+='</div>';
+  return h;
+}
+
+/* ---- Claude-assisted: meal ideas and off-bank lookup ----
+   Whitelist every field taken from the response. Nothing but these keys is
+   read, so an energy figure cannot reach the screen even if one is returned. */
+function cleanFood(o){
+  if(!o||typeof o!=="object") return null;
+  const n=String(o.name||"").trim().slice(0,60);
+  const p=+o.p, f=+o.f, c=+o.c;
+  if(!n||!isFinite(p)||!isFinite(f)||!isFinite(c)) return null;
+  if(p<0||f<0||c<0||p>100||f<0||f>100||c>100||(p+f+c)>105) return null;
+  const cat=CAT[o.cat]?o.cat:"grain";
+  let t=Array.isArray(o.tags)?o.tags.filter(function(x){return ["sweet","savory","mex","med","asian","amer"].indexOf(x)>=0;}):[];
+  if(!t.length) t=["savory"];
+  const y=(+o.cookedYield>0&&+o.cookedYield<6)?+o.cookedYield:undefined;
+  const food={n:n,p:r1(p),f:r1(f),c:r1(c),cat:cat,t:t,looked:1};
+  if(y) food.y=y;
+  if(c>=15) food.carb=1;
+  if(f>=15) food.fat=1;
+  return food;
+}
+function saveCustom(food){
+  const cf=state.settings.customFoods||[];
+  if(!cf.some(function(x){return x.n.toLowerCase()===food.n.toLowerCase();})){ cf.push(food); state.settings.customFoods=cf; state.settings.updatedAt=Date.now(); saveLocal(); touch(); }
+}
+const BANK_HINT = FOODS.map(function(f){return f.n}).join("; ");
+function askForMeal(){
+  if(!sampleFn||build.busy) return;
+  const idea=(document.getElementById("bIdea").value||"").trim();
+  if(!idea){ build.msg="Type a meal idea first."; renderBuild(); return; }
+  build.busy=true; build.msg=""; build.idea=idea; renderBuild();
+  const t=buildTarget();
+  const prompt =
+    "Break a meal idea into weighable ingredients. Return JSON only, no prose.\n\n"+
+    "Meal idea: \""+idea+"\"\n"+
+    "It has to carry, in grams: protein "+r0(t[0])+", fat "+r0(t[1])+", carbohydrate "+r0(t[2])+".\n\n"+
+    "Shape: {\"items\":[{\"name\":string,\"p\":number,\"f\":number,\"c\":number,\"cat\":string,\"tags\":[string],\"cookedYield\":number|null}],\"note\":string}\n\n"+
+    "Rules:\n"+
+    "- 3 to 7 real ingredients. No seasonings, no water, no 'to taste' entries.\n"+
+    "- p, f and c are grams per 100 g of that ingredient, raw for meat, dry for grains and pasta, ready-to-eat otherwise. Use standard reference values.\n"+
+    "- cookedYield = cooked weight divided by raw or dry weight, or null if it is not cooked.\n"+
+    "- cat is one of: "+Object.keys(CAT).join(", ")+".\n"+
+    "- tags: one of sweet or savory, optionally plus one of mex, med, asian, amer.\n"+
+    "- The meal must include a starch dense enough to carry that carbohydrate figure. A bowl of yogurt and fruit cannot reach it alone — add granola, oats or bread as appropriate to the dish. Never add a starch that would be wrong for the dish.\n"+
+    "- Prefer these exact names where they fit the dish: "+BANK_HINT+"\n"+
+    "- Do not return energy, calories, kcal, or any field other than those named. Grams only.\n"+
+    "- Do not choose portion sizes; only identify the ingredients.";
+  sampleFn.json(prompt,{modelTier:"default"}).then(function(res){
+    build.busy=false;
+    const items=(res&&Array.isArray(res.items))?res.items:[];
+    if(!items.length){ build.msg="Claude didn't return an ingredient list for that. Try naming the dish more plainly."; renderBuild(); return; }
+    let added=0, newOnes=[];
+    items.slice(0,7).forEach(function(o){
+      let f=findFood(o.name);
+      if(!f){ const c=cleanFood(o); if(c){ saveCustom(c); f=c; newOnes.push(c.n); } }
+      if(f&&!build.items.some(function(i){return i.name===f.n})){ build.items.push(toSolverItem(f)); added++; }
+    });
+    build.msg = added
+      ? ("Built from "+added+" ingredients"+(newOnes.length?", "+newOnes.length+" new to your bank ("+esc(newOnes.join(", "))+") — check those values before you trust them":"")+". Weights below are solved to the target; hold any you've already weighed and it will re-solve around them.")
+      : "Nothing new to add — those ingredients are already in the build.";
+    resolveBuild(); renderBuild();
+  }).catch(function(e){
+    build.busy=false;
+    build.msg = (e&&e.code==="not_granted") ? "Claude lookup isn't available in this view." :
+                (e&&e.code==="rate_limited") ? "Rate limited — try again in a moment." : "That lookup failed. Add the ingredients by name instead.";
+    renderBuild();
+  });
+}
+function lookupFood(q, cb){
+  if(!sampleFn){ build.msg='"'+esc(q)+'" isn\'t in your bank, and lookup isn\'t available here. Add it by hand under My added foods.'; renderBuild(); cb(null); return; }
+  build.busy=true; renderBuild();
+  const prompt =
+    "Return JSON only, no prose: {\"name\":string,\"p\":number,\"f\":number,\"c\":number,\"cat\":string,\"tags\":[string],\"cookedYield\":number|null}\n\n"+
+    "Nutrition per 100 g for: \""+q+"\". Use standard published reference values — USDA generic values unless a brand is named, in which case that brand's panel.\n"+
+    "p, f, c are grams of protein, fat and total carbohydrate per 100 g, on the as-purchased basis (raw for meat, dry for grains and pasta, ready-to-eat otherwise).\n"+
+    "cookedYield = cooked weight divided by raw or dry weight, or null if it is not cooked.\n"+
+    "cat is one of: "+Object.keys(CAT).join(", ")+". tags: sweet or savory, optionally plus mex, med, asian or amer.\n"+
+    "Do not return energy, calories, kcal, or any field other than those named.";
+  sampleFn.json(prompt,{modelTier:"quick"}).then(function(res){
+    build.busy=false;
+    const f=cleanFood(res&&res.name?res:Object.assign({name:q},res||{}));
+    if(!f){ build.msg="Couldn't get usable numbers for \""+esc(q)+"\". Add it by hand under My added foods."; renderBuild(); cb(null); return; }
+    saveCustom(f);
+    build.msg="Added <b>"+esc(f.n)+"</b> at "+f.p+" / "+f.f+" / "+f.c+" per 100 g — a looked-up estimate, not something you weighed. Correct it under My added foods if your package says otherwise.";
+    renderBuild(); cb(f);
+  }).catch(function(){ build.busy=false; build.msg="That lookup failed. Add it by hand under My added foods."; renderBuild(); cb(null); });
+}
+
+/* ================= today ================= */
+function render(){
+  today=isoToday(); day(today,true);
+  renderHeader();
+  if(view==="today"){ renderTypeRow(); renderAlerts(); renderTotals(); renderSlots(); renderYields(); renderCustom(); }
+  else if(view==="build"){ renderBuild(); }
+  else { renderTrend(); }
+}
+function renderHeader(){
+  const d=new Date(today+"T12:00:00");
+  document.getElementById("dowLabel").textContent=["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"][d.getDay()]+" · "+TYPE_NAME[dayType(today)];
+  document.getElementById("dateLabel").textContent=d.getDate()+" "+["January","February","March","April","May","June","July","August","September","October","November","December"][d.getMonth()];
+}
+function renderTypeRow(){
+  const row=document.getElementById("typeRow"); row.innerHTML="";
+  const cur=dayType(today);
+  [["lifting","Lifting"],["longrun","Long run"],["rest","Rest"]].forEach(function(t){
+    const b=document.createElement("button");b.className="chip";b.textContent=t[1];
+    b.setAttribute("aria-pressed",cur===t[0]?"true":"false");
+    b.onclick=function(){day(today,true).type=t[0];commit(today);};
+    row.appendChild(b);
+  });
+}
+function history(n){const out=[],base=new Date(today+"T12:00:00");for(let i=n-1;i>=0;i--){const d=new Date(base);d.setDate(d.getDate()-i);out.push(d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate()));}return out;}
+function slotLogged(iso,s){return s==="night"?true:entriesFor(iso).some(function(e){return e.slot===s;});}
+function slotClosed(iso,s){const T=TARGETS[dayType(iso)][s];return slotTotals(iso,s)[2]>=T[2]*0.8;}
+function dayHasData(iso){return entriesFor(iso).length>0;}
+
+function renderAlerts(){
+  const box=document.getElementById("alerts");box.innerHTML="";
+  const past=history(4).slice(0,3), withData=past.filter(dayHasData);
+  function add(html){const d=document.createElement("div");d.className="alert";d.innerHTML="<div>"+html+"</div>";box.appendChild(d);}
+  const snackShort=past.filter(function(iso){return dayHasData(iso)&&!slotClosed(iso,"snack");});
+  if(withData.length===3&&snackShort.length===3) add("<b>Three days running the 3:30 snack came up short.</b> That slot is the one Revision 4 shrank to 15 g protein so it would actually get eaten. Pack the desk-drawer kit tonight — pretzels, jerky, almonds — so tomorrow doesn't need a decision.");
+  const lunchShort=past.filter(function(iso){
+    if(!dayHasData(iso))return false;
+    const T=TARGETS[dayType(iso)].lunch,v=slotTotals(iso,"lunch");
+    return v[2]<T[2]*0.8||v[0]<T[0]*0.8;
+  });
+  if(lunchShort.length>=2) add("<b>Lunch has read incomplete "+lunchShort.length+" of the last 3 logged days.</b> It's the biggest protein slot at 43 g and it carries 68 g of carbohydrate with it — when lunch slips the day rarely recovers by dinner.");
+}
+function renderTotals(){
+  const tot=dayTotals(today),tgt=dayTargets(today),c=tot[2],ct=tgt[2];
+  document.getElementById("carbNum").textContent=r0(c);
+  document.getElementById("carbTgt").textContent=ct;
+  const gapEl=document.getElementById("carbGap"),rail=document.getElementById("carbRail"),gap=r1(ct-c);
+  if(gap>0.5){gapEl.textContent=r0(gap)+" g still to eat";gapEl.className="gapline";}
+  else{gapEl.textContent=gap<-0.5?"closed, +"+r0(-gap)+" g over — floors, not ceilings":"closed";gapEl.className="gapline done";}
+  rail.firstElementChild.style.width=Math.min(100,c/ct*100)+"%";
+  rail.className="rail"+(c>=ct?" over":"");
+  const pv=document.getElementById("proVal"),fv=document.getElementById("fatVal");
+  pv.innerHTML=r0(tot[0])+' <span>/ '+tgt[0]+' g</span>';
+  fv.innerHTML=r0(tot[1])+' <span>/ '+tgt[1]+' g</span>';
+  pv.parentElement.querySelector(".minirail > i").style.width=Math.min(100,tot[0]/tgt[0]*100)+"%";
+  fv.parentElement.querySelector(".minirail > i").style.width=Math.min(100,tot[1]/tgt[1]*100)+"%";
+  document.getElementById("dayFixHint").textContent=gap>0.5?"day short "+r0(gap)+" g carb":"";
+}
+function renderSlots(){
+  const wrap=document.getElementById("slots");wrap.innerHTML="";
+  const T=TARGETS[dayType(today)];
+  SLOTS.forEach(function(s){
+    const v=slotTotals(today,s.k),t=T[s.k],gap=r1(t[2]-v[2]),logged=slotLogged(today,s.k),open=openSlots[s.k]===true;
+    const el=document.createElement("div");el.className="slot";
+    const head=document.createElement("button");head.className="slothead";head.setAttribute("aria-expanded",open?"true":"false");
+    head.innerHTML='<div><div class="slotname"><i class="dot '+(!logged?"empty":(gap<=0.5?"ok":"short"))+'"></i>'+s.n+(s.k==="night"?' <span class="locked">fixed</span>':'')+'</div>'+
+      '<div class="slotsub">'+r1(v[0])+' P · '+r1(v[1])+' F &nbsp;·&nbsp; target '+t[0]+' / '+t[1]+' / '+t[2]+'</div></div>'+
+      '<div class="slotcarb">'+r0(v[2])+'<small> / '+t[2]+' g C</small></div>';
+    head.onclick=function(){openSlots[s.k]=!open;render();};
+    el.appendChild(head);
+    const bar=document.createElement("div");bar.className="slotbar"+(v[2]>=t[2]?" full":"");
+    bar.innerHTML='<i style="width:'+Math.min(100,v[2]/t[2]*100)+'%"></i>';el.appendChild(bar);
+    if(open){
+      const body=document.createElement("div");body.className="slotbody";
+      if(s.k==="night"){
+        const e=document.createElement("div");e.className="entries";
+        e.innerHTML='<div class="entry"><div class="ename">'+NIGHT.name+' <em>fixed, already counted</em></div><div class="emac">18 / 4 / 18</div><div></div></div>';
+        body.appendChild(e);
+      } else {
+        const list=entriesFor(today).filter(function(e){return e.slot===s.k});
+        if(list.length){
+          const e=document.createElement("div");e.className="entries";
+          let lastMeal=null;
+          list.forEach(function(en){
+            if((en.meal||null)!==lastMeal){
+              lastMeal=en.meal||null;
+              if(lastMeal){const lab=document.createElement("div");lab.className="mealtag";lab.textContent=lastMeal;e.appendChild(lab);}
+            }
+            const row=document.createElement("div");row.className="entry";
+            const w=(en.g+" g "+(en.basis||"")).trim()+(en.cooked?" → "+en.cooked+" g cooked":"")+(en.est?" · est":"");
+            row.innerHTML='<div class="ename">'+esc(en.disp||en.name)+' <em>'+esc(w)+'</em></div><div class="emac">'+r1(en.p)+' / '+r1(en.f)+' / '+r1(en.c)+'</div>';
+            const del=document.createElement("button");del.className="del";del.textContent="×";del.setAttribute("aria-label","remove "+en.name);
+            del.onclick=function(){const d=day(today,true);d.entries=d.entries.filter(function(x){return x.id!==en.id});commit(today);};
+            row.appendChild(del);e.appendChild(row);
+          });
+          body.appendChild(e);
+        }
+        const pick=document.createElement("button");
+        pick.className="chip small pickbtn"; pick.textContent="Pick a "+s.n.toLowerCase()+" from the bank";
+        pick.onclick=function(){ build.slot=s.k; build.picking=true; build.items=[]; build.gs=[]; build.meal=null; build.msg=""; build.q=""; setView("build"); };
+        body.appendChild(pick);
+        body.appendChild(slotFix(s,v,t));
+      }
+      el.appendChild(body);
+    }
+    wrap.appendChild(el);
+  });
+}
+function slotFix(s,v,t){
+  const box=document.createElement("div");box.className="fix";
+  const gapC=r1(t[2]-v[2]),gapF=r1(t[1]-v[1]);
+  const ctx=slotContext(today,s.k);
+  let html="";
+  if(gapC<=0.5&&gapF<=0.5){
+    html+='<div class="verdict ok">'+s.n+' is closed.</div>';
+    if(gapC<-0.5) html+='<div class="why">'+r0(-gapC)+' g of carbohydrate over the slot. Leave it — the targets are floors.</div>';
+  } else if(gapC>0.5){
+    html+='<div class="verdict">Short '+r0(gapC)+' g carb'+(gapF>0.5?', '+r0(gapF)+' g fat':'')+'.</div>';
+    html+='<div class="ctx">'+contextLabel(ctx)+'</div><div class="fixopts">';
+    const opts=sourceFixes(gapC,3,ctx);
+    if(opts.length){
+      opts.forEach(function(o){
+        html+='<div class="fixopt"><b>'+o.g+' g '+o.label.toLowerCase()+(o.cooked?' <span class="est">≈'+o.cooked+' g cooked</span>':'')+'</b><span class="mono">'+o.P+' / '+o.F+' / '+o.C+'</span></div>';
+      });
+    } else html+='<div class="fixopt">Nothing in the bank fits that gap in one portion. Build it on the Build tab.</div>';
+    html+='</div>';
+    if(gapF>0.5){
+      const fo=sourceFixes(gapF,1,ctx,"fat")[0];
+      if(fo) html+='<div class="why">Carbohydrate first. Then '+fo.g+' g '+fo.label.toLowerCase()+' covers the fat ('+fo.P+' / '+fo.F+' / '+fo.C+').</div>';
+    }
+  } else {
+    html+='<div class="verdict">Carbohydrate closed. Short '+r0(gapF)+' g fat.</div><div class="ctx">'+contextLabel(ctx)+'</div><div class="fixopts">';
+    sourceFixes(gapF,2,ctx,"fat").forEach(function(o){
+      html+='<div class="fixopt"><b>'+o.g+' g '+o.label.toLowerCase()+'</b><span class="mono">'+o.P+' / '+o.F+' / '+o.C+'</span></div>';
+    });
+    html+='</div>';
+  }
+  if(gapC>0.5&&v[0]>=t[0]) html+='<div class="why"><b>Protein is already at target in this slot with '+r0(gapC)+' g of carbohydrate open.</b> Nothing here needs to get smaller — the gap is starch, not meat.</div>';
+  const swap=swapOffer(s.k);
+  if(swap&&gapF>2) html+='<div class="why">Cheaper than adding starch: '+swap+'</div>';
+  if(s.k==="breakfast"&&dayType(today)==="longrun") html+='<div class="note" style="margin-top:9px">117 g is a window, not a plate. Split it: something before the run, 15–20 g an hour during, the remainder after.</div>';
+  if(s.k==="snack"){
+    const dayGap=r1(dayTargets(today)[2]-dayTotals(today)[2]);
+    if(dayGap>0.5&&entriesFor(today).length>0){
+      html+='<div class="note" style="margin-top:9px"><b>Day is '+r0(dayGap)+' g carb short.</b> The correction belongs in this slot, not dinner — dinner cooks for two.</div><div class="fixopts">';
+      sourceFixes(dayGap,2,ctx).forEach(function(o){
+        html+='<div class="fixopt"><b>'+o.g+' g '+o.label.toLowerCase()+(o.cooked?' <span class="est">≈'+o.cooked+' g cooked</span>':'')+'</b><span class="mono">'+o.P+' / '+o.F+' / '+o.C+'</span></div>';
+      });
+      html+='</div>';
+    }
+    html+='<div class="snackopts">'+SNACK_OPTIONS.map(function(o,i){return '<span class="snackopt'+(i===0?' kit':'')+'">'+esc(o)+'</span>';}).join('')+'</div>';
+  }
+  box.innerHTML=html;return box;
+}
+function swapOffer(slotKey){
+  const list=entriesFor(today).filter(function(e){return e.slot===slotKey&&e.swapTo;});
+  if(!list.length)return null;
+  const en=list[0],from=findFood(en.name),to=findFood(en.swapTo);
+  if(!from||!to)return null;
+  const dF=r1((to.f-from.f)*en.g/100),dP=r1((to.p-from.p)*en.g/100);
+  return 'swap the '+en.g+' g of '+from.n.toLowerCase()+' for '+to.n.toLowerCase()+' — '+(dF>=0?'+':'')+dF+' F, '+(dP>=0?'+':'')+dP+' P at the same weight.';
+}
+function renderYields(){
+  const box=document.getElementById("yields");box.innerHTML="";
+  const names=Object.keys(DEFAULT_YIELDS).sort();
+  names.forEach(function(n){
+    const f=findFood(n);if(!f)return;
+    const row=document.createElement("div");row.className="yrow";
+    const lab=document.createElement("div");
+    lab.innerHTML=esc(n)+(isMeasured(n)?'':' <span class="est">est</span>');
+    const inp=document.createElement("input");inp.type="text";inp.inputMode="decimal";inp.value="×"+yieldOf(f);inp.setAttribute("aria-label",n+" cooked yield");
+    inp.onchange=function(){
+      const val=parseFloat(inp.value.replace(/[^0-9.]/g,""));
+      if(val>0){state.settings.yields[n]=val;state.settings.measured[n]=true;state.settings.updatedAt=Date.now();commit(null);}else render();
+    };
+    const m=document.createElement("div");m.className="measured";m.textContent=isMeasured(n)?"measured":"assumed";
+    row.appendChild(lab);row.appendChild(inp);row.appendChild(m);box.appendChild(row);
+  });
+}
+function renderCustom(){
+  const el=document.getElementById("customList");el.innerHTML="";
+  const cf=state.settings.customFoods||[];
+  if(!cf.length){el.innerHTML='<div class="hint">Anything you add by hand, or that Claude looks up from the Build tab, lands here. Looked-up values are estimates — correct them against your package.</div>';return;}
+  cf.forEach(function(f,i){
+    const row=document.createElement("div");row.className="cfrow";row.style.marginTop="6px";
+    row.innerHTML='<div style="font-size:13px">'+esc(f.n)+(f.looked?' <span class="est">looked up</span>':'')+'</div>';
+    ["p","f","c"].forEach(function(k){
+      const inp=document.createElement("input");inp.value=f[k];inp.inputMode="decimal";inp.setAttribute("aria-label",f.n+" "+k+" per 100 g");
+      inp.onchange=function(){const v=parseFloat(inp.value);if(isFinite(v)&&v>=0&&v<=100){f[k]=v;delete f.looked;state.settings.updatedAt=Date.now();commit(null);}else render();};
+      row.appendChild(inp);
+    });
+    const del=document.createElement("button");del.className="chip small";del.textContent="×";del.setAttribute("aria-label","remove "+f.n);
+    del.onclick=function(){cf.splice(i,1);state.settings.updatedAt=Date.now();commit(null);};
+    row.appendChild(del);el.appendChild(row);
+  });
+}
+
+/* ================= trend ================= */
+function renderTrend(){
+  const v=document.getElementById("viewTrend"),days=history(21),logged=days.filter(dayHasData);
+  const closed=logged.filter(function(iso){return dayTotals(iso)[2]>=dayTargets(iso)[2];});
+  const snackDone=logged.filter(function(iso){return slotClosed(iso,"snack");});
+  const snackPct=logged.length?Math.round(snackDone.length/logged.length*100):0;
+  const leaks=SLOTS.filter(function(s){return s.k!=="night"}).map(function(s){
+    return {n:s.n,miss:logged.filter(function(iso){return !slotClosed(iso,s.k);}).length};
+  }).sort(function(a,b){return b.miss-a.miss;});
+  const lunchMiss=logged.filter(function(iso){
+    const T=TARGETS[dayType(iso)].lunch,t=slotTotals(iso,"lunch");
+    return t[2]<T[2]*0.8||t[0]<T[0]*0.8;
+  }).length;
+  let bars="",ticks="";
+  days.forEach(function(iso){
+    const has=dayHasData(iso),tot=dayTotals(iso)[2],tgt=dayTargets(iso)[2];
+    const pct=has?Math.min(130,tot/tgt*100):0;
+    bars+='<div class="b'+(has?(tot>=tgt?' hit':''):' none')+'" title="'+iso+'"><i style="height:'+(pct/130*100)+'%"></i></div>';
+    ticks+='<div class="tick '+(!has?"":(slotClosed(iso,"snack")?"yes":"no"))+'" title="'+iso+'"></div>';
+  });
+  v.innerHTML='<div class="tgrid">'+
+    '<div class="tile"><div class="eyebrow">Carbohydrate, last 21 days</div><div class="tval">'+closed.length+'<small> of '+logged.length+' days closed</small></div>'+
+    '<div class="bars"><div class="target"></div>'+bars+'</div>'+
+    '<div class="barlabels"><span>21 days ago</span><span>dashed line = target</span><span>today</span></div></div>'+
+    '<div class="tile" style="border-left:3px solid var(--carb-fill)"><div class="eyebrow">Afternoon snack — the Revision 4 test</div>'+
+    '<div class="tval">'+snackPct+'<small>% ticked</small></div><div class="ticks">'+ticks+'</div>'+
+    '<div class="tsub">The 3:30 slot dropped to 15 g protein on 30 August so it would stop feeling like a fourth meal. Whether it now gets eaten is the only thing that revision was for. '+snackDone.length+' of '+logged.length+' logged days hit at least 80% of the slot\'s carbohydrate.</div></div>'+
+    '<div class="tile"><div class="eyebrow">Where the day leaks</div><table class="leaktable"><tbody>'+
+    leaks.map(function(l){return '<tr><td>'+l.n+'</td><td>'+l.miss+' day'+(l.miss===1?'':'s')+' short</td></tr>';}).join('')+
+    '</tbody></table><div class="tsub">'+(lunchMiss>0?'<b>Lunch read incomplete on '+lunchMiss+' of '+logged.length+' logged days.</b> It is the largest protein slot at 43 g and carries 68 g of carbohydrate with it — a missed lunch takes both, and the snack cannot cover the difference.':'Lunch is holding. It is the slot to watch: 43 g protein and 68 g carbohydrate travel together, and losing it costs more than a missed snack.')+'</div></div>'+
+    '</div><div class="sync">A day counts as logged once it has one entry. A slot counts as closed at 80% of its carbohydrate target or better.</div>';
+}
+
+/* ================= logger ================= */
+function currentSlotGuess(){const h=new Date().getHours();return h<10?"breakfast":(h<14?"lunch":(h<17?"snack":(h<21?"dinner":"snack")));}
+function renderSlotPick(){
+  const el=document.getElementById("slotPick");el.innerHTML="";
+  if(!pendingSlot)pendingSlot=currentSlotGuess();
+  SLOTS.filter(function(s){return s.k!=="night"}).forEach(function(s){
+    const b=document.createElement("button");b.className="chip small";b.textContent=s.n;
+    b.setAttribute("aria-pressed",pendingSlot===s.k?"true":"false");
+    b.onclick=function(){pendingSlot=s.k;renderSlotPick();refreshLogger();};
+    el.appendChild(b);
+  });
+}
+function parseInput(raw){
+  const m=raw.match(/^(.*?)[\s,]*([0-9]+(?:\.[0-9]+)?)\s*(g|grams?)?\s*(raw|cooked|dry)?$/i);
+  if(m&&m[1].trim())return {name:m[1].trim(),g:parseFloat(m[2]),basis:(m[4]||"").toLowerCase()};
+  const m2=raw.match(/^([0-9]+(?:\.[0-9]+)?)\s*(?:g|grams?)?\s+(.+)$/i);
+  if(m2)return {name:m2[2].trim(),g:parseFloat(m2[1]),basis:""};
+  return {name:raw.trim(),g:null,basis:""};
+}
+function matchFoods(q){
+  if(!q)return[];
+  const s=q.toLowerCase();
+  const hits=allFoods().filter(function(f){return f.n.toLowerCase().indexOf(s)>=0;})
+    .sort(function(a,b){return a.n.toLowerCase().indexOf(s)-b.n.toLowerCase().indexOf(s);});
+  if(hits.length<6){ // the bank's own wording finds the same food
+    Object.keys(BANK_ALIAS).forEach(function(k){
+      if(k.indexOf(s)<0) return;
+      const f=findFood(BANK_ALIAS[k]);
+      if(f&&hits.indexOf(f)<0) hits.push(f);
+    });
+  }
+  return hits.slice(0,6);
+}
+function refreshLogger(){
+  const input=document.getElementById("logInput"),p=parseInput(input.value),ac=document.getElementById("ac");
+  const matches=p.name?matchFoods(p.name):[];
+  const exact=(pendingFood&&p.name.toLowerCase()===pendingFood.n.toLowerCase())?pendingFood:(matches.length===1?matches[0]:null);
+  if(matches.length&&!(exact&&p.g)){
+    ac.innerHTML="";
+    matches.forEach(function(f){
+      const li=document.createElement("li"),b=document.createElement("button");
+      b.innerHTML='<span>'+esc(f.n)+'</span><span class="acmac">'+f.p+' / '+f.f+' / '+f.c+' per 100 g</span>';
+      b.onclick=function(){pendingFood=f;input.value=f.n+(p.g?" "+p.g:" ");input.focus();refreshLogger();};
+      li.appendChild(b);ac.appendChild(li);
+    });
+    ac.classList.remove("hidden");
+  } else ac.classList.add("hidden");
+  const food=exact||((pendingFood&&p.name.toLowerCase().indexOf(pendingFood.n.toLowerCase())===0)?pendingFood:null);
+  const basisRow=document.getElementById("basisRow");
+  if(food&&food.y){
+    if(p.basis==="cooked")pendingBasis="cooked";else if(p.basis)pendingBasis="raw";
+    basisRow.classList.remove("hidden");basisRow.innerHTML="";
+    const lbl=document.createElement("span");lbl.textContent="Weighed:";basisRow.appendChild(lbl);
+    [["raw",/dry/.test(food.n)?"dry":"raw"],["cooked","cooked"]].forEach(function(o){
+      const b=document.createElement("button");b.className="chip small";b.textContent=o[1];
+      b.setAttribute("aria-pressed",pendingBasis===o[0]?"true":"false");
+      b.onclick=function(){pendingBasis=o[0];refreshLogger();};basisRow.appendChild(b);
+    });
+    const e=document.createElement("span");e.className="est";e.textContent="×"+yieldOf(food)+(isMeasured(food.n)?" measured":" est");
+    basisRow.appendChild(e);
+  } else {basisRow.classList.add("hidden");pendingBasis="raw";}
+  document.getElementById("addBtn").disabled=!(food&&p.g>0);
+  const hint=document.getElementById("logHint");
+  if(food&&p.g>0){
+    const m=computeMacros(food,p.g,pendingBasis);
+    hint.innerHTML="Into <b>"+SLOTS.filter(function(s){return s.k===pendingSlot})[0].n.toLowerCase()+"</b> · "+r1(m.p)+" P / "+r1(m.f)+" F / <b>"+r1(m.c)+" C</b>"+
+      (m.raw!==p.g?" · "+r0(m.raw)+" g "+(/dry/.test(food.n)?"dry":"raw")+" → "+p.g+" g cooked":"")+(m.est?' <span class="est">yield est</span>':'');
+  } else if(p.name&&!matches.length){
+    hint.innerHTML='No match for "'+esc(p.name)+'". <b>Build tab</b> can look it up and add it to your bank.';
+  } else hint.textContent="Type a food, then grams. Weights are grams, always.";
+}
+function computeMacros(food,g,basis){
+  let base=g,est=false;const y=yieldOf(food);
+  if(y&&basis==="cooked"){base=g/y;est=!isMeasured(food.n);}
+  return {p:food.p*base/100,f:food.f*base/100,c:food.c*base/100,est:est,raw:base};
+}
+function addEntry(){
+  const input=document.getElementById("logInput"),p=parseInput(input.value);
+  const food=matchFoods(p.name).filter(function(f){return f.n.toLowerCase()===p.name.toLowerCase();})[0]||matchFoods(p.name)[0];
+  if(!food||!(p.g>0))return;
+  const m=computeMacros(food,p.g,pendingBasis),y=yieldOf(food);
+  const d=day(today,true);
+  d.entries.push({id:String(Date.now())+Math.random().toString(36).slice(2,6),name:food.n,
+    g:r0(m.raw), basis:y?(/dry/.test(food.n)?"dry":"raw"):"",
+    cooked:y?Math.round(m.raw*y):null, est:m.est, slot:pendingSlot,
+    p:m.p,f:m.f,c:m.c,swapTo:food.swap||null});
+  input.value="";pendingFood=null;pendingBasis="raw";openSlots[pendingSlot]=true;
+  commit(today);refreshLogger();
+}
+
+/* ================= wiring ================= */
+document.getElementById("logInput").addEventListener("input",function(){pendingFood=null;refreshLogger();});
+document.getElementById("logInput").addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault();addEntry();}});
+document.getElementById("addBtn").addEventListener("click",addEntry);
+document.getElementById("cfAdd").addEventListener("click",function(){
+  const n=document.getElementById("cfName").value.trim();
+  const p=parseFloat(document.getElementById("cfP").value),f=parseFloat(document.getElementById("cfF").value),c=parseFloat(document.getElementById("cfC").value);
+  if(!n||isNaN(p)||isNaN(f)||isNaN(c))return;
+  saveCustom({n:n,p:p,f:f,c:c,cat:c>=40?"grain":(f>=20?"nut":"veg"),t:["sweet","savory"],carb:c>=15?1:0,fat:f>=15?1:0});
+  state.settings.updatedAt=Date.now();
+  document.getElementById("cfName").value="";document.getElementById("cfP").value="";document.getElementById("cfF").value="";document.getElementById("cfC").value="";
+  commit(null);
+});
+function setView(v){
+  view=v;
+  [["today","tabToday","viewToday"],["build","tabBuild","viewBuild"],["trend","tabTrend","viewTrend"]].forEach(function(x){
+    document.getElementById(x[1]).setAttribute("aria-selected",v===x[0]?"true":"false");
+    document.getElementById(x[2]).classList.toggle("hidden",v!==x[0]);
+  });
+  document.getElementById("logbar").classList.toggle("hidden",v!=="today");
+  if(v==="build"&&!build.items.length) build.slot=build.slot||currentSlotGuess();
+  render();
+}
+document.getElementById("syncChip").onclick=function(){ retries=0; flushNow(); };
+document.getElementById("tabToday").onclick=function(){setView("today");};
+document.getElementById("tabBuild").onclick=function(){setView("build");};
+document.getElementById("tabTrend").onclick=function(){setView("trend");};
+setInterval(function(){if(isoToday()!==today){today=isoToday();day(today,true);render();}},30000);
+
+loadLocal();
+if(!state.settings.yields)state.settings.yields={};
+if(!state.settings.measured)state.settings.measured={};
+if(!state.settings.customFoods)state.settings.customFoods=[];
+day(today,true);
+openSlots[currentSlotGuess()]=true;
+renderSlotPick();render();refreshLogger();initCaps();
+})();
+</script>

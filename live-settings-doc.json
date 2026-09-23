@@ -1,0 +1,4614 @@
+{
+  "bank": {
+    "at": 1789829075261,
+    "meals": [
+      {
+        "b": "70 g dry oats + 10 g chia + banana",
+        "c": 99.2,
+        "f": 18.2,
+        "i": [
+          [
+            "rolled oats",
+            70,
+            "Rolled oats, dry"
+          ],
+          [
+            "cottage cheese 2%",
+            175,
+            "Cottage cheese 2%"
+          ],
+          [
+            "milk 2%",
+            100,
+            "Milk 2%"
+          ],
+          [
+            "chia seeds",
+            10,
+            "Chia seeds"
+          ],
+          [
+            "blueberries",
+            75,
+            "Blueberries, frozen"
+          ],
+          [
+            "banana",
+            100,
+            "Banana"
+          ],
+          [
+            "peanut butter",
+            8,
+            "Peanut butter"
+          ]
+        ],
+        "id": "B1",
+        "l": "jar",
+        "n": "Big Oat Jar with chia",
+        "nat": "lift",
+        "p": 37.1,
+        "s": "breakfast",
+        "w": "440 g jar + banana on the side"
+      },
+      {
+        "b": "55 g dry oats + banana",
+        "c": 98.4,
+        "f": 17.4,
+        "i": [
+          [
+            "rolled oats",
+            55,
+            "Rolled oats, dry"
+          ],
+          [
+            "cottage cheese 2%",
+            120,
+            "Cottage cheese 2%"
+          ],
+          [
+            "egg",
+            50,
+            "Egg, whole"
+          ],
+          [
+            "protein powder",
+            10,
+            "Protein powder"
+          ],
+          [
+            "peanut butter",
+            10,
+            "Peanut butter"
+          ],
+          [
+            "banana",
+            110,
+            "Banana"
+          ],
+          [
+            "maple syrup",
+            25,
+            "Maple syrup"
+          ],
+          [
+            "blueberries",
+            75,
+            "Blueberries, frozen"
+          ]
+        ],
+        "id": "B2",
+        "l": "griddle",
+        "n": "Protein Pancakes",
+        "nat": "lift",
+        "p": 38.1,
+        "s": "breakfast",
+        "w": "~250 g plus toppings"
+      },
+      {
+        "b": "25 g Three Wishes + 25 g rice crisps + banana",
+        "c": 102.6,
+        "f": 18.3,
+        "i": [
+          [
+            "greek yogurt nonfat",
+            200,
+            "Fage 0% Greek yogurt"
+          ],
+          [
+            "three wishes cereal",
+            25,
+            "Three Wishes cereal"
+          ],
+          [
+            "one degree brown rice crisps",
+            25,
+            "One Degree brown rice crisps"
+          ],
+          [
+            "blueberries",
+            100,
+            "Blueberries, frozen"
+          ],
+          [
+            "banana",
+            120,
+            "Banana"
+          ],
+          [
+            "peanut butter",
+            27,
+            "Peanut butter"
+          ],
+          [
+            "honey",
+            15,
+            "Honey"
+          ]
+        ],
+        "id": "B3",
+        "l": "no cook",
+        "n": "Greek Yogurt Bowl",
+        "nat": "lift",
+        "p": 36.9,
+        "s": "breakfast",
+        "w": "~560 g"
+      },
+      {
+        "b": "70 g dry oats + banana",
+        "c": 100.2,
+        "f": 17.1,
+        "i": [
+          [
+            "rolled oats",
+            70,
+            "Rolled oats, dry"
+          ],
+          [
+            "greek yogurt nonfat",
+            170,
+            "Fage 0% Greek yogurt"
+          ],
+          [
+            "milk 2%",
+            100,
+            "Milk 2%"
+          ],
+          [
+            "banana",
+            130,
+            "Banana"
+          ],
+          [
+            "peanut butter",
+            20,
+            "Peanut butter"
+          ],
+          [
+            "honey",
+            10,
+            "Honey"
+          ]
+        ],
+        "id": "B4",
+        "l": "jar",
+        "n": "Banana-PB Overnight Oats",
+        "nat": "lift",
+        "p": 36.5,
+        "s": "breakfast",
+        "w": "~470 g jar"
+      },
+      {
+        "b": "72 g tortilla + 170 g raw potato",
+        "c": 99.9,
+        "f": 16.8,
+        "i": [
+          [
+            "flour tortilla",
+            72,
+            "Tortilla, large flour"
+          ],
+          [
+            "egg",
+            75,
+            "Egg, whole"
+          ],
+          [
+            "potato",
+            170,
+            "Potato, raw"
+          ],
+          [
+            "cheddar",
+            10,
+            "Cheddar"
+          ],
+          [
+            "salsa",
+            40,
+            "Salsa"
+          ],
+          [
+            "greek yogurt nonfat",
+            150,
+            "Fage 0% Greek yogurt"
+          ],
+          [
+            "banana",
+            110,
+            "Banana"
+          ]
+        ],
+        "id": "B5",
+        "l": "savoury · handheld",
+        "n": "Freezer Breakfast Burrito",
+        "nat": "lift",
+        "p": 38.2,
+        "s": "breakfast",
+        "w": "1 burrito + yogurt + banana"
+      },
+      {
+        "b": "75 g dry oats per serving",
+        "c": 100.3,
+        "f": 17.3,
+        "i": [
+          [
+            "rolled oats",
+            75,
+            "Rolled oats, dry"
+          ],
+          [
+            "egg",
+            25,
+            "Egg, whole"
+          ],
+          [
+            "milk 2%",
+            75,
+            "Milk 2%"
+          ],
+          [
+            "greek yogurt nonfat",
+            110,
+            "Fage 0% Greek yogurt"
+          ],
+          [
+            "banana",
+            65,
+            "Banana"
+          ],
+          [
+            "blueberries",
+            75,
+            "Blueberries, frozen"
+          ],
+          [
+            "peanut butter",
+            15,
+            "Peanut butter"
+          ],
+          [
+            "honey",
+            15,
+            "Honey"
+          ],
+          [
+            "protein powder",
+            8,
+            "Protein powder"
+          ]
+        ],
+        "id": "B6",
+        "l": "grab and go",
+        "n": "Blueberry Baked Oatmeal, 2 squares",
+        "nat": "lift",
+        "p": 37.6,
+        "s": "breakfast",
+        "w": "2 squares ~195 g + 60 g yogurt"
+      },
+      {
+        "b": "100 g sourdough",
+        "c": 98.2,
+        "f": 17.3,
+        "i": [
+          [
+            "sourdough",
+            100,
+            "Sourdough"
+          ],
+          [
+            "egg",
+            50,
+            "Egg, whole"
+          ],
+          [
+            "cottage cheese 2%",
+            140,
+            "Cottage cheese 2%"
+          ],
+          [
+            "milk 2%",
+            50,
+            "Milk 2%"
+          ],
+          [
+            "maple syrup",
+            20,
+            "Maple syrup"
+          ],
+          [
+            "blueberries",
+            100,
+            "Blueberries, frozen"
+          ],
+          [
+            "peanut butter",
+            12,
+            "Peanut butter"
+          ],
+          [
+            "banana",
+            40,
+            "Banana"
+          ]
+        ],
+        "id": "B7",
+        "l": "sat down",
+        "n": "Cottage Cheese French Toast",
+        "nat": "lift",
+        "p": 36.5,
+        "s": "breakfast",
+        "w": "2 thick slices + fruit"
+      },
+      {
+        "b": "packet + 20 g dry oats + banana",
+        "c": 100.6,
+        "f": 15.5,
+        "i": [
+          [
+            "oats overnight packet",
+            76,
+            "Oats overnight packet"
+          ],
+          [
+            "cottage cheese 2%",
+            120,
+            "Cottage cheese 2%"
+          ],
+          [
+            "rolled oats",
+            20,
+            "Rolled oats, dry"
+          ],
+          [
+            "frozen blueberries",
+            75,
+            "Blueberries, frozen"
+          ],
+          [
+            "peanut butter",
+            12,
+            "Peanut butter"
+          ],
+          [
+            "banana",
+            120,
+            "Banana"
+          ]
+        ],
+        "id": "B8",
+        "l": "packet",
+        "n": "Oats Overnight, cottage cheese base",
+        "nat": "lift",
+        "p": 40.7,
+        "s": "breakfast",
+        "w": "shaker + banana on the side"
+      },
+      {
+        "b": "40 g dry oats pre · honey during · yogurt bowl post",
+        "c": 121.7,
+        "f": 16.9,
+        "i": [
+          [
+            "rolled oats",
+            40,
+            "Rolled oats, dry"
+          ],
+          [
+            "milk 2%",
+            100,
+            "Milk 2%"
+          ],
+          [
+            "banana",
+            130,
+            "Banana"
+          ],
+          [
+            "honey",
+            25,
+            "Honey"
+          ],
+          [
+            "greek yogurt nonfat",
+            200,
+            "Fage 0% Greek yogurt"
+          ],
+          [
+            "three wishes cereal",
+            13,
+            "Three Wishes cereal"
+          ],
+          [
+            "one degree brown rice crisps",
+            12,
+            "One Degree brown rice crisps"
+          ],
+          [
+            "blueberries",
+            75,
+            "Blueberries, frozen"
+          ],
+          [
+            "peanut butter",
+            19,
+            "Peanut butter"
+          ]
+        ],
+        "id": "B9",
+        "l": "long run only",
+        "n": "Saturday run window",
+        "nat": "long",
+        "p": 39.8,
+        "s": "breakfast",
+        "w": "three servings across the morning"
+      },
+      {
+        "b": "150 g cooked white rice",
+        "c": 74,
+        "f": 17.2,
+        "i": [
+          [
+            "chicken breast",
+            133,
+            "Chicken breast, raw"
+          ],
+          [
+            "white rice dry",
+            50,
+            "White rice, dry"
+          ],
+          [
+            "black beans canned",
+            50,
+            "Black beans, canned drained"
+          ],
+          [
+            "corn frozen",
+            40,
+            "Corn"
+          ],
+          [
+            "bell pepper",
+            60,
+            "Bell pepper"
+          ],
+          [
+            "olive oil",
+            4,
+            "Olive oil"
+          ],
+          [
+            "honey",
+            8,
+            "Honey"
+          ],
+          [
+            "chipotle in adobo",
+            5,
+            "Chipotle in adobo"
+          ],
+          [
+            "lime juice",
+            10,
+            "Lime juice"
+          ],
+          [
+            "cheddar",
+            10,
+            "Cheddar"
+          ],
+          [
+            "pico de gallo",
+            50,
+            "Salsa"
+          ],
+          [
+            "avocado",
+            35,
+            "Avocado"
+          ]
+        ],
+        "id": "L1",
+        "l": "Mexican",
+        "n": "Chipotle-Honey Chicken & Rice Bowl",
+        "nat": "lift",
+        "p": 42,
+        "s": "lunch",
+        "w": "~470 g"
+      },
+      {
+        "b": "156 g cooked orzo",
+        "c": 79.7,
+        "f": 24.1,
+        "i": [
+          [
+            "ground turkey 93/7",
+            136,
+            "Ground turkey 93/7"
+          ],
+          [
+            "panko",
+            13,
+            "Panko/breadcrumbs"
+          ],
+          [
+            "egg",
+            20,
+            "Egg, whole"
+          ],
+          [
+            "orzo dry",
+            65,
+            "Orzo, dry"
+          ],
+          [
+            "cucumber",
+            100,
+            "Cucumber"
+          ],
+          [
+            "cherry tomatoes",
+            100,
+            "Tomato"
+          ],
+          [
+            "red onion",
+            20,
+            "Onion"
+          ],
+          [
+            "kalamata olives",
+            8,
+            "Kalamata olives"
+          ],
+          [
+            "feta",
+            15,
+            "Feta"
+          ],
+          [
+            "olive oil",
+            4,
+            "Olive oil"
+          ],
+          [
+            "lemon juice",
+            15,
+            "Lemon juice"
+          ],
+          [
+            "garlic",
+            5,
+            "Garlic"
+          ],
+          [
+            "chickpeas canned",
+            50,
+            "Chickpeas, canned drained"
+          ]
+        ],
+        "id": "L2",
+        "l": "Mediterranean",
+        "n": "Greek Orzo Salad + Turkey Meatballs",
+        "nat": "lift",
+        "p": 46.9,
+        "s": "lunch",
+        "w": "~580 g"
+      },
+      {
+        "b": "174 g cooked white rice",
+        "c": 68.4,
+        "f": 19.5,
+        "i": [
+          [
+            "chicken breast",
+            123,
+            "Chicken breast, raw"
+          ],
+          [
+            "white rice dry",
+            58,
+            "White rice, dry"
+          ],
+          [
+            "black beans canned",
+            80,
+            "Black beans, canned drained"
+          ],
+          [
+            "cheddar",
+            15,
+            "Cheddar"
+          ],
+          [
+            "pico de gallo",
+            60,
+            "Salsa"
+          ],
+          [
+            "avocado",
+            45,
+            "Avocado"
+          ],
+          [
+            "olive oil",
+            4,
+            "Olive oil"
+          ],
+          [
+            "lime juice",
+            10,
+            "Lime juice"
+          ]
+        ],
+        "id": "L3",
+        "l": "Mexican",
+        "n": "Chicken Burrito Bowl",
+        "nat": "lift",
+        "p": 41.5,
+        "s": "lunch",
+        "w": "~490 g"
+      },
+      {
+        "b": "162 g cooked pearl couscous",
+        "c": 67.8,
+        "f": 19.2,
+        "i": [
+          [
+            "chicken breast",
+            120,
+            "Chicken breast, raw"
+          ],
+          [
+            "pearl couscous dry",
+            65,
+            "Couscous, dry"
+          ],
+          [
+            "chickpeas canned",
+            50,
+            "Chickpeas, canned drained"
+          ],
+          [
+            "cucumber",
+            80,
+            "Cucumber"
+          ],
+          [
+            "cherry tomatoes",
+            80,
+            "Tomato"
+          ],
+          [
+            "feta",
+            20,
+            "Feta"
+          ],
+          [
+            "kalamata olives",
+            12,
+            "Kalamata olives"
+          ],
+          [
+            "olive oil",
+            8,
+            "Olive oil"
+          ],
+          [
+            "lemon juice",
+            15,
+            "Lemon juice"
+          ]
+        ],
+        "id": "L4",
+        "l": "Mediterranean",
+        "n": "Mediterranean Chicken & Couscous",
+        "nat": "lift",
+        "p": 43.1,
+        "s": "lunch",
+        "w": "~510 g"
+      },
+      {
+        "b": "192 g cooked pasta",
+        "c": 77.1,
+        "f": 22.8,
+        "i": [
+          [
+            "pasta dry",
+            80,
+            "Pasta, dry"
+          ],
+          [
+            "ground turkey 93/7",
+            111,
+            "Ground turkey 93/7"
+          ],
+          [
+            "pesto",
+            18,
+            "Pesto"
+          ],
+          [
+            "greek yogurt nonfat",
+            40,
+            "Fage 0% Greek yogurt"
+          ],
+          [
+            "cherry tomatoes",
+            100,
+            "Tomato"
+          ],
+          [
+            "mozzarella",
+            20,
+            "Mozzarella, part-skim"
+          ],
+          [
+            "spinach",
+            20,
+            "Spinach"
+          ],
+          [
+            "lemon juice",
+            10,
+            "Lemon juice"
+          ],
+          [
+            "chickpeas canned",
+            50,
+            "Chickpeas, canned drained"
+          ]
+        ],
+        "id": "L6",
+        "l": "Mediterranean",
+        "n": "Turkey Pesto Pasta Salad",
+        "nat": "lift",
+        "p": 47,
+        "s": "lunch",
+        "w": "~530 g"
+      },
+      {
+        "b": "203 g roasted potato",
+        "c": 73.2,
+        "f": 18.3,
+        "i": [
+          [
+            "chicken breast",
+            129,
+            "Chicken breast, raw"
+          ],
+          [
+            "potato",
+            260,
+            "Potato, raw"
+          ],
+          [
+            "bbq sauce",
+            35,
+            "BBQ sauce"
+          ],
+          [
+            "cheddar",
+            15,
+            "Cheddar"
+          ],
+          [
+            "corn frozen",
+            50,
+            "Corn"
+          ],
+          [
+            "red onion",
+            25,
+            "Onion"
+          ],
+          [
+            "olive oil",
+            9,
+            "Olive oil"
+          ],
+          [
+            "greek yogurt nonfat",
+            30,
+            "Fage 0% Greek yogurt"
+          ]
+        ],
+        "id": "L7",
+        "l": "American",
+        "n": "BBQ Chicken & Baked Potato Bowl",
+        "nat": "lift",
+        "p": 43,
+        "s": "lunch",
+        "w": "~450 g"
+      },
+      {
+        "b": "40 g crackers + 20 g pretzels",
+        "c": 81,
+        "f": 21.3,
+        "i": [
+          [
+            "deli turkey",
+            134,
+            "Deli turkey, low sodium"
+          ],
+          [
+            "cheddar",
+            25,
+            "Cheddar"
+          ],
+          [
+            "whole-grain crackers",
+            40,
+            "Whole-grain crackers"
+          ],
+          [
+            "egg",
+            50,
+            "Egg, whole"
+          ],
+          [
+            "grapes",
+            100,
+            "Grapes"
+          ],
+          [
+            "cucumber",
+            80,
+            "Cucumber"
+          ],
+          [
+            "cherry tomatoes",
+            80,
+            "Tomato"
+          ],
+          [
+            "pretzels",
+            20,
+            "Pretzels"
+          ],
+          [
+            "baby carrots",
+            80,
+            "Baby carrots"
+          ],
+          [
+            "sugar snap peas",
+            60,
+            "Sugar snap peas"
+          ]
+        ],
+        "id": "L8",
+        "l": "bento · no cook",
+        "n": "Adult Lunchable",
+        "nat": "lift",
+        "p": 45.1,
+        "s": "lunch",
+        "w": "bento ~645 g"
+      },
+      {
+        "b": "100 g sourdough",
+        "c": 87.6,
+        "f": 19.8,
+        "i": [
+          [
+            "deli turkey",
+            150,
+            "Deli turkey, low sodium"
+          ],
+          [
+            "sourdough",
+            100,
+            "Sourdough"
+          ],
+          [
+            "provolone",
+            25,
+            "Provolone"
+          ],
+          [
+            "mayonnaise",
+            10,
+            "Mayonnaise"
+          ],
+          [
+            "dijon mustard",
+            8,
+            "Dijon mustard"
+          ],
+          [
+            "romaine",
+            20,
+            "Romaine"
+          ],
+          [
+            "cherry tomatoes",
+            40,
+            "Tomato"
+          ],
+          [
+            "cucumber",
+            60,
+            "Cucumber"
+          ],
+          [
+            "grapes",
+            100,
+            "Grapes"
+          ],
+          [
+            "baby carrots",
+            80,
+            "Baby carrots"
+          ],
+          [
+            "sugar snap peas",
+            60,
+            "Sugar snap peas"
+          ]
+        ],
+        "id": "L9",
+        "l": "sandwich",
+        "n": "Turkey & Provolone on Sourdough + Grapes",
+        "nat": "lift",
+        "p": 45.2,
+        "s": "lunch",
+        "w": "sandwich + sides"
+      },
+      {
+        "b": "110 g sourdough",
+        "c": 82.1,
+        "f": 17.7,
+        "i": [
+          [
+            "chicken breast",
+            116,
+            "Chicken breast, raw"
+          ],
+          [
+            "sourdough",
+            110,
+            "Sourdough"
+          ],
+          [
+            "cherry tomatoes",
+            130,
+            "Tomato"
+          ],
+          [
+            "mozzarella",
+            20,
+            "Mozzarella, part-skim"
+          ],
+          [
+            "olive oil",
+            8,
+            "Olive oil"
+          ],
+          [
+            "balsamic vinegar",
+            10,
+            "Balsamic vinegar"
+          ],
+          [
+            "garlic",
+            5,
+            "Garlic"
+          ],
+          [
+            "basil",
+            5,
+            "Basil"
+          ],
+          [
+            "grapes",
+            60,
+            "Grapes"
+          ],
+          [
+            "chickpeas canned",
+            40,
+            "Chickpeas, canned drained"
+          ]
+        ],
+        "id": "L10",
+        "l": "Mediterranean",
+        "n": "Bruschetta Chicken + Sourdough",
+        "nat": "lift",
+        "p": 45.8,
+        "s": "lunch",
+        "w": "~540 g"
+      },
+      {
+        "b": "75 g whole-wheat pita",
+        "c": 67.3,
+        "f": 18.9,
+        "i": [
+          [
+            "whole-wheat pita",
+            75,
+            "Whole-wheat pita"
+          ],
+          [
+            "hummus",
+            35,
+            "Hummus"
+          ],
+          [
+            "chickpeas canned",
+            50,
+            "Chickpeas, canned drained"
+          ],
+          [
+            "feta",
+            25,
+            "Feta"
+          ],
+          [
+            "cucumber",
+            100,
+            "Cucumber"
+          ],
+          [
+            "cherry tomatoes",
+            100,
+            "Tomato"
+          ],
+          [
+            "kalamata olives",
+            12,
+            "Kalamata olives"
+          ],
+          [
+            "deli turkey",
+            144,
+            "Deli turkey, low sodium"
+          ]
+        ],
+        "id": "L11",
+        "l": "bento · no cook",
+        "n": "No-Cook Mezze Box",
+        "nat": "lift",
+        "p": 43.4,
+        "s": "lunch",
+        "w": "bento ~510 g"
+      },
+      {
+        "b": "265 g boiled potato",
+        "c": 69.4,
+        "f": 19.2,
+        "i": [
+          [
+            "sirloin steak",
+            126,
+            "Sirloin steak, raw"
+          ],
+          [
+            "potato",
+            340,
+            "Potato, raw"
+          ],
+          [
+            "olive oil",
+            8,
+            "Olive oil"
+          ],
+          [
+            "dijon mustard",
+            12,
+            "Dijon mustard"
+          ],
+          [
+            "greek yogurt nonfat",
+            40,
+            "Fage 0% Greek yogurt"
+          ],
+          [
+            "parmesan",
+            10,
+            "Parmesan"
+          ],
+          [
+            "red onion",
+            25,
+            "Onion"
+          ],
+          [
+            "cherry tomatoes",
+            80,
+            "Tomato"
+          ],
+          [
+            "romaine",
+            40,
+            "Romaine"
+          ],
+          [
+            "lemon juice",
+            10,
+            "Lemon juice"
+          ]
+        ],
+        "id": "L12",
+        "l": "American",
+        "n": "Steak & Potato Salad",
+        "nat": "lift",
+        "p": 43,
+        "s": "lunch",
+        "w": "~600 g"
+      },
+      {
+        "b": "188 g roasted sweet potato",
+        "c": 69.5,
+        "f": 20.5,
+        "i": [
+          [
+            "chicken breast",
+            133,
+            "Chicken breast, raw"
+          ],
+          [
+            "sweet potato",
+            250,
+            "Sweet potato, raw"
+          ],
+          [
+            "black beans canned",
+            70,
+            "Black beans, canned drained"
+          ],
+          [
+            "olive oil",
+            8,
+            "Olive oil"
+          ],
+          [
+            "avocado",
+            35,
+            "Avocado"
+          ],
+          [
+            "salsa",
+            50,
+            "Salsa"
+          ],
+          [
+            "cheddar",
+            10,
+            "Cheddar"
+          ],
+          [
+            "lime juice",
+            10,
+            "Lime juice"
+          ]
+        ],
+        "id": "L14",
+        "l": "Mexican",
+        "n": "Chicken, Sweet Potato & Black Bean Bowl",
+        "nat": "lift",
+        "p": 41.9,
+        "s": "lunch",
+        "w": "~480 g"
+      },
+      {
+        "b": "143 g cooked farro",
+        "c": 70.6,
+        "f": 17.1,
+        "i": [
+          [
+            "farro dry",
+            55,
+            "Farro, dry"
+          ],
+          [
+            "chicken breast",
+            130,
+            "Chicken breast, raw"
+          ],
+          [
+            "apple",
+            90,
+            "Apple"
+          ],
+          [
+            "spinach",
+            40,
+            "Spinach"
+          ],
+          [
+            "red onion",
+            20,
+            "Onion"
+          ],
+          [
+            "feta",
+            18,
+            "Feta"
+          ],
+          [
+            "sliced almonds",
+            8,
+            "Almonds"
+          ],
+          [
+            "dijon mustard",
+            12,
+            "Dijon mustard"
+          ],
+          [
+            "honey",
+            14,
+            "Honey"
+          ],
+          [
+            "olive oil",
+            4,
+            "Olive oil"
+          ],
+          [
+            "lemon juice",
+            10,
+            "Lemon juice"
+          ]
+        ],
+        "id": "L15",
+        "l": "Mediterranean",
+        "n": "Honey-Mustard Chicken & Farro Salad",
+        "nat": "lift",
+        "p": 43.2,
+        "s": "lunch",
+        "w": "~440 g"
+      },
+      {
+        "b": "70 g wrap + 10 g pretzels",
+        "c": 74,
+        "f": 20.4,
+        "i": [
+          [
+            "large tortilla wrap",
+            70,
+            "Tortilla, large flour"
+          ],
+          [
+            "deli turkey",
+            162,
+            "Deli turkey, low sodium"
+          ],
+          [
+            "hummus",
+            40,
+            "Hummus"
+          ],
+          [
+            "roasted red pepper",
+            50,
+            "Roasted red pepper"
+          ],
+          [
+            "zucchini",
+            60,
+            "Zucchini"
+          ],
+          [
+            "spinach",
+            25,
+            "Spinach"
+          ],
+          [
+            "feta",
+            18,
+            "Feta"
+          ],
+          [
+            "grapes",
+            90,
+            "Grapes"
+          ],
+          [
+            "pretzels",
+            10,
+            "Pretzels"
+          ]
+        ],
+        "id": "L17",
+        "l": "Mediterranean",
+        "n": "Turkey, Hummus & Roasted Veg Wrap",
+        "nat": "lift",
+        "p": 42.4,
+        "s": "lunch",
+        "w": "wrap + fruit"
+      },
+      {
+        "b": "180 g roasted sweet potato",
+        "c": 69,
+        "f": 23,
+        "i": [
+          [
+            "ground turkey 93/7",
+            115,
+            "Ground turkey 93/7"
+          ],
+          [
+            "sweet potato",
+            240,
+            "Sweet potato, raw"
+          ],
+          [
+            "cottage cheese 2%",
+            110,
+            "Cottage cheese 2%"
+          ],
+          [
+            "avocado",
+            40,
+            "Avocado"
+          ],
+          [
+            "hot honey",
+            14,
+            "Hot honey"
+          ],
+          [
+            "olive oil",
+            5,
+            "Olive oil"
+          ],
+          [
+            "spinach",
+            30,
+            "Spinach"
+          ],
+          [
+            "lime juice",
+            8,
+            "Lime juice"
+          ]
+        ],
+        "id": "L18",
+        "l": "bowl · hot honey",
+        "n": "Hot Honey Turkey & Sweet Potato Bowl",
+        "nat": "lift",
+        "p": 40.3,
+        "s": "lunch",
+        "w": "~445 g"
+      },
+      {
+        "b": "65 g sourdough",
+        "c": 79.8,
+        "f": 21.6,
+        "i": [
+          [
+            "chicken breast",
+            131,
+            "Chicken breast, raw"
+          ],
+          [
+            "olive oil",
+            6,
+            "Olive oil"
+          ],
+          [
+            "hot honey",
+            18,
+            "Hot honey"
+          ],
+          [
+            "cheddar",
+            20,
+            "Cheddar"
+          ],
+          [
+            "sourdough",
+            65,
+            "Sourdough"
+          ],
+          [
+            "apple",
+            70,
+            "Apple"
+          ],
+          [
+            "grapes",
+            40,
+            "Grapes"
+          ],
+          [
+            "cucumber",
+            80,
+            "Cucumber"
+          ],
+          [
+            "almonds",
+            8,
+            "Almonds"
+          ],
+          [
+            "baby carrots",
+            80,
+            "Baby carrots"
+          ],
+          [
+            "sugar snap peas",
+            60,
+            "Sugar snap peas"
+          ]
+        ],
+        "id": "L19",
+        "l": "bento",
+        "n": "Hot Honey Chicken & Cheddar Bento",
+        "nat": "lift",
+        "p": 44.9,
+        "s": "lunch",
+        "w": "~580 g"
+      },
+      {
+        "b": "80 g sourdough",
+        "c": 79.1,
+        "f": 19.6,
+        "i": [
+          [
+            "deli turkey",
+            154,
+            "Deli turkey, low sodium"
+          ],
+          [
+            "fresh mozzarella",
+            45,
+            "Fresh mozzarella"
+          ],
+          [
+            "cherry tomatoes",
+            120,
+            "Tomato"
+          ],
+          [
+            "balsamic glaze",
+            12,
+            "Balsamic glaze"
+          ],
+          [
+            "sourdough",
+            80,
+            "Sourdough"
+          ],
+          [
+            "olive oil",
+            5,
+            "Olive oil"
+          ],
+          [
+            "grapes",
+            70,
+            "Grapes"
+          ],
+          [
+            "kalamata olives",
+            12,
+            "Kalamata olives"
+          ],
+          [
+            "basil",
+            4,
+            "Basil"
+          ],
+          [
+            "baby carrots",
+            80,
+            "Baby carrots"
+          ],
+          [
+            "sugar snap peas",
+            60,
+            "Sugar snap peas"
+          ]
+        ],
+        "id": "L20",
+        "l": "bento · no cook",
+        "n": "Caprese Turkey Bento",
+        "nat": "lift",
+        "p": 45.5,
+        "s": "lunch",
+        "w": "~610 g"
+      },
+      {
+        "b": "13 g Three Wishes + 12 g rice crisps + banana",
+        "c": 33.2,
+        "f": 8.2,
+        "i": [
+          [
+            "greek yogurt nonfat",
+            80,
+            "Fage 0% Greek yogurt"
+          ],
+          [
+            "three wishes cereal",
+            13,
+            "Three Wishes cereal"
+          ],
+          [
+            "one degree brown rice crisps",
+            12,
+            "One Degree brown rice crisps"
+          ],
+          [
+            "banana",
+            45,
+            "Banana"
+          ],
+          [
+            "peanut butter",
+            12,
+            "Peanut butter"
+          ]
+        ],
+        "id": "S1",
+        "l": "spoon · sweet",
+        "n": "Yogurt, cereal, banana & PB",
+        "nat": "lift",
+        "p": 15.6,
+        "s": "snack",
+        "w": "~160 g"
+      },
+      {
+        "b": "12 g crackers + pineapple",
+        "c": 30.1,
+        "f": 8.4,
+        "i": [
+          [
+            "cottage cheese 2%",
+            110,
+            "Cottage cheese 2%"
+          ],
+          [
+            "pineapple",
+            110,
+            "Pineapple"
+          ],
+          [
+            "whole-grain crackers",
+            12,
+            "Whole-grain crackers"
+          ],
+          [
+            "cashews",
+            10,
+            "Cashews"
+          ]
+        ],
+        "id": "S2",
+        "l": "spoon · sweet",
+        "n": "Cottage cheese, pineapple & crackers",
+        "nat": "lift",
+        "p": 15.7,
+        "s": "snack",
+        "w": "~230 g"
+      },
+      {
+        "b": "22 g pretzels + grapes",
+        "c": 31.6,
+        "f": 7.5,
+        "i": [
+          [
+            "deli turkey",
+            60,
+            "Deli turkey, low sodium"
+          ],
+          [
+            "pretzels",
+            22,
+            "Pretzels"
+          ],
+          [
+            "grapes",
+            60,
+            "Grapes"
+          ],
+          [
+            "almonds",
+            11,
+            "Almonds"
+          ]
+        ],
+        "id": "S3",
+        "l": "desk · savoury",
+        "n": "Turkey, pretzels & grapes",
+        "nat": "lift",
+        "p": 15.2,
+        "s": "snack",
+        "w": "~155 g"
+      },
+      {
+        "b": "apple + 6 g honey",
+        "c": 31,
+        "f": 7.4,
+        "i": [
+          [
+            "apple",
+            140,
+            "Apple"
+          ],
+          [
+            "peanut butter",
+            14,
+            "Peanut butter"
+          ],
+          [
+            "greek yogurt nonfat",
+            110,
+            "Fage 0% Greek yogurt"
+          ],
+          [
+            "honey",
+            6,
+            "Honey"
+          ]
+        ],
+        "id": "S4",
+        "l": "spoon · sweet",
+        "n": "Apple, peanut butter & a yogurt cup",
+        "nat": "lift",
+        "p": 15.3,
+        "s": "snack",
+        "w": "~270 g"
+      },
+      {
+        "b": "30 g pretzels",
+        "c": 30.6,
+        "f": 7.8,
+        "i": [
+          [
+            "pretzels",
+            30,
+            "Pretzels"
+          ],
+          [
+            "turkey jerky",
+            30,
+            "Turkey jerky"
+          ],
+          [
+            "almonds",
+            12,
+            "Almonds"
+          ]
+        ],
+        "id": "S6",
+        "l": "desk · shelf-stable",
+        "n": "Desk-drawer kit",
+        "nat": "lift",
+        "p": 15.4,
+        "s": "snack",
+        "w": "three small bags"
+      },
+      {
+        "b": "42 g sourdough",
+        "c": 30.3,
+        "f": 7.9,
+        "i": [
+          [
+            "sourdough",
+            42,
+            "Sourdough"
+          ],
+          [
+            "peanut butter",
+            14,
+            "Peanut butter"
+          ],
+          [
+            "greek yogurt nonfat",
+            90,
+            "Fage 0% Greek yogurt"
+          ],
+          [
+            "honey",
+            4,
+            "Honey"
+          ]
+        ],
+        "id": "S10",
+        "l": "desk · sweet",
+        "n": "PB & honey on sourdough + yogurt",
+        "nat": "lift",
+        "p": 16.6,
+        "s": "snack",
+        "w": "1 slice + cup"
+      },
+      {
+        "b": "25 g pretzels",
+        "c": 30.6,
+        "f": 7.3,
+        "i": [
+          [
+            "cottage cheese 2%",
+            110,
+            "Cottage cheese 2%"
+          ],
+          [
+            "pretzels",
+            25,
+            "Pretzels"
+          ],
+          [
+            "hot honey",
+            6,
+            "Hot honey"
+          ],
+          [
+            "almonds",
+            8,
+            "Almonds"
+          ]
+        ],
+        "id": "S11",
+        "l": "spoon · sweet-savoury",
+        "n": "Hot honey cottage cheese & pretzels",
+        "nat": "lift",
+        "p": 16.3,
+        "s": "snack",
+        "w": "~150 g"
+      },
+      {
+        "b": "20 g popcorn",
+        "c": 29.3,
+        "f": 7.9,
+        "i": [
+          [
+            "air-popped popcorn",
+            20,
+            "Popcorn, popped"
+          ],
+          [
+            "turkey jerky",
+            30,
+            "Turkey jerky"
+          ],
+          [
+            "grapes",
+            40,
+            "Grapes"
+          ],
+          [
+            "almonds",
+            12,
+            "Almonds"
+          ]
+        ],
+        "id": "S12",
+        "l": "desk · high volume",
+        "n": "Popcorn, jerky & grapes",
+        "nat": "lift",
+        "p": 15.1,
+        "s": "snack",
+        "w": "~105 g"
+      },
+      {
+        "b": "9 g graham crackers + banana",
+        "c": 31.6,
+        "f": 8,
+        "i": [
+          [
+            "cottage cheese 2%",
+            110,
+            "Cottage cheese 2%"
+          ],
+          [
+            "cocoa powder",
+            4,
+            "Cocoa powder"
+          ],
+          [
+            "honey",
+            8,
+            "Honey"
+          ],
+          [
+            "banana",
+            40,
+            "Banana"
+          ],
+          [
+            "graham crackers",
+            9,
+            "Graham crackers"
+          ],
+          [
+            "peanut butter",
+            8,
+            "Peanut butter"
+          ]
+        ],
+        "id": "S13",
+        "l": "spoon · dessert",
+        "n": "Chocolate cottage cheese pudding",
+        "nat": "lift",
+        "p": 15.9,
+        "s": "snack",
+        "w": "~180 g"
+      },
+      {
+        "b": "24 g granola + strawberries",
+        "c": 31.1,
+        "f": 7.4,
+        "i": [
+          [
+            "greek yogurt nonfat",
+            110,
+            "Fage 0% Greek yogurt"
+          ],
+          [
+            "milk 2%",
+            50,
+            "Milk 2%"
+          ],
+          [
+            "chia seeds",
+            7,
+            "Chia seeds"
+          ],
+          [
+            "granola",
+            24,
+            "Granola"
+          ],
+          [
+            "strawberries",
+            80,
+            "Strawberries"
+          ]
+        ],
+        "id": "S14",
+        "l": "spoon · make ahead",
+        "n": "Chia pudding, granola & berries",
+        "nat": "lift",
+        "p": 16.9,
+        "s": "snack",
+        "w": "~270 g"
+      },
+      {
+        "b": "24 g rice cakes",
+        "c": 29.9,
+        "f": 8.5,
+        "i": [
+          [
+            "rice cakes",
+            24,
+            "Rice cakes"
+          ],
+          [
+            "cottage cheese 2%",
+            110,
+            "Cottage cheese 2%"
+          ],
+          [
+            "cherry tomatoes",
+            60,
+            "Tomato"
+          ],
+          [
+            "avocado",
+            32,
+            "Avocado"
+          ],
+          [
+            "everything bagel seasoning",
+            2,
+            "Everything bagel seasoning"
+          ]
+        ],
+        "id": "S16",
+        "l": "desk · savoury",
+        "n": "Everything-bagel cottage cheese rice cakes",
+        "nat": "lift",
+        "p": 15.5,
+        "s": "snack",
+        "w": "~225 g"
+      },
+      {
+        "b": "16 g dried mango + pineapple",
+        "c": 29.6,
+        "f": 6.8,
+        "i": [
+          [
+            "greek yogurt nonfat",
+            130,
+            "Fage 0% Greek yogurt"
+          ],
+          [
+            "dried mango",
+            16,
+            "Dried mango"
+          ],
+          [
+            "cashews",
+            15,
+            "Cashews"
+          ],
+          [
+            "pineapple",
+            60,
+            "Pineapple"
+          ]
+        ],
+        "id": "S17",
+        "l": "spoon · fruit-forward",
+        "n": "Mango, yogurt & cashews",
+        "nat": "lift",
+        "p": 16.7,
+        "s": "snack",
+        "w": "~220 g"
+      },
+      {
+        "b": "apple + 5 g pretzels",
+        "c": 30.7,
+        "f": 7.1,
+        "i": [
+          [
+            "shelled edamame frozen",
+            130,
+            "Edamame, shelled"
+          ],
+          [
+            "apple",
+            110,
+            "Apple"
+          ],
+          [
+            "pretzels",
+            5,
+            "Pretzels"
+          ]
+        ],
+        "id": "S18",
+        "l": "desk · no dairy",
+        "n": "Edamame & apple",
+        "nat": "lift",
+        "p": 16.3,
+        "s": "snack",
+        "w": "~245 g"
+      },
+      {
+        "b": "frozen berries + 10 g oats",
+        "c": 30,
+        "f": 7.2,
+        "i": [
+          [
+            "greek yogurt nonfat",
+            90,
+            "Fage 0% Greek yogurt"
+          ],
+          [
+            "frozen mixed berries",
+            122,
+            "Frozen mixed berries"
+          ],
+          [
+            "milk 2%",
+            80,
+            "Milk 2%"
+          ],
+          [
+            "almond butter",
+            8,
+            "Almond butter"
+          ],
+          [
+            "rolled oats",
+            10,
+            "Rolled oats, dry"
+          ]
+        ],
+        "id": "S19",
+        "l": "drinkable",
+        "n": "Berry smoothie in a thermos",
+        "nat": "lift",
+        "p": 15.9,
+        "s": "snack",
+        "w": "~300 ml"
+      },
+      {
+        "b": "30 g medjool dates",
+        "c": 30.7,
+        "f": 8.6,
+        "i": [
+          [
+            "medjool dates",
+            30,
+            "Dates, Medjool"
+          ],
+          [
+            "peanut butter",
+            12,
+            "Peanut butter"
+          ],
+          [
+            "turkey jerky",
+            33,
+            "Turkey jerky"
+          ],
+          [
+            "almonds",
+            3,
+            "Almonds"
+          ]
+        ],
+        "id": "S20",
+        "l": "desk · shelf-stable · treat",
+        "n": "Stuffed dates & jerky",
+        "nat": "lift",
+        "p": 15,
+        "s": "snack",
+        "w": "~80 g"
+      },
+      {
+        "b": "45 g sourdough",
+        "c": 30.1,
+        "f": 8.2,
+        "i": [
+          [
+            "fresh mozzarella",
+            40,
+            "Fresh mozzarella"
+          ],
+          [
+            "cherry tomatoes",
+            100,
+            "Tomato"
+          ],
+          [
+            "sourdough",
+            45,
+            "Sourdough"
+          ],
+          [
+            "deli turkey",
+            20,
+            "Deli turkey, low sodium"
+          ],
+          [
+            "balsamic glaze",
+            5,
+            "Balsamic glaze"
+          ]
+        ],
+        "id": "S21",
+        "l": "desk · savoury",
+        "n": "Caprese plate",
+        "nat": "lift",
+        "p": 15.6,
+        "s": "snack",
+        "w": "~210 g"
+      },
+      {
+        "b": "22 g pretzels + grapes",
+        "c": 36.4,
+        "f": 7.5,
+        "i": [
+          [
+            "parmesan snack cheese",
+            21,
+            "Parmesan snack cheese"
+          ],
+          [
+            "deli turkey",
+            30,
+            "Deli turkey, low sodium"
+          ],
+          [
+            "pretzels",
+            22,
+            "Pretzels"
+          ],
+          [
+            "grapes",
+            70,
+            "Grapes"
+          ],
+          [
+            "baby carrots",
+            60,
+            "Baby carrots"
+          ]
+        ],
+        "id": "S22",
+        "l": "desk · savoury",
+        "n": "Parmesan, turkey & pretzels",
+        "nat": "lift",
+        "p": 15.1,
+        "s": "snack",
+        "w": "~200 g"
+      },
+      {
+        "b": "25 g crackers + apple",
+        "c": 34.1,
+        "f": 9,
+        "i": [
+          [
+            "turkey snack stick",
+            33,
+            "Turkey snack stick"
+          ],
+          [
+            "whole-grain crackers",
+            25,
+            "Whole-grain crackers"
+          ],
+          [
+            "apple",
+            120,
+            "Apple"
+          ],
+          [
+            "almonds",
+            5,
+            "Almonds"
+          ]
+        ],
+        "id": "S23",
+        "l": "desk · no dairy",
+        "n": "Turkey stick, apple & crackers",
+        "nat": "lift",
+        "p": 16.2,
+        "s": "snack",
+        "w": "~180 g"
+      },
+      {
+        "b": "the bar + 130 g apple",
+        "c": 30.9,
+        "f": 12.3,
+        "i": [
+          [
+            "protein bar high fibre",
+            45,
+            "Protein bar, high fibre"
+          ],
+          [
+            "apple",
+            130,
+            "Apple"
+          ]
+        ],
+        "id": "S24",
+        "l": "travel · zero prep",
+        "n": "Protein bar & apple",
+        "nat": "lift",
+        "p": 12.4,
+        "s": "snack",
+        "w": "bar + 1 apple ~175 g"
+      },
+      {
+        "b": "32 g dry oats + 10 g honey",
+        "c": 33.1,
+        "f": 8,
+        "i": [
+          [
+            "rolled oats",
+            32,
+            "Rolled oats, dry"
+          ],
+          [
+            "peanut butter",
+            10,
+            "Peanut butter"
+          ],
+          [
+            "honey",
+            10,
+            "Honey"
+          ],
+          [
+            "protein powder",
+            12,
+            "Protein powder"
+          ]
+        ],
+        "id": "S25",
+        "l": "make ahead · no spoon",
+        "n": "Peanut butter power balls",
+        "nat": "lift",
+        "p": 15.3,
+        "s": "snack",
+        "w": "3 balls ~65 g"
+      },
+      {
+        "b": "210 g cooked jasmine rice",
+        "c": 86.7,
+        "f": 26.9,
+        "i": [
+          [
+            "salmon",
+            128,
+            "Salmon, raw"
+          ],
+          [
+            "jasmine rice dry",
+            70,
+            "Jasmine rice, dry"
+          ],
+          [
+            "broccolini",
+            150,
+            "Broccolini"
+          ],
+          [
+            "olive oil",
+            5,
+            "Olive oil"
+          ],
+          [
+            "honey",
+            15,
+            "Honey"
+          ],
+          [
+            "soy sauce low sodium",
+            15,
+            "Soy sauce"
+          ],
+          [
+            "garlic",
+            6,
+            "Garlic"
+          ],
+          [
+            "edamame frozen",
+            70,
+            "Edamame, shelled"
+          ]
+        ],
+        "id": "D1",
+        "l": "American",
+        "n": "Honey-Garlic Salmon, Jasmine Rice, Broccolini",
+        "nat": "lift",
+        "p": 45,
+        "s": "dinner",
+        "w": "~525 g"
+      },
+      {
+        "b": "60 g bun + 179 g roasted wedges",
+        "c": 78.5,
+        "f": 23.6,
+        "i": [
+          [
+            "ground beef 90/10",
+            119,
+            "Ground beef 90/10"
+          ],
+          [
+            "burger bun",
+            60,
+            "Burger bun"
+          ],
+          [
+            "american cheese",
+            15,
+            "American cheese"
+          ],
+          [
+            "potato",
+            230,
+            "Potato, raw"
+          ],
+          [
+            "olive oil",
+            5,
+            "Olive oil"
+          ],
+          [
+            "ketchup",
+            15,
+            "Ketchup"
+          ],
+          [
+            "onion",
+            30,
+            "Onion"
+          ],
+          [
+            "romaine",
+            25,
+            "Romaine"
+          ],
+          [
+            "cherry tomatoes",
+            40,
+            "Tomato"
+          ]
+        ],
+        "id": "D2",
+        "l": "burgers",
+        "n": "Blackstone Smash Burgers + Griddled Wedges",
+        "nat": "lift",
+        "p": 37.6,
+        "s": "dinner",
+        "w": "~500 g"
+      },
+      {
+        "b": "135 g cooked jasmine rice",
+        "c": 89.5,
+        "f": 22.9,
+        "i": [
+          [
+            "chicken breast",
+            118,
+            "Chicken breast, raw"
+          ],
+          [
+            "jasmine rice dry",
+            45,
+            "Jasmine rice, dry"
+          ],
+          [
+            "pineapple",
+            90,
+            "Pineapple"
+          ],
+          [
+            "bell pepper",
+            80,
+            "Bell pepper"
+          ],
+          [
+            "sugar snap peas",
+            60,
+            "Sugar snap peas"
+          ],
+          [
+            "red onion",
+            40,
+            "Onion"
+          ],
+          [
+            "cashews",
+            22,
+            "Cashews"
+          ],
+          [
+            "soy sauce low sodium",
+            20,
+            "Soy sauce"
+          ],
+          [
+            "honey",
+            10,
+            "Honey"
+          ],
+          [
+            "sesame oil",
+            9,
+            "Sesame oil"
+          ],
+          [
+            "cornstarch",
+            4,
+            "Cornstarch"
+          ],
+          [
+            "garlic",
+            6,
+            "Garlic"
+          ],
+          [
+            "ginger",
+            5,
+            "Ginger"
+          ],
+          [
+            "broccoli",
+            100,
+            "Broccoli, raw"
+          ]
+        ],
+        "id": "D3",
+        "l": "stir fry",
+        "n": "Pineapple Chicken Stir Fry + Jasmine Rice",
+        "nat": "lift",
+        "p": 41.9,
+        "s": "dinner",
+        "w": "~618 g"
+      },
+      {
+        "b": "312 g Greek lemon potatoes",
+        "c": 78.3,
+        "f": 21.3,
+        "i": [
+          [
+            "chicken breast",
+            118,
+            "Chicken breast, raw"
+          ],
+          [
+            "potato",
+            400,
+            "Potato, raw"
+          ],
+          [
+            "olive oil",
+            14,
+            "Olive oil"
+          ],
+          [
+            "tzatziki",
+            60,
+            "Tzatziki"
+          ],
+          [
+            "cucumber",
+            60,
+            "Cucumber"
+          ],
+          [
+            "cherry tomatoes",
+            60,
+            "Tomato"
+          ],
+          [
+            "lemon juice",
+            20,
+            "Lemon juice"
+          ]
+        ],
+        "id": "D4",
+        "l": "Mediterranean",
+        "n": "Chicken Souvlaki + Greek Lemon Potatoes",
+        "nat": "lift",
+        "p": 37.4,
+        "s": "dinner",
+        "w": "~580 g"
+      },
+      {
+        "b": "100 g sourdough + 150 g hash browns",
+        "c": 94.5,
+        "f": 28.8,
+        "i": [
+          [
+            "egg",
+            100,
+            "Egg, whole"
+          ],
+          [
+            "liquid egg white",
+            42,
+            "Egg white"
+          ],
+          [
+            "turkey bacon",
+            30,
+            "Turkey bacon"
+          ],
+          [
+            "sourdough",
+            100,
+            "Sourdough"
+          ],
+          [
+            "butter",
+            4,
+            "Butter"
+          ],
+          [
+            "frozen hash browns",
+            150,
+            "Frozen hash browns"
+          ],
+          [
+            "spinach",
+            100,
+            "Spinach"
+          ],
+          [
+            "cherry tomatoes",
+            120,
+            "Tomato"
+          ],
+          [
+            "black beans canned",
+            45,
+            "Black beans, canned drained"
+          ]
+        ],
+        "id": "D5",
+        "l": "breakfast-for-dinner",
+        "n": "Blackstone Breakfast-for-Dinner",
+        "nat": "lift",
+        "p": 42.6,
+        "s": "dinner",
+        "w": "~630 g"
+      },
+      {
+        "b": "195 g cooked white rice",
+        "c": 79.6,
+        "f": 24.3,
+        "i": [
+          [
+            "ground turkey 93/7",
+            109,
+            "Ground turkey 93/7"
+          ],
+          [
+            "white rice dry",
+            65,
+            "White rice, dry"
+          ],
+          [
+            "black beans canned",
+            80,
+            "Black beans, canned drained"
+          ],
+          [
+            "bell pepper",
+            60,
+            "Bell pepper"
+          ],
+          [
+            "onion",
+            40,
+            "Onion"
+          ],
+          [
+            "olive oil",
+            4,
+            "Olive oil"
+          ],
+          [
+            "salsa",
+            50,
+            "Salsa"
+          ],
+          [
+            "cheddar",
+            12,
+            "Cheddar"
+          ],
+          [
+            "avocado",
+            45,
+            "Avocado"
+          ]
+        ],
+        "id": "D6",
+        "l": "Mexican",
+        "n": "Ground Turkey Taco Skillet + Rice",
+        "nat": "lift",
+        "p": 35.9,
+        "s": "dinner",
+        "w": "~490 g"
+      },
+      {
+        "b": "226 g roasted potato",
+        "c": 64.7,
+        "f": 22.3,
+        "i": [
+          [
+            "chicken breast",
+            97,
+            "Chicken breast, raw"
+          ],
+          [
+            "potato",
+            290,
+            "Potato, raw"
+          ],
+          [
+            "olive oil",
+            9,
+            "Olive oil"
+          ],
+          [
+            "milk 2%",
+            40,
+            "Milk 2%"
+          ],
+          [
+            "light cream cheese",
+            25,
+            "Light cream cheese"
+          ],
+          [
+            "parmesan",
+            12,
+            "Parmesan"
+          ],
+          [
+            "mozzarella",
+            15,
+            "Mozzarella, part-skim"
+          ],
+          [
+            "garlic",
+            8,
+            "Garlic"
+          ],
+          [
+            "broccoli",
+            100,
+            "Broccoli, raw"
+          ]
+        ],
+        "id": "D7",
+        "l": "American",
+        "n": "Garlic-Parm Chicken & Crispy Potatoes",
+        "nat": "rest",
+        "p": 42.2,
+        "s": "dinner",
+        "w": "~478 g"
+      },
+      {
+        "b": "225 g cooked white rice",
+        "c": 77.8,
+        "f": 20.2,
+        "i": [
+          [
+            "shrimp",
+            140,
+            "Shrimp, raw"
+          ],
+          [
+            "white rice dry",
+            75,
+            "White rice, dry"
+          ],
+          [
+            "bell pepper",
+            90,
+            "Bell pepper"
+          ],
+          [
+            "onion",
+            50,
+            "Onion"
+          ],
+          [
+            "olive oil",
+            8,
+            "Olive oil"
+          ],
+          [
+            "avocado",
+            45,
+            "Avocado"
+          ],
+          [
+            "pico de gallo",
+            50,
+            "Salsa"
+          ],
+          [
+            "cheddar",
+            12,
+            "Cheddar"
+          ],
+          [
+            "lime juice",
+            10,
+            "Lime juice"
+          ]
+        ],
+        "id": "D8",
+        "l": "Mexican",
+        "n": "Shrimp Fajita Bowls + Cilantro-Lime Rice",
+        "nat": "lift",
+        "p": 38.9,
+        "s": "dinner",
+        "w": "~630 g"
+      },
+      {
+        "b": "168 g cooked rigatoni",
+        "c": 79.3,
+        "f": 20.5,
+        "i": [
+          [
+            "ground turkey 93/7",
+            100,
+            "Ground turkey 93/7"
+          ],
+          [
+            "rigatoni dry",
+            70,
+            "Pasta, dry"
+          ],
+          [
+            "crushed tomatoes",
+            150,
+            "Crushed tomatoes"
+          ],
+          [
+            "tomato paste",
+            20,
+            "Tomato paste"
+          ],
+          [
+            "onion",
+            40,
+            "Onion"
+          ],
+          [
+            "carrot",
+            40,
+            "Carrot"
+          ],
+          [
+            "celery",
+            30,
+            "Celery"
+          ],
+          [
+            "olive oil",
+            7,
+            "Olive oil"
+          ],
+          [
+            "parmesan",
+            12,
+            "Parmesan"
+          ],
+          [
+            "milk 2%",
+            30,
+            "Milk 2%"
+          ],
+          [
+            "garlic",
+            6,
+            "Garlic"
+          ]
+        ],
+        "id": "D9",
+        "l": "Italian",
+        "n": "Ground Turkey Bolognese over Rigatoni",
+        "nat": "lift",
+        "p": 38.7,
+        "s": "dinner",
+        "w": "~560 g"
+      },
+      {
+        "b": "210 g roasted sweet potato",
+        "c": 81,
+        "f": 22,
+        "i": [
+          [
+            "chicken thigh",
+            155,
+            "Chicken thigh, raw"
+          ],
+          [
+            "sweet potato",
+            280,
+            "Sweet potato, raw"
+          ],
+          [
+            "green beans",
+            130,
+            "Green beans"
+          ],
+          [
+            "olive oil",
+            9,
+            "Olive oil"
+          ],
+          [
+            "honey",
+            15,
+            "Honey"
+          ],
+          [
+            "soy sauce low sodium",
+            12,
+            "Soy sauce"
+          ],
+          [
+            "garlic",
+            8,
+            "Garlic"
+          ]
+        ],
+        "id": "D10",
+        "l": "American",
+        "n": "Honey-Garlic Chicken Thighs + Sweet Potato",
+        "nat": "lift",
+        "p": 37.2,
+        "s": "dinner",
+        "w": "~470 g"
+      },
+      {
+        "b": "296 g baked potato",
+        "c": 77.2,
+        "f": 20.8,
+        "i": [
+          [
+            "sirloin steak",
+            85,
+            "Sirloin steak, raw"
+          ],
+          [
+            "potato",
+            380,
+            "Potato, raw"
+          ],
+          [
+            "butter",
+            6,
+            "Butter"
+          ],
+          [
+            "greek yogurt nonfat",
+            40,
+            "Fage 0% Greek yogurt"
+          ],
+          [
+            "cheddar",
+            18,
+            "Cheddar"
+          ],
+          [
+            "scallions",
+            10,
+            "Scallions"
+          ],
+          [
+            "olive oil",
+            4,
+            "Olive oil"
+          ],
+          [
+            "broccoli",
+            120,
+            "Broccoli, raw"
+          ]
+        ],
+        "id": "D11",
+        "l": "American",
+        "n": "Blackstone Steak & Loaded Baked Potato",
+        "nat": "lift",
+        "p": 37.3,
+        "s": "dinner",
+        "w": "~570 g"
+      },
+      {
+        "b": "240 g cooked jasmine rice",
+        "c": 83.4,
+        "f": 26.6,
+        "i": [
+          [
+            "salmon",
+            112,
+            "Salmon, raw"
+          ],
+          [
+            "jasmine rice dry",
+            80,
+            "Jasmine rice, dry"
+          ],
+          [
+            "cucumber",
+            100,
+            "Cucumber"
+          ],
+          [
+            "avocado",
+            25,
+            "Avocado"
+          ],
+          [
+            "edamame frozen",
+            50,
+            "Edamame, shelled"
+          ],
+          [
+            "mayonnaise",
+            4,
+            "Mayonnaise"
+          ],
+          [
+            "sriracha",
+            10,
+            "Sriracha"
+          ],
+          [
+            "soy sauce low sodium",
+            12,
+            "Soy sauce"
+          ],
+          [
+            "sesame seeds",
+            3,
+            "Sesame seeds"
+          ],
+          [
+            "scallions",
+            10,
+            "Scallions"
+          ],
+          [
+            "cabbage slaw mix",
+            100,
+            "Cabbage slaw mix"
+          ]
+        ],
+        "id": "D12",
+        "l": "bowls",
+        "n": "Spicy Salmon Rice Bowls with Cucumber",
+        "nat": "lift",
+        "p": 38.6,
+        "s": "dinner",
+        "w": "~620 g"
+      },
+      {
+        "b": "78 g corn tortillas + 99 g cooked rice",
+        "c": 77.9,
+        "f": 21.2,
+        "i": [
+          [
+            "ground turkey 93/7",
+            110,
+            "Ground turkey 93/7"
+          ],
+          [
+            "corn tortillas",
+            78,
+            "Tortilla, corn"
+          ],
+          [
+            "american cheese",
+            15,
+            "American cheese"
+          ],
+          [
+            "white rice dry",
+            33,
+            "White rice, dry"
+          ],
+          [
+            "corn frozen",
+            60,
+            "Corn"
+          ],
+          [
+            "cotija",
+            12,
+            "Cotija"
+          ],
+          [
+            "greek yogurt nonfat",
+            30,
+            "Fage 0% Greek yogurt"
+          ],
+          [
+            "mayonnaise",
+            4,
+            "Mayonnaise"
+          ],
+          [
+            "onion",
+            25,
+            "Onion"
+          ],
+          [
+            "lime juice",
+            8,
+            "Lime juice"
+          ]
+        ],
+        "id": "D13",
+        "l": "burgers × Mexican",
+        "n": "Turkey Smash Burger Tacos + Street-Corn Rice",
+        "nat": "lift",
+        "p": 39,
+        "s": "dinner",
+        "w": "3 tacos + rice"
+      },
+      {
+        "b": "221 g cooked pasta",
+        "c": 87.6,
+        "f": 22.2,
+        "i": [
+          [
+            "chicken breast",
+            80,
+            "Chicken breast, raw"
+          ],
+          [
+            "pasta dry",
+            92,
+            "Pasta, dry"
+          ],
+          [
+            "pesto",
+            20,
+            "Pesto"
+          ],
+          [
+            "cherry tomatoes",
+            110,
+            "Tomato"
+          ],
+          [
+            "parmesan",
+            12,
+            "Parmesan"
+          ],
+          [
+            "greek yogurt nonfat",
+            30,
+            "Fage 0% Greek yogurt"
+          ],
+          [
+            "olive oil",
+            6,
+            "Olive oil"
+          ],
+          [
+            "garlic",
+            6,
+            "Garlic"
+          ],
+          [
+            "broccoli",
+            150,
+            "Broccoli, raw"
+          ]
+        ],
+        "id": "D14",
+        "l": "Mediterranean",
+        "n": "Pesto Chicken Pasta",
+        "nat": "lift",
+        "p": 43.7,
+        "s": "dinner",
+        "w": "~582 g"
+      },
+      {
+        "b": "180 g cooked pasta",
+        "c": 77.1,
+        "f": 21.2,
+        "i": [
+          [
+            "ground turkey 93/7",
+            85,
+            "Ground turkey 93/7"
+          ],
+          [
+            "pasta dry",
+            75,
+            "Pasta, dry"
+          ],
+          [
+            "marinara",
+            130,
+            "Marinara sauce"
+          ],
+          [
+            "cottage cheese 2%",
+            40,
+            "Cottage cheese 2%"
+          ],
+          [
+            "zucchini",
+            80,
+            "Zucchini"
+          ],
+          [
+            "broccoli",
+            80,
+            "Broccoli, raw"
+          ],
+          [
+            "mozzarella",
+            20,
+            "Mozzarella, part-skim"
+          ],
+          [
+            "olive oil",
+            6,
+            "Olive oil"
+          ]
+        ],
+        "id": "D15",
+        "l": "Italian",
+        "n": "Ground Turkey Pasta Bake",
+        "nat": "lift",
+        "p": 41,
+        "s": "dinner",
+        "w": "~490 g"
+      },
+      {
+        "b": "188 g sweet potato + 84 g cooked rice",
+        "c": 80.8,
+        "f": 20.1,
+        "i": [
+          [
+            "chicken breast",
+            110,
+            "Chicken breast, raw"
+          ],
+          [
+            "sweet potato",
+            250,
+            "Sweet potato, raw"
+          ],
+          [
+            "white rice dry",
+            28,
+            "White rice, dry"
+          ],
+          [
+            "buffalo sauce",
+            30,
+            "Buffalo sauce"
+          ],
+          [
+            "greek yogurt nonfat",
+            45,
+            "Fage 0% Greek yogurt"
+          ],
+          [
+            "blue cheese",
+            18,
+            "Blue cheese"
+          ],
+          [
+            "olive oil",
+            11,
+            "Olive oil"
+          ],
+          [
+            "celery",
+            40,
+            "Celery"
+          ],
+          [
+            "carrot",
+            40,
+            "Carrot"
+          ],
+          [
+            "scallions",
+            10,
+            "Scallions"
+          ]
+        ],
+        "id": "D16",
+        "l": "American",
+        "n": "Buffalo Chicken & Sweet Potato Bowl",
+        "nat": "lift",
+        "p": 40,
+        "s": "dinner",
+        "w": "~590 g"
+      },
+      {
+        "b": "2 corn tortillas + 150 g cooked rice",
+        "c": 83.5,
+        "f": 22.1,
+        "i": [
+          [
+            "chicken breast",
+            99,
+            "Chicken breast, raw"
+          ],
+          [
+            "corn tortillas",
+            52,
+            "Tortilla, corn"
+          ],
+          [
+            "white rice dry",
+            50,
+            "White rice, dry"
+          ],
+          [
+            "bell pepper",
+            100,
+            "Bell pepper"
+          ],
+          [
+            "onion",
+            60,
+            "Onion"
+          ],
+          [
+            "olive oil",
+            7,
+            "Olive oil"
+          ],
+          [
+            "pico de gallo",
+            50,
+            "Salsa"
+          ],
+          [
+            "avocado",
+            51,
+            "Avocado"
+          ],
+          [
+            "cheddar",
+            10,
+            "Cheddar"
+          ],
+          [
+            "greek yogurt nonfat",
+            30,
+            "Fage 0% Greek yogurt"
+          ]
+        ],
+        "id": "D17",
+        "l": "Mexican",
+        "n": "Sheet-Pan Chicken Fajitas + Tortillas & Rice",
+        "nat": "lift",
+        "p": 37.3,
+        "s": "dinner",
+        "w": "~570 g"
+      },
+      {
+        "b": "174 g cooked jasmine rice",
+        "c": 85.8,
+        "f": 27.4,
+        "i": [
+          [
+            "salmon",
+            124,
+            "Salmon, raw"
+          ],
+          [
+            "jasmine rice dry",
+            58,
+            "Jasmine rice, dry"
+          ],
+          [
+            "broccoli",
+            150,
+            "Broccoli, raw"
+          ],
+          [
+            "soy sauce low sodium",
+            25,
+            "Soy sauce"
+          ],
+          [
+            "honey",
+            16,
+            "Honey"
+          ],
+          [
+            "ginger",
+            6,
+            "Ginger"
+          ],
+          [
+            "garlic",
+            6,
+            "Garlic"
+          ],
+          [
+            "cornstarch",
+            5,
+            "Cornstarch"
+          ],
+          [
+            "sesame oil",
+            4,
+            "Sesame oil"
+          ],
+          [
+            "sesame seeds",
+            4,
+            "Sesame seeds"
+          ],
+          [
+            "scallions",
+            10,
+            "Scallions"
+          ],
+          [
+            "edamame frozen",
+            70,
+            "Edamame, shelled"
+          ]
+        ],
+        "id": "D18",
+        "l": "stir fry",
+        "n": "Teriyaki Salmon & Broccoli Rice Bowl",
+        "nat": "lift",
+        "p": 45.2,
+        "s": "dinner",
+        "w": "~560 g"
+      },
+      {
+        "b": "173 g cooked spaghetti",
+        "c": 87.2,
+        "f": 21.1,
+        "i": [
+          [
+            "chicken breast",
+            70,
+            "Chicken breast, raw"
+          ],
+          [
+            "panko",
+            16,
+            "Panko/breadcrumbs"
+          ],
+          [
+            "egg",
+            15,
+            "Egg, whole"
+          ],
+          [
+            "spaghetti dry",
+            72,
+            "Pasta, dry"
+          ],
+          [
+            "marinara",
+            130,
+            "Marinara sauce"
+          ],
+          [
+            "mozzarella",
+            20,
+            "Mozzarella, part-skim"
+          ],
+          [
+            "parmesan",
+            8,
+            "Parmesan"
+          ],
+          [
+            "olive oil",
+            8,
+            "Olive oil"
+          ],
+          [
+            "broccoli",
+            150,
+            "Broccoli, raw"
+          ]
+        ],
+        "id": "D19",
+        "l": "Italian",
+        "n": "Chicken Parmesan with Spaghetti",
+        "nat": "lift",
+        "p": 42.9,
+        "s": "dinner",
+        "w": "~592 g"
+      },
+      {
+        "b": "90 g flour tortillas + 84 g cooked rice",
+        "c": 89,
+        "f": 20.5,
+        "i": [
+          [
+            "chicken breast",
+            75,
+            "Chicken breast, raw"
+          ],
+          [
+            "flour tortillas",
+            90,
+            "Tortilla, large flour"
+          ],
+          [
+            "cheddar",
+            20,
+            "Cheddar"
+          ],
+          [
+            "white rice dry",
+            28,
+            "White rice, dry"
+          ],
+          [
+            "crushed tomatoes",
+            40,
+            "Crushed tomatoes"
+          ],
+          [
+            "onion",
+            30,
+            "Onion"
+          ],
+          [
+            "bell pepper",
+            50,
+            "Bell pepper"
+          ],
+          [
+            "olive oil",
+            4,
+            "Olive oil"
+          ],
+          [
+            "greek yogurt nonfat",
+            40,
+            "Fage 0% Greek yogurt"
+          ],
+          [
+            "pico de gallo",
+            40,
+            "Salsa"
+          ],
+          [
+            "black beans canned",
+            50,
+            "Black beans, canned drained"
+          ]
+        ],
+        "id": "D20",
+        "l": "Mexican",
+        "n": "Blackstone Chicken Quesadillas + Mexican Rice",
+        "nat": "lift",
+        "p": 39.7,
+        "s": "dinner",
+        "w": "~520 g"
+      },
+      {
+        "b": "221 g cooked linguine",
+        "c": 88.6,
+        "f": 22.9,
+        "i": [
+          [
+            "shrimp",
+            100,
+            "Shrimp, raw"
+          ],
+          [
+            "linguine dry",
+            92,
+            "Pasta, dry"
+          ],
+          [
+            "butter",
+            8,
+            "Butter"
+          ],
+          [
+            "olive oil",
+            11,
+            "Olive oil"
+          ],
+          [
+            "garlic",
+            10,
+            "Garlic"
+          ],
+          [
+            "white wine",
+            30,
+            "White wine"
+          ],
+          [
+            "lemon juice",
+            15,
+            "Lemon juice"
+          ],
+          [
+            "parmesan",
+            10,
+            "Parmesan"
+          ],
+          [
+            "cherry tomatoes",
+            80,
+            "Tomato"
+          ],
+          [
+            "spinach",
+            40,
+            "Spinach"
+          ],
+          [
+            "broccolini",
+            150,
+            "Broccolini"
+          ]
+        ],
+        "id": "D21",
+        "l": "Mediterranean",
+        "n": "Shrimp Scampi with Linguine",
+        "nat": "lift",
+        "p": 42.5,
+        "s": "dinner",
+        "w": "~632 g"
+      },
+      {
+        "b": "60 g bun + 136 g oven fries",
+        "c": 81.8,
+        "f": 23.7,
+        "i": [
+          [
+            "ground turkey 93/7",
+            124,
+            "Ground turkey 93/7"
+          ],
+          [
+            "burger bun",
+            60,
+            "Burger bun"
+          ],
+          [
+            "ketchup",
+            30,
+            "Ketchup"
+          ],
+          [
+            "tomato paste",
+            15,
+            "Tomato paste"
+          ],
+          [
+            "brown sugar",
+            6,
+            "Brown sugar"
+          ],
+          [
+            "onion",
+            40,
+            "Onion"
+          ],
+          [
+            "bell pepper",
+            40,
+            "Bell pepper"
+          ],
+          [
+            "potato",
+            175,
+            "Potato, raw"
+          ],
+          [
+            "olive oil",
+            7,
+            "Olive oil"
+          ],
+          [
+            "cheddar",
+            12,
+            "Cheddar"
+          ]
+        ],
+        "id": "D22",
+        "l": "burgers",
+        "n": "Turkey Sloppy Joes with Oven Fries",
+        "nat": "lift",
+        "p": 37.9,
+        "s": "dinner",
+        "w": "~480 g"
+      },
+      {
+        "b": "162 g cooked jasmine rice",
+        "c": 88.6,
+        "f": 22,
+        "i": [
+          [
+            "sirloin steak",
+            107,
+            "Sirloin steak, raw"
+          ],
+          [
+            "jasmine rice dry",
+            54,
+            "Jasmine rice, dry"
+          ],
+          [
+            "broccoli",
+            180,
+            "Broccoli, raw"
+          ],
+          [
+            "soy sauce low sodium",
+            25,
+            "Soy sauce"
+          ],
+          [
+            "oyster sauce",
+            20,
+            "Oyster sauce"
+          ],
+          [
+            "honey",
+            10,
+            "Honey"
+          ],
+          [
+            "cornstarch",
+            6,
+            "Cornstarch"
+          ],
+          [
+            "sesame oil",
+            9,
+            "Sesame oil"
+          ],
+          [
+            "cashews",
+            12,
+            "Cashews"
+          ],
+          [
+            "garlic",
+            8,
+            "Garlic"
+          ],
+          [
+            "ginger",
+            6,
+            "Ginger"
+          ],
+          [
+            "scallions",
+            15,
+            "Scallions"
+          ],
+          [
+            "sugar snap peas",
+            80,
+            "Sugar snap peas"
+          ]
+        ],
+        "id": "D23",
+        "l": "stir fry",
+        "n": "Beef & Broccoli Stir Fry with Rice",
+        "nat": "lift",
+        "p": 38.9,
+        "s": "dinner",
+        "w": "~592 g"
+      },
+      {
+        "b": "292 g roasted potato",
+        "c": 79,
+        "f": 22.2,
+        "i": [
+          [
+            "sirloin steak",
+            108,
+            "Sirloin steak, raw"
+          ],
+          [
+            "potato",
+            375,
+            "Potato, raw"
+          ],
+          [
+            "butter",
+            8,
+            "Butter"
+          ],
+          [
+            "olive oil",
+            6,
+            "Olive oil"
+          ],
+          [
+            "garlic",
+            12,
+            "Garlic"
+          ],
+          [
+            "parmesan",
+            10,
+            "Parmesan"
+          ],
+          [
+            "green beans",
+            130,
+            "Green beans"
+          ]
+        ],
+        "id": "D24",
+        "l": "American",
+        "n": "Garlic Butter Steak Bites & Crispy Potatoes",
+        "nat": "lift",
+        "p": 36.9,
+        "s": "dinner",
+        "w": "~570 g"
+      },
+      {
+        "b": "100 g hoagie roll + 70 g oven fries",
+        "c": 79.4,
+        "f": 24.5,
+        "i": [
+          [
+            "sirloin steak",
+            96,
+            "Sirloin steak, raw"
+          ],
+          [
+            "hoagie roll",
+            100,
+            "Hoagie roll"
+          ],
+          [
+            "provolone",
+            18,
+            "Provolone"
+          ],
+          [
+            "green bell pepper",
+            80,
+            "Bell pepper"
+          ],
+          [
+            "onion",
+            80,
+            "Onion"
+          ],
+          [
+            "olive oil",
+            10,
+            "Olive oil"
+          ],
+          [
+            "potato",
+            90,
+            "Potato, raw"
+          ]
+        ],
+        "id": "D25",
+        "l": "American",
+        "n": "Blackstone Philly Cheesesteak + Oven Fries",
+        "nat": "lift",
+        "p": 37.7,
+        "s": "dinner",
+        "w": "~440 g"
+      },
+      {
+        "b": "250 g garlic mashed potato",
+        "c": 81,
+        "f": 23.1,
+        "i": [
+          [
+            "chicken breast",
+            89,
+            "Chicken breast, raw"
+          ],
+          [
+            "potato",
+            275,
+            "Potato, raw"
+          ],
+          [
+            "onion",
+            150,
+            "Onion"
+          ],
+          [
+            "gruyere",
+            15,
+            "Gruyere"
+          ],
+          [
+            "butter",
+            12,
+            "Butter"
+          ],
+          [
+            "olive oil",
+            4,
+            "Olive oil"
+          ],
+          [
+            "all-purpose flour",
+            4,
+            "All-purpose flour"
+          ],
+          [
+            "chicken stock",
+            100,
+            "Chicken stock"
+          ],
+          [
+            "milk 2%",
+            50,
+            "Milk 2%"
+          ],
+          [
+            "garlic",
+            6,
+            "Garlic"
+          ],
+          [
+            "green beans",
+            150,
+            "Green beans"
+          ]
+        ],
+        "id": "D26",
+        "l": "American",
+        "n": "French Onion Smothered Chicken + Garlic Mash",
+        "nat": "lift",
+        "p": 37.9,
+        "s": "dinner",
+        "w": "~590 g"
+      },
+      {
+        "b": "163 g cooked pasta",
+        "c": 82.3,
+        "f": 19.1,
+        "i": [
+          [
+            "chicken breast",
+            88,
+            "Chicken breast, raw"
+          ],
+          [
+            "pasta dry",
+            68,
+            "Pasta, dry"
+          ],
+          [
+            "greek yogurt nonfat",
+            60,
+            "Fage 0% Greek yogurt"
+          ],
+          [
+            "parmesan",
+            16,
+            "Parmesan"
+          ],
+          [
+            "dijon mustard",
+            8,
+            "Dijon mustard"
+          ],
+          [
+            "lemon juice",
+            12,
+            "Lemon juice"
+          ],
+          [
+            "olive oil",
+            7,
+            "Olive oil"
+          ],
+          [
+            "kale",
+            45,
+            "Kale"
+          ],
+          [
+            "romaine",
+            35,
+            "Romaine"
+          ],
+          [
+            "cherry tomatoes",
+            70,
+            "Tomato"
+          ],
+          [
+            "croutons",
+            14,
+            "Croutons"
+          ],
+          [
+            "chickpeas canned",
+            60,
+            "Chickpeas, canned drained"
+          ]
+        ],
+        "id": "L22",
+        "l": "American · from Instagram",
+        "n": "Chicken Caesar Pasta Salad",
+        "nat": "lift",
+        "p": 49.4,
+        "s": "lunch",
+        "w": "~560 g"
+      },
+      {
+        "b": "125 g gnocchi + 30 g sourdough",
+        "c": 86.2,
+        "f": 21.7,
+        "i": [
+          [
+            "chicken breast",
+            60,
+            "Chicken breast, raw"
+          ],
+          [
+            "potato gnocchi",
+            125,
+            "Potato gnocchi"
+          ],
+          [
+            "sourdough",
+            30,
+            "Sourdough"
+          ],
+          [
+            "milk 2%",
+            90,
+            "Milk 2%"
+          ],
+          [
+            "light cream cheese",
+            22,
+            "Light cream cheese"
+          ],
+          [
+            "parmesan",
+            8,
+            "Parmesan"
+          ],
+          [
+            "chicken stock",
+            240,
+            "Chicken stock"
+          ],
+          [
+            "all-purpose flour",
+            7,
+            "All-purpose flour"
+          ],
+          [
+            "carrot",
+            50,
+            "Carrot"
+          ],
+          [
+            "celery",
+            30,
+            "Celery"
+          ],
+          [
+            "onion",
+            40,
+            "Onion"
+          ],
+          [
+            "spinach",
+            40,
+            "Spinach"
+          ],
+          [
+            "olive oil",
+            6,
+            "Olive oil"
+          ],
+          [
+            "butter",
+            4,
+            "Butter"
+          ],
+          [
+            "kale",
+            60,
+            "Kale"
+          ]
+        ],
+        "id": "D27",
+        "l": "American · from Instagram",
+        "n": "Chicken Gnocchi Soup",
+        "nat": "lift",
+        "p": 39.3,
+        "s": "dinner",
+        "w": "~695 g bowl + bread"
+      },
+      {
+        "b": "151 g cooked rice noodles",
+        "c": 81.6,
+        "f": 20.7,
+        "i": [
+          [
+            "chicken breast",
+            95,
+            "Chicken breast, raw"
+          ],
+          [
+            "rice noodles dry",
+            58,
+            "Rice noodles, dry"
+          ],
+          [
+            "peanut butter",
+            20,
+            "Peanut butter"
+          ],
+          [
+            "soy sauce low sodium",
+            22,
+            "Soy sauce"
+          ],
+          [
+            "honey",
+            12,
+            "Honey"
+          ],
+          [
+            "rice vinegar",
+            8,
+            "Rice vinegar"
+          ],
+          [
+            "sesame oil",
+            4,
+            "Sesame oil"
+          ],
+          [
+            "ginger",
+            6,
+            "Ginger"
+          ],
+          [
+            "garlic",
+            8,
+            "Garlic"
+          ],
+          [
+            "sriracha",
+            8,
+            "Sriracha"
+          ],
+          [
+            "broccoli",
+            120,
+            "Broccoli, raw"
+          ],
+          [
+            "carrot",
+            50,
+            "Carrot"
+          ],
+          [
+            "scallions",
+            15,
+            "Scallions"
+          ],
+          [
+            "peanuts",
+            6,
+            "Peanuts"
+          ]
+        ],
+        "id": "D28",
+        "l": "stir fry · from Instagram",
+        "n": "Honey-Garlic Chicken & Peanut Noodles",
+        "nat": "lift",
+        "p": 38,
+        "s": "dinner",
+        "w": "~510 g"
+      },
+      {
+        "b": "192 g cooked white rice",
+        "c": 86.6,
+        "f": 23.6,
+        "i": [
+          [
+            "chicken breast",
+            100,
+            "Chicken breast, raw"
+          ],
+          [
+            "white rice dry",
+            64,
+            "White rice, dry"
+          ],
+          [
+            "corn frozen",
+            90,
+            "Corn"
+          ],
+          [
+            "cotija",
+            16,
+            "Cotija"
+          ],
+          [
+            "greek yogurt nonfat",
+            40,
+            "Fage 0% Greek yogurt"
+          ],
+          [
+            "mayonnaise",
+            8,
+            "Mayonnaise"
+          ],
+          [
+            "lime juice",
+            10,
+            "Lime juice"
+          ],
+          [
+            "bell pepper",
+            60,
+            "Bell pepper"
+          ],
+          [
+            "onion",
+            35,
+            "Onion"
+          ],
+          [
+            "olive oil",
+            9,
+            "Olive oil"
+          ],
+          [
+            "black beans canned",
+            55,
+            "Black beans, canned drained"
+          ]
+        ],
+        "id": "D29",
+        "l": "Mexican · from Instagram",
+        "n": "Mexican Street Corn Chicken & Rice",
+        "nat": "lift",
+        "p": 41.7,
+        "s": "dinner",
+        "w": "~555 g"
+      },
+      {
+        "b": "138 g cooked white rice",
+        "c": 69.7,
+        "f": 19.2,
+        "i": [
+          [
+            "chicken breast",
+            110,
+            "Chicken breast, raw"
+          ],
+          [
+            "white rice dry",
+            46,
+            "White rice, dry"
+          ],
+          [
+            "corn frozen",
+            80,
+            "Corn"
+          ],
+          [
+            "cotija",
+            12,
+            "Cotija"
+          ],
+          [
+            "greek yogurt nonfat",
+            45,
+            "Fage 0% Greek yogurt"
+          ],
+          [
+            "mayonnaise",
+            4,
+            "Mayonnaise"
+          ],
+          [
+            "lime juice",
+            10,
+            "Lime juice"
+          ],
+          [
+            "bell pepper",
+            60,
+            "Bell pepper"
+          ],
+          [
+            "onion",
+            30,
+            "Onion"
+          ],
+          [
+            "olive oil",
+            5,
+            "Olive oil"
+          ],
+          [
+            "black beans canned",
+            40,
+            "Black beans, canned drained"
+          ],
+          [
+            "avocado",
+            25,
+            "Avocado"
+          ]
+        ],
+        "id": "L24",
+        "l": "Mexican · from Instagram",
+        "n": "Street Corn Chicken Bowl",
+        "nat": "lift",
+        "p": 41.6,
+        "s": "lunch",
+        "w": "~480 g"
+      },
+      {
+        "b": "120 g crisped white rice",
+        "c": 69.6,
+        "f": 20.6,
+        "i": [
+          [
+            "chicken breast",
+            125,
+            "Chicken breast, raw"
+          ],
+          [
+            "white rice dry",
+            40,
+            "White rice, dry"
+          ],
+          [
+            "sweet chilli sauce",
+            25,
+            "Sweet chilli sauce"
+          ],
+          [
+            "soy sauce low sodium",
+            10,
+            "Soy sauce"
+          ],
+          [
+            "rice vinegar",
+            8,
+            "Rice vinegar"
+          ],
+          [
+            "sesame oil",
+            5,
+            "Sesame oil"
+          ],
+          [
+            "cabbage slaw mix",
+            80,
+            "Cabbage slaw mix"
+          ],
+          [
+            "carrot",
+            50,
+            "Carrot"
+          ],
+          [
+            "cucumber",
+            60,
+            "Cucumber"
+          ],
+          [
+            "shelled edamame frozen",
+            60,
+            "Edamame, shelled"
+          ],
+          [
+            "peanuts",
+            10,
+            "Peanuts"
+          ],
+          [
+            "scallions",
+            12,
+            "Scallions"
+          ],
+          [
+            "mayonnaise",
+            5,
+            "Mayonnaise"
+          ]
+        ],
+        "id": "L25",
+        "l": "bowl · from Instagram",
+        "n": "Sweet Chilli Chicken Crispy Rice Salad",
+        "nat": "lift",
+        "p": 43.7,
+        "s": "lunch",
+        "w": "~490 g"
+      },
+      {
+        "b": "80 g sourdough + 90 g black beans",
+        "c": 80.9,
+        "f": 18.9,
+        "i": [
+          [
+            "chicken breast",
+            78,
+            "Chicken breast, raw"
+          ],
+          [
+            "black beans canned",
+            90,
+            "Black beans, canned drained"
+          ],
+          [
+            "corn frozen",
+            70,
+            "Corn"
+          ],
+          [
+            "cherry tomatoes",
+            80,
+            "Tomato"
+          ],
+          [
+            "bell pepper",
+            60,
+            "Bell pepper"
+          ],
+          [
+            "red onion",
+            25,
+            "Onion"
+          ],
+          [
+            "greek yogurt nonfat",
+            60,
+            "Fage 0% Greek yogurt"
+          ],
+          [
+            "mayonnaise",
+            8,
+            "Mayonnaise"
+          ],
+          [
+            "lime juice",
+            12,
+            "Lime juice"
+          ],
+          [
+            "olive oil",
+            4,
+            "Olive oil"
+          ],
+          [
+            "cheddar",
+            12,
+            "Cheddar"
+          ],
+          [
+            "sourdough",
+            80,
+            "Sourdough"
+          ]
+        ],
+        "id": "L26",
+        "l": "Mexican · from Instagram",
+        "n": "Southwest Chicken Salad + Sourdough",
+        "nat": "lift",
+        "p": 43.1,
+        "s": "lunch",
+        "w": "~555 g"
+      },
+      {
+        "b": "156 g cooked white rice + 80 g black beans",
+        "c": 84.1,
+        "f": 19,
+        "i": [
+          [
+            "chicken breast",
+            100,
+            "Chicken breast, raw"
+          ],
+          [
+            "enchilada sauce",
+            90,
+            "Enchilada sauce"
+          ],
+          [
+            "black beans canned",
+            80,
+            "Black beans, canned drained"
+          ],
+          [
+            "corn frozen",
+            60,
+            "Corn"
+          ],
+          [
+            "onion",
+            30,
+            "Onion"
+          ],
+          [
+            "white rice dry",
+            52,
+            "White rice, dry"
+          ],
+          [
+            "cheddar",
+            20,
+            "Cheddar"
+          ],
+          [
+            "avocado",
+            45,
+            "Avocado"
+          ],
+          [
+            "greek yogurt nonfat",
+            30,
+            "Fage 0% Greek yogurt"
+          ],
+          [
+            "pico de gallo",
+            40,
+            "Salsa"
+          ]
+        ],
+        "id": "L27",
+        "l": "Mexican · from Instagram",
+        "n": "Crockpot Chicken Enchilada Bowl",
+        "nat": "lift",
+        "p": 43.1,
+        "s": "lunch",
+        "w": "~590 g"
+      },
+      {
+        "b": "104 g corn tortillas + 70 g black beans",
+        "c": 86.5,
+        "f": 21.8,
+        "i": [
+          [
+            "shrimp",
+            150,
+            "Shrimp, raw"
+          ],
+          [
+            "corn tortillas",
+            104,
+            "Tortilla, corn"
+          ],
+          [
+            "black beans canned",
+            70,
+            "Black beans, canned drained"
+          ],
+          [
+            "bell pepper",
+            80,
+            "Bell pepper"
+          ],
+          [
+            "red onion",
+            40,
+            "Onion"
+          ],
+          [
+            "avocado",
+            85,
+            "Avocado"
+          ],
+          [
+            "olive oil",
+            6,
+            "Olive oil"
+          ],
+          [
+            "hot honey",
+            12,
+            "Hot honey"
+          ],
+          [
+            "lime juice",
+            12,
+            "Lime juice"
+          ],
+          [
+            "cherry tomatoes",
+            60,
+            "Tomato"
+          ]
+        ],
+        "id": "D30",
+        "l": "Mexican · from Instagram",
+        "n": "Shrimp Guacamole Tostadas",
+        "nat": "lift",
+        "p": 43.8,
+        "s": "dinner",
+        "w": "4 tostadas ~520 g"
+      },
+      {
+        "b": "400 g baked potato",
+        "c": 91.8,
+        "f": 24.9,
+        "i": [
+          [
+            "potato",
+            400,
+            "Potato, raw"
+          ],
+          [
+            "broccoli",
+            200,
+            "Broccoli, raw"
+          ],
+          [
+            "chicken breast",
+            60,
+            "Chicken breast, raw"
+          ],
+          [
+            "cheddar",
+            25,
+            "Cheddar"
+          ],
+          [
+            "greek yogurt nonfat",
+            50,
+            "Fage 0% Greek yogurt"
+          ],
+          [
+            "milk 2%",
+            40,
+            "Milk 2%"
+          ],
+          [
+            "light cream cheese",
+            20,
+            "Light cream cheese"
+          ],
+          [
+            "olive oil",
+            6,
+            "Olive oil"
+          ],
+          [
+            "butter",
+            5,
+            "Butter"
+          ],
+          [
+            "scallions",
+            12,
+            "Scallions"
+          ],
+          [
+            "garlic",
+            5,
+            "Garlic"
+          ]
+        ],
+        "id": "D31",
+        "l": "American · from Instagram",
+        "n": "Loaded Broccoli-Cheddar Chicken Potato",
+        "nat": "lift",
+        "p": 41.5,
+        "s": "dinner",
+        "w": "~640 g"
+      }
+    ]
+  },
+  "customFoods": [
+    {
+      "c": 66.3,
+      "carb": 1,
+      "cat": "grain",
+      "f": 6.9,
+      "looked": 1,
+      "n": "Oats overnight",
+      "p": 10.7,
+      "t": [
+        "sweet"
+      ]
+    },
+    {
+      "c": 66,
+      "carb": 1,
+      "cat": "cereal",
+      "f": 5,
+      "looked": 1,
+      "n": "Oats Overnight Brand",
+      "p": 10,
+      "t": [
+        "sweet"
+      ]
+    }
+  ],
+  "measured": {},
+  "updatedAt": 1789829075261,
+  "yields": {}
+}

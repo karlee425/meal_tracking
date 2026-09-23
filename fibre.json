@@ -1,0 +1,772 @@
+{
+ "perHundredGrams": [
+  [
+   "rolled oats",
+   10.6
+  ],
+  [
+   "enchilada sauce",
+   1.5
+  ],
+  [
+   "protein bar high fibre",
+   22.2
+  ],
+  [
+   "parmesan snack cheese",
+   0
+  ],
+  [
+   "turkey snack stick",
+   0
+  ],
+  [
+   "cabbage slaw mix",
+   2.5
+  ],
+  [
+   "sweet chilli sauce",
+   0.5
+  ],
+  [
+   "enchilada sauce",
+   1.5
+  ],
+  [
+   "turkey bacon",
+   0
+  ],
+  [
+   "potato gnocchi",
+   2
+  ],
+  [
+   "rice noodles dry",
+   1.6
+  ],
+  [
+   "croutons",
+   3.5
+  ],
+  [
+   "kale",
+   3.6
+  ],
+  [
+   "peanuts",
+   8.5
+  ],
+  [
+   "oats overnight packet",
+   7
+  ],
+  [
+   "chia seeds",
+   34.4
+  ],
+  [
+   "ground flaxseed",
+   27.3
+  ],
+  [
+   "three wishes cereal",
+   8.6
+  ],
+  [
+   "one degree brown rice crisps",
+   3.6
+  ],
+  [
+   "granola",
+   7
+  ],
+  [
+   "blueberries",
+   2.4
+  ],
+  [
+   "frozen blueberries",
+   2.4
+  ],
+  [
+   "frozen mixed berries",
+   3.5
+  ],
+  [
+   "strawberries",
+   2
+  ],
+  [
+   "banana",
+   2.6
+  ],
+  [
+   "apple",
+   2.4
+  ],
+  [
+   "grapes",
+   0.9
+  ],
+  [
+   "pineapple",
+   1.4
+  ],
+  [
+   "dried mango",
+   7
+  ],
+  [
+   "medjool dates",
+   6.7
+  ],
+  [
+   "dried cranberries",
+   5.7
+  ],
+  [
+   "avocado",
+   6.7
+  ],
+  [
+   "sweet potato",
+   3
+  ],
+  [
+   "potato",
+   2.2
+  ],
+  [
+   "butternut squash",
+   2
+  ],
+  [
+   "broccolini",
+   2.6
+  ],
+  [
+   "broccoli",
+   2.6
+  ],
+  [
+   "green beans",
+   3.4
+  ],
+  [
+   "sugar snap peas",
+   2.6
+  ],
+  [
+   "spinach",
+   2.2
+  ],
+  [
+   "romaine",
+   2.1
+  ],
+  [
+   "cucumber",
+   0.5
+  ],
+  [
+   "cherry tomatoes",
+   1.2
+  ],
+  [
+   "crushed tomatoes",
+   1.4
+  ],
+  [
+   "tomato paste",
+   4.1
+  ],
+  [
+   "marinara",
+   1.8
+  ],
+  [
+   "green bell pepper",
+   1.7
+  ],
+  [
+   "bell pepper",
+   1.7
+  ],
+  [
+   "roasted red pepper",
+   1.7
+  ],
+  [
+   "red onion",
+   1.7
+  ],
+  [
+   "onion",
+   1.7
+  ],
+  [
+   "scallions",
+   2.6
+  ],
+  [
+   "baby carrots",
+   2.9
+  ],
+  [
+   "carrot",
+   2.8
+  ],
+  [
+   "celery",
+   1.6
+  ],
+  [
+   "zucchini",
+   1
+  ],
+  [
+   "corn frozen",
+   2.4
+  ],
+  [
+   "garlic",
+   2.1
+  ],
+  [
+   "ginger",
+   2
+  ],
+  [
+   "black beans canned",
+   7.5
+  ],
+  [
+   "chickpeas canned",
+   7.6
+  ],
+  [
+   "shelled edamame frozen",
+   5.2
+  ],
+  [
+   "edamame frozen",
+   5.2
+  ],
+  [
+   "white rice dry",
+   1.3
+  ],
+  [
+   "jasmine rice dry",
+   1.3
+  ],
+  [
+   "wild rice dry",
+   6.2
+  ],
+  [
+   "rigatoni dry",
+   3.2
+  ],
+  [
+   "spaghetti dry",
+   3.2
+  ],
+  [
+   "linguine dry",
+   3.2
+  ],
+  [
+   "pasta dry",
+   3.2
+  ],
+  [
+   "orzo dry",
+   3.2
+  ],
+  [
+   "pearl couscous dry",
+   2.5
+  ],
+  [
+   "farro dry",
+   8
+  ],
+  [
+   "sourdough",
+   2.4
+  ],
+  [
+   "whole-wheat pita",
+   7.4
+  ],
+  [
+   "corn tortillas",
+   6.9
+  ],
+  [
+   "flour tortillas",
+   3
+  ],
+  [
+   "flour tortilla",
+   3
+  ],
+  [
+   "small flour tortilla",
+   3
+  ],
+  [
+   "large tortilla wrap",
+   3
+  ],
+  [
+   "hoagie roll",
+   2.4
+  ],
+  [
+   "burger bun",
+   2.4
+  ],
+  [
+   "panko",
+   3
+  ],
+  [
+   "all-purpose flour",
+   2.7
+  ],
+  [
+   "whole-grain crackers",
+   6
+  ],
+  [
+   "graham crackers",
+   3
+  ],
+  [
+   "pretzels",
+   3
+  ],
+  [
+   "rice cakes",
+   4.2
+  ],
+  [
+   "air-popped popcorn",
+   14.5
+  ],
+  [
+   "almonds",
+   12.5
+  ],
+  [
+   "sliced almonds",
+   12.5
+  ],
+  [
+   "cashews",
+   3.3
+  ],
+  [
+   "sesame seeds",
+   11.8
+  ],
+  [
+   "peanut butter",
+   6
+  ],
+  [
+   "almond butter",
+   10
+  ],
+  [
+   "hummus",
+   6
+  ],
+  [
+   "pesto",
+   2.5
+  ],
+  [
+   "kalamata olives",
+   3.2
+  ],
+  [
+   "pico de gallo",
+   1.5
+  ],
+  [
+   "salsa",
+   1.5
+  ],
+  [
+   "cocoa powder",
+   33
+  ],
+  [
+   "chipotle in adobo",
+   5
+  ],
+  [
+   "protein powder",
+   2
+  ],
+  [
+   "basil",
+   3
+  ],
+  [
+   "cilantro",
+   2.8
+  ],
+  [
+   "bbq sauce",
+   0.9
+  ],
+  [
+   "ketchup",
+   1
+  ],
+  [
+   "oyster sauce",
+   0.4
+  ],
+  [
+   "dijon mustard",
+   4
+  ],
+  [
+   "buffalo sauce",
+   0.4
+  ]
+ ],
+ "solubleShare": [
+  [
+   "protein bar high fibre",
+   0.6
+  ],
+  [
+   "rolled oats",
+   0.45
+  ],
+  [
+   "cabbage slaw mix",
+   0.35
+  ],
+  [
+   "potato gnocchi",
+   0.3
+  ],
+  [
+   "rice noodles dry",
+   0.2
+  ],
+  [
+   "croutons",
+   0.2
+  ],
+  [
+   "kale",
+   0.3
+  ],
+  [
+   "peanuts",
+   0.15
+  ],
+  [
+   "oats overnight packet",
+   0.4
+  ],
+  [
+   "chia seeds",
+   0.25
+  ],
+  [
+   "ground flaxseed",
+   0.3
+  ],
+  [
+   "sweet potato",
+   0.45
+  ],
+  [
+   "potato",
+   0.35
+  ],
+  [
+   "carrot",
+   0.4
+  ],
+  [
+   "baby carrots",
+   0.4
+  ],
+  [
+   "onion",
+   0.45
+  ],
+  [
+   "red onion",
+   0.45
+  ],
+  [
+   "garlic",
+   0.5
+  ],
+  [
+   "zucchini",
+   0.35
+  ],
+  [
+   "broccoli",
+   0.35
+  ],
+  [
+   "broccolini",
+   0.35
+  ],
+  [
+   "green beans",
+   0.35
+  ],
+  [
+   "spinach",
+   0.3
+  ],
+  [
+   "cucumber",
+   0.35
+  ],
+  [
+   "cherry tomatoes",
+   0.3
+  ],
+  [
+   "crushed tomatoes",
+   0.3
+  ],
+  [
+   "marinara",
+   0.3
+  ],
+  [
+   "bell pepper",
+   0.3
+  ],
+  [
+   "green bell pepper",
+   0.3
+  ],
+  [
+   "apple",
+   0.35
+  ],
+  [
+   "banana",
+   0.3
+  ],
+  [
+   "strawberries",
+   0.3
+  ],
+  [
+   "blueberries",
+   0.2
+  ],
+  [
+   "frozen blueberries",
+   0.2
+  ],
+  [
+   "frozen mixed berries",
+   0.25
+  ],
+  [
+   "pineapple",
+   0.25
+  ],
+  [
+   "dried mango",
+   0.3
+  ],
+  [
+   "medjool dates",
+   0.25
+  ],
+  [
+   "black beans canned",
+   0.3
+  ],
+  [
+   "chickpeas canned",
+   0.3
+  ],
+  [
+   "hummus",
+   0.3
+  ],
+  [
+   "shelled edamame frozen",
+   0.25
+  ],
+  [
+   "avocado",
+   0.25
+  ],
+  [
+   "farro dry",
+   0.25
+  ],
+  [
+   "pearl couscous dry",
+   0.25
+  ],
+  [
+   "pasta dry",
+   0.25
+  ],
+  [
+   "rigatoni dry",
+   0.25
+  ],
+  [
+   "spaghetti dry",
+   0.25
+  ],
+  [
+   "linguine dry",
+   0.25
+  ],
+  [
+   "orzo dry",
+   0.25
+  ],
+  [
+   "sourdough",
+   0.25
+  ],
+  [
+   "granola",
+   0.25
+  ],
+  [
+   "three wishes cereal",
+   0.25
+  ],
+  [
+   "white rice dry",
+   0.2
+  ],
+  [
+   "jasmine rice dry",
+   0.2
+  ],
+  [
+   "wild rice dry",
+   0.2
+  ],
+  [
+   "whole-wheat pita",
+   0.2
+  ],
+  [
+   "corn tortillas",
+   0.15
+  ],
+  [
+   "flour tortillas",
+   0.15
+  ],
+  [
+   "flour tortilla",
+   0.15
+  ],
+  [
+   "small flour tortilla",
+   0.15
+  ],
+  [
+   "large tortilla wrap",
+   0.15
+  ],
+  [
+   "hoagie roll",
+   0.2
+  ],
+  [
+   "burger bun",
+   0.2
+  ],
+  [
+   "one degree brown rice crisps",
+   0.15
+  ],
+  [
+   "whole-grain crackers",
+   0.15
+  ],
+  [
+   "graham crackers",
+   0.15
+  ],
+  [
+   "pretzels",
+   0.15
+  ],
+  [
+   "rice cakes",
+   0.15
+  ],
+  [
+   "air-popped popcorn",
+   0.05
+  ],
+  [
+   "almonds",
+   0.1
+  ],
+  [
+   "sliced almonds",
+   0.1
+  ],
+  [
+   "cashews",
+   0.15
+  ],
+  [
+   "sesame seeds",
+   0.15
+  ],
+  [
+   "peanut butter",
+   0.2
+  ],
+  [
+   "almond butter",
+   0.2
+  ],
+  [
+   "cocoa powder",
+   0.1
+  ]
+ ],
+ "briskFermenting": [
+  "protein bar high fibre",
+  "onion",
+  "red onion",
+  "garlic",
+  "black beans canned",
+  "chickpeas canned",
+  "hummus",
+  "shelled edamame frozen",
+  "edamame frozen",
+  "apple",
+  "dried mango",
+  "medjool dates",
+  "cashews",
+  "sugar snap peas",
+  "broccoli",
+  "broccolini"
+ ]
+}

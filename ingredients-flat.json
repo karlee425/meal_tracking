@@ -1,0 +1,5658 @@
+[
+ {
+  "option": "B1",
+  "slot": "breakfast",
+  "ingredient": "rolled oats",
+  "grams": 70,
+  "unit": "g",
+  "food": "Rolled oats, dry"
+ },
+ {
+  "option": "B1",
+  "slot": "breakfast",
+  "ingredient": "cottage cheese 2%",
+  "grams": 175,
+  "unit": "g",
+  "food": "Cottage cheese 2%"
+ },
+ {
+  "option": "B1",
+  "slot": "breakfast",
+  "ingredient": "milk 2%",
+  "grams": 100,
+  "unit": "g",
+  "food": "Milk 2%"
+ },
+ {
+  "option": "B1",
+  "slot": "breakfast",
+  "ingredient": "chia seeds",
+  "grams": 10,
+  "unit": "g",
+  "food": "Chia seeds"
+ },
+ {
+  "option": "B1",
+  "slot": "breakfast",
+  "ingredient": "blueberries",
+  "grams": 75,
+  "unit": "g",
+  "food": "Blueberries, frozen"
+ },
+ {
+  "option": "B1",
+  "slot": "breakfast",
+  "ingredient": "banana",
+  "grams": 100,
+  "unit": "g",
+  "food": "Banana"
+ },
+ {
+  "option": "B1",
+  "slot": "breakfast",
+  "ingredient": "peanut butter",
+  "grams": 8,
+  "unit": "g",
+  "food": "Peanut butter"
+ },
+ {
+  "option": "B2",
+  "slot": "breakfast",
+  "ingredient": "rolled oats",
+  "grams": 55,
+  "unit": "g",
+  "food": "Rolled oats, dry"
+ },
+ {
+  "option": "B2",
+  "slot": "breakfast",
+  "ingredient": "cottage cheese 2%",
+  "grams": 120,
+  "unit": "g",
+  "food": "Cottage cheese 2%"
+ },
+ {
+  "option": "B2",
+  "slot": "breakfast",
+  "ingredient": "egg",
+  "grams": 50,
+  "unit": "g",
+  "food": "Egg, whole"
+ },
+ {
+  "option": "B2",
+  "slot": "breakfast",
+  "ingredient": "protein powder",
+  "grams": 10,
+  "unit": "g",
+  "food": "Protein powder"
+ },
+ {
+  "option": "B2",
+  "slot": "breakfast",
+  "ingredient": "peanut butter",
+  "grams": 10,
+  "unit": "g",
+  "food": "Peanut butter"
+ },
+ {
+  "option": "B2",
+  "slot": "breakfast",
+  "ingredient": "banana",
+  "grams": 110,
+  "unit": "g",
+  "food": "Banana"
+ },
+ {
+  "option": "B2",
+  "slot": "breakfast",
+  "ingredient": "maple syrup",
+  "grams": 25,
+  "unit": "g",
+  "food": "Maple syrup"
+ },
+ {
+  "option": "B2",
+  "slot": "breakfast",
+  "ingredient": "blueberries",
+  "grams": 75,
+  "unit": "g",
+  "food": "Blueberries, frozen"
+ },
+ {
+  "option": "B3",
+  "slot": "breakfast",
+  "ingredient": "greek yogurt nonfat",
+  "grams": 200,
+  "unit": "g",
+  "food": "Fage 0% Greek yogurt"
+ },
+ {
+  "option": "B3",
+  "slot": "breakfast",
+  "ingredient": "three wishes cereal",
+  "grams": 25,
+  "unit": "g",
+  "food": "Three Wishes cereal"
+ },
+ {
+  "option": "B3",
+  "slot": "breakfast",
+  "ingredient": "one degree brown rice crisps",
+  "grams": 25,
+  "unit": "g",
+  "food": "One Degree brown rice crisps"
+ },
+ {
+  "option": "B3",
+  "slot": "breakfast",
+  "ingredient": "blueberries",
+  "grams": 100,
+  "unit": "g",
+  "food": "Blueberries, frozen"
+ },
+ {
+  "option": "B3",
+  "slot": "breakfast",
+  "ingredient": "banana",
+  "grams": 120,
+  "unit": "g",
+  "food": "Banana"
+ },
+ {
+  "option": "B3",
+  "slot": "breakfast",
+  "ingredient": "peanut butter",
+  "grams": 27,
+  "unit": "g",
+  "food": "Peanut butter"
+ },
+ {
+  "option": "B3",
+  "slot": "breakfast",
+  "ingredient": "honey",
+  "grams": 15,
+  "unit": "g",
+  "food": "Honey"
+ },
+ {
+  "option": "B4",
+  "slot": "breakfast",
+  "ingredient": "rolled oats",
+  "grams": 70,
+  "unit": "g",
+  "food": "Rolled oats, dry"
+ },
+ {
+  "option": "B4",
+  "slot": "breakfast",
+  "ingredient": "greek yogurt nonfat",
+  "grams": 170,
+  "unit": "g",
+  "food": "Fage 0% Greek yogurt"
+ },
+ {
+  "option": "B4",
+  "slot": "breakfast",
+  "ingredient": "milk 2%",
+  "grams": 100,
+  "unit": "g",
+  "food": "Milk 2%"
+ },
+ {
+  "option": "B4",
+  "slot": "breakfast",
+  "ingredient": "banana",
+  "grams": 130,
+  "unit": "g",
+  "food": "Banana"
+ },
+ {
+  "option": "B4",
+  "slot": "breakfast",
+  "ingredient": "peanut butter",
+  "grams": 20,
+  "unit": "g",
+  "food": "Peanut butter"
+ },
+ {
+  "option": "B4",
+  "slot": "breakfast",
+  "ingredient": "honey",
+  "grams": 10,
+  "unit": "g",
+  "food": "Honey"
+ },
+ {
+  "option": "B5",
+  "slot": "breakfast",
+  "ingredient": "flour tortilla",
+  "grams": 72,
+  "unit": "g",
+  "food": "Tortilla, large flour"
+ },
+ {
+  "option": "B5",
+  "slot": "breakfast",
+  "ingredient": "egg",
+  "grams": 75,
+  "unit": "g",
+  "food": "Egg, whole"
+ },
+ {
+  "option": "B5",
+  "slot": "breakfast",
+  "ingredient": "potato",
+  "grams": 170,
+  "unit": "g",
+  "food": "Potato, raw"
+ },
+ {
+  "option": "B5",
+  "slot": "breakfast",
+  "ingredient": "cheddar",
+  "grams": 10,
+  "unit": "g",
+  "food": "Cheddar"
+ },
+ {
+  "option": "B5",
+  "slot": "breakfast",
+  "ingredient": "salsa",
+  "grams": 40,
+  "unit": "g",
+  "food": "Salsa"
+ },
+ {
+  "option": "B5",
+  "slot": "breakfast",
+  "ingredient": "greek yogurt nonfat",
+  "grams": 150,
+  "unit": "g",
+  "food": "Fage 0% Greek yogurt"
+ },
+ {
+  "option": "B5",
+  "slot": "breakfast",
+  "ingredient": "banana",
+  "grams": 110,
+  "unit": "g",
+  "food": "Banana"
+ },
+ {
+  "option": "B6",
+  "slot": "breakfast",
+  "ingredient": "rolled oats",
+  "grams": 75,
+  "unit": "g",
+  "food": "Rolled oats, dry"
+ },
+ {
+  "option": "B6",
+  "slot": "breakfast",
+  "ingredient": "egg",
+  "grams": 25,
+  "unit": "g",
+  "food": "Egg, whole"
+ },
+ {
+  "option": "B6",
+  "slot": "breakfast",
+  "ingredient": "milk 2%",
+  "grams": 75,
+  "unit": "g",
+  "food": "Milk 2%"
+ },
+ {
+  "option": "B6",
+  "slot": "breakfast",
+  "ingredient": "greek yogurt nonfat",
+  "grams": 110,
+  "unit": "g",
+  "food": "Fage 0% Greek yogurt"
+ },
+ {
+  "option": "B6",
+  "slot": "breakfast",
+  "ingredient": "banana",
+  "grams": 65,
+  "unit": "g",
+  "food": "Banana"
+ },
+ {
+  "option": "B6",
+  "slot": "breakfast",
+  "ingredient": "blueberries",
+  "grams": 75,
+  "unit": "g",
+  "food": "Blueberries, frozen"
+ },
+ {
+  "option": "B6",
+  "slot": "breakfast",
+  "ingredient": "peanut butter",
+  "grams": 15,
+  "unit": "g",
+  "food": "Peanut butter"
+ },
+ {
+  "option": "B6",
+  "slot": "breakfast",
+  "ingredient": "honey",
+  "grams": 15,
+  "unit": "g",
+  "food": "Honey"
+ },
+ {
+  "option": "B6",
+  "slot": "breakfast",
+  "ingredient": "protein powder",
+  "grams": 8,
+  "unit": "g",
+  "food": "Protein powder"
+ },
+ {
+  "option": "B7",
+  "slot": "breakfast",
+  "ingredient": "sourdough",
+  "grams": 100,
+  "unit": "g",
+  "food": "Sourdough"
+ },
+ {
+  "option": "B7",
+  "slot": "breakfast",
+  "ingredient": "egg",
+  "grams": 50,
+  "unit": "g",
+  "food": "Egg, whole"
+ },
+ {
+  "option": "B7",
+  "slot": "breakfast",
+  "ingredient": "cottage cheese 2%",
+  "grams": 140,
+  "unit": "g",
+  "food": "Cottage cheese 2%"
+ },
+ {
+  "option": "B7",
+  "slot": "breakfast",
+  "ingredient": "milk 2%",
+  "grams": 50,
+  "unit": "g",
+  "food": "Milk 2%"
+ },
+ {
+  "option": "B7",
+  "slot": "breakfast",
+  "ingredient": "maple syrup",
+  "grams": 20,
+  "unit": "g",
+  "food": "Maple syrup"
+ },
+ {
+  "option": "B7",
+  "slot": "breakfast",
+  "ingredient": "blueberries",
+  "grams": 100,
+  "unit": "g",
+  "food": "Blueberries, frozen"
+ },
+ {
+  "option": "B7",
+  "slot": "breakfast",
+  "ingredient": "peanut butter",
+  "grams": 12,
+  "unit": "g",
+  "food": "Peanut butter"
+ },
+ {
+  "option": "B7",
+  "slot": "breakfast",
+  "ingredient": "banana",
+  "grams": 40,
+  "unit": "g",
+  "food": "Banana"
+ },
+ {
+  "option": "B8",
+  "slot": "breakfast",
+  "ingredient": "oats overnight packet",
+  "grams": 76,
+  "unit": "g",
+  "food": "Oats overnight packet"
+ },
+ {
+  "option": "B8",
+  "slot": "breakfast",
+  "ingredient": "cottage cheese 2%",
+  "grams": 120,
+  "unit": "g",
+  "food": "Cottage cheese 2%"
+ },
+ {
+  "option": "B8",
+  "slot": "breakfast",
+  "ingredient": "rolled oats",
+  "grams": 20,
+  "unit": "g",
+  "food": "Rolled oats, dry"
+ },
+ {
+  "option": "B8",
+  "slot": "breakfast",
+  "ingredient": "frozen blueberries",
+  "grams": 75,
+  "unit": "g",
+  "food": "Blueberries, frozen"
+ },
+ {
+  "option": "B8",
+  "slot": "breakfast",
+  "ingredient": "peanut butter",
+  "grams": 12,
+  "unit": "g",
+  "food": "Peanut butter"
+ },
+ {
+  "option": "B8",
+  "slot": "breakfast",
+  "ingredient": "banana",
+  "grams": 120,
+  "unit": "g",
+  "food": "Banana"
+ },
+ {
+  "option": "B9",
+  "slot": "breakfast",
+  "ingredient": "rolled oats",
+  "grams": 40,
+  "unit": "g",
+  "food": "Rolled oats, dry"
+ },
+ {
+  "option": "B9",
+  "slot": "breakfast",
+  "ingredient": "milk 2%",
+  "grams": 100,
+  "unit": "g",
+  "food": "Milk 2%"
+ },
+ {
+  "option": "B9",
+  "slot": "breakfast",
+  "ingredient": "banana",
+  "grams": 130,
+  "unit": "g",
+  "food": "Banana"
+ },
+ {
+  "option": "B9",
+  "slot": "breakfast",
+  "ingredient": "honey",
+  "grams": 25,
+  "unit": "g",
+  "food": "Honey"
+ },
+ {
+  "option": "B9",
+  "slot": "breakfast",
+  "ingredient": "greek yogurt nonfat",
+  "grams": 200,
+  "unit": "g",
+  "food": "Fage 0% Greek yogurt"
+ },
+ {
+  "option": "B9",
+  "slot": "breakfast",
+  "ingredient": "three wishes cereal",
+  "grams": 13,
+  "unit": "g",
+  "food": "Three Wishes cereal"
+ },
+ {
+  "option": "B9",
+  "slot": "breakfast",
+  "ingredient": "one degree brown rice crisps",
+  "grams": 12,
+  "unit": "g",
+  "food": "One Degree brown rice crisps"
+ },
+ {
+  "option": "B9",
+  "slot": "breakfast",
+  "ingredient": "blueberries",
+  "grams": 75,
+  "unit": "g",
+  "food": "Blueberries, frozen"
+ },
+ {
+  "option": "B9",
+  "slot": "breakfast",
+  "ingredient": "peanut butter",
+  "grams": 19,
+  "unit": "g",
+  "food": "Peanut butter"
+ },
+ {
+  "option": "L1",
+  "slot": "lunch",
+  "ingredient": "chicken breast",
+  "grams": 133,
+  "unit": "g",
+  "food": "Chicken breast, raw"
+ },
+ {
+  "option": "L1",
+  "slot": "lunch",
+  "ingredient": "white rice dry",
+  "grams": 50,
+  "unit": "g",
+  "food": "White rice, dry"
+ },
+ {
+  "option": "L1",
+  "slot": "lunch",
+  "ingredient": "black beans canned",
+  "grams": 50,
+  "unit": "g",
+  "food": "Black beans, canned drained"
+ },
+ {
+  "option": "L1",
+  "slot": "lunch",
+  "ingredient": "corn frozen",
+  "grams": 40,
+  "unit": "g",
+  "food": "Corn"
+ },
+ {
+  "option": "L1",
+  "slot": "lunch",
+  "ingredient": "bell pepper",
+  "grams": 60,
+  "unit": "g",
+  "food": "Bell pepper"
+ },
+ {
+  "option": "L1",
+  "slot": "lunch",
+  "ingredient": "olive oil",
+  "grams": 4,
+  "unit": "g",
+  "food": "Olive oil"
+ },
+ {
+  "option": "L1",
+  "slot": "lunch",
+  "ingredient": "honey",
+  "grams": 8,
+  "unit": "g",
+  "food": "Honey"
+ },
+ {
+  "option": "L1",
+  "slot": "lunch",
+  "ingredient": "chipotle in adobo",
+  "grams": 5,
+  "unit": "g",
+  "food": "Chipotle in adobo"
+ },
+ {
+  "option": "L1",
+  "slot": "lunch",
+  "ingredient": "lime juice",
+  "grams": 10,
+  "unit": "g",
+  "food": "Lime juice"
+ },
+ {
+  "option": "L1",
+  "slot": "lunch",
+  "ingredient": "cheddar",
+  "grams": 10,
+  "unit": "g",
+  "food": "Cheddar"
+ },
+ {
+  "option": "L1",
+  "slot": "lunch",
+  "ingredient": "pico de gallo",
+  "grams": 50,
+  "unit": "g",
+  "food": "Salsa"
+ },
+ {
+  "option": "L1",
+  "slot": "lunch",
+  "ingredient": "avocado",
+  "grams": 35,
+  "unit": "g",
+  "food": "Avocado"
+ },
+ {
+  "option": "L2",
+  "slot": "lunch",
+  "ingredient": "ground turkey 93/7",
+  "grams": 136,
+  "unit": "g",
+  "food": "Ground turkey 93/7"
+ },
+ {
+  "option": "L2",
+  "slot": "lunch",
+  "ingredient": "panko",
+  "grams": 13,
+  "unit": "g",
+  "food": "Panko/breadcrumbs"
+ },
+ {
+  "option": "L2",
+  "slot": "lunch",
+  "ingredient": "egg",
+  "grams": 20,
+  "unit": "g",
+  "food": "Egg, whole"
+ },
+ {
+  "option": "L2",
+  "slot": "lunch",
+  "ingredient": "orzo dry",
+  "grams": 65,
+  "unit": "g",
+  "food": "Orzo, dry"
+ },
+ {
+  "option": "L2",
+  "slot": "lunch",
+  "ingredient": "cucumber",
+  "grams": 100,
+  "unit": "g",
+  "food": "Cucumber"
+ },
+ {
+  "option": "L2",
+  "slot": "lunch",
+  "ingredient": "cherry tomatoes",
+  "grams": 100,
+  "unit": "g",
+  "food": "Tomato"
+ },
+ {
+  "option": "L2",
+  "slot": "lunch",
+  "ingredient": "red onion",
+  "grams": 20,
+  "unit": "g",
+  "food": "Onion"
+ },
+ {
+  "option": "L2",
+  "slot": "lunch",
+  "ingredient": "kalamata olives",
+  "grams": 8,
+  "unit": "g",
+  "food": "Kalamata olives"
+ },
+ {
+  "option": "L2",
+  "slot": "lunch",
+  "ingredient": "feta",
+  "grams": 15,
+  "unit": "g",
+  "food": "Feta"
+ },
+ {
+  "option": "L2",
+  "slot": "lunch",
+  "ingredient": "olive oil",
+  "grams": 4,
+  "unit": "g",
+  "food": "Olive oil"
+ },
+ {
+  "option": "L2",
+  "slot": "lunch",
+  "ingredient": "lemon juice",
+  "grams": 15,
+  "unit": "g",
+  "food": "Lemon juice"
+ },
+ {
+  "option": "L2",
+  "slot": "lunch",
+  "ingredient": "garlic",
+  "grams": 5,
+  "unit": "g",
+  "food": "Garlic"
+ },
+ {
+  "option": "L2",
+  "slot": "lunch",
+  "ingredient": "chickpeas canned",
+  "grams": 50,
+  "unit": "g",
+  "food": "Chickpeas, canned drained"
+ },
+ {
+  "option": "L3",
+  "slot": "lunch",
+  "ingredient": "chicken breast",
+  "grams": 123,
+  "unit": "g",
+  "food": "Chicken breast, raw"
+ },
+ {
+  "option": "L3",
+  "slot": "lunch",
+  "ingredient": "white rice dry",
+  "grams": 58,
+  "unit": "g",
+  "food": "White rice, dry"
+ },
+ {
+  "option": "L3",
+  "slot": "lunch",
+  "ingredient": "black beans canned",
+  "grams": 80,
+  "unit": "g",
+  "food": "Black beans, canned drained"
+ },
+ {
+  "option": "L3",
+  "slot": "lunch",
+  "ingredient": "cheddar",
+  "grams": 15,
+  "unit": "g",
+  "food": "Cheddar"
+ },
+ {
+  "option": "L3",
+  "slot": "lunch",
+  "ingredient": "pico de gallo",
+  "grams": 60,
+  "unit": "g",
+  "food": "Salsa"
+ },
+ {
+  "option": "L3",
+  "slot": "lunch",
+  "ingredient": "avocado",
+  "grams": 45,
+  "unit": "g",
+  "food": "Avocado"
+ },
+ {
+  "option": "L3",
+  "slot": "lunch",
+  "ingredient": "olive oil",
+  "grams": 4,
+  "unit": "g",
+  "food": "Olive oil"
+ },
+ {
+  "option": "L3",
+  "slot": "lunch",
+  "ingredient": "lime juice",
+  "grams": 10,
+  "unit": "g",
+  "food": "Lime juice"
+ },
+ {
+  "option": "L4",
+  "slot": "lunch",
+  "ingredient": "chicken breast",
+  "grams": 120,
+  "unit": "g",
+  "food": "Chicken breast, raw"
+ },
+ {
+  "option": "L4",
+  "slot": "lunch",
+  "ingredient": "pearl couscous dry",
+  "grams": 65,
+  "unit": "g",
+  "food": "Couscous, dry"
+ },
+ {
+  "option": "L4",
+  "slot": "lunch",
+  "ingredient": "chickpeas canned",
+  "grams": 50,
+  "unit": "g",
+  "food": "Chickpeas, canned drained"
+ },
+ {
+  "option": "L4",
+  "slot": "lunch",
+  "ingredient": "cucumber",
+  "grams": 80,
+  "unit": "g",
+  "food": "Cucumber"
+ },
+ {
+  "option": "L4",
+  "slot": "lunch",
+  "ingredient": "cherry tomatoes",
+  "grams": 80,
+  "unit": "g",
+  "food": "Tomato"
+ },
+ {
+  "option": "L4",
+  "slot": "lunch",
+  "ingredient": "feta",
+  "grams": 20,
+  "unit": "g",
+  "food": "Feta"
+ },
+ {
+  "option": "L4",
+  "slot": "lunch",
+  "ingredient": "kalamata olives",
+  "grams": 12,
+  "unit": "g",
+  "food": "Kalamata olives"
+ },
+ {
+  "option": "L4",
+  "slot": "lunch",
+  "ingredient": "olive oil",
+  "grams": 8,
+  "unit": "g",
+  "food": "Olive oil"
+ },
+ {
+  "option": "L4",
+  "slot": "lunch",
+  "ingredient": "lemon juice",
+  "grams": 15,
+  "unit": "g",
+  "food": "Lemon juice"
+ },
+ {
+  "option": "L6",
+  "slot": "lunch",
+  "ingredient": "pasta dry",
+  "grams": 80,
+  "unit": "g",
+  "food": "Pasta, dry"
+ },
+ {
+  "option": "L6",
+  "slot": "lunch",
+  "ingredient": "ground turkey 93/7",
+  "grams": 111,
+  "unit": "g",
+  "food": "Ground turkey 93/7"
+ },
+ {
+  "option": "L6",
+  "slot": "lunch",
+  "ingredient": "pesto",
+  "grams": 18,
+  "unit": "g",
+  "food": "Pesto"
+ },
+ {
+  "option": "L6",
+  "slot": "lunch",
+  "ingredient": "greek yogurt nonfat",
+  "grams": 40,
+  "unit": "g",
+  "food": "Fage 0% Greek yogurt"
+ },
+ {
+  "option": "L6",
+  "slot": "lunch",
+  "ingredient": "cherry tomatoes",
+  "grams": 100,
+  "unit": "g",
+  "food": "Tomato"
+ },
+ {
+  "option": "L6",
+  "slot": "lunch",
+  "ingredient": "mozzarella",
+  "grams": 20,
+  "unit": "g",
+  "food": "Mozzarella, part-skim"
+ },
+ {
+  "option": "L6",
+  "slot": "lunch",
+  "ingredient": "spinach",
+  "grams": 20,
+  "unit": "g",
+  "food": "Spinach"
+ },
+ {
+  "option": "L6",
+  "slot": "lunch",
+  "ingredient": "lemon juice",
+  "grams": 10,
+  "unit": "g",
+  "food": "Lemon juice"
+ },
+ {
+  "option": "L6",
+  "slot": "lunch",
+  "ingredient": "chickpeas canned",
+  "grams": 50,
+  "unit": "g",
+  "food": "Chickpeas, canned drained"
+ },
+ {
+  "option": "L7",
+  "slot": "lunch",
+  "ingredient": "chicken breast",
+  "grams": 129,
+  "unit": "g",
+  "food": "Chicken breast, raw"
+ },
+ {
+  "option": "L7",
+  "slot": "lunch",
+  "ingredient": "potato",
+  "grams": 260,
+  "unit": "g",
+  "food": "Potato, raw"
+ },
+ {
+  "option": "L7",
+  "slot": "lunch",
+  "ingredient": "bbq sauce",
+  "grams": 35,
+  "unit": "g",
+  "food": "BBQ sauce"
+ },
+ {
+  "option": "L7",
+  "slot": "lunch",
+  "ingredient": "cheddar",
+  "grams": 15,
+  "unit": "g",
+  "food": "Cheddar"
+ },
+ {
+  "option": "L7",
+  "slot": "lunch",
+  "ingredient": "corn frozen",
+  "grams": 50,
+  "unit": "g",
+  "food": "Corn"
+ },
+ {
+  "option": "L7",
+  "slot": "lunch",
+  "ingredient": "red onion",
+  "grams": 25,
+  "unit": "g",
+  "food": "Onion"
+ },
+ {
+  "option": "L7",
+  "slot": "lunch",
+  "ingredient": "olive oil",
+  "grams": 9,
+  "unit": "g",
+  "food": "Olive oil"
+ },
+ {
+  "option": "L7",
+  "slot": "lunch",
+  "ingredient": "greek yogurt nonfat",
+  "grams": 30,
+  "unit": "g",
+  "food": "Fage 0% Greek yogurt"
+ },
+ {
+  "option": "L8",
+  "slot": "lunch",
+  "ingredient": "deli turkey",
+  "grams": 134,
+  "unit": "g",
+  "food": "Deli turkey, low sodium"
+ },
+ {
+  "option": "L8",
+  "slot": "lunch",
+  "ingredient": "cheddar",
+  "grams": 25,
+  "unit": "g",
+  "food": "Cheddar"
+ },
+ {
+  "option": "L8",
+  "slot": "lunch",
+  "ingredient": "whole-grain crackers",
+  "grams": 40,
+  "unit": "g",
+  "food": "Whole-grain crackers"
+ },
+ {
+  "option": "L8",
+  "slot": "lunch",
+  "ingredient": "egg",
+  "grams": 50,
+  "unit": "g",
+  "food": "Egg, whole"
+ },
+ {
+  "option": "L8",
+  "slot": "lunch",
+  "ingredient": "grapes",
+  "grams": 100,
+  "unit": "g",
+  "food": "Grapes"
+ },
+ {
+  "option": "L8",
+  "slot": "lunch",
+  "ingredient": "cucumber",
+  "grams": 80,
+  "unit": "g",
+  "food": "Cucumber"
+ },
+ {
+  "option": "L8",
+  "slot": "lunch",
+  "ingredient": "cherry tomatoes",
+  "grams": 80,
+  "unit": "g",
+  "food": "Tomato"
+ },
+ {
+  "option": "L8",
+  "slot": "lunch",
+  "ingredient": "pretzels",
+  "grams": 20,
+  "unit": "g",
+  "food": "Pretzels"
+ },
+ {
+  "option": "L8",
+  "slot": "lunch",
+  "ingredient": "baby carrots",
+  "grams": 80,
+  "unit": "g",
+  "food": "Baby carrots"
+ },
+ {
+  "option": "L8",
+  "slot": "lunch",
+  "ingredient": "sugar snap peas",
+  "grams": 60,
+  "unit": "g",
+  "food": "Sugar snap peas"
+ },
+ {
+  "option": "L9",
+  "slot": "lunch",
+  "ingredient": "deli turkey",
+  "grams": 150,
+  "unit": "g",
+  "food": "Deli turkey, low sodium"
+ },
+ {
+  "option": "L9",
+  "slot": "lunch",
+  "ingredient": "sourdough",
+  "grams": 100,
+  "unit": "g",
+  "food": "Sourdough"
+ },
+ {
+  "option": "L9",
+  "slot": "lunch",
+  "ingredient": "provolone",
+  "grams": 25,
+  "unit": "g",
+  "food": "Provolone"
+ },
+ {
+  "option": "L9",
+  "slot": "lunch",
+  "ingredient": "mayonnaise",
+  "grams": 10,
+  "unit": "g",
+  "food": "Mayonnaise"
+ },
+ {
+  "option": "L9",
+  "slot": "lunch",
+  "ingredient": "dijon mustard",
+  "grams": 8,
+  "unit": "g",
+  "food": "Dijon mustard"
+ },
+ {
+  "option": "L9",
+  "slot": "lunch",
+  "ingredient": "romaine",
+  "grams": 20,
+  "unit": "g",
+  "food": "Romaine"
+ },
+ {
+  "option": "L9",
+  "slot": "lunch",
+  "ingredient": "cherry tomatoes",
+  "grams": 40,
+  "unit": "g",
+  "food": "Tomato"
+ },
+ {
+  "option": "L9",
+  "slot": "lunch",
+  "ingredient": "cucumber",
+  "grams": 60,
+  "unit": "g",
+  "food": "Cucumber"
+ },
+ {
+  "option": "L9",
+  "slot": "lunch",
+  "ingredient": "grapes",
+  "grams": 100,
+  "unit": "g",
+  "food": "Grapes"
+ },
+ {
+  "option": "L9",
+  "slot": "lunch",
+  "ingredient": "baby carrots",
+  "grams": 80,
+  "unit": "g",
+  "food": "Baby carrots"
+ },
+ {
+  "option": "L9",
+  "slot": "lunch",
+  "ingredient": "sugar snap peas",
+  "grams": 60,
+  "unit": "g",
+  "food": "Sugar snap peas"
+ },
+ {
+  "option": "L10",
+  "slot": "lunch",
+  "ingredient": "chicken breast",
+  "grams": 116,
+  "unit": "g",
+  "food": "Chicken breast, raw"
+ },
+ {
+  "option": "L10",
+  "slot": "lunch",
+  "ingredient": "sourdough",
+  "grams": 110,
+  "unit": "g",
+  "food": "Sourdough"
+ },
+ {
+  "option": "L10",
+  "slot": "lunch",
+  "ingredient": "cherry tomatoes",
+  "grams": 130,
+  "unit": "g",
+  "food": "Tomato"
+ },
+ {
+  "option": "L10",
+  "slot": "lunch",
+  "ingredient": "mozzarella",
+  "grams": 20,
+  "unit": "g",
+  "food": "Mozzarella, part-skim"
+ },
+ {
+  "option": "L10",
+  "slot": "lunch",
+  "ingredient": "olive oil",
+  "grams": 8,
+  "unit": "g",
+  "food": "Olive oil"
+ },
+ {
+  "option": "L10",
+  "slot": "lunch",
+  "ingredient": "balsamic vinegar",
+  "grams": 10,
+  "unit": "g",
+  "food": "Balsamic vinegar"
+ },
+ {
+  "option": "L10",
+  "slot": "lunch",
+  "ingredient": "garlic",
+  "grams": 5,
+  "unit": "g",
+  "food": "Garlic"
+ },
+ {
+  "option": "L10",
+  "slot": "lunch",
+  "ingredient": "basil",
+  "grams": 5,
+  "unit": "g",
+  "food": "Basil"
+ },
+ {
+  "option": "L10",
+  "slot": "lunch",
+  "ingredient": "grapes",
+  "grams": 60,
+  "unit": "g",
+  "food": "Grapes"
+ },
+ {
+  "option": "L10",
+  "slot": "lunch",
+  "ingredient": "chickpeas canned",
+  "grams": 40,
+  "unit": "g",
+  "food": "Chickpeas, canned drained"
+ },
+ {
+  "option": "L11",
+  "slot": "lunch",
+  "ingredient": "whole-wheat pita",
+  "grams": 75,
+  "unit": "g",
+  "food": "Whole-wheat pita"
+ },
+ {
+  "option": "L11",
+  "slot": "lunch",
+  "ingredient": "hummus",
+  "grams": 35,
+  "unit": "g",
+  "food": "Hummus"
+ },
+ {
+  "option": "L11",
+  "slot": "lunch",
+  "ingredient": "chickpeas canned",
+  "grams": 50,
+  "unit": "g",
+  "food": "Chickpeas, canned drained"
+ },
+ {
+  "option": "L11",
+  "slot": "lunch",
+  "ingredient": "feta",
+  "grams": 25,
+  "unit": "g",
+  "food": "Feta"
+ },
+ {
+  "option": "L11",
+  "slot": "lunch",
+  "ingredient": "cucumber",
+  "grams": 100,
+  "unit": "g",
+  "food": "Cucumber"
+ },
+ {
+  "option": "L11",
+  "slot": "lunch",
+  "ingredient": "cherry tomatoes",
+  "grams": 100,
+  "unit": "g",
+  "food": "Tomato"
+ },
+ {
+  "option": "L11",
+  "slot": "lunch",
+  "ingredient": "kalamata olives",
+  "grams": 12,
+  "unit": "g",
+  "food": "Kalamata olives"
+ },
+ {
+  "option": "L11",
+  "slot": "lunch",
+  "ingredient": "deli turkey",
+  "grams": 144,
+  "unit": "g",
+  "food": "Deli turkey, low sodium"
+ },
+ {
+  "option": "L12",
+  "slot": "lunch",
+  "ingredient": "sirloin steak",
+  "grams": 126,
+  "unit": "g",
+  "food": "Sirloin steak, raw"
+ },
+ {
+  "option": "L12",
+  "slot": "lunch",
+  "ingredient": "potato",
+  "grams": 340,
+  "unit": "g",
+  "food": "Potato, raw"
+ },
+ {
+  "option": "L12",
+  "slot": "lunch",
+  "ingredient": "olive oil",
+  "grams": 8,
+  "unit": "g",
+  "food": "Olive oil"
+ },
+ {
+  "option": "L12",
+  "slot": "lunch",
+  "ingredient": "dijon mustard",
+  "grams": 12,
+  "unit": "g",
+  "food": "Dijon mustard"
+ },
+ {
+  "option": "L12",
+  "slot": "lunch",
+  "ingredient": "greek yogurt nonfat",
+  "grams": 40,
+  "unit": "g",
+  "food": "Fage 0% Greek yogurt"
+ },
+ {
+  "option": "L12",
+  "slot": "lunch",
+  "ingredient": "parmesan",
+  "grams": 10,
+  "unit": "g",
+  "food": "Parmesan"
+ },
+ {
+  "option": "L12",
+  "slot": "lunch",
+  "ingredient": "red onion",
+  "grams": 25,
+  "unit": "g",
+  "food": "Onion"
+ },
+ {
+  "option": "L12",
+  "slot": "lunch",
+  "ingredient": "cherry tomatoes",
+  "grams": 80,
+  "unit": "g",
+  "food": "Tomato"
+ },
+ {
+  "option": "L12",
+  "slot": "lunch",
+  "ingredient": "romaine",
+  "grams": 40,
+  "unit": "g",
+  "food": "Romaine"
+ },
+ {
+  "option": "L12",
+  "slot": "lunch",
+  "ingredient": "lemon juice",
+  "grams": 10,
+  "unit": "g",
+  "food": "Lemon juice"
+ },
+ {
+  "option": "L13",
+  "slot": "lunch",
+  "ingredient": "chicken breast",
+  "grams": 141,
+  "unit": "g",
+  "food": "Chicken breast, raw"
+ },
+ {
+  "option": "L13",
+  "slot": "lunch",
+  "ingredient": "wild rice dry",
+  "grams": 45,
+  "unit": "g",
+  "food": "Wild rice, dry"
+ },
+ {
+  "option": "L13",
+  "slot": "lunch",
+  "ingredient": "butternut squash",
+  "grams": 180,
+  "unit": "g",
+  "food": "Butternut squash"
+ },
+ {
+  "option": "L13",
+  "slot": "lunch",
+  "ingredient": "olive oil",
+  "grams": 9,
+  "unit": "g",
+  "food": "Olive oil"
+ },
+ {
+  "option": "L13",
+  "slot": "lunch",
+  "ingredient": "dried cranberries",
+  "grams": 15,
+  "unit": "g",
+  "food": "Dried cranberries"
+ },
+ {
+  "option": "L13",
+  "slot": "lunch",
+  "ingredient": "sliced almonds",
+  "grams": 8,
+  "unit": "g",
+  "food": "Almonds"
+ },
+ {
+  "option": "L13",
+  "slot": "lunch",
+  "ingredient": "spinach",
+  "grams": 40,
+  "unit": "g",
+  "food": "Spinach"
+ },
+ {
+  "option": "L13",
+  "slot": "lunch",
+  "ingredient": "balsamic vinegar",
+  "grams": 10,
+  "unit": "g",
+  "food": "Balsamic vinegar"
+ },
+ {
+  "option": "L14",
+  "slot": "lunch",
+  "ingredient": "chicken breast",
+  "grams": 133,
+  "unit": "g",
+  "food": "Chicken breast, raw"
+ },
+ {
+  "option": "L14",
+  "slot": "lunch",
+  "ingredient": "sweet potato",
+  "grams": 250,
+  "unit": "g",
+  "food": "Sweet potato, raw"
+ },
+ {
+  "option": "L14",
+  "slot": "lunch",
+  "ingredient": "black beans canned",
+  "grams": 70,
+  "unit": "g",
+  "food": "Black beans, canned drained"
+ },
+ {
+  "option": "L14",
+  "slot": "lunch",
+  "ingredient": "olive oil",
+  "grams": 8,
+  "unit": "g",
+  "food": "Olive oil"
+ },
+ {
+  "option": "L14",
+  "slot": "lunch",
+  "ingredient": "avocado",
+  "grams": 35,
+  "unit": "g",
+  "food": "Avocado"
+ },
+ {
+  "option": "L14",
+  "slot": "lunch",
+  "ingredient": "salsa",
+  "grams": 50,
+  "unit": "g",
+  "food": "Salsa"
+ },
+ {
+  "option": "L14",
+  "slot": "lunch",
+  "ingredient": "cheddar",
+  "grams": 10,
+  "unit": "g",
+  "food": "Cheddar"
+ },
+ {
+  "option": "L14",
+  "slot": "lunch",
+  "ingredient": "lime juice",
+  "grams": 10,
+  "unit": "g",
+  "food": "Lime juice"
+ },
+ {
+  "option": "L15",
+  "slot": "lunch",
+  "ingredient": "farro dry",
+  "grams": 55,
+  "unit": "g",
+  "food": "Farro, dry"
+ },
+ {
+  "option": "L15",
+  "slot": "lunch",
+  "ingredient": "chicken breast",
+  "grams": 130,
+  "unit": "g",
+  "food": "Chicken breast, raw"
+ },
+ {
+  "option": "L15",
+  "slot": "lunch",
+  "ingredient": "apple",
+  "grams": 90,
+  "unit": "g",
+  "food": "Apple"
+ },
+ {
+  "option": "L15",
+  "slot": "lunch",
+  "ingredient": "spinach",
+  "grams": 40,
+  "unit": "g",
+  "food": "Spinach"
+ },
+ {
+  "option": "L15",
+  "slot": "lunch",
+  "ingredient": "red onion",
+  "grams": 20,
+  "unit": "g",
+  "food": "Onion"
+ },
+ {
+  "option": "L15",
+  "slot": "lunch",
+  "ingredient": "feta",
+  "grams": 18,
+  "unit": "g",
+  "food": "Feta"
+ },
+ {
+  "option": "L15",
+  "slot": "lunch",
+  "ingredient": "sliced almonds",
+  "grams": 8,
+  "unit": "g",
+  "food": "Almonds"
+ },
+ {
+  "option": "L15",
+  "slot": "lunch",
+  "ingredient": "dijon mustard",
+  "grams": 12,
+  "unit": "g",
+  "food": "Dijon mustard"
+ },
+ {
+  "option": "L15",
+  "slot": "lunch",
+  "ingredient": "honey",
+  "grams": 14,
+  "unit": "g",
+  "food": "Honey"
+ },
+ {
+  "option": "L15",
+  "slot": "lunch",
+  "ingredient": "olive oil",
+  "grams": 4,
+  "unit": "g",
+  "food": "Olive oil"
+ },
+ {
+  "option": "L15",
+  "slot": "lunch",
+  "ingredient": "lemon juice",
+  "grams": 10,
+  "unit": "g",
+  "food": "Lemon juice"
+ },
+ {
+  "option": "L16",
+  "slot": "lunch",
+  "ingredient": "chicken breast",
+  "grams": 118,
+  "unit": "g",
+  "food": "Chicken breast, raw"
+ },
+ {
+  "option": "L16",
+  "slot": "lunch",
+  "ingredient": "white rice dry",
+  "grams": 58,
+  "unit": "g",
+  "food": "White rice, dry"
+ },
+ {
+  "option": "L16",
+  "slot": "lunch",
+  "ingredient": "crushed tomatoes",
+  "grams": 90,
+  "unit": "g",
+  "food": "Crushed tomatoes"
+ },
+ {
+  "option": "L16",
+  "slot": "lunch",
+  "ingredient": "chipotle in adobo",
+  "grams": 12,
+  "unit": "g",
+  "food": "Chipotle in adobo"
+ },
+ {
+  "option": "L16",
+  "slot": "lunch",
+  "ingredient": "onion",
+  "grams": 50,
+  "unit": "g",
+  "food": "Onion"
+ },
+ {
+  "option": "L16",
+  "slot": "lunch",
+  "ingredient": "olive oil",
+  "grams": 7,
+  "unit": "g",
+  "food": "Olive oil"
+ },
+ {
+  "option": "L16",
+  "slot": "lunch",
+  "ingredient": "black beans canned",
+  "grams": 50,
+  "unit": "g",
+  "food": "Black beans, canned drained"
+ },
+ {
+  "option": "L16",
+  "slot": "lunch",
+  "ingredient": "cotija",
+  "grams": 12,
+  "unit": "g",
+  "food": "Cotija"
+ },
+ {
+  "option": "L16",
+  "slot": "lunch",
+  "ingredient": "greek yogurt nonfat",
+  "grams": 30,
+  "unit": "g",
+  "food": "Fage 0% Greek yogurt"
+ },
+ {
+  "option": "L16",
+  "slot": "lunch",
+  "ingredient": "avocado",
+  "grams": 35,
+  "unit": "g",
+  "food": "Avocado"
+ },
+ {
+  "option": "L16",
+  "slot": "lunch",
+  "ingredient": "lime juice",
+  "grams": 8,
+  "unit": "g",
+  "food": "Lime juice"
+ },
+ {
+  "option": "L17",
+  "slot": "lunch",
+  "ingredient": "large tortilla wrap",
+  "grams": 70,
+  "unit": "g",
+  "food": "Tortilla, large flour"
+ },
+ {
+  "option": "L17",
+  "slot": "lunch",
+  "ingredient": "deli turkey",
+  "grams": 162,
+  "unit": "g",
+  "food": "Deli turkey, low sodium"
+ },
+ {
+  "option": "L17",
+  "slot": "lunch",
+  "ingredient": "hummus",
+  "grams": 40,
+  "unit": "g",
+  "food": "Hummus"
+ },
+ {
+  "option": "L17",
+  "slot": "lunch",
+  "ingredient": "roasted red pepper",
+  "grams": 50,
+  "unit": "g",
+  "food": "Roasted red pepper"
+ },
+ {
+  "option": "L17",
+  "slot": "lunch",
+  "ingredient": "zucchini",
+  "grams": 60,
+  "unit": "g",
+  "food": "Zucchini"
+ },
+ {
+  "option": "L17",
+  "slot": "lunch",
+  "ingredient": "spinach",
+  "grams": 25,
+  "unit": "g",
+  "food": "Spinach"
+ },
+ {
+  "option": "L17",
+  "slot": "lunch",
+  "ingredient": "feta",
+  "grams": 18,
+  "unit": "g",
+  "food": "Feta"
+ },
+ {
+  "option": "L17",
+  "slot": "lunch",
+  "ingredient": "grapes",
+  "grams": 90,
+  "unit": "g",
+  "food": "Grapes"
+ },
+ {
+  "option": "L17",
+  "slot": "lunch",
+  "ingredient": "pretzels",
+  "grams": 10,
+  "unit": "g",
+  "food": "Pretzels"
+ },
+ {
+  "option": "L18",
+  "slot": "lunch",
+  "ingredient": "ground turkey 93/7",
+  "grams": 115,
+  "unit": "g",
+  "food": "Ground turkey 93/7"
+ },
+ {
+  "option": "L18",
+  "slot": "lunch",
+  "ingredient": "sweet potato",
+  "grams": 240,
+  "unit": "g",
+  "food": "Sweet potato, raw"
+ },
+ {
+  "option": "L18",
+  "slot": "lunch",
+  "ingredient": "cottage cheese 2%",
+  "grams": 110,
+  "unit": "g",
+  "food": "Cottage cheese 2%"
+ },
+ {
+  "option": "L18",
+  "slot": "lunch",
+  "ingredient": "avocado",
+  "grams": 40,
+  "unit": "g",
+  "food": "Avocado"
+ },
+ {
+  "option": "L18",
+  "slot": "lunch",
+  "ingredient": "hot honey",
+  "grams": 14,
+  "unit": "g",
+  "food": "Hot honey"
+ },
+ {
+  "option": "L18",
+  "slot": "lunch",
+  "ingredient": "olive oil",
+  "grams": 5,
+  "unit": "g",
+  "food": "Olive oil"
+ },
+ {
+  "option": "L18",
+  "slot": "lunch",
+  "ingredient": "spinach",
+  "grams": 30,
+  "unit": "g",
+  "food": "Spinach"
+ },
+ {
+  "option": "L18",
+  "slot": "lunch",
+  "ingredient": "lime juice",
+  "grams": 8,
+  "unit": "g",
+  "food": "Lime juice"
+ },
+ {
+  "option": "L19",
+  "slot": "lunch",
+  "ingredient": "chicken breast",
+  "grams": 131,
+  "unit": "g",
+  "food": "Chicken breast, raw"
+ },
+ {
+  "option": "L19",
+  "slot": "lunch",
+  "ingredient": "olive oil",
+  "grams": 6,
+  "unit": "g",
+  "food": "Olive oil"
+ },
+ {
+  "option": "L19",
+  "slot": "lunch",
+  "ingredient": "hot honey",
+  "grams": 18,
+  "unit": "g",
+  "food": "Hot honey"
+ },
+ {
+  "option": "L19",
+  "slot": "lunch",
+  "ingredient": "cheddar",
+  "grams": 20,
+  "unit": "g",
+  "food": "Cheddar"
+ },
+ {
+  "option": "L19",
+  "slot": "lunch",
+  "ingredient": "sourdough",
+  "grams": 65,
+  "unit": "g",
+  "food": "Sourdough"
+ },
+ {
+  "option": "L19",
+  "slot": "lunch",
+  "ingredient": "apple",
+  "grams": 70,
+  "unit": "g",
+  "food": "Apple"
+ },
+ {
+  "option": "L19",
+  "slot": "lunch",
+  "ingredient": "grapes",
+  "grams": 40,
+  "unit": "g",
+  "food": "Grapes"
+ },
+ {
+  "option": "L19",
+  "slot": "lunch",
+  "ingredient": "cucumber",
+  "grams": 80,
+  "unit": "g",
+  "food": "Cucumber"
+ },
+ {
+  "option": "L19",
+  "slot": "lunch",
+  "ingredient": "almonds",
+  "grams": 8,
+  "unit": "g",
+  "food": "Almonds"
+ },
+ {
+  "option": "L19",
+  "slot": "lunch",
+  "ingredient": "baby carrots",
+  "grams": 80,
+  "unit": "g",
+  "food": "Baby carrots"
+ },
+ {
+  "option": "L19",
+  "slot": "lunch",
+  "ingredient": "sugar snap peas",
+  "grams": 60,
+  "unit": "g",
+  "food": "Sugar snap peas"
+ },
+ {
+  "option": "L20",
+  "slot": "lunch",
+  "ingredient": "deli turkey",
+  "grams": 154,
+  "unit": "g",
+  "food": "Deli turkey, low sodium"
+ },
+ {
+  "option": "L20",
+  "slot": "lunch",
+  "ingredient": "fresh mozzarella",
+  "grams": 45,
+  "unit": "g",
+  "food": "Fresh mozzarella"
+ },
+ {
+  "option": "L20",
+  "slot": "lunch",
+  "ingredient": "cherry tomatoes",
+  "grams": 120,
+  "unit": "g",
+  "food": "Tomato"
+ },
+ {
+  "option": "L20",
+  "slot": "lunch",
+  "ingredient": "balsamic glaze",
+  "grams": 12,
+  "unit": "g",
+  "food": "Balsamic glaze"
+ },
+ {
+  "option": "L20",
+  "slot": "lunch",
+  "ingredient": "sourdough",
+  "grams": 80,
+  "unit": "g",
+  "food": "Sourdough"
+ },
+ {
+  "option": "L20",
+  "slot": "lunch",
+  "ingredient": "olive oil",
+  "grams": 5,
+  "unit": "g",
+  "food": "Olive oil"
+ },
+ {
+  "option": "L20",
+  "slot": "lunch",
+  "ingredient": "grapes",
+  "grams": 70,
+  "unit": "g",
+  "food": "Grapes"
+ },
+ {
+  "option": "L20",
+  "slot": "lunch",
+  "ingredient": "kalamata olives",
+  "grams": 12,
+  "unit": "g",
+  "food": "Kalamata olives"
+ },
+ {
+  "option": "L20",
+  "slot": "lunch",
+  "ingredient": "basil",
+  "grams": 4,
+  "unit": "g",
+  "food": "Basil"
+ },
+ {
+  "option": "L20",
+  "slot": "lunch",
+  "ingredient": "baby carrots",
+  "grams": 80,
+  "unit": "g",
+  "food": "Baby carrots"
+ },
+ {
+  "option": "L20",
+  "slot": "lunch",
+  "ingredient": "sugar snap peas",
+  "grams": 60,
+  "unit": "g",
+  "food": "Sugar snap peas"
+ },
+ {
+  "option": "S1",
+  "slot": "snack",
+  "ingredient": "greek yogurt nonfat",
+  "grams": 80,
+  "unit": "g",
+  "food": "Fage 0% Greek yogurt"
+ },
+ {
+  "option": "S1",
+  "slot": "snack",
+  "ingredient": "three wishes cereal",
+  "grams": 13,
+  "unit": "g",
+  "food": "Three Wishes cereal"
+ },
+ {
+  "option": "S1",
+  "slot": "snack",
+  "ingredient": "one degree brown rice crisps",
+  "grams": 12,
+  "unit": "g",
+  "food": "One Degree brown rice crisps"
+ },
+ {
+  "option": "S1",
+  "slot": "snack",
+  "ingredient": "banana",
+  "grams": 45,
+  "unit": "g",
+  "food": "Banana"
+ },
+ {
+  "option": "S1",
+  "slot": "snack",
+  "ingredient": "peanut butter",
+  "grams": 12,
+  "unit": "g",
+  "food": "Peanut butter"
+ },
+ {
+  "option": "S2",
+  "slot": "snack",
+  "ingredient": "cottage cheese 2%",
+  "grams": 110,
+  "unit": "g",
+  "food": "Cottage cheese 2%"
+ },
+ {
+  "option": "S2",
+  "slot": "snack",
+  "ingredient": "pineapple",
+  "grams": 110,
+  "unit": "g",
+  "food": "Pineapple"
+ },
+ {
+  "option": "S2",
+  "slot": "snack",
+  "ingredient": "whole-grain crackers",
+  "grams": 12,
+  "unit": "g",
+  "food": "Whole-grain crackers"
+ },
+ {
+  "option": "S2",
+  "slot": "snack",
+  "ingredient": "cashews",
+  "grams": 10,
+  "unit": "g",
+  "food": "Cashews"
+ },
+ {
+  "option": "S3",
+  "slot": "snack",
+  "ingredient": "deli turkey",
+  "grams": 60,
+  "unit": "g",
+  "food": "Deli turkey, low sodium"
+ },
+ {
+  "option": "S3",
+  "slot": "snack",
+  "ingredient": "pretzels",
+  "grams": 22,
+  "unit": "g",
+  "food": "Pretzels"
+ },
+ {
+  "option": "S3",
+  "slot": "snack",
+  "ingredient": "grapes",
+  "grams": 60,
+  "unit": "g",
+  "food": "Grapes"
+ },
+ {
+  "option": "S3",
+  "slot": "snack",
+  "ingredient": "almonds",
+  "grams": 11,
+  "unit": "g",
+  "food": "Almonds"
+ },
+ {
+  "option": "S4",
+  "slot": "snack",
+  "ingredient": "apple",
+  "grams": 140,
+  "unit": "g",
+  "food": "Apple"
+ },
+ {
+  "option": "S4",
+  "slot": "snack",
+  "ingredient": "peanut butter",
+  "grams": 14,
+  "unit": "g",
+  "food": "Peanut butter"
+ },
+ {
+  "option": "S4",
+  "slot": "snack",
+  "ingredient": "greek yogurt nonfat",
+  "grams": 110,
+  "unit": "g",
+  "food": "Fage 0% Greek yogurt"
+ },
+ {
+  "option": "S4",
+  "slot": "snack",
+  "ingredient": "honey",
+  "grams": 6,
+  "unit": "g",
+  "food": "Honey"
+ },
+ {
+  "option": "S6",
+  "slot": "snack",
+  "ingredient": "pretzels",
+  "grams": 30,
+  "unit": "g",
+  "food": "Pretzels"
+ },
+ {
+  "option": "S6",
+  "slot": "snack",
+  "ingredient": "turkey jerky",
+  "grams": 30,
+  "unit": "g",
+  "food": "Turkey jerky"
+ },
+ {
+  "option": "S6",
+  "slot": "snack",
+  "ingredient": "almonds",
+  "grams": 12,
+  "unit": "g",
+  "food": "Almonds"
+ },
+ {
+  "option": "S10",
+  "slot": "snack",
+  "ingredient": "sourdough",
+  "grams": 42,
+  "unit": "g",
+  "food": "Sourdough"
+ },
+ {
+  "option": "S10",
+  "slot": "snack",
+  "ingredient": "peanut butter",
+  "grams": 14,
+  "unit": "g",
+  "food": "Peanut butter"
+ },
+ {
+  "option": "S10",
+  "slot": "snack",
+  "ingredient": "greek yogurt nonfat",
+  "grams": 90,
+  "unit": "g",
+  "food": "Fage 0% Greek yogurt"
+ },
+ {
+  "option": "S10",
+  "slot": "snack",
+  "ingredient": "honey",
+  "grams": 4,
+  "unit": "g",
+  "food": "Honey"
+ },
+ {
+  "option": "S11",
+  "slot": "snack",
+  "ingredient": "cottage cheese 2%",
+  "grams": 110,
+  "unit": "g",
+  "food": "Cottage cheese 2%"
+ },
+ {
+  "option": "S11",
+  "slot": "snack",
+  "ingredient": "pretzels",
+  "grams": 25,
+  "unit": "g",
+  "food": "Pretzels"
+ },
+ {
+  "option": "S11",
+  "slot": "snack",
+  "ingredient": "hot honey",
+  "grams": 6,
+  "unit": "g",
+  "food": "Hot honey"
+ },
+ {
+  "option": "S11",
+  "slot": "snack",
+  "ingredient": "almonds",
+  "grams": 8,
+  "unit": "g",
+  "food": "Almonds"
+ },
+ {
+  "option": "S12",
+  "slot": "snack",
+  "ingredient": "air-popped popcorn",
+  "grams": 20,
+  "unit": "g",
+  "food": "Popcorn, popped"
+ },
+ {
+  "option": "S12",
+  "slot": "snack",
+  "ingredient": "turkey jerky",
+  "grams": 30,
+  "unit": "g",
+  "food": "Turkey jerky"
+ },
+ {
+  "option": "S12",
+  "slot": "snack",
+  "ingredient": "grapes",
+  "grams": 40,
+  "unit": "g",
+  "food": "Grapes"
+ },
+ {
+  "option": "S12",
+  "slot": "snack",
+  "ingredient": "almonds",
+  "grams": 12,
+  "unit": "g",
+  "food": "Almonds"
+ },
+ {
+  "option": "S13",
+  "slot": "snack",
+  "ingredient": "cottage cheese 2%",
+  "grams": 110,
+  "unit": "g",
+  "food": "Cottage cheese 2%"
+ },
+ {
+  "option": "S13",
+  "slot": "snack",
+  "ingredient": "cocoa powder",
+  "grams": 4,
+  "unit": "g",
+  "food": "Cocoa powder"
+ },
+ {
+  "option": "S13",
+  "slot": "snack",
+  "ingredient": "honey",
+  "grams": 8,
+  "unit": "g",
+  "food": "Honey"
+ },
+ {
+  "option": "S13",
+  "slot": "snack",
+  "ingredient": "banana",
+  "grams": 40,
+  "unit": "g",
+  "food": "Banana"
+ },
+ {
+  "option": "S13",
+  "slot": "snack",
+  "ingredient": "graham crackers",
+  "grams": 9,
+  "unit": "g",
+  "food": "Graham crackers"
+ },
+ {
+  "option": "S13",
+  "slot": "snack",
+  "ingredient": "peanut butter",
+  "grams": 8,
+  "unit": "g",
+  "food": "Peanut butter"
+ },
+ {
+  "option": "S14",
+  "slot": "snack",
+  "ingredient": "greek yogurt nonfat",
+  "grams": 110,
+  "unit": "g",
+  "food": "Fage 0% Greek yogurt"
+ },
+ {
+  "option": "S14",
+  "slot": "snack",
+  "ingredient": "milk 2%",
+  "grams": 50,
+  "unit": "g",
+  "food": "Milk 2%"
+ },
+ {
+  "option": "S14",
+  "slot": "snack",
+  "ingredient": "chia seeds",
+  "grams": 7,
+  "unit": "g",
+  "food": "Chia seeds"
+ },
+ {
+  "option": "S14",
+  "slot": "snack",
+  "ingredient": "granola",
+  "grams": 24,
+  "unit": "g",
+  "food": "Granola"
+ },
+ {
+  "option": "S14",
+  "slot": "snack",
+  "ingredient": "strawberries",
+  "grams": 80,
+  "unit": "g",
+  "food": "Strawberries"
+ },
+ {
+  "option": "S16",
+  "slot": "snack",
+  "ingredient": "rice cakes",
+  "grams": 24,
+  "unit": "g",
+  "food": "Rice cakes"
+ },
+ {
+  "option": "S16",
+  "slot": "snack",
+  "ingredient": "cottage cheese 2%",
+  "grams": 110,
+  "unit": "g",
+  "food": "Cottage cheese 2%"
+ },
+ {
+  "option": "S16",
+  "slot": "snack",
+  "ingredient": "cherry tomatoes",
+  "grams": 60,
+  "unit": "g",
+  "food": "Tomato"
+ },
+ {
+  "option": "S16",
+  "slot": "snack",
+  "ingredient": "avocado",
+  "grams": 32,
+  "unit": "g",
+  "food": "Avocado"
+ },
+ {
+  "option": "S16",
+  "slot": "snack",
+  "ingredient": "everything bagel seasoning",
+  "grams": 2,
+  "unit": "g",
+  "food": "Everything bagel seasoning"
+ },
+ {
+  "option": "S17",
+  "slot": "snack",
+  "ingredient": "greek yogurt nonfat",
+  "grams": 130,
+  "unit": "g",
+  "food": "Fage 0% Greek yogurt"
+ },
+ {
+  "option": "S17",
+  "slot": "snack",
+  "ingredient": "dried mango",
+  "grams": 16,
+  "unit": "g",
+  "food": "Dried mango"
+ },
+ {
+  "option": "S17",
+  "slot": "snack",
+  "ingredient": "cashews",
+  "grams": 15,
+  "unit": "g",
+  "food": "Cashews"
+ },
+ {
+  "option": "S17",
+  "slot": "snack",
+  "ingredient": "pineapple",
+  "grams": 60,
+  "unit": "g",
+  "food": "Pineapple"
+ },
+ {
+  "option": "S18",
+  "slot": "snack",
+  "ingredient": "shelled edamame frozen",
+  "grams": 130,
+  "unit": "g",
+  "food": "Edamame, shelled"
+ },
+ {
+  "option": "S18",
+  "slot": "snack",
+  "ingredient": "apple",
+  "grams": 110,
+  "unit": "g",
+  "food": "Apple"
+ },
+ {
+  "option": "S18",
+  "slot": "snack",
+  "ingredient": "pretzels",
+  "grams": 5,
+  "unit": "g",
+  "food": "Pretzels"
+ },
+ {
+  "option": "S19",
+  "slot": "snack",
+  "ingredient": "greek yogurt nonfat",
+  "grams": 90,
+  "unit": "g",
+  "food": "Fage 0% Greek yogurt"
+ },
+ {
+  "option": "S19",
+  "slot": "snack",
+  "ingredient": "frozen mixed berries",
+  "grams": 122,
+  "unit": "g",
+  "food": "Frozen mixed berries"
+ },
+ {
+  "option": "S19",
+  "slot": "snack",
+  "ingredient": "milk 2%",
+  "grams": 80,
+  "unit": "g",
+  "food": "Milk 2%"
+ },
+ {
+  "option": "S19",
+  "slot": "snack",
+  "ingredient": "almond butter",
+  "grams": 8,
+  "unit": "g",
+  "food": "Almond butter"
+ },
+ {
+  "option": "S19",
+  "slot": "snack",
+  "ingredient": "rolled oats",
+  "grams": 10,
+  "unit": "g",
+  "food": "Rolled oats, dry"
+ },
+ {
+  "option": "S20",
+  "slot": "snack",
+  "ingredient": "medjool dates",
+  "grams": 30,
+  "unit": "g",
+  "food": "Dates, Medjool"
+ },
+ {
+  "option": "S20",
+  "slot": "snack",
+  "ingredient": "peanut butter",
+  "grams": 12,
+  "unit": "g",
+  "food": "Peanut butter"
+ },
+ {
+  "option": "S20",
+  "slot": "snack",
+  "ingredient": "turkey jerky",
+  "grams": 33,
+  "unit": "g",
+  "food": "Turkey jerky"
+ },
+ {
+  "option": "S20",
+  "slot": "snack",
+  "ingredient": "almonds",
+  "grams": 3,
+  "unit": "g",
+  "food": "Almonds"
+ },
+ {
+  "option": "S21",
+  "slot": "snack",
+  "ingredient": "fresh mozzarella",
+  "grams": 40,
+  "unit": "g",
+  "food": "Fresh mozzarella"
+ },
+ {
+  "option": "S21",
+  "slot": "snack",
+  "ingredient": "cherry tomatoes",
+  "grams": 100,
+  "unit": "g",
+  "food": "Tomato"
+ },
+ {
+  "option": "S21",
+  "slot": "snack",
+  "ingredient": "sourdough",
+  "grams": 45,
+  "unit": "g",
+  "food": "Sourdough"
+ },
+ {
+  "option": "S21",
+  "slot": "snack",
+  "ingredient": "deli turkey",
+  "grams": 20,
+  "unit": "g",
+  "food": "Deli turkey, low sodium"
+ },
+ {
+  "option": "S21",
+  "slot": "snack",
+  "ingredient": "balsamic glaze",
+  "grams": 5,
+  "unit": "g",
+  "food": "Balsamic glaze"
+ },
+ {
+  "option": "S22",
+  "slot": "snack",
+  "ingredient": "parmesan snack cheese",
+  "grams": 21,
+  "unit": "g",
+  "food": "Parmesan snack cheese"
+ },
+ {
+  "option": "S22",
+  "slot": "snack",
+  "ingredient": "deli turkey",
+  "grams": 30,
+  "unit": "g",
+  "food": "Deli turkey, low sodium"
+ },
+ {
+  "option": "S22",
+  "slot": "snack",
+  "ingredient": "pretzels",
+  "grams": 22,
+  "unit": "g",
+  "food": "Pretzels"
+ },
+ {
+  "option": "S22",
+  "slot": "snack",
+  "ingredient": "grapes",
+  "grams": 70,
+  "unit": "g",
+  "food": "Grapes"
+ },
+ {
+  "option": "S22",
+  "slot": "snack",
+  "ingredient": "baby carrots",
+  "grams": 60,
+  "unit": "g",
+  "food": "Baby carrots"
+ },
+ {
+  "option": "S23",
+  "slot": "snack",
+  "ingredient": "turkey snack stick",
+  "grams": 33,
+  "unit": "g",
+  "food": "Turkey snack stick"
+ },
+ {
+  "option": "S23",
+  "slot": "snack",
+  "ingredient": "whole-grain crackers",
+  "grams": 25,
+  "unit": "g",
+  "food": "Whole-grain crackers"
+ },
+ {
+  "option": "S23",
+  "slot": "snack",
+  "ingredient": "apple",
+  "grams": 120,
+  "unit": "g",
+  "food": "Apple"
+ },
+ {
+  "option": "S23",
+  "slot": "snack",
+  "ingredient": "almonds",
+  "grams": 5,
+  "unit": "g",
+  "food": "Almonds"
+ },
+ {
+  "option": "S24",
+  "slot": "snack",
+  "ingredient": "protein bar high fibre",
+  "grams": 45,
+  "unit": "g",
+  "food": "Protein bar, high fibre"
+ },
+ {
+  "option": "S24",
+  "slot": "snack",
+  "ingredient": "apple",
+  "grams": 130,
+  "unit": "g",
+  "food": "Apple"
+ },
+ {
+  "option": "S25",
+  "slot": "snack",
+  "ingredient": "rolled oats",
+  "grams": 32,
+  "unit": "g",
+  "food": "Rolled oats, dry"
+ },
+ {
+  "option": "S25",
+  "slot": "snack",
+  "ingredient": "peanut butter",
+  "grams": 10,
+  "unit": "g",
+  "food": "Peanut butter"
+ },
+ {
+  "option": "S25",
+  "slot": "snack",
+  "ingredient": "honey",
+  "grams": 10,
+  "unit": "g",
+  "food": "Honey"
+ },
+ {
+  "option": "S25",
+  "slot": "snack",
+  "ingredient": "protein powder",
+  "grams": 12,
+  "unit": "g",
+  "food": "Protein powder"
+ },
+ {
+  "option": "D1",
+  "slot": "dinner",
+  "ingredient": "salmon",
+  "grams": 128,
+  "unit": "g",
+  "food": "Salmon, raw"
+ },
+ {
+  "option": "D1",
+  "slot": "dinner",
+  "ingredient": "jasmine rice dry",
+  "grams": 70,
+  "unit": "g",
+  "food": "Jasmine rice, dry"
+ },
+ {
+  "option": "D1",
+  "slot": "dinner",
+  "ingredient": "broccolini",
+  "grams": 150,
+  "unit": "g",
+  "food": "Broccolini"
+ },
+ {
+  "option": "D1",
+  "slot": "dinner",
+  "ingredient": "olive oil",
+  "grams": 5,
+  "unit": "g",
+  "food": "Olive oil"
+ },
+ {
+  "option": "D1",
+  "slot": "dinner",
+  "ingredient": "honey",
+  "grams": 15,
+  "unit": "g",
+  "food": "Honey"
+ },
+ {
+  "option": "D1",
+  "slot": "dinner",
+  "ingredient": "soy sauce low sodium",
+  "grams": 15,
+  "unit": "g",
+  "food": "Soy sauce"
+ },
+ {
+  "option": "D1",
+  "slot": "dinner",
+  "ingredient": "garlic",
+  "grams": 6,
+  "unit": "g",
+  "food": "Garlic"
+ },
+ {
+  "option": "D1",
+  "slot": "dinner",
+  "ingredient": "edamame frozen",
+  "grams": 70,
+  "unit": "g",
+  "food": "Edamame, shelled"
+ },
+ {
+  "option": "D2",
+  "slot": "dinner",
+  "ingredient": "ground beef 90/10",
+  "grams": 119,
+  "unit": "g",
+  "food": "Ground beef 90/10"
+ },
+ {
+  "option": "D2",
+  "slot": "dinner",
+  "ingredient": "burger bun",
+  "grams": 60,
+  "unit": "g",
+  "food": "Burger bun"
+ },
+ {
+  "option": "D2",
+  "slot": "dinner",
+  "ingredient": "american cheese",
+  "grams": 15,
+  "unit": "g",
+  "food": "American cheese"
+ },
+ {
+  "option": "D2",
+  "slot": "dinner",
+  "ingredient": "potato",
+  "grams": 230,
+  "unit": "g",
+  "food": "Potato, raw"
+ },
+ {
+  "option": "D2",
+  "slot": "dinner",
+  "ingredient": "olive oil",
+  "grams": 5,
+  "unit": "g",
+  "food": "Olive oil"
+ },
+ {
+  "option": "D2",
+  "slot": "dinner",
+  "ingredient": "ketchup",
+  "grams": 15,
+  "unit": "g",
+  "food": "Ketchup"
+ },
+ {
+  "option": "D2",
+  "slot": "dinner",
+  "ingredient": "onion",
+  "grams": 30,
+  "unit": "g",
+  "food": "Onion"
+ },
+ {
+  "option": "D2",
+  "slot": "dinner",
+  "ingredient": "romaine",
+  "grams": 25,
+  "unit": "g",
+  "food": "Romaine"
+ },
+ {
+  "option": "D2",
+  "slot": "dinner",
+  "ingredient": "cherry tomatoes",
+  "grams": 40,
+  "unit": "g",
+  "food": "Tomato"
+ },
+ {
+  "option": "D3",
+  "slot": "dinner",
+  "ingredient": "chicken breast",
+  "grams": 118,
+  "unit": "g",
+  "food": "Chicken breast, raw"
+ },
+ {
+  "option": "D3",
+  "slot": "dinner",
+  "ingredient": "jasmine rice dry",
+  "grams": 45,
+  "unit": "g",
+  "food": "Jasmine rice, dry"
+ },
+ {
+  "option": "D3",
+  "slot": "dinner",
+  "ingredient": "pineapple",
+  "grams": 90,
+  "unit": "g",
+  "food": "Pineapple"
+ },
+ {
+  "option": "D3",
+  "slot": "dinner",
+  "ingredient": "bell pepper",
+  "grams": 80,
+  "unit": "g",
+  "food": "Bell pepper"
+ },
+ {
+  "option": "D3",
+  "slot": "dinner",
+  "ingredient": "sugar snap peas",
+  "grams": 60,
+  "unit": "g",
+  "food": "Sugar snap peas"
+ },
+ {
+  "option": "D3",
+  "slot": "dinner",
+  "ingredient": "red onion",
+  "grams": 40,
+  "unit": "g",
+  "food": "Onion"
+ },
+ {
+  "option": "D3",
+  "slot": "dinner",
+  "ingredient": "cashews",
+  "grams": 22,
+  "unit": "g",
+  "food": "Cashews"
+ },
+ {
+  "option": "D3",
+  "slot": "dinner",
+  "ingredient": "soy sauce low sodium",
+  "grams": 20,
+  "unit": "g",
+  "food": "Soy sauce"
+ },
+ {
+  "option": "D3",
+  "slot": "dinner",
+  "ingredient": "honey",
+  "grams": 10,
+  "unit": "g",
+  "food": "Honey"
+ },
+ {
+  "option": "D3",
+  "slot": "dinner",
+  "ingredient": "sesame oil",
+  "grams": 9,
+  "unit": "g",
+  "food": "Sesame oil"
+ },
+ {
+  "option": "D3",
+  "slot": "dinner",
+  "ingredient": "cornstarch",
+  "grams": 4,
+  "unit": "g",
+  "food": "Cornstarch"
+ },
+ {
+  "option": "D3",
+  "slot": "dinner",
+  "ingredient": "garlic",
+  "grams": 6,
+  "unit": "g",
+  "food": "Garlic"
+ },
+ {
+  "option": "D3",
+  "slot": "dinner",
+  "ingredient": "ginger",
+  "grams": 5,
+  "unit": "g",
+  "food": "Ginger"
+ },
+ {
+  "option": "D3",
+  "slot": "dinner",
+  "ingredient": "broccoli",
+  "grams": 100,
+  "unit": "g",
+  "food": "Broccoli, raw"
+ },
+ {
+  "option": "D4",
+  "slot": "dinner",
+  "ingredient": "chicken breast",
+  "grams": 118,
+  "unit": "g",
+  "food": "Chicken breast, raw"
+ },
+ {
+  "option": "D4",
+  "slot": "dinner",
+  "ingredient": "potato",
+  "grams": 400,
+  "unit": "g",
+  "food": "Potato, raw"
+ },
+ {
+  "option": "D4",
+  "slot": "dinner",
+  "ingredient": "olive oil",
+  "grams": 14,
+  "unit": "g",
+  "food": "Olive oil"
+ },
+ {
+  "option": "D4",
+  "slot": "dinner",
+  "ingredient": "tzatziki",
+  "grams": 60,
+  "unit": "g",
+  "food": "Tzatziki"
+ },
+ {
+  "option": "D4",
+  "slot": "dinner",
+  "ingredient": "cucumber",
+  "grams": 60,
+  "unit": "g",
+  "food": "Cucumber"
+ },
+ {
+  "option": "D4",
+  "slot": "dinner",
+  "ingredient": "cherry tomatoes",
+  "grams": 60,
+  "unit": "g",
+  "food": "Tomato"
+ },
+ {
+  "option": "D4",
+  "slot": "dinner",
+  "ingredient": "lemon juice",
+  "grams": 20,
+  "unit": "g",
+  "food": "Lemon juice"
+ },
+ {
+  "option": "D5",
+  "slot": "dinner",
+  "ingredient": "egg",
+  "grams": 100,
+  "unit": "g",
+  "food": "Egg, whole"
+ },
+ {
+  "option": "D5",
+  "slot": "dinner",
+  "ingredient": "liquid egg white",
+  "grams": 42,
+  "unit": "g",
+  "food": "Egg white"
+ },
+ {
+  "option": "D5",
+  "slot": "dinner",
+  "ingredient": "turkey bacon",
+  "grams": 30,
+  "unit": "g",
+  "food": "Turkey bacon"
+ },
+ {
+  "option": "D5",
+  "slot": "dinner",
+  "ingredient": "sourdough",
+  "grams": 100,
+  "unit": "g",
+  "food": "Sourdough"
+ },
+ {
+  "option": "D5",
+  "slot": "dinner",
+  "ingredient": "butter",
+  "grams": 4,
+  "unit": "g",
+  "food": "Butter"
+ },
+ {
+  "option": "D5",
+  "slot": "dinner",
+  "ingredient": "frozen hash browns",
+  "grams": 150,
+  "unit": "g",
+  "food": "Frozen hash browns"
+ },
+ {
+  "option": "D5",
+  "slot": "dinner",
+  "ingredient": "spinach",
+  "grams": 100,
+  "unit": "g",
+  "food": "Spinach"
+ },
+ {
+  "option": "D5",
+  "slot": "dinner",
+  "ingredient": "cherry tomatoes",
+  "grams": 120,
+  "unit": "g",
+  "food": "Tomato"
+ },
+ {
+  "option": "D5",
+  "slot": "dinner",
+  "ingredient": "black beans canned",
+  "grams": 45,
+  "unit": "g",
+  "food": "Black beans, canned drained"
+ },
+ {
+  "option": "D6",
+  "slot": "dinner",
+  "ingredient": "ground turkey 93/7",
+  "grams": 109,
+  "unit": "g",
+  "food": "Ground turkey 93/7"
+ },
+ {
+  "option": "D6",
+  "slot": "dinner",
+  "ingredient": "white rice dry",
+  "grams": 65,
+  "unit": "g",
+  "food": "White rice, dry"
+ },
+ {
+  "option": "D6",
+  "slot": "dinner",
+  "ingredient": "black beans canned",
+  "grams": 80,
+  "unit": "g",
+  "food": "Black beans, canned drained"
+ },
+ {
+  "option": "D6",
+  "slot": "dinner",
+  "ingredient": "bell pepper",
+  "grams": 60,
+  "unit": "g",
+  "food": "Bell pepper"
+ },
+ {
+  "option": "D6",
+  "slot": "dinner",
+  "ingredient": "onion",
+  "grams": 40,
+  "unit": "g",
+  "food": "Onion"
+ },
+ {
+  "option": "D6",
+  "slot": "dinner",
+  "ingredient": "olive oil",
+  "grams": 4,
+  "unit": "g",
+  "food": "Olive oil"
+ },
+ {
+  "option": "D6",
+  "slot": "dinner",
+  "ingredient": "salsa",
+  "grams": 50,
+  "unit": "g",
+  "food": "Salsa"
+ },
+ {
+  "option": "D6",
+  "slot": "dinner",
+  "ingredient": "cheddar",
+  "grams": 12,
+  "unit": "g",
+  "food": "Cheddar"
+ },
+ {
+  "option": "D6",
+  "slot": "dinner",
+  "ingredient": "avocado",
+  "grams": 45,
+  "unit": "g",
+  "food": "Avocado"
+ },
+ {
+  "option": "D7",
+  "slot": "dinner",
+  "ingredient": "chicken breast",
+  "grams": 97,
+  "unit": "g",
+  "food": "Chicken breast, raw"
+ },
+ {
+  "option": "D7",
+  "slot": "dinner",
+  "ingredient": "potato",
+  "grams": 290,
+  "unit": "g",
+  "food": "Potato, raw"
+ },
+ {
+  "option": "D7",
+  "slot": "dinner",
+  "ingredient": "olive oil",
+  "grams": 9,
+  "unit": "g",
+  "food": "Olive oil"
+ },
+ {
+  "option": "D7",
+  "slot": "dinner",
+  "ingredient": "milk 2%",
+  "grams": 40,
+  "unit": "g",
+  "food": "Milk 2%"
+ },
+ {
+  "option": "D7",
+  "slot": "dinner",
+  "ingredient": "light cream cheese",
+  "grams": 25,
+  "unit": "g",
+  "food": "Light cream cheese"
+ },
+ {
+  "option": "D7",
+  "slot": "dinner",
+  "ingredient": "parmesan",
+  "grams": 12,
+  "unit": "g",
+  "food": "Parmesan"
+ },
+ {
+  "option": "D7",
+  "slot": "dinner",
+  "ingredient": "mozzarella",
+  "grams": 15,
+  "unit": "g",
+  "food": "Mozzarella, part-skim"
+ },
+ {
+  "option": "D7",
+  "slot": "dinner",
+  "ingredient": "garlic",
+  "grams": 8,
+  "unit": "g",
+  "food": "Garlic"
+ },
+ {
+  "option": "D7",
+  "slot": "dinner",
+  "ingredient": "broccoli",
+  "grams": 100,
+  "unit": "g",
+  "food": "Broccoli, raw"
+ },
+ {
+  "option": "D8",
+  "slot": "dinner",
+  "ingredient": "shrimp",
+  "grams": 140,
+  "unit": "g",
+  "food": "Shrimp, raw"
+ },
+ {
+  "option": "D8",
+  "slot": "dinner",
+  "ingredient": "white rice dry",
+  "grams": 75,
+  "unit": "g",
+  "food": "White rice, dry"
+ },
+ {
+  "option": "D8",
+  "slot": "dinner",
+  "ingredient": "bell pepper",
+  "grams": 90,
+  "unit": "g",
+  "food": "Bell pepper"
+ },
+ {
+  "option": "D8",
+  "slot": "dinner",
+  "ingredient": "onion",
+  "grams": 50,
+  "unit": "g",
+  "food": "Onion"
+ },
+ {
+  "option": "D8",
+  "slot": "dinner",
+  "ingredient": "olive oil",
+  "grams": 8,
+  "unit": "g",
+  "food": "Olive oil"
+ },
+ {
+  "option": "D8",
+  "slot": "dinner",
+  "ingredient": "avocado",
+  "grams": 45,
+  "unit": "g",
+  "food": "Avocado"
+ },
+ {
+  "option": "D8",
+  "slot": "dinner",
+  "ingredient": "pico de gallo",
+  "grams": 50,
+  "unit": "g",
+  "food": "Salsa"
+ },
+ {
+  "option": "D8",
+  "slot": "dinner",
+  "ingredient": "cheddar",
+  "grams": 12,
+  "unit": "g",
+  "food": "Cheddar"
+ },
+ {
+  "option": "D8",
+  "slot": "dinner",
+  "ingredient": "lime juice",
+  "grams": 10,
+  "unit": "g",
+  "food": "Lime juice"
+ },
+ {
+  "option": "D9",
+  "slot": "dinner",
+  "ingredient": "ground turkey 93/7",
+  "grams": 100,
+  "unit": "g",
+  "food": "Ground turkey 93/7"
+ },
+ {
+  "option": "D9",
+  "slot": "dinner",
+  "ingredient": "rigatoni dry",
+  "grams": 70,
+  "unit": "g",
+  "food": "Pasta, dry"
+ },
+ {
+  "option": "D9",
+  "slot": "dinner",
+  "ingredient": "crushed tomatoes",
+  "grams": 150,
+  "unit": "g",
+  "food": "Crushed tomatoes"
+ },
+ {
+  "option": "D9",
+  "slot": "dinner",
+  "ingredient": "tomato paste",
+  "grams": 20,
+  "unit": "g",
+  "food": "Tomato paste"
+ },
+ {
+  "option": "D9",
+  "slot": "dinner",
+  "ingredient": "onion",
+  "grams": 40,
+  "unit": "g",
+  "food": "Onion"
+ },
+ {
+  "option": "D9",
+  "slot": "dinner",
+  "ingredient": "carrot",
+  "grams": 40,
+  "unit": "g",
+  "food": "Carrot"
+ },
+ {
+  "option": "D9",
+  "slot": "dinner",
+  "ingredient": "celery",
+  "grams": 30,
+  "unit": "g",
+  "food": "Celery"
+ },
+ {
+  "option": "D9",
+  "slot": "dinner",
+  "ingredient": "olive oil",
+  "grams": 7,
+  "unit": "g",
+  "food": "Olive oil"
+ },
+ {
+  "option": "D9",
+  "slot": "dinner",
+  "ingredient": "parmesan",
+  "grams": 12,
+  "unit": "g",
+  "food": "Parmesan"
+ },
+ {
+  "option": "D9",
+  "slot": "dinner",
+  "ingredient": "milk 2%",
+  "grams": 30,
+  "unit": "g",
+  "food": "Milk 2%"
+ },
+ {
+  "option": "D9",
+  "slot": "dinner",
+  "ingredient": "garlic",
+  "grams": 6,
+  "unit": "g",
+  "food": "Garlic"
+ },
+ {
+  "option": "D10",
+  "slot": "dinner",
+  "ingredient": "chicken thigh",
+  "grams": 155,
+  "unit": "g",
+  "food": "Chicken thigh, raw"
+ },
+ {
+  "option": "D10",
+  "slot": "dinner",
+  "ingredient": "sweet potato",
+  "grams": 280,
+  "unit": "g",
+  "food": "Sweet potato, raw"
+ },
+ {
+  "option": "D10",
+  "slot": "dinner",
+  "ingredient": "green beans",
+  "grams": 130,
+  "unit": "g",
+  "food": "Green beans"
+ },
+ {
+  "option": "D10",
+  "slot": "dinner",
+  "ingredient": "olive oil",
+  "grams": 9,
+  "unit": "g",
+  "food": "Olive oil"
+ },
+ {
+  "option": "D10",
+  "slot": "dinner",
+  "ingredient": "honey",
+  "grams": 15,
+  "unit": "g",
+  "food": "Honey"
+ },
+ {
+  "option": "D10",
+  "slot": "dinner",
+  "ingredient": "soy sauce low sodium",
+  "grams": 12,
+  "unit": "g",
+  "food": "Soy sauce"
+ },
+ {
+  "option": "D10",
+  "slot": "dinner",
+  "ingredient": "garlic",
+  "grams": 8,
+  "unit": "g",
+  "food": "Garlic"
+ },
+ {
+  "option": "D11",
+  "slot": "dinner",
+  "ingredient": "sirloin steak",
+  "grams": 85,
+  "unit": "g",
+  "food": "Sirloin steak, raw"
+ },
+ {
+  "option": "D11",
+  "slot": "dinner",
+  "ingredient": "potato",
+  "grams": 380,
+  "unit": "g",
+  "food": "Potato, raw"
+ },
+ {
+  "option": "D11",
+  "slot": "dinner",
+  "ingredient": "butter",
+  "grams": 6,
+  "unit": "g",
+  "food": "Butter"
+ },
+ {
+  "option": "D11",
+  "slot": "dinner",
+  "ingredient": "greek yogurt nonfat",
+  "grams": 40,
+  "unit": "g",
+  "food": "Fage 0% Greek yogurt"
+ },
+ {
+  "option": "D11",
+  "slot": "dinner",
+  "ingredient": "cheddar",
+  "grams": 18,
+  "unit": "g",
+  "food": "Cheddar"
+ },
+ {
+  "option": "D11",
+  "slot": "dinner",
+  "ingredient": "scallions",
+  "grams": 10,
+  "unit": "g",
+  "food": "Scallions"
+ },
+ {
+  "option": "D11",
+  "slot": "dinner",
+  "ingredient": "olive oil",
+  "grams": 4,
+  "unit": "g",
+  "food": "Olive oil"
+ },
+ {
+  "option": "D11",
+  "slot": "dinner",
+  "ingredient": "broccoli",
+  "grams": 120,
+  "unit": "g",
+  "food": "Broccoli, raw"
+ },
+ {
+  "option": "D12",
+  "slot": "dinner",
+  "ingredient": "salmon",
+  "grams": 112,
+  "unit": "g",
+  "food": "Salmon, raw"
+ },
+ {
+  "option": "D12",
+  "slot": "dinner",
+  "ingredient": "jasmine rice dry",
+  "grams": 80,
+  "unit": "g",
+  "food": "Jasmine rice, dry"
+ },
+ {
+  "option": "D12",
+  "slot": "dinner",
+  "ingredient": "cucumber",
+  "grams": 100,
+  "unit": "g",
+  "food": "Cucumber"
+ },
+ {
+  "option": "D12",
+  "slot": "dinner",
+  "ingredient": "avocado",
+  "grams": 25,
+  "unit": "g",
+  "food": "Avocado"
+ },
+ {
+  "option": "D12",
+  "slot": "dinner",
+  "ingredient": "edamame frozen",
+  "grams": 50,
+  "unit": "g",
+  "food": "Edamame, shelled"
+ },
+ {
+  "option": "D12",
+  "slot": "dinner",
+  "ingredient": "mayonnaise",
+  "grams": 4,
+  "unit": "g",
+  "food": "Mayonnaise"
+ },
+ {
+  "option": "D12",
+  "slot": "dinner",
+  "ingredient": "sriracha",
+  "grams": 10,
+  "unit": "g",
+  "food": "Sriracha"
+ },
+ {
+  "option": "D12",
+  "slot": "dinner",
+  "ingredient": "soy sauce low sodium",
+  "grams": 12,
+  "unit": "g",
+  "food": "Soy sauce"
+ },
+ {
+  "option": "D12",
+  "slot": "dinner",
+  "ingredient": "sesame seeds",
+  "grams": 3,
+  "unit": "g",
+  "food": "Sesame seeds"
+ },
+ {
+  "option": "D12",
+  "slot": "dinner",
+  "ingredient": "scallions",
+  "grams": 10,
+  "unit": "g",
+  "food": "Scallions"
+ },
+ {
+  "option": "D12",
+  "slot": "dinner",
+  "ingredient": "cabbage slaw mix",
+  "grams": 100,
+  "unit": "g",
+  "food": "Cabbage slaw mix"
+ },
+ {
+  "option": "D13",
+  "slot": "dinner",
+  "ingredient": "ground turkey 93/7",
+  "grams": 110,
+  "unit": "g",
+  "food": "Ground turkey 93/7"
+ },
+ {
+  "option": "D13",
+  "slot": "dinner",
+  "ingredient": "corn tortillas",
+  "grams": 78,
+  "unit": "g",
+  "food": "Tortilla, corn"
+ },
+ {
+  "option": "D13",
+  "slot": "dinner",
+  "ingredient": "american cheese",
+  "grams": 15,
+  "unit": "g",
+  "food": "American cheese"
+ },
+ {
+  "option": "D13",
+  "slot": "dinner",
+  "ingredient": "white rice dry",
+  "grams": 33,
+  "unit": "g",
+  "food": "White rice, dry"
+ },
+ {
+  "option": "D13",
+  "slot": "dinner",
+  "ingredient": "corn frozen",
+  "grams": 60,
+  "unit": "g",
+  "food": "Corn"
+ },
+ {
+  "option": "D13",
+  "slot": "dinner",
+  "ingredient": "cotija",
+  "grams": 12,
+  "unit": "g",
+  "food": "Cotija"
+ },
+ {
+  "option": "D13",
+  "slot": "dinner",
+  "ingredient": "greek yogurt nonfat",
+  "grams": 30,
+  "unit": "g",
+  "food": "Fage 0% Greek yogurt"
+ },
+ {
+  "option": "D13",
+  "slot": "dinner",
+  "ingredient": "mayonnaise",
+  "grams": 4,
+  "unit": "g",
+  "food": "Mayonnaise"
+ },
+ {
+  "option": "D13",
+  "slot": "dinner",
+  "ingredient": "onion",
+  "grams": 25,
+  "unit": "g",
+  "food": "Onion"
+ },
+ {
+  "option": "D13",
+  "slot": "dinner",
+  "ingredient": "lime juice",
+  "grams": 8,
+  "unit": "g",
+  "food": "Lime juice"
+ },
+ {
+  "option": "D14",
+  "slot": "dinner",
+  "ingredient": "chicken breast",
+  "grams": 80,
+  "unit": "g",
+  "food": "Chicken breast, raw"
+ },
+ {
+  "option": "D14",
+  "slot": "dinner",
+  "ingredient": "pasta dry",
+  "grams": 92,
+  "unit": "g",
+  "food": "Pasta, dry"
+ },
+ {
+  "option": "D14",
+  "slot": "dinner",
+  "ingredient": "pesto",
+  "grams": 20,
+  "unit": "g",
+  "food": "Pesto"
+ },
+ {
+  "option": "D14",
+  "slot": "dinner",
+  "ingredient": "cherry tomatoes",
+  "grams": 110,
+  "unit": "g",
+  "food": "Tomato"
+ },
+ {
+  "option": "D14",
+  "slot": "dinner",
+  "ingredient": "parmesan",
+  "grams": 12,
+  "unit": "g",
+  "food": "Parmesan"
+ },
+ {
+  "option": "D14",
+  "slot": "dinner",
+  "ingredient": "greek yogurt nonfat",
+  "grams": 30,
+  "unit": "g",
+  "food": "Fage 0% Greek yogurt"
+ },
+ {
+  "option": "D14",
+  "slot": "dinner",
+  "ingredient": "olive oil",
+  "grams": 6,
+  "unit": "g",
+  "food": "Olive oil"
+ },
+ {
+  "option": "D14",
+  "slot": "dinner",
+  "ingredient": "garlic",
+  "grams": 6,
+  "unit": "g",
+  "food": "Garlic"
+ },
+ {
+  "option": "D14",
+  "slot": "dinner",
+  "ingredient": "broccoli",
+  "grams": 150,
+  "unit": "g",
+  "food": "Broccoli, raw"
+ },
+ {
+  "option": "D15",
+  "slot": "dinner",
+  "ingredient": "ground turkey 93/7",
+  "grams": 85,
+  "unit": "g",
+  "food": "Ground turkey 93/7"
+ },
+ {
+  "option": "D15",
+  "slot": "dinner",
+  "ingredient": "pasta dry",
+  "grams": 75,
+  "unit": "g",
+  "food": "Pasta, dry"
+ },
+ {
+  "option": "D15",
+  "slot": "dinner",
+  "ingredient": "marinara",
+  "grams": 130,
+  "unit": "g",
+  "food": "Marinara sauce"
+ },
+ {
+  "option": "D15",
+  "slot": "dinner",
+  "ingredient": "cottage cheese 2%",
+  "grams": 40,
+  "unit": "g",
+  "food": "Cottage cheese 2%"
+ },
+ {
+  "option": "D15",
+  "slot": "dinner",
+  "ingredient": "zucchini",
+  "grams": 80,
+  "unit": "g",
+  "food": "Zucchini"
+ },
+ {
+  "option": "D15",
+  "slot": "dinner",
+  "ingredient": "broccoli",
+  "grams": 80,
+  "unit": "g",
+  "food": "Broccoli, raw"
+ },
+ {
+  "option": "D15",
+  "slot": "dinner",
+  "ingredient": "mozzarella",
+  "grams": 20,
+  "unit": "g",
+  "food": "Mozzarella, part-skim"
+ },
+ {
+  "option": "D15",
+  "slot": "dinner",
+  "ingredient": "olive oil",
+  "grams": 6,
+  "unit": "g",
+  "food": "Olive oil"
+ },
+ {
+  "option": "D16",
+  "slot": "dinner",
+  "ingredient": "chicken breast",
+  "grams": 110,
+  "unit": "g",
+  "food": "Chicken breast, raw"
+ },
+ {
+  "option": "D16",
+  "slot": "dinner",
+  "ingredient": "sweet potato",
+  "grams": 250,
+  "unit": "g",
+  "food": "Sweet potato, raw"
+ },
+ {
+  "option": "D16",
+  "slot": "dinner",
+  "ingredient": "white rice dry",
+  "grams": 28,
+  "unit": "g",
+  "food": "White rice, dry"
+ },
+ {
+  "option": "D16",
+  "slot": "dinner",
+  "ingredient": "buffalo sauce",
+  "grams": 30,
+  "unit": "g",
+  "food": "Buffalo sauce"
+ },
+ {
+  "option": "D16",
+  "slot": "dinner",
+  "ingredient": "greek yogurt nonfat",
+  "grams": 45,
+  "unit": "g",
+  "food": "Fage 0% Greek yogurt"
+ },
+ {
+  "option": "D16",
+  "slot": "dinner",
+  "ingredient": "blue cheese",
+  "grams": 18,
+  "unit": "g",
+  "food": "Blue cheese"
+ },
+ {
+  "option": "D16",
+  "slot": "dinner",
+  "ingredient": "olive oil",
+  "grams": 11,
+  "unit": "g",
+  "food": "Olive oil"
+ },
+ {
+  "option": "D16",
+  "slot": "dinner",
+  "ingredient": "celery",
+  "grams": 40,
+  "unit": "g",
+  "food": "Celery"
+ },
+ {
+  "option": "D16",
+  "slot": "dinner",
+  "ingredient": "carrot",
+  "grams": 40,
+  "unit": "g",
+  "food": "Carrot"
+ },
+ {
+  "option": "D16",
+  "slot": "dinner",
+  "ingredient": "scallions",
+  "grams": 10,
+  "unit": "g",
+  "food": "Scallions"
+ },
+ {
+  "option": "D17",
+  "slot": "dinner",
+  "ingredient": "chicken breast",
+  "grams": 99,
+  "unit": "g",
+  "food": "Chicken breast, raw"
+ },
+ {
+  "option": "D17",
+  "slot": "dinner",
+  "ingredient": "corn tortillas",
+  "grams": 52,
+  "unit": "g",
+  "food": "Tortilla, corn"
+ },
+ {
+  "option": "D17",
+  "slot": "dinner",
+  "ingredient": "white rice dry",
+  "grams": 50,
+  "unit": "g",
+  "food": "White rice, dry"
+ },
+ {
+  "option": "D17",
+  "slot": "dinner",
+  "ingredient": "bell pepper",
+  "grams": 100,
+  "unit": "g",
+  "food": "Bell pepper"
+ },
+ {
+  "option": "D17",
+  "slot": "dinner",
+  "ingredient": "onion",
+  "grams": 60,
+  "unit": "g",
+  "food": "Onion"
+ },
+ {
+  "option": "D17",
+  "slot": "dinner",
+  "ingredient": "olive oil",
+  "grams": 7,
+  "unit": "g",
+  "food": "Olive oil"
+ },
+ {
+  "option": "D17",
+  "slot": "dinner",
+  "ingredient": "pico de gallo",
+  "grams": 50,
+  "unit": "g",
+  "food": "Salsa"
+ },
+ {
+  "option": "D17",
+  "slot": "dinner",
+  "ingredient": "avocado",
+  "grams": 51,
+  "unit": "g",
+  "food": "Avocado"
+ },
+ {
+  "option": "D17",
+  "slot": "dinner",
+  "ingredient": "cheddar",
+  "grams": 10,
+  "unit": "g",
+  "food": "Cheddar"
+ },
+ {
+  "option": "D17",
+  "slot": "dinner",
+  "ingredient": "greek yogurt nonfat",
+  "grams": 30,
+  "unit": "g",
+  "food": "Fage 0% Greek yogurt"
+ },
+ {
+  "option": "D18",
+  "slot": "dinner",
+  "ingredient": "salmon",
+  "grams": 124,
+  "unit": "g",
+  "food": "Salmon, raw"
+ },
+ {
+  "option": "D18",
+  "slot": "dinner",
+  "ingredient": "jasmine rice dry",
+  "grams": 58,
+  "unit": "g",
+  "food": "Jasmine rice, dry"
+ },
+ {
+  "option": "D18",
+  "slot": "dinner",
+  "ingredient": "broccoli",
+  "grams": 150,
+  "unit": "g",
+  "food": "Broccoli, raw"
+ },
+ {
+  "option": "D18",
+  "slot": "dinner",
+  "ingredient": "soy sauce low sodium",
+  "grams": 25,
+  "unit": "g",
+  "food": "Soy sauce"
+ },
+ {
+  "option": "D18",
+  "slot": "dinner",
+  "ingredient": "honey",
+  "grams": 16,
+  "unit": "g",
+  "food": "Honey"
+ },
+ {
+  "option": "D18",
+  "slot": "dinner",
+  "ingredient": "ginger",
+  "grams": 6,
+  "unit": "g",
+  "food": "Ginger"
+ },
+ {
+  "option": "D18",
+  "slot": "dinner",
+  "ingredient": "garlic",
+  "grams": 6,
+  "unit": "g",
+  "food": "Garlic"
+ },
+ {
+  "option": "D18",
+  "slot": "dinner",
+  "ingredient": "cornstarch",
+  "grams": 5,
+  "unit": "g",
+  "food": "Cornstarch"
+ },
+ {
+  "option": "D18",
+  "slot": "dinner",
+  "ingredient": "sesame oil",
+  "grams": 4,
+  "unit": "g",
+  "food": "Sesame oil"
+ },
+ {
+  "option": "D18",
+  "slot": "dinner",
+  "ingredient": "sesame seeds",
+  "grams": 4,
+  "unit": "g",
+  "food": "Sesame seeds"
+ },
+ {
+  "option": "D18",
+  "slot": "dinner",
+  "ingredient": "scallions",
+  "grams": 10,
+  "unit": "g",
+  "food": "Scallions"
+ },
+ {
+  "option": "D18",
+  "slot": "dinner",
+  "ingredient": "edamame frozen",
+  "grams": 70,
+  "unit": "g",
+  "food": "Edamame, shelled"
+ },
+ {
+  "option": "D19",
+  "slot": "dinner",
+  "ingredient": "chicken breast",
+  "grams": 70,
+  "unit": "g",
+  "food": "Chicken breast, raw"
+ },
+ {
+  "option": "D19",
+  "slot": "dinner",
+  "ingredient": "panko",
+  "grams": 16,
+  "unit": "g",
+  "food": "Panko/breadcrumbs"
+ },
+ {
+  "option": "D19",
+  "slot": "dinner",
+  "ingredient": "egg",
+  "grams": 15,
+  "unit": "g",
+  "food": "Egg, whole"
+ },
+ {
+  "option": "D19",
+  "slot": "dinner",
+  "ingredient": "spaghetti dry",
+  "grams": 72,
+  "unit": "g",
+  "food": "Pasta, dry"
+ },
+ {
+  "option": "D19",
+  "slot": "dinner",
+  "ingredient": "marinara",
+  "grams": 130,
+  "unit": "g",
+  "food": "Marinara sauce"
+ },
+ {
+  "option": "D19",
+  "slot": "dinner",
+  "ingredient": "mozzarella",
+  "grams": 20,
+  "unit": "g",
+  "food": "Mozzarella, part-skim"
+ },
+ {
+  "option": "D19",
+  "slot": "dinner",
+  "ingredient": "parmesan",
+  "grams": 8,
+  "unit": "g",
+  "food": "Parmesan"
+ },
+ {
+  "option": "D19",
+  "slot": "dinner",
+  "ingredient": "olive oil",
+  "grams": 8,
+  "unit": "g",
+  "food": "Olive oil"
+ },
+ {
+  "option": "D19",
+  "slot": "dinner",
+  "ingredient": "broccoli",
+  "grams": 150,
+  "unit": "g",
+  "food": "Broccoli, raw"
+ },
+ {
+  "option": "D20",
+  "slot": "dinner",
+  "ingredient": "chicken breast",
+  "grams": 75,
+  "unit": "g",
+  "food": "Chicken breast, raw"
+ },
+ {
+  "option": "D20",
+  "slot": "dinner",
+  "ingredient": "flour tortillas",
+  "grams": 90,
+  "unit": "g",
+  "food": "Tortilla, large flour"
+ },
+ {
+  "option": "D20",
+  "slot": "dinner",
+  "ingredient": "cheddar",
+  "grams": 20,
+  "unit": "g",
+  "food": "Cheddar"
+ },
+ {
+  "option": "D20",
+  "slot": "dinner",
+  "ingredient": "white rice dry",
+  "grams": 28,
+  "unit": "g",
+  "food": "White rice, dry"
+ },
+ {
+  "option": "D20",
+  "slot": "dinner",
+  "ingredient": "crushed tomatoes",
+  "grams": 40,
+  "unit": "g",
+  "food": "Crushed tomatoes"
+ },
+ {
+  "option": "D20",
+  "slot": "dinner",
+  "ingredient": "onion",
+  "grams": 30,
+  "unit": "g",
+  "food": "Onion"
+ },
+ {
+  "option": "D20",
+  "slot": "dinner",
+  "ingredient": "bell pepper",
+  "grams": 50,
+  "unit": "g",
+  "food": "Bell pepper"
+ },
+ {
+  "option": "D20",
+  "slot": "dinner",
+  "ingredient": "olive oil",
+  "grams": 4,
+  "unit": "g",
+  "food": "Olive oil"
+ },
+ {
+  "option": "D20",
+  "slot": "dinner",
+  "ingredient": "greek yogurt nonfat",
+  "grams": 40,
+  "unit": "g",
+  "food": "Fage 0% Greek yogurt"
+ },
+ {
+  "option": "D20",
+  "slot": "dinner",
+  "ingredient": "pico de gallo",
+  "grams": 40,
+  "unit": "g",
+  "food": "Salsa"
+ },
+ {
+  "option": "D20",
+  "slot": "dinner",
+  "ingredient": "black beans canned",
+  "grams": 50,
+  "unit": "g",
+  "food": "Black beans, canned drained"
+ },
+ {
+  "option": "D21",
+  "slot": "dinner",
+  "ingredient": "shrimp",
+  "grams": 100,
+  "unit": "g",
+  "food": "Shrimp, raw"
+ },
+ {
+  "option": "D21",
+  "slot": "dinner",
+  "ingredient": "linguine dry",
+  "grams": 92,
+  "unit": "g",
+  "food": "Pasta, dry"
+ },
+ {
+  "option": "D21",
+  "slot": "dinner",
+  "ingredient": "butter",
+  "grams": 8,
+  "unit": "g",
+  "food": "Butter"
+ },
+ {
+  "option": "D21",
+  "slot": "dinner",
+  "ingredient": "olive oil",
+  "grams": 11,
+  "unit": "g",
+  "food": "Olive oil"
+ },
+ {
+  "option": "D21",
+  "slot": "dinner",
+  "ingredient": "garlic",
+  "grams": 10,
+  "unit": "g",
+  "food": "Garlic"
+ },
+ {
+  "option": "D21",
+  "slot": "dinner",
+  "ingredient": "white wine",
+  "grams": 30,
+  "unit": "g",
+  "food": "White wine"
+ },
+ {
+  "option": "D21",
+  "slot": "dinner",
+  "ingredient": "lemon juice",
+  "grams": 15,
+  "unit": "g",
+  "food": "Lemon juice"
+ },
+ {
+  "option": "D21",
+  "slot": "dinner",
+  "ingredient": "parmesan",
+  "grams": 10,
+  "unit": "g",
+  "food": "Parmesan"
+ },
+ {
+  "option": "D21",
+  "slot": "dinner",
+  "ingredient": "cherry tomatoes",
+  "grams": 80,
+  "unit": "g",
+  "food": "Tomato"
+ },
+ {
+  "option": "D21",
+  "slot": "dinner",
+  "ingredient": "spinach",
+  "grams": 40,
+  "unit": "g",
+  "food": "Spinach"
+ },
+ {
+  "option": "D21",
+  "slot": "dinner",
+  "ingredient": "broccolini",
+  "grams": 150,
+  "unit": "g",
+  "food": "Broccolini"
+ },
+ {
+  "option": "D22",
+  "slot": "dinner",
+  "ingredient": "ground turkey 93/7",
+  "grams": 124,
+  "unit": "g",
+  "food": "Ground turkey 93/7"
+ },
+ {
+  "option": "D22",
+  "slot": "dinner",
+  "ingredient": "burger bun",
+  "grams": 60,
+  "unit": "g",
+  "food": "Burger bun"
+ },
+ {
+  "option": "D22",
+  "slot": "dinner",
+  "ingredient": "ketchup",
+  "grams": 30,
+  "unit": "g",
+  "food": "Ketchup"
+ },
+ {
+  "option": "D22",
+  "slot": "dinner",
+  "ingredient": "tomato paste",
+  "grams": 15,
+  "unit": "g",
+  "food": "Tomato paste"
+ },
+ {
+  "option": "D22",
+  "slot": "dinner",
+  "ingredient": "brown sugar",
+  "grams": 6,
+  "unit": "g",
+  "food": "Brown sugar"
+ },
+ {
+  "option": "D22",
+  "slot": "dinner",
+  "ingredient": "onion",
+  "grams": 40,
+  "unit": "g",
+  "food": "Onion"
+ },
+ {
+  "option": "D22",
+  "slot": "dinner",
+  "ingredient": "bell pepper",
+  "grams": 40,
+  "unit": "g",
+  "food": "Bell pepper"
+ },
+ {
+  "option": "D22",
+  "slot": "dinner",
+  "ingredient": "potato",
+  "grams": 175,
+  "unit": "g",
+  "food": "Potato, raw"
+ },
+ {
+  "option": "D22",
+  "slot": "dinner",
+  "ingredient": "olive oil",
+  "grams": 7,
+  "unit": "g",
+  "food": "Olive oil"
+ },
+ {
+  "option": "D22",
+  "slot": "dinner",
+  "ingredient": "cheddar",
+  "grams": 12,
+  "unit": "g",
+  "food": "Cheddar"
+ },
+ {
+  "option": "D23",
+  "slot": "dinner",
+  "ingredient": "sirloin steak",
+  "grams": 107,
+  "unit": "g",
+  "food": "Sirloin steak, raw"
+ },
+ {
+  "option": "D23",
+  "slot": "dinner",
+  "ingredient": "jasmine rice dry",
+  "grams": 54,
+  "unit": "g",
+  "food": "Jasmine rice, dry"
+ },
+ {
+  "option": "D23",
+  "slot": "dinner",
+  "ingredient": "broccoli",
+  "grams": 180,
+  "unit": "g",
+  "food": "Broccoli, raw"
+ },
+ {
+  "option": "D23",
+  "slot": "dinner",
+  "ingredient": "soy sauce low sodium",
+  "grams": 25,
+  "unit": "g",
+  "food": "Soy sauce"
+ },
+ {
+  "option": "D23",
+  "slot": "dinner",
+  "ingredient": "oyster sauce",
+  "grams": 20,
+  "unit": "g",
+  "food": "Oyster sauce"
+ },
+ {
+  "option": "D23",
+  "slot": "dinner",
+  "ingredient": "honey",
+  "grams": 10,
+  "unit": "g",
+  "food": "Honey"
+ },
+ {
+  "option": "D23",
+  "slot": "dinner",
+  "ingredient": "cornstarch",
+  "grams": 6,
+  "unit": "g",
+  "food": "Cornstarch"
+ },
+ {
+  "option": "D23",
+  "slot": "dinner",
+  "ingredient": "sesame oil",
+  "grams": 9,
+  "unit": "g",
+  "food": "Sesame oil"
+ },
+ {
+  "option": "D23",
+  "slot": "dinner",
+  "ingredient": "cashews",
+  "grams": 12,
+  "unit": "g",
+  "food": "Cashews"
+ },
+ {
+  "option": "D23",
+  "slot": "dinner",
+  "ingredient": "garlic",
+  "grams": 8,
+  "unit": "g",
+  "food": "Garlic"
+ },
+ {
+  "option": "D23",
+  "slot": "dinner",
+  "ingredient": "ginger",
+  "grams": 6,
+  "unit": "g",
+  "food": "Ginger"
+ },
+ {
+  "option": "D23",
+  "slot": "dinner",
+  "ingredient": "scallions",
+  "grams": 15,
+  "unit": "g",
+  "food": "Scallions"
+ },
+ {
+  "option": "D23",
+  "slot": "dinner",
+  "ingredient": "sugar snap peas",
+  "grams": 80,
+  "unit": "g",
+  "food": "Sugar snap peas"
+ },
+ {
+  "option": "D24",
+  "slot": "dinner",
+  "ingredient": "sirloin steak",
+  "grams": 108,
+  "unit": "g",
+  "food": "Sirloin steak, raw"
+ },
+ {
+  "option": "D24",
+  "slot": "dinner",
+  "ingredient": "potato",
+  "grams": 375,
+  "unit": "g",
+  "food": "Potato, raw"
+ },
+ {
+  "option": "D24",
+  "slot": "dinner",
+  "ingredient": "butter",
+  "grams": 8,
+  "unit": "g",
+  "food": "Butter"
+ },
+ {
+  "option": "D24",
+  "slot": "dinner",
+  "ingredient": "olive oil",
+  "grams": 6,
+  "unit": "g",
+  "food": "Olive oil"
+ },
+ {
+  "option": "D24",
+  "slot": "dinner",
+  "ingredient": "garlic",
+  "grams": 12,
+  "unit": "g",
+  "food": "Garlic"
+ },
+ {
+  "option": "D24",
+  "slot": "dinner",
+  "ingredient": "parmesan",
+  "grams": 10,
+  "unit": "g",
+  "food": "Parmesan"
+ },
+ {
+  "option": "D24",
+  "slot": "dinner",
+  "ingredient": "green beans",
+  "grams": 130,
+  "unit": "g",
+  "food": "Green beans"
+ },
+ {
+  "option": "D25",
+  "slot": "dinner",
+  "ingredient": "sirloin steak",
+  "grams": 96,
+  "unit": "g",
+  "food": "Sirloin steak, raw"
+ },
+ {
+  "option": "D25",
+  "slot": "dinner",
+  "ingredient": "hoagie roll",
+  "grams": 100,
+  "unit": "g",
+  "food": "Hoagie roll"
+ },
+ {
+  "option": "D25",
+  "slot": "dinner",
+  "ingredient": "provolone",
+  "grams": 18,
+  "unit": "g",
+  "food": "Provolone"
+ },
+ {
+  "option": "D25",
+  "slot": "dinner",
+  "ingredient": "green bell pepper",
+  "grams": 80,
+  "unit": "g",
+  "food": "Bell pepper"
+ },
+ {
+  "option": "D25",
+  "slot": "dinner",
+  "ingredient": "onion",
+  "grams": 80,
+  "unit": "g",
+  "food": "Onion"
+ },
+ {
+  "option": "D25",
+  "slot": "dinner",
+  "ingredient": "olive oil",
+  "grams": 10,
+  "unit": "g",
+  "food": "Olive oil"
+ },
+ {
+  "option": "D25",
+  "slot": "dinner",
+  "ingredient": "potato",
+  "grams": 90,
+  "unit": "g",
+  "food": "Potato, raw"
+ },
+ {
+  "option": "D26",
+  "slot": "dinner",
+  "ingredient": "chicken breast",
+  "grams": 89,
+  "unit": "g",
+  "food": "Chicken breast, raw"
+ },
+ {
+  "option": "D26",
+  "slot": "dinner",
+  "ingredient": "potato",
+  "grams": 275,
+  "unit": "g",
+  "food": "Potato, raw"
+ },
+ {
+  "option": "D26",
+  "slot": "dinner",
+  "ingredient": "onion",
+  "grams": 150,
+  "unit": "g",
+  "food": "Onion"
+ },
+ {
+  "option": "D26",
+  "slot": "dinner",
+  "ingredient": "gruyere",
+  "grams": 15,
+  "unit": "g",
+  "food": "Gruyere"
+ },
+ {
+  "option": "D26",
+  "slot": "dinner",
+  "ingredient": "butter",
+  "grams": 12,
+  "unit": "g",
+  "food": "Butter"
+ },
+ {
+  "option": "D26",
+  "slot": "dinner",
+  "ingredient": "olive oil",
+  "grams": 4,
+  "unit": "g",
+  "food": "Olive oil"
+ },
+ {
+  "option": "D26",
+  "slot": "dinner",
+  "ingredient": "all-purpose flour",
+  "grams": 4,
+  "unit": "g",
+  "food": "All-purpose flour"
+ },
+ {
+  "option": "D26",
+  "slot": "dinner",
+  "ingredient": "chicken stock",
+  "grams": 100,
+  "unit": "g",
+  "food": "Chicken stock"
+ },
+ {
+  "option": "D26",
+  "slot": "dinner",
+  "ingredient": "milk 2%",
+  "grams": 50,
+  "unit": "g",
+  "food": "Milk 2%"
+ },
+ {
+  "option": "D26",
+  "slot": "dinner",
+  "ingredient": "garlic",
+  "grams": 6,
+  "unit": "g",
+  "food": "Garlic"
+ },
+ {
+  "option": "D26",
+  "slot": "dinner",
+  "ingredient": "green beans",
+  "grams": 150,
+  "unit": "g",
+  "food": "Green beans"
+ },
+ {
+  "option": "L22",
+  "slot": "lunch",
+  "ingredient": "chicken breast",
+  "grams": 88,
+  "unit": "g",
+  "food": "Chicken breast, raw"
+ },
+ {
+  "option": "L22",
+  "slot": "lunch",
+  "ingredient": "pasta dry",
+  "grams": 68,
+  "unit": "g",
+  "food": "Pasta, dry"
+ },
+ {
+  "option": "L22",
+  "slot": "lunch",
+  "ingredient": "greek yogurt nonfat",
+  "grams": 60,
+  "unit": "g",
+  "food": "Fage 0% Greek yogurt"
+ },
+ {
+  "option": "L22",
+  "slot": "lunch",
+  "ingredient": "parmesan",
+  "grams": 16,
+  "unit": "g",
+  "food": "Parmesan"
+ },
+ {
+  "option": "L22",
+  "slot": "lunch",
+  "ingredient": "dijon mustard",
+  "grams": 8,
+  "unit": "g",
+  "food": "Dijon mustard"
+ },
+ {
+  "option": "L22",
+  "slot": "lunch",
+  "ingredient": "lemon juice",
+  "grams": 12,
+  "unit": "g",
+  "food": "Lemon juice"
+ },
+ {
+  "option": "L22",
+  "slot": "lunch",
+  "ingredient": "olive oil",
+  "grams": 7,
+  "unit": "g",
+  "food": "Olive oil"
+ },
+ {
+  "option": "L22",
+  "slot": "lunch",
+  "ingredient": "kale",
+  "grams": 45,
+  "unit": "g",
+  "food": "Kale"
+ },
+ {
+  "option": "L22",
+  "slot": "lunch",
+  "ingredient": "romaine",
+  "grams": 35,
+  "unit": "g",
+  "food": "Romaine"
+ },
+ {
+  "option": "L22",
+  "slot": "lunch",
+  "ingredient": "cherry tomatoes",
+  "grams": 70,
+  "unit": "g",
+  "food": "Tomato"
+ },
+ {
+  "option": "L22",
+  "slot": "lunch",
+  "ingredient": "croutons",
+  "grams": 14,
+  "unit": "g",
+  "food": "Croutons"
+ },
+ {
+  "option": "L22",
+  "slot": "lunch",
+  "ingredient": "chickpeas canned",
+  "grams": 60,
+  "unit": "g",
+  "food": "Chickpeas, canned drained"
+ },
+ {
+  "option": "D27",
+  "slot": "dinner",
+  "ingredient": "chicken breast",
+  "grams": 60,
+  "unit": "g",
+  "food": "Chicken breast, raw"
+ },
+ {
+  "option": "D27",
+  "slot": "dinner",
+  "ingredient": "potato gnocchi",
+  "grams": 125,
+  "unit": "g",
+  "food": "Potato gnocchi"
+ },
+ {
+  "option": "D27",
+  "slot": "dinner",
+  "ingredient": "sourdough",
+  "grams": 30,
+  "unit": "g",
+  "food": "Sourdough"
+ },
+ {
+  "option": "D27",
+  "slot": "dinner",
+  "ingredient": "milk 2%",
+  "grams": 90,
+  "unit": "g",
+  "food": "Milk 2%"
+ },
+ {
+  "option": "D27",
+  "slot": "dinner",
+  "ingredient": "light cream cheese",
+  "grams": 22,
+  "unit": "g",
+  "food": "Light cream cheese"
+ },
+ {
+  "option": "D27",
+  "slot": "dinner",
+  "ingredient": "parmesan",
+  "grams": 8,
+  "unit": "g",
+  "food": "Parmesan"
+ },
+ {
+  "option": "D27",
+  "slot": "dinner",
+  "ingredient": "chicken stock",
+  "grams": 240,
+  "unit": "g",
+  "food": "Chicken stock"
+ },
+ {
+  "option": "D27",
+  "slot": "dinner",
+  "ingredient": "all-purpose flour",
+  "grams": 7,
+  "unit": "g",
+  "food": "All-purpose flour"
+ },
+ {
+  "option": "D27",
+  "slot": "dinner",
+  "ingredient": "carrot",
+  "grams": 50,
+  "unit": "g",
+  "food": "Carrot"
+ },
+ {
+  "option": "D27",
+  "slot": "dinner",
+  "ingredient": "celery",
+  "grams": 30,
+  "unit": "g",
+  "food": "Celery"
+ },
+ {
+  "option": "D27",
+  "slot": "dinner",
+  "ingredient": "onion",
+  "grams": 40,
+  "unit": "g",
+  "food": "Onion"
+ },
+ {
+  "option": "D27",
+  "slot": "dinner",
+  "ingredient": "spinach",
+  "grams": 40,
+  "unit": "g",
+  "food": "Spinach"
+ },
+ {
+  "option": "D27",
+  "slot": "dinner",
+  "ingredient": "olive oil",
+  "grams": 6,
+  "unit": "g",
+  "food": "Olive oil"
+ },
+ {
+  "option": "D27",
+  "slot": "dinner",
+  "ingredient": "butter",
+  "grams": 4,
+  "unit": "g",
+  "food": "Butter"
+ },
+ {
+  "option": "D27",
+  "slot": "dinner",
+  "ingredient": "kale",
+  "grams": 60,
+  "unit": "g",
+  "food": "Kale"
+ },
+ {
+  "option": "D28",
+  "slot": "dinner",
+  "ingredient": "chicken breast",
+  "grams": 95,
+  "unit": "g",
+  "food": "Chicken breast, raw"
+ },
+ {
+  "option": "D28",
+  "slot": "dinner",
+  "ingredient": "rice noodles dry",
+  "grams": 58,
+  "unit": "g",
+  "food": "Rice noodles, dry"
+ },
+ {
+  "option": "D28",
+  "slot": "dinner",
+  "ingredient": "peanut butter",
+  "grams": 20,
+  "unit": "g",
+  "food": "Peanut butter"
+ },
+ {
+  "option": "D28",
+  "slot": "dinner",
+  "ingredient": "soy sauce low sodium",
+  "grams": 22,
+  "unit": "g",
+  "food": "Soy sauce"
+ },
+ {
+  "option": "D28",
+  "slot": "dinner",
+  "ingredient": "honey",
+  "grams": 12,
+  "unit": "g",
+  "food": "Honey"
+ },
+ {
+  "option": "D28",
+  "slot": "dinner",
+  "ingredient": "rice vinegar",
+  "grams": 8,
+  "unit": "g",
+  "food": "Rice vinegar"
+ },
+ {
+  "option": "D28",
+  "slot": "dinner",
+  "ingredient": "sesame oil",
+  "grams": 4,
+  "unit": "g",
+  "food": "Sesame oil"
+ },
+ {
+  "option": "D28",
+  "slot": "dinner",
+  "ingredient": "ginger",
+  "grams": 6,
+  "unit": "g",
+  "food": "Ginger"
+ },
+ {
+  "option": "D28",
+  "slot": "dinner",
+  "ingredient": "garlic",
+  "grams": 8,
+  "unit": "g",
+  "food": "Garlic"
+ },
+ {
+  "option": "D28",
+  "slot": "dinner",
+  "ingredient": "sriracha",
+  "grams": 8,
+  "unit": "g",
+  "food": "Sriracha"
+ },
+ {
+  "option": "D28",
+  "slot": "dinner",
+  "ingredient": "broccoli",
+  "grams": 120,
+  "unit": "g",
+  "food": "Broccoli, raw"
+ },
+ {
+  "option": "D28",
+  "slot": "dinner",
+  "ingredient": "carrot",
+  "grams": 50,
+  "unit": "g",
+  "food": "Carrot"
+ },
+ {
+  "option": "D28",
+  "slot": "dinner",
+  "ingredient": "scallions",
+  "grams": 15,
+  "unit": "g",
+  "food": "Scallions"
+ },
+ {
+  "option": "D28",
+  "slot": "dinner",
+  "ingredient": "peanuts",
+  "grams": 6,
+  "unit": "g",
+  "food": "Peanuts"
+ },
+ {
+  "option": "D29",
+  "slot": "dinner",
+  "ingredient": "chicken breast",
+  "grams": 100,
+  "unit": "g",
+  "food": "Chicken breast, raw"
+ },
+ {
+  "option": "D29",
+  "slot": "dinner",
+  "ingredient": "white rice dry",
+  "grams": 64,
+  "unit": "g",
+  "food": "White rice, dry"
+ },
+ {
+  "option": "D29",
+  "slot": "dinner",
+  "ingredient": "corn frozen",
+  "grams": 90,
+  "unit": "g",
+  "food": "Corn"
+ },
+ {
+  "option": "D29",
+  "slot": "dinner",
+  "ingredient": "cotija",
+  "grams": 16,
+  "unit": "g",
+  "food": "Cotija"
+ },
+ {
+  "option": "D29",
+  "slot": "dinner",
+  "ingredient": "greek yogurt nonfat",
+  "grams": 40,
+  "unit": "g",
+  "food": "Fage 0% Greek yogurt"
+ },
+ {
+  "option": "D29",
+  "slot": "dinner",
+  "ingredient": "mayonnaise",
+  "grams": 8,
+  "unit": "g",
+  "food": "Mayonnaise"
+ },
+ {
+  "option": "D29",
+  "slot": "dinner",
+  "ingredient": "lime juice",
+  "grams": 10,
+  "unit": "g",
+  "food": "Lime juice"
+ },
+ {
+  "option": "D29",
+  "slot": "dinner",
+  "ingredient": "bell pepper",
+  "grams": 60,
+  "unit": "g",
+  "food": "Bell pepper"
+ },
+ {
+  "option": "D29",
+  "slot": "dinner",
+  "ingredient": "onion",
+  "grams": 35,
+  "unit": "g",
+  "food": "Onion"
+ },
+ {
+  "option": "D29",
+  "slot": "dinner",
+  "ingredient": "olive oil",
+  "grams": 9,
+  "unit": "g",
+  "food": "Olive oil"
+ },
+ {
+  "option": "D29",
+  "slot": "dinner",
+  "ingredient": "black beans canned",
+  "grams": 55,
+  "unit": "g",
+  "food": "Black beans, canned drained"
+ },
+ {
+  "option": "L24",
+  "slot": "lunch",
+  "ingredient": "chicken breast",
+  "grams": 110,
+  "unit": "g",
+  "food": "Chicken breast, raw"
+ },
+ {
+  "option": "L24",
+  "slot": "lunch",
+  "ingredient": "white rice dry",
+  "grams": 46,
+  "unit": "g",
+  "food": "White rice, dry"
+ },
+ {
+  "option": "L24",
+  "slot": "lunch",
+  "ingredient": "corn frozen",
+  "grams": 80,
+  "unit": "g",
+  "food": "Corn"
+ },
+ {
+  "option": "L24",
+  "slot": "lunch",
+  "ingredient": "cotija",
+  "grams": 12,
+  "unit": "g",
+  "food": "Cotija"
+ },
+ {
+  "option": "L24",
+  "slot": "lunch",
+  "ingredient": "greek yogurt nonfat",
+  "grams": 45,
+  "unit": "g",
+  "food": "Fage 0% Greek yogurt"
+ },
+ {
+  "option": "L24",
+  "slot": "lunch",
+  "ingredient": "mayonnaise",
+  "grams": 4,
+  "unit": "g",
+  "food": "Mayonnaise"
+ },
+ {
+  "option": "L24",
+  "slot": "lunch",
+  "ingredient": "lime juice",
+  "grams": 10,
+  "unit": "g",
+  "food": "Lime juice"
+ },
+ {
+  "option": "L24",
+  "slot": "lunch",
+  "ingredient": "bell pepper",
+  "grams": 60,
+  "unit": "g",
+  "food": "Bell pepper"
+ },
+ {
+  "option": "L24",
+  "slot": "lunch",
+  "ingredient": "onion",
+  "grams": 30,
+  "unit": "g",
+  "food": "Onion"
+ },
+ {
+  "option": "L24",
+  "slot": "lunch",
+  "ingredient": "olive oil",
+  "grams": 5,
+  "unit": "g",
+  "food": "Olive oil"
+ },
+ {
+  "option": "L24",
+  "slot": "lunch",
+  "ingredient": "black beans canned",
+  "grams": 40,
+  "unit": "g",
+  "food": "Black beans, canned drained"
+ },
+ {
+  "option": "L24",
+  "slot": "lunch",
+  "ingredient": "avocado",
+  "grams": 25,
+  "unit": "g",
+  "food": "Avocado"
+ },
+ {
+  "option": "L25",
+  "slot": "lunch",
+  "ingredient": "chicken breast",
+  "grams": 125,
+  "unit": "g",
+  "food": "Chicken breast, raw"
+ },
+ {
+  "option": "L25",
+  "slot": "lunch",
+  "ingredient": "white rice dry",
+  "grams": 40,
+  "unit": "g",
+  "food": "White rice, dry"
+ },
+ {
+  "option": "L25",
+  "slot": "lunch",
+  "ingredient": "sweet chilli sauce",
+  "grams": 25,
+  "unit": "g",
+  "food": "Sweet chilli sauce"
+ },
+ {
+  "option": "L25",
+  "slot": "lunch",
+  "ingredient": "soy sauce low sodium",
+  "grams": 10,
+  "unit": "g",
+  "food": "Soy sauce"
+ },
+ {
+  "option": "L25",
+  "slot": "lunch",
+  "ingredient": "rice vinegar",
+  "grams": 8,
+  "unit": "g",
+  "food": "Rice vinegar"
+ },
+ {
+  "option": "L25",
+  "slot": "lunch",
+  "ingredient": "sesame oil",
+  "grams": 5,
+  "unit": "g",
+  "food": "Sesame oil"
+ },
+ {
+  "option": "L25",
+  "slot": "lunch",
+  "ingredient": "cabbage slaw mix",
+  "grams": 80,
+  "unit": "g",
+  "food": "Cabbage slaw mix"
+ },
+ {
+  "option": "L25",
+  "slot": "lunch",
+  "ingredient": "carrot",
+  "grams": 50,
+  "unit": "g",
+  "food": "Carrot"
+ },
+ {
+  "option": "L25",
+  "slot": "lunch",
+  "ingredient": "cucumber",
+  "grams": 60,
+  "unit": "g",
+  "food": "Cucumber"
+ },
+ {
+  "option": "L25",
+  "slot": "lunch",
+  "ingredient": "shelled edamame frozen",
+  "grams": 60,
+  "unit": "g",
+  "food": "Edamame, shelled"
+ },
+ {
+  "option": "L25",
+  "slot": "lunch",
+  "ingredient": "peanuts",
+  "grams": 10,
+  "unit": "g",
+  "food": "Peanuts"
+ },
+ {
+  "option": "L25",
+  "slot": "lunch",
+  "ingredient": "scallions",
+  "grams": 12,
+  "unit": "g",
+  "food": "Scallions"
+ },
+ {
+  "option": "L25",
+  "slot": "lunch",
+  "ingredient": "mayonnaise",
+  "grams": 5,
+  "unit": "g",
+  "food": "Mayonnaise"
+ },
+ {
+  "option": "L26",
+  "slot": "lunch",
+  "ingredient": "chicken breast",
+  "grams": 78,
+  "unit": "g",
+  "food": "Chicken breast, raw"
+ },
+ {
+  "option": "L26",
+  "slot": "lunch",
+  "ingredient": "black beans canned",
+  "grams": 90,
+  "unit": "g",
+  "food": "Black beans, canned drained"
+ },
+ {
+  "option": "L26",
+  "slot": "lunch",
+  "ingredient": "corn frozen",
+  "grams": 70,
+  "unit": "g",
+  "food": "Corn"
+ },
+ {
+  "option": "L26",
+  "slot": "lunch",
+  "ingredient": "cherry tomatoes",
+  "grams": 80,
+  "unit": "g",
+  "food": "Tomato"
+ },
+ {
+  "option": "L26",
+  "slot": "lunch",
+  "ingredient": "bell pepper",
+  "grams": 60,
+  "unit": "g",
+  "food": "Bell pepper"
+ },
+ {
+  "option": "L26",
+  "slot": "lunch",
+  "ingredient": "red onion",
+  "grams": 25,
+  "unit": "g",
+  "food": "Onion"
+ },
+ {
+  "option": "L26",
+  "slot": "lunch",
+  "ingredient": "greek yogurt nonfat",
+  "grams": 60,
+  "unit": "g",
+  "food": "Fage 0% Greek yogurt"
+ },
+ {
+  "option": "L26",
+  "slot": "lunch",
+  "ingredient": "mayonnaise",
+  "grams": 8,
+  "unit": "g",
+  "food": "Mayonnaise"
+ },
+ {
+  "option": "L26",
+  "slot": "lunch",
+  "ingredient": "lime juice",
+  "grams": 12,
+  "unit": "g",
+  "food": "Lime juice"
+ },
+ {
+  "option": "L26",
+  "slot": "lunch",
+  "ingredient": "olive oil",
+  "grams": 4,
+  "unit": "g",
+  "food": "Olive oil"
+ },
+ {
+  "option": "L26",
+  "slot": "lunch",
+  "ingredient": "cheddar",
+  "grams": 12,
+  "unit": "g",
+  "food": "Cheddar"
+ },
+ {
+  "option": "L26",
+  "slot": "lunch",
+  "ingredient": "sourdough",
+  "grams": 80,
+  "unit": "g",
+  "food": "Sourdough"
+ },
+ {
+  "option": "L26",
+  "slot": "lunch",
+  "ingredient": "cilantro",
+  "grams": 0,
+  "unit": "g",
+  "food": "Cilantro"
+ },
+ {
+  "option": "L27",
+  "slot": "lunch",
+  "ingredient": "chicken breast",
+  "grams": 100,
+  "unit": "g",
+  "food": "Chicken breast, raw"
+ },
+ {
+  "option": "L27",
+  "slot": "lunch",
+  "ingredient": "enchilada sauce",
+  "grams": 90,
+  "unit": "g",
+  "food": "Enchilada sauce"
+ },
+ {
+  "option": "L27",
+  "slot": "lunch",
+  "ingredient": "black beans canned",
+  "grams": 80,
+  "unit": "g",
+  "food": "Black beans, canned drained"
+ },
+ {
+  "option": "L27",
+  "slot": "lunch",
+  "ingredient": "corn frozen",
+  "grams": 60,
+  "unit": "g",
+  "food": "Corn"
+ },
+ {
+  "option": "L27",
+  "slot": "lunch",
+  "ingredient": "onion",
+  "grams": 30,
+  "unit": "g",
+  "food": "Onion"
+ },
+ {
+  "option": "L27",
+  "slot": "lunch",
+  "ingredient": "white rice dry",
+  "grams": 52,
+  "unit": "g",
+  "food": "White rice, dry"
+ },
+ {
+  "option": "L27",
+  "slot": "lunch",
+  "ingredient": "cheddar",
+  "grams": 20,
+  "unit": "g",
+  "food": "Cheddar"
+ },
+ {
+  "option": "L27",
+  "slot": "lunch",
+  "ingredient": "avocado",
+  "grams": 45,
+  "unit": "g",
+  "food": "Avocado"
+ },
+ {
+  "option": "L27",
+  "slot": "lunch",
+  "ingredient": "greek yogurt nonfat",
+  "grams": 30,
+  "unit": "g",
+  "food": "Fage 0% Greek yogurt"
+ },
+ {
+  "option": "L27",
+  "slot": "lunch",
+  "ingredient": "pico de gallo",
+  "grams": 40,
+  "unit": "g",
+  "food": "Salsa"
+ },
+ {
+  "option": "D30",
+  "slot": "dinner",
+  "ingredient": "shrimp",
+  "grams": 150,
+  "unit": "g",
+  "food": "Shrimp, raw"
+ },
+ {
+  "option": "D30",
+  "slot": "dinner",
+  "ingredient": "corn tortillas",
+  "grams": 104,
+  "unit": "g",
+  "food": "Tortilla, corn"
+ },
+ {
+  "option": "D30",
+  "slot": "dinner",
+  "ingredient": "black beans canned",
+  "grams": 70,
+  "unit": "g",
+  "food": "Black beans, canned drained"
+ },
+ {
+  "option": "D30",
+  "slot": "dinner",
+  "ingredient": "bell pepper",
+  "grams": 80,
+  "unit": "g",
+  "food": "Bell pepper"
+ },
+ {
+  "option": "D30",
+  "slot": "dinner",
+  "ingredient": "red onion",
+  "grams": 40,
+  "unit": "g",
+  "food": "Onion"
+ },
+ {
+  "option": "D30",
+  "slot": "dinner",
+  "ingredient": "avocado",
+  "grams": 85,
+  "unit": "g",
+  "food": "Avocado"
+ },
+ {
+  "option": "D30",
+  "slot": "dinner",
+  "ingredient": "olive oil",
+  "grams": 6,
+  "unit": "g",
+  "food": "Olive oil"
+ },
+ {
+  "option": "D30",
+  "slot": "dinner",
+  "ingredient": "hot honey",
+  "grams": 12,
+  "unit": "g",
+  "food": "Hot honey"
+ },
+ {
+  "option": "D30",
+  "slot": "dinner",
+  "ingredient": "lime juice",
+  "grams": 12,
+  "unit": "g",
+  "food": "Lime juice"
+ },
+ {
+  "option": "D30",
+  "slot": "dinner",
+  "ingredient": "cherry tomatoes",
+  "grams": 60,
+  "unit": "g",
+  "food": "Tomato"
+ },
+ {
+  "option": "D30",
+  "slot": "dinner",
+  "ingredient": "cilantro",
+  "grams": 0,
+  "unit": "g",
+  "food": "Cilantro"
+ },
+ {
+  "option": "D31",
+  "slot": "dinner",
+  "ingredient": "potato",
+  "grams": 400,
+  "unit": "g",
+  "food": "Potato, raw"
+ },
+ {
+  "option": "D31",
+  "slot": "dinner",
+  "ingredient": "broccoli",
+  "grams": 200,
+  "unit": "g",
+  "food": "Broccoli, raw"
+ },
+ {
+  "option": "D31",
+  "slot": "dinner",
+  "ingredient": "chicken breast",
+  "grams": 60,
+  "unit": "g",
+  "food": "Chicken breast, raw"
+ },
+ {
+  "option": "D31",
+  "slot": "dinner",
+  "ingredient": "cheddar",
+  "grams": 25,
+  "unit": "g",
+  "food": "Cheddar"
+ },
+ {
+  "option": "D31",
+  "slot": "dinner",
+  "ingredient": "greek yogurt nonfat",
+  "grams": 50,
+  "unit": "g",
+  "food": "Fage 0% Greek yogurt"
+ },
+ {
+  "option": "D31",
+  "slot": "dinner",
+  "ingredient": "milk 2%",
+  "grams": 40,
+  "unit": "g",
+  "food": "Milk 2%"
+ },
+ {
+  "option": "D31",
+  "slot": "dinner",
+  "ingredient": "light cream cheese",
+  "grams": 20,
+  "unit": "g",
+  "food": "Light cream cheese"
+ },
+ {
+  "option": "D31",
+  "slot": "dinner",
+  "ingredient": "olive oil",
+  "grams": 6,
+  "unit": "g",
+  "food": "Olive oil"
+ },
+ {
+  "option": "D31",
+  "slot": "dinner",
+  "ingredient": "butter",
+  "grams": 5,
+  "unit": "g",
+  "food": "Butter"
+ },
+ {
+  "option": "D31",
+  "slot": "dinner",
+  "ingredient": "scallions",
+  "grams": 12,
+  "unit": "g",
+  "food": "Scallions"
+ },
+ {
+  "option": "D31",
+  "slot": "dinner",
+  "ingredient": "garlic",
+  "grams": 5,
+  "unit": "g",
+  "food": "Garlic"
+ }
+]

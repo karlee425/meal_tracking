@@ -1,0 +1,2057 @@
+[
+ {
+  "n": "Fage 0% Greek yogurt",
+  "p": 10.3,
+  "f": 0,
+  "c": 3.6,
+  "cat": "dairy",
+  "t": [
+   "sweet"
+  ],
+  "swap": "Fage 5% Greek yogurt"
+ },
+ {
+  "n": "Fage 2% Greek yogurt",
+  "p": 9.8,
+  "f": 2.7,
+  "c": 3.7,
+  "cat": "dairy",
+  "t": [
+   "sweet"
+  ]
+ },
+ {
+  "n": "Fage 5% Greek yogurt",
+  "p": 9,
+  "f": 5,
+  "c": 3.8,
+  "cat": "dairy",
+  "t": [
+   "sweet"
+  ]
+ },
+ {
+  "n": "Cottage cheese 2%",
+  "p": 11,
+  "f": 2.3,
+  "c": 4.3,
+  "cat": "dairy",
+  "t": [
+   "sweet",
+   "savory"
+  ],
+  "swap": "Cottage cheese 4%"
+ },
+ {
+  "n": "Cottage cheese 4%",
+  "p": 11.5,
+  "f": 4.3,
+  "c": 3.4,
+  "cat": "dairy",
+  "t": [
+   "sweet",
+   "savory"
+  ]
+ },
+ {
+  "n": "Skim milk",
+  "p": 3.4,
+  "f": 0.2,
+  "c": 5,
+  "cat": "dairy",
+  "t": [
+   "sweet"
+  ],
+  "swap": "Whole milk"
+ },
+ {
+  "n": "Whole milk",
+  "p": 3.2,
+  "f": 3.3,
+  "c": 4.8,
+  "cat": "dairy",
+  "t": [
+   "sweet"
+  ]
+ },
+ {
+  "n": "Chocolate milk",
+  "p": 3.2,
+  "f": 3,
+  "c": 10.4,
+  "cat": "dairy",
+  "t": [
+   "sweet"
+  ],
+  "carb": 1
+ },
+ {
+  "n": "Kefir, plain",
+  "p": 3.3,
+  "f": 1,
+  "c": 4.7,
+  "cat": "dairy",
+  "t": [
+   "sweet"
+  ]
+ },
+ {
+  "n": "Ricotta, part-skim",
+  "p": 11.4,
+  "f": 8,
+  "c": 5.1,
+  "cat": "dairy",
+  "t": [
+   "sweet",
+   "med"
+  ]
+ },
+ {
+  "n": "Rolled oats, dry",
+  "p": 13.2,
+  "f": 6.5,
+  "c": 67.7,
+  "cat": "grain",
+  "t": [
+   "sweet"
+  ],
+  "y": 2.4,
+  "carb": 1
+ },
+ {
+  "n": "Steel-cut oats, dry",
+  "p": 13.5,
+  "f": 6.5,
+  "c": 68,
+  "cat": "grain",
+  "t": [
+   "sweet"
+  ],
+  "y": 3,
+  "carb": 1
+ },
+ {
+  "n": "Granola",
+  "p": 9.2,
+  "f": 16.7,
+  "c": 65.1,
+  "cat": "cereal",
+  "t": [
+   "sweet"
+  ],
+  "carb": 1,
+  "brandy": 1
+ },
+ {
+  "n": "Three Wishes cereal",
+  "p": 23,
+  "f": 13,
+  "c": 54,
+  "cat": "cereal",
+  "t": [
+   "sweet"
+  ],
+  "carb": 1
+ },
+ {
+  "n": "One Degree brown rice crisps",
+  "p": 7,
+  "f": 2.5,
+  "c": 89,
+  "cat": "cereal",
+  "t": [
+   "sweet"
+  ],
+  "carb": 1
+ },
+ {
+  "n": "Rice cakes",
+  "p": 7.9,
+  "f": 2.8,
+  "c": 81.5,
+  "cat": "cracker",
+  "t": [
+   "sweet",
+   "savory"
+  ],
+  "carb": 1
+ },
+ {
+  "n": "Honey",
+  "p": 0.3,
+  "f": 0,
+  "c": 82.4,
+  "cat": "syrup",
+  "t": [
+   "sweet"
+  ],
+  "carb": 1
+ },
+ {
+  "n": "Hot honey",
+  "p": 0.3,
+  "f": 0,
+  "c": 78,
+  "cat": "syrup",
+  "t": [
+   "sweet",
+   "amer"
+  ],
+  "carb": 1
+ },
+ {
+  "n": "Maple syrup",
+  "p": 0,
+  "f": 0,
+  "c": 67,
+  "cat": "syrup",
+  "t": [
+   "sweet"
+  ],
+  "carb": 1
+ },
+ {
+  "n": "Chia seeds",
+  "p": 16.5,
+  "f": 30.7,
+  "c": 42.1,
+  "cat": "nut",
+  "t": [
+   "sweet"
+  ],
+  "fat": 1
+ },
+ {
+  "n": "Banana",
+  "p": 1.1,
+  "f": 0.3,
+  "c": 22.8,
+  "cat": "fruit",
+  "t": [
+   "sweet"
+  ],
+  "carb": 1,
+  "step": 60
+ },
+ {
+  "n": "Blueberries, frozen",
+  "p": 0.7,
+  "f": 0.3,
+  "c": 14.5,
+  "cat": "fruit",
+  "t": [
+   "sweet"
+  ],
+  "carb": 1
+ },
+ {
+  "n": "Strawberries",
+  "p": 0.7,
+  "f": 0.3,
+  "c": 7.7,
+  "cat": "fruit",
+  "t": [
+   "sweet"
+  ]
+ },
+ {
+  "n": "Raspberries",
+  "p": 1.2,
+  "f": 0.7,
+  "c": 11.9,
+  "cat": "fruit",
+  "t": [
+   "sweet"
+  ]
+ },
+ {
+  "n": "Grapes",
+  "p": 0.7,
+  "f": 0.2,
+  "c": 18.1,
+  "cat": "fruit",
+  "t": [
+   "sweet"
+  ],
+  "carb": 1
+ },
+ {
+  "n": "Apple",
+  "p": 0.3,
+  "f": 0.2,
+  "c": 13.8,
+  "cat": "fruit",
+  "t": [
+   "sweet"
+  ],
+  "carb": 1
+ },
+ {
+  "n": "Mango",
+  "p": 0.8,
+  "f": 0.4,
+  "c": 15,
+  "cat": "fruit",
+  "t": [
+   "sweet"
+  ],
+  "carb": 1
+ },
+ {
+  "n": "Pineapple",
+  "p": 0.5,
+  "f": 0.1,
+  "c": 13.1,
+  "cat": "fruit",
+  "t": [
+   "sweet"
+  ],
+  "carb": 1
+ },
+ {
+  "n": "Orange",
+  "p": 0.9,
+  "f": 0.1,
+  "c": 11.8,
+  "cat": "fruit",
+  "t": [
+   "sweet"
+  ]
+ },
+ {
+  "n": "Applesauce, unsweetened",
+  "p": 0.2,
+  "f": 0.1,
+  "c": 11.3,
+  "cat": "fruit",
+  "t": [
+   "sweet"
+  ],
+  "carb": 1
+ },
+ {
+  "n": "Dates, Medjool",
+  "p": 1.8,
+  "f": 0.2,
+  "c": 75,
+  "cat": "driedfruit",
+  "t": [
+   "sweet"
+  ],
+  "carb": 1
+ },
+ {
+  "n": "Raisins",
+  "p": 3.1,
+  "f": 0.5,
+  "c": 79.2,
+  "cat": "driedfruit",
+  "t": [
+   "sweet"
+  ],
+  "carb": 1
+ },
+ {
+  "n": "White rice, dry",
+  "p": 6.5,
+  "f": 0.6,
+  "c": 79,
+  "cat": "grain",
+  "t": [
+   "savory"
+  ],
+  "y": 2.9,
+  "yk": "rice",
+  "carb": 1
+ },
+ {
+  "n": "Jasmine rice, dry",
+  "p": 6.7,
+  "f": 0.7,
+  "c": 79.3,
+  "cat": "grain",
+  "t": [
+   "savory",
+   "asian"
+  ],
+  "y": 2.9,
+  "yk": "rice",
+  "carb": 1
+ },
+ {
+  "n": "Brown rice, dry",
+  "p": 7.5,
+  "f": 2.7,
+  "c": 76,
+  "cat": "grain",
+  "t": [
+   "savory"
+  ],
+  "y": 2.7,
+  "carb": 1
+ },
+ {
+  "n": "Quinoa, dry",
+  "p": 14.1,
+  "f": 6.1,
+  "c": 64.2,
+  "cat": "grain",
+  "t": [
+   "savory",
+   "med"
+  ],
+  "y": 2.9,
+  "carb": 1
+ },
+ {
+  "n": "Couscous, dry",
+  "p": 12.8,
+  "f": 0.6,
+  "c": 77.4,
+  "cat": "grain",
+  "t": [
+   "savory",
+   "med"
+  ],
+  "y": 2.8,
+  "carb": 1
+ },
+ {
+  "n": "Farro, dry",
+  "p": 13.5,
+  "f": 2,
+  "c": 72,
+  "cat": "grain",
+  "t": [
+   "savory",
+   "med"
+  ],
+  "y": 2.7,
+  "carb": 1
+ },
+ {
+  "n": "Orzo, dry",
+  "p": 12.5,
+  "f": 1.5,
+  "c": 74,
+  "cat": "grain",
+  "t": [
+   "savory",
+   "med"
+  ],
+  "y": 2.3,
+  "carb": 1
+ },
+ {
+  "n": "Pasta, dry",
+  "p": 13,
+  "f": 1.5,
+  "c": 74.7,
+  "cat": "grain",
+  "t": [
+   "savory"
+  ],
+  "y": 2.3,
+  "carb": 1
+ },
+ {
+  "n": "Rice noodles, dry",
+  "p": 5.9,
+  "f": 0.6,
+  "c": 80.2,
+  "cat": "grain",
+  "t": [
+   "savory",
+   "asian"
+  ],
+  "y": 2.6,
+  "carb": 1
+ },
+ {
+  "n": "Sourdough",
+  "p": 9,
+  "f": 1.8,
+  "c": 50,
+  "cat": "bread",
+  "t": [
+   "sweet",
+   "savory"
+  ],
+  "carb": 1
+ },
+ {
+  "n": "Whole wheat bread",
+  "p": 12.5,
+  "f": 3.5,
+  "c": 43,
+  "cat": "bread",
+  "t": [
+   "sweet",
+   "savory"
+  ],
+  "carb": 1
+ },
+ {
+  "n": "Bagel, plain",
+  "p": 10.5,
+  "f": 1.7,
+  "c": 53,
+  "cat": "bread",
+  "t": [
+   "sweet",
+   "savory"
+  ],
+  "carb": 1
+ },
+ {
+  "n": "English muffin",
+  "p": 9,
+  "f": 1.8,
+  "c": 46,
+  "cat": "bread",
+  "t": [
+   "sweet",
+   "savory"
+  ],
+  "carb": 1
+ },
+ {
+  "n": "Tortilla, large flour",
+  "p": 8,
+  "f": 8,
+  "c": 50,
+  "cat": "tortilla",
+  "t": [
+   "savory",
+   "mex"
+  ],
+  "carb": 1
+ },
+ {
+  "n": "Tortilla, corn",
+  "p": 5.7,
+  "f": 1.8,
+  "c": 44.6,
+  "cat": "tortilla",
+  "t": [
+   "savory",
+   "mex"
+  ],
+  "carb": 1,
+  "step": 25
+ },
+ {
+  "n": "Pita, white",
+  "p": 9.1,
+  "f": 1.2,
+  "c": 55.7,
+  "cat": "bread",
+  "t": [
+   "savory",
+   "med"
+  ],
+  "carb": 1
+ },
+ {
+  "n": "Naan",
+  "p": 8.7,
+  "f": 5.7,
+  "c": 48,
+  "cat": "bread",
+  "t": [
+   "savory",
+   "med"
+  ],
+  "carb": 1
+ },
+ {
+  "n": "Tortilla chips",
+  "p": 6.7,
+  "f": 24,
+  "c": 64,
+  "cat": "cracker",
+  "t": [
+   "savory",
+   "mex"
+  ],
+  "carb": 1
+ },
+ {
+  "n": "Pretzels",
+  "p": 10,
+  "f": 3,
+  "c": 78,
+  "cat": "cracker",
+  "t": [
+   "savory",
+   "sweet"
+  ],
+  "carb": 1
+ },
+ {
+  "n": "Popcorn, popped",
+  "p": 12,
+  "f": 4.5,
+  "c": 74,
+  "cat": "cracker",
+  "t": [
+   "savory",
+   "sweet"
+  ],
+  "carb": 1
+ },
+ {
+  "n": "Potato, raw",
+  "p": 2,
+  "f": 0.1,
+  "c": 17.5,
+  "cat": "starchveg",
+  "t": [
+   "savory"
+  ],
+  "y": 0.78,
+  "yk": "potato",
+  "carb": 1
+ },
+ {
+  "n": "Sweet potato, raw",
+  "p": 1.6,
+  "f": 0.1,
+  "c": 20.1,
+  "cat": "starchveg",
+  "t": [
+   "savory"
+  ],
+  "y": 0.78,
+  "carb": 1
+ },
+ {
+  "n": "Corn",
+  "p": 3.3,
+  "f": 1.2,
+  "c": 19,
+  "cat": "veg",
+  "t": [
+   "savory",
+   "mex"
+  ],
+  "carb": 1
+ },
+ {
+  "n": "Peas, frozen",
+  "p": 5.2,
+  "f": 0.4,
+  "c": 14.5,
+  "cat": "veg",
+  "t": [
+   "savory"
+  ]
+ },
+ {
+  "n": "Chicken breast, raw",
+  "p": 22.5,
+  "f": 2.6,
+  "c": 0,
+  "cat": "meat",
+  "t": [
+   "savory"
+  ],
+  "y": 0.72,
+  "yk": "chicken"
+ },
+ {
+  "n": "Chicken thigh, raw",
+  "p": 18.6,
+  "f": 8,
+  "c": 0,
+  "cat": "meat",
+  "t": [
+   "savory"
+  ],
+  "y": 0.75
+ },
+ {
+  "n": "Rotisserie chicken meat",
+  "p": 25,
+  "f": 8,
+  "c": 0,
+  "cat": "meat",
+  "t": [
+   "savory"
+  ]
+ },
+ {
+  "n": "Ground turkey 93/7",
+  "p": 19.7,
+  "f": 8,
+  "c": 0,
+  "cat": "meat",
+  "t": [
+   "savory"
+  ],
+  "y": 0.69
+ },
+ {
+  "n": "Ground beef 93/7",
+  "p": 21.4,
+  "f": 7,
+  "c": 0,
+  "cat": "meat",
+  "t": [
+   "savory"
+  ],
+  "y": 0.77
+ },
+ {
+  "n": "Sirloin steak, raw",
+  "p": 21,
+  "f": 6,
+  "c": 0,
+  "cat": "meat",
+  "t": [
+   "savory"
+  ],
+  "y": 0.75
+ },
+ {
+  "n": "Pork tenderloin, raw",
+  "p": 20.9,
+  "f": 3.4,
+  "c": 0,
+  "cat": "meat",
+  "t": [
+   "savory"
+  ],
+  "y": 0.8
+ },
+ {
+  "n": "Salmon, raw",
+  "p": 20.4,
+  "f": 13.4,
+  "c": 0,
+  "cat": "meat",
+  "t": [
+   "savory"
+  ],
+  "y": 0.79,
+  "yk": "salmon"
+ },
+ {
+  "n": "Shrimp, raw",
+  "p": 20.1,
+  "f": 0.5,
+  "c": 0,
+  "cat": "meat",
+  "t": [
+   "savory",
+   "asian"
+  ],
+  "y": 0.72
+ },
+ {
+  "n": "Tuna steak, raw",
+  "p": 24.4,
+  "f": 0.5,
+  "c": 0,
+  "cat": "meat",
+  "t": [
+   "savory"
+  ]
+ },
+ {
+  "n": "Tuna, canned in water",
+  "p": 25.5,
+  "f": 0.8,
+  "c": 0,
+  "cat": "meat",
+  "t": [
+   "savory"
+  ]
+ },
+ {
+  "n": "Deli turkey, low sodium",
+  "p": 17,
+  "f": 2,
+  "c": 2,
+  "cat": "meat",
+  "t": [
+   "savory"
+  ]
+ },
+ {
+  "n": "Beef jerky",
+  "p": 33,
+  "f": 7,
+  "c": 11,
+  "cat": "cracker",
+  "t": [
+   "savory"
+  ]
+ },
+ {
+  "n": "Bacon, raw",
+  "p": 12.6,
+  "f": 45,
+  "c": 0.7,
+  "cat": "meat",
+  "t": [
+   "savory"
+  ],
+  "y": 0.42,
+  "fat": 1
+ },
+ {
+  "n": "Turkey bacon",
+  "p": 20,
+  "f": 22,
+  "c": 2.5,
+  "cat": "meat",
+  "t": [
+   "savory"
+  ],
+  "fat": 1
+ },
+ {
+  "n": "Egg, whole",
+  "p": 12.6,
+  "f": 9.5,
+  "c": 0.7,
+  "cat": "egg",
+  "t": [
+   "sweet",
+   "savory"
+  ]
+ },
+ {
+  "n": "Egg white",
+  "p": 10.9,
+  "f": 0.2,
+  "c": 0.7,
+  "cat": "egg",
+  "t": [
+   "savory"
+  ]
+ },
+ {
+  "n": "Tofu, extra firm",
+  "p": 17.3,
+  "f": 10,
+  "c": 2.7,
+  "cat": "meat",
+  "t": [
+   "savory",
+   "asian"
+  ]
+ },
+ {
+  "n": "Edamame, shelled",
+  "p": 11.9,
+  "f": 5.2,
+  "c": 8.9,
+  "cat": "legume",
+  "t": [
+   "savory",
+   "asian"
+  ]
+ },
+ {
+  "n": "Black beans, canned drained",
+  "p": 6,
+  "f": 0.3,
+  "c": 16.6,
+  "cat": "legume",
+  "t": [
+   "savory",
+   "mex"
+  ],
+  "carb": 1
+ },
+ {
+  "n": "Pinto beans, canned drained",
+  "p": 5.9,
+  "f": 0.5,
+  "c": 16.4,
+  "cat": "legume",
+  "t": [
+   "savory",
+   "mex"
+  ],
+  "carb": 1
+ },
+ {
+  "n": "Refried beans",
+  "p": 5,
+  "f": 2,
+  "c": 13,
+  "cat": "legume",
+  "t": [
+   "savory",
+   "mex"
+  ],
+  "carb": 1
+ },
+ {
+  "n": "Chickpeas, canned drained",
+  "p": 7,
+  "f": 2.6,
+  "c": 17.8,
+  "cat": "legume",
+  "t": [
+   "savory",
+   "med"
+  ],
+  "carb": 1
+ },
+ {
+  "n": "Peanut butter",
+  "p": 25.1,
+  "f": 50.8,
+  "c": 20,
+  "cat": "nutbutter",
+  "t": [
+   "sweet"
+  ],
+  "fat": 1
+ },
+ {
+  "n": "Almond butter",
+  "p": 21,
+  "f": 55.5,
+  "c": 18.8,
+  "cat": "nutbutter",
+  "t": [
+   "sweet"
+  ],
+  "fat": 1
+ },
+ {
+  "n": "Almonds",
+  "p": 21.2,
+  "f": 49.9,
+  "c": 21.6,
+  "cat": "nut",
+  "t": [
+   "sweet",
+   "savory"
+  ],
+  "fat": 1
+ },
+ {
+  "n": "Walnuts",
+  "p": 15.2,
+  "f": 65.2,
+  "c": 13.7,
+  "cat": "nut",
+  "t": [
+   "sweet"
+  ],
+  "fat": 1
+ },
+ {
+  "n": "Cashews",
+  "p": 18.2,
+  "f": 43.9,
+  "c": 30.2,
+  "cat": "nut",
+  "t": [
+   "sweet"
+  ],
+  "fat": 1
+ },
+ {
+  "n": "Avocado",
+  "p": 2,
+  "f": 14.7,
+  "c": 8.5,
+  "cat": "veg",
+  "t": [
+   "savory",
+   "mex"
+  ],
+  "fat": 1
+ },
+ {
+  "n": "Olive oil",
+  "p": 0,
+  "f": 100,
+  "c": 0,
+  "cat": "oil",
+  "t": [
+   "savory",
+   "med"
+  ],
+  "fat": 1
+ },
+ {
+  "n": "Butter",
+  "p": 0.9,
+  "f": 81.1,
+  "c": 0.1,
+  "cat": "oil",
+  "t": [
+   "sweet",
+   "savory"
+  ],
+  "fat": 1
+ },
+ {
+  "n": "Feta",
+  "p": 14.2,
+  "f": 21.3,
+  "c": 4.1,
+  "cat": "cheese",
+  "t": [
+   "savory",
+   "med"
+  ],
+  "fat": 1
+ },
+ {
+  "n": "Cheddar",
+  "p": 23,
+  "f": 33.1,
+  "c": 3.1,
+  "cat": "cheese",
+  "t": [
+   "savory"
+  ],
+  "fat": 1
+ },
+ {
+  "n": "Mozzarella, part-skim",
+  "p": 24.3,
+  "f": 15.9,
+  "c": 2.8,
+  "cat": "cheese",
+  "t": [
+   "savory",
+   "med"
+  ]
+ },
+ {
+  "n": "Parmesan",
+  "p": 35.8,
+  "f": 25.8,
+  "c": 3.2,
+  "cat": "cheese",
+  "t": [
+   "savory",
+   "med"
+  ],
+  "fat": 1
+ },
+ {
+  "n": "Cream cheese",
+  "p": 6.2,
+  "f": 34.2,
+  "c": 5.5,
+  "cat": "cheese",
+  "t": [
+   "sweet",
+   "savory"
+  ],
+  "fat": 1
+ },
+ {
+  "n": "Sour cream",
+  "p": 2.4,
+  "f": 19.4,
+  "c": 4.6,
+  "cat": "sauce",
+  "t": [
+   "savory",
+   "mex"
+  ],
+  "fat": 1
+ },
+ {
+  "n": "Guacamole",
+  "p": 2,
+  "f": 14,
+  "c": 8.5,
+  "cat": "sauce",
+  "t": [
+   "savory",
+   "mex"
+  ],
+  "fat": 1
+ },
+ {
+  "n": "Salsa",
+  "p": 1.5,
+  "f": 0.2,
+  "c": 7,
+  "cat": "sauce",
+  "t": [
+   "savory",
+   "mex"
+  ]
+ },
+ {
+  "n": "Hummus",
+  "p": 7.9,
+  "f": 17.1,
+  "c": 14.3,
+  "cat": "sauce",
+  "t": [
+   "savory",
+   "med"
+  ],
+  "fat": 1
+ },
+ {
+  "n": "Marinara sauce",
+  "p": 1.6,
+  "f": 2,
+  "c": 8.5,
+  "cat": "sauce",
+  "t": [
+   "savory",
+   "med"
+  ]
+ },
+ {
+  "n": "Soy sauce",
+  "p": 8.1,
+  "f": 0,
+  "c": 4.9,
+  "cat": "sauce",
+  "t": [
+   "savory",
+   "asian"
+  ]
+ },
+ {
+  "n": "Broccoli, raw",
+  "p": 2.8,
+  "f": 0.4,
+  "c": 6.6,
+  "cat": "veg",
+  "t": [
+   "savory"
+  ],
+  "y": 0.9
+ },
+ {
+  "n": "Bell pepper",
+  "p": 1,
+  "f": 0.3,
+  "c": 6,
+  "cat": "veg",
+  "t": [
+   "savory",
+   "mex"
+  ]
+ },
+ {
+  "n": "Zucchini",
+  "p": 1.2,
+  "f": 0.3,
+  "c": 3.1,
+  "cat": "veg",
+  "t": [
+   "savory",
+   "med"
+  ]
+ },
+ {
+  "n": "Spinach",
+  "p": 2.9,
+  "f": 0.4,
+  "c": 3.6,
+  "cat": "veg",
+  "t": [
+   "savory"
+  ]
+ },
+ {
+  "n": "Onion",
+  "p": 1.1,
+  "f": 0.1,
+  "c": 9.3,
+  "cat": "veg",
+  "t": [
+   "savory"
+  ]
+ },
+ {
+  "n": "Mushrooms",
+  "p": 3.1,
+  "f": 0.3,
+  "c": 3.3,
+  "cat": "veg",
+  "t": [
+   "savory"
+  ]
+ },
+ {
+  "n": "Asparagus",
+  "p": 2.2,
+  "f": 0.1,
+  "c": 3.9,
+  "cat": "veg",
+  "t": [
+   "savory"
+  ]
+ },
+ {
+  "n": "Green beans",
+  "p": 1.8,
+  "f": 0.2,
+  "c": 7,
+  "cat": "veg",
+  "t": [
+   "savory"
+  ]
+ },
+ {
+  "n": "Tomato",
+  "p": 0.9,
+  "f": 0.2,
+  "c": 3.9,
+  "cat": "veg",
+  "t": [
+   "savory",
+   "med"
+  ]
+ },
+ {
+  "n": "Cucumber",
+  "p": 0.7,
+  "f": 0.1,
+  "c": 3.6,
+  "cat": "veg",
+  "t": [
+   "savory",
+   "med"
+  ]
+ },
+ {
+  "n": "Romaine",
+  "p": 1.2,
+  "f": 0.3,
+  "c": 3.3,
+  "cat": "veg",
+  "t": [
+   "savory"
+  ]
+ },
+ {
+  "n": "Cabbage slaw mix",
+  "p": 1.3,
+  "f": 0.1,
+  "c": 5.8,
+  "cat": "veg",
+  "t": [
+   "savory",
+   "mex"
+  ]
+ },
+ {
+  "n": "Panko/breadcrumbs",
+  "p": 12,
+  "f": 2,
+  "c": 72,
+  "cat": "cracker",
+  "t": [
+   "savory"
+  ],
+  "carb": 1
+ },
+ {
+  "n": "Milk 2%",
+  "p": 3.3,
+  "f": 2,
+  "c": 4.8,
+  "cat": "dairy",
+  "t": [
+   "sweet"
+  ]
+ },
+ {
+  "n": "Whole-grain crackers",
+  "p": 10.4,
+  "f": 11.1,
+  "c": 66,
+  "cat": "cracker",
+  "t": [
+   "savory",
+   "sweet"
+  ],
+  "carb": 1
+ },
+ {
+  "n": "Whole-wheat pita",
+  "p": 9.8,
+  "f": 1.7,
+  "c": 55,
+  "cat": "bread",
+  "t": [
+   "savory",
+   "med"
+  ],
+  "carb": 1
+ },
+ {
+  "n": "Kalamata olives",
+  "p": 1,
+  "f": 15.3,
+  "c": 6.3,
+  "cat": "sauce",
+  "t": [
+   "savory",
+   "med"
+  ],
+  "fat": 1
+ },
+ {
+  "n": "Mayonnaise",
+  "p": 1,
+  "f": 75,
+  "c": 0.6,
+  "cat": "oil",
+  "t": [
+   "savory"
+  ],
+  "fat": 1
+ },
+ {
+  "n": "Dijon mustard",
+  "p": 4.4,
+  "f": 3.6,
+  "c": 5.3,
+  "cat": "sauce",
+  "t": [
+   "savory"
+  ]
+ },
+ {
+  "n": "Lemon juice",
+  "p": 0.4,
+  "f": 0.2,
+  "c": 6.9,
+  "cat": "sauce",
+  "t": [
+   "savory",
+   "med"
+  ]
+ },
+ {
+  "n": "Lime juice",
+  "p": 0.4,
+  "f": 0.2,
+  "c": 8.4,
+  "cat": "sauce",
+  "t": [
+   "savory",
+   "mex"
+  ]
+ },
+ {
+  "n": "Garlic",
+  "p": 6.4,
+  "f": 0.5,
+  "c": 33.1,
+  "cat": "veg",
+  "t": [
+   "savory"
+  ]
+ },
+ {
+  "n": "Ginger",
+  "p": 1.8,
+  "f": 0.8,
+  "c": 17.8,
+  "cat": "veg",
+  "t": [
+   "savory",
+   "asian"
+  ]
+ },
+ {
+  "n": "Basil",
+  "p": 3.2,
+  "f": 0.6,
+  "c": 2.7,
+  "cat": "veg",
+  "t": [
+   "savory",
+   "med"
+  ]
+ },
+ {
+  "n": "Scallions",
+  "p": 1.8,
+  "f": 0.2,
+  "c": 7.3,
+  "cat": "veg",
+  "t": [
+   "savory",
+   "asian"
+  ]
+ },
+ {
+  "n": "Celery",
+  "p": 0.7,
+  "f": 0.2,
+  "c": 3,
+  "cat": "veg",
+  "t": [
+   "savory"
+  ]
+ },
+ {
+  "n": "Carrot",
+  "p": 0.9,
+  "f": 0.2,
+  "c": 9.6,
+  "cat": "veg",
+  "t": [
+   "savory"
+  ]
+ },
+ {
+  "n": "Baby carrots",
+  "p": 0.6,
+  "f": 0.1,
+  "c": 8.2,
+  "cat": "veg",
+  "t": [
+   "savory"
+  ]
+ },
+ {
+  "n": "Everything bagel seasoning",
+  "p": 15,
+  "f": 25,
+  "c": 25,
+  "cat": "nut",
+  "t": [
+   "savory"
+  ]
+ },
+ {
+  "n": "White wine",
+  "p": 0.1,
+  "f": 0,
+  "c": 2.6,
+  "cat": "sauce",
+  "t": [
+   "savory"
+  ]
+ },
+ {
+  "n": "Chicken stock",
+  "p": 1,
+  "f": 0.4,
+  "c": 0.9,
+  "cat": "sauce",
+  "t": [
+   "savory"
+  ]
+ },
+ {
+  "n": "Crushed tomatoes",
+  "p": 1.6,
+  "f": 0.3,
+  "c": 7.3,
+  "cat": "sauce",
+  "t": [
+   "savory",
+   "med"
+  ]
+ },
+ {
+  "n": "Tomato paste",
+  "p": 4.3,
+  "f": 0.5,
+  "c": 18.9,
+  "cat": "sauce",
+  "t": [
+   "savory",
+   "med"
+  ]
+ },
+ {
+  "n": "Pesto",
+  "p": 4,
+  "f": 44,
+  "c": 6,
+  "cat": "sauce",
+  "t": [
+   "savory",
+   "med"
+  ],
+  "fat": 1
+ },
+ {
+  "n": "Tzatziki",
+  "p": 3,
+  "f": 6,
+  "c": 4,
+  "cat": "sauce",
+  "t": [
+   "savory",
+   "med"
+  ]
+ },
+ {
+  "n": "BBQ sauce",
+  "p": 0.8,
+  "f": 0.4,
+  "c": 40.8,
+  "cat": "sauce",
+  "t": [
+   "savory",
+   "amer"
+  ],
+  "carb": 1
+ },
+ {
+  "n": "Ketchup",
+  "p": 1,
+  "f": 0.1,
+  "c": 25.8,
+  "cat": "sauce",
+  "t": [
+   "savory",
+   "amer"
+  ]
+ },
+ {
+  "n": "Buffalo sauce",
+  "p": 0.5,
+  "f": 1.5,
+  "c": 2,
+  "cat": "sauce",
+  "t": [
+   "savory",
+   "amer"
+  ]
+ },
+ {
+  "n": "Oyster sauce",
+  "p": 2,
+  "f": 0.3,
+  "c": 22,
+  "cat": "sauce",
+  "t": [
+   "savory",
+   "asian"
+  ]
+ },
+ {
+  "n": "Sriracha",
+  "p": 1.9,
+  "f": 0.9,
+  "c": 19.2,
+  "cat": "sauce",
+  "t": [
+   "savory",
+   "asian"
+  ]
+ },
+ {
+  "n": "Balsamic vinegar",
+  "p": 0.5,
+  "f": 0,
+  "c": 17,
+  "cat": "sauce",
+  "t": [
+   "savory",
+   "med"
+  ]
+ },
+ {
+  "n": "Balsamic glaze",
+  "p": 0.6,
+  "f": 0,
+  "c": 46,
+  "cat": "sauce",
+  "t": [
+   "savory",
+   "med"
+  ]
+ },
+ {
+  "n": "Brown sugar",
+  "p": 0,
+  "f": 0,
+  "c": 98.1,
+  "cat": "syrup",
+  "t": [
+   "sweet"
+  ],
+  "carb": 1
+ },
+ {
+  "n": "Cornstarch",
+  "p": 0.3,
+  "f": 0.1,
+  "c": 91.3,
+  "cat": "syrup",
+  "t": [
+   "savory",
+   "asian"
+  ]
+ },
+ {
+  "n": "All-purpose flour",
+  "p": 10.3,
+  "f": 1,
+  "c": 76.3,
+  "cat": "grain",
+  "t": [
+   "sweet",
+   "savory"
+  ],
+  "carb": 1
+ },
+ {
+  "n": "Cocoa powder",
+  "p": 19.6,
+  "f": 13.7,
+  "c": 57.9,
+  "cat": "nut",
+  "t": [
+   "sweet"
+  ]
+ },
+ {
+  "n": "Sesame oil",
+  "p": 0,
+  "f": 100,
+  "c": 0,
+  "cat": "oil",
+  "t": [
+   "savory",
+   "asian"
+  ],
+  "fat": 1
+ },
+ {
+  "n": "Sesame seeds",
+  "p": 17.7,
+  "f": 49.7,
+  "c": 23.4,
+  "cat": "nut",
+  "t": [
+   "savory",
+   "asian"
+  ],
+  "fat": 1
+ },
+ {
+  "n": "Protein powder",
+  "p": 71.4,
+  "f": 6.6,
+  "c": 9.7,
+  "cat": "nut",
+  "t": [
+   "sweet"
+  ],
+  "brandy": 1
+ },
+ {
+  "n": "Protein cereal",
+  "p": 22.7,
+  "f": 6.6,
+  "c": 61.7,
+  "cat": "cereal",
+  "t": [
+   "sweet"
+  ],
+  "carb": 1,
+  "brandy": 1
+ },
+ {
+  "n": "Oats overnight packet",
+  "p": 26.3,
+  "f": 6.3,
+  "c": 54.3,
+  "cat": "cereal",
+  "t": [
+   "sweet"
+  ],
+  "carb": 1,
+  "brandy": 1
+ },
+ {
+  "n": "Graham crackers",
+  "p": 6,
+  "f": 8.2,
+  "c": 80.5,
+  "cat": "cracker",
+  "t": [
+   "sweet"
+  ],
+  "carb": 1
+ },
+ {
+  "n": "Turkey jerky",
+  "p": 32.8,
+  "f": 3,
+  "c": 15.5,
+  "cat": "cracker",
+  "t": [
+   "savory"
+  ]
+ },
+ {
+  "n": "Dried mango",
+  "p": 2,
+  "f": 1,
+  "c": 78.6,
+  "cat": "driedfruit",
+  "t": [
+   "sweet"
+  ],
+  "carb": 1
+ },
+ {
+  "n": "Dried cranberries",
+  "p": 0.1,
+  "f": 1.4,
+  "c": 82.8,
+  "cat": "driedfruit",
+  "t": [
+   "sweet"
+  ],
+  "carb": 1
+ },
+ {
+  "n": "Frozen mixed berries",
+  "p": 0.8,
+  "f": 0.4,
+  "c": 12,
+  "cat": "fruit",
+  "t": [
+   "sweet"
+  ]
+ },
+ {
+  "n": "Cotija",
+  "p": 22,
+  "f": 26,
+  "c": 4,
+  "cat": "cheese",
+  "t": [
+   "savory",
+   "mex"
+  ],
+  "fat": 1
+ },
+ {
+  "n": "Provolone",
+  "p": 25.6,
+  "f": 26.6,
+  "c": 2.1,
+  "cat": "cheese",
+  "t": [
+   "savory"
+  ],
+  "fat": 1
+ },
+ {
+  "n": "Gruyere",
+  "p": 30,
+  "f": 32.3,
+  "c": 0.4,
+  "cat": "cheese",
+  "t": [
+   "savory"
+  ],
+  "fat": 1
+ },
+ {
+  "n": "Blue cheese",
+  "p": 21.4,
+  "f": 28.7,
+  "c": 2.3,
+  "cat": "cheese",
+  "t": [
+   "savory"
+  ],
+  "fat": 1
+ },
+ {
+  "n": "American cheese",
+  "p": 18,
+  "f": 26,
+  "c": 7,
+  "cat": "cheese",
+  "t": [
+   "savory",
+   "amer"
+  ],
+  "fat": 1
+ },
+ {
+  "n": "Light cream cheese",
+  "p": 8,
+  "f": 15,
+  "c": 8,
+  "cat": "cheese",
+  "t": [
+   "savory",
+   "sweet"
+  ],
+  "fat": 1
+ },
+ {
+  "n": "Fresh mozzarella",
+  "p": 18,
+  "f": 17,
+  "c": 2.5,
+  "cat": "cheese",
+  "t": [
+   "savory",
+   "med"
+  ],
+  "fat": 1
+ },
+ {
+  "n": "Burger bun",
+  "p": 9,
+  "f": 4,
+  "c": 47,
+  "cat": "bread",
+  "t": [
+   "savory",
+   "amer"
+  ],
+  "carb": 1
+ },
+ {
+  "n": "Hoagie roll",
+  "p": 9.5,
+  "f": 3.5,
+  "c": 51,
+  "cat": "bread",
+  "t": [
+   "savory",
+   "amer"
+  ],
+  "carb": 1
+ },
+ {
+  "n": "Frozen hash browns",
+  "p": 2.5,
+  "f": 4.5,
+  "c": 18,
+  "cat": "starchveg",
+  "t": [
+   "savory",
+   "amer"
+  ],
+  "carb": 1
+ },
+ {
+  "n": "Butternut squash",
+  "p": 1,
+  "f": 0.1,
+  "c": 11.7,
+  "cat": "starchveg",
+  "t": [
+   "savory"
+  ],
+  "carb": 1
+ },
+ {
+  "n": "Broccolini",
+  "p": 2.8,
+  "f": 0.4,
+  "c": 6.6,
+  "cat": "veg",
+  "t": [
+   "savory"
+  ],
+  "y": 0.9
+ },
+ {
+  "n": "Sugar snap peas",
+  "p": 2.8,
+  "f": 0.1,
+  "c": 7.6,
+  "cat": "veg",
+  "t": [
+   "savory",
+   "asian"
+  ]
+ },
+ {
+  "n": "Wild rice, dry",
+  "p": 14.7,
+  "f": 1.1,
+  "c": 74.9,
+  "cat": "grain",
+  "t": [
+   "savory"
+  ],
+  "y": 3,
+  "carb": 1
+ },
+ {
+  "n": "Ground beef 90/10",
+  "p": 20,
+  "f": 10,
+  "c": 0,
+  "cat": "meat",
+  "t": [
+   "savory"
+  ],
+  "y": 0.75
+ },
+ {
+  "n": "Roasted red pepper",
+  "p": 1,
+  "f": 0.2,
+  "c": 5,
+  "cat": "veg",
+  "t": [
+   "savory",
+   "med"
+  ]
+ },
+ {
+  "n": "Chipotle in adobo",
+  "p": 2,
+  "f": 1.5,
+  "c": 15,
+  "cat": "sauce",
+  "t": [
+   "savory",
+   "mex"
+  ]
+ },
+ {
+  "n": "Potato gnocchi",
+  "p": 6,
+  "f": 1,
+  "c": 33,
+  "cat": "grain",
+  "t": [
+   "savory",
+   "med"
+  ],
+  "carb": 1
+ },
+ {
+  "n": "Croutons",
+  "p": 9,
+  "f": 15,
+  "c": 65,
+  "cat": "cracker",
+  "t": [
+   "savory"
+  ],
+  "carb": 1
+ },
+ {
+  "n": "Kale",
+  "p": 4.3,
+  "f": 0.9,
+  "c": 8.8,
+  "cat": "veg",
+  "t": [
+   "savory"
+  ]
+ },
+ {
+  "n": "Peanuts",
+  "p": 25.8,
+  "f": 49.2,
+  "c": 16.1,
+  "cat": "nut",
+  "t": [
+   "savory",
+   "sweet",
+   "asian"
+  ],
+  "fat": 1
+ },
+ {
+  "n": "Rice vinegar",
+  "p": 0,
+  "f": 0,
+  "c": 0.5,
+  "cat": "sauce",
+  "t": [
+   "savory",
+   "asian"
+  ]
+ },
+ {
+  "n": "Sweet chilli sauce",
+  "p": 1,
+  "f": 0.3,
+  "c": 72,
+  "cat": "sauce",
+  "t": [
+   "savory",
+   "asian"
+  ],
+  "carb": 1,
+  "swap": "Sweet chilli sauce"
+ },
+ {
+  "n": "Enchilada sauce",
+  "p": 1,
+  "f": 2,
+  "c": 8,
+  "cat": "sauce",
+  "t": [
+   "savory",
+   "mexican"
+  ],
+  "swap": "Salsa"
+ },
+ {
+  "n": "Cilantro",
+  "p": 2.1,
+  "f": 0.5,
+  "c": 3.7,
+  "cat": "vegetable",
+  "t": [
+   "savory"
+  ],
+  "swap": "Parsley"
+ },
+ {
+  "n": "Parmesan snack cheese",
+  "p": 33.3,
+  "f": 28.6,
+  "c": 4.8,
+  "cat": "cheese",
+  "t": [
+   "savory"
+  ],
+  "fat": 1,
+  "brandy": 1,
+  "swap": "Parmesan"
+ },
+ {
+  "n": "Turkey snack stick",
+  "p": 36.8,
+  "f": 10.7,
+  "c": 0,
+  "cat": "meat",
+  "t": [
+   "savory"
+  ],
+  "brandy": 1,
+  "swap": "Turkey jerky"
+ },
+ {
+  "n": "Protein bar, high fibre",
+  "p": 26.7,
+  "f": 26.7,
+  "c": 28.9,
+  "cat": "cracker",
+  "t": [
+   "sweet"
+  ],
+  "fat": 1,
+  "brandy": 1
+ }
+]

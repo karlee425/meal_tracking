@@ -1,0 +1,1529 @@
+<title>Karlee's Meal Bank</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<style>
+:root{
+  --ground:#F2F3F0; --surface:#FFFFFF; --surface-2:#E9EBE7;
+  --ink:#141C1A; --body:#2C3835; --muted:#63706B; --hair:#D3D8D3;
+  --accent:#0E6A5B; --accent-soft:#DCEBE6;
+  --warn:#B4530A; --warn-soft:#F7E7D6;
+  --honey:#B87C10;
+  --shadow:0 1px 2px rgba(20,28,26,.06),0 6px 18px rgba(20,28,26,.05);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#0E1413; --surface:#18201E; --surface-2:#212B28;
+    --ink:#ECEFEC; --body:#CBD3CF; --muted:#8B9A94; --hair:#2C3733;
+    --accent:#45BEA5; --accent-soft:#12332D;
+    --warn:#EE9448; --warn-soft:#3A2413;
+    --honey:#E0A93F;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 6px 18px rgba(0,0,0,.3);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0E1413; --surface:#18201E; --surface-2:#212B28;
+  --ink:#ECEFEC; --body:#CBD3CF; --muted:#8B9A94; --hair:#2C3733;
+  --accent:#45BEA5; --accent-soft:#12332D;
+  --warn:#EE9448; --warn-soft:#3A2413;
+  --honey:#E0A93F;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 6px 18px rgba(0,0,0,.3);
+}
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--ground); color:var(--body);
+  font-family:"Source Sans 3","Segoe UI",system-ui,sans-serif;
+  font-size:16px; line-height:1.5; -webkit-text-size-adjust:100%;
+}
+h1,h2,h3{font-family:"Bricolage Grotesque","Source Sans 3",system-ui,sans-serif;color:var(--ink);margin:0;text-wrap:balance;letter-spacing:-.015em}
+.mono{font-family:"IBM Plex Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums}
+.wrap{max-width:940px;margin:0 auto;padding:0 16px 110px}
+
+header.mast{border-bottom:1px solid var(--hair);background:var(--surface)}
+.mast-in{max-width:940px;margin:0 auto;padding:18px 16px 0}
+.eyebrow{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.mast h1{font-size:26px;font-weight:800;margin:2px 0 4px}
+.mast p.sub{margin:0 0 14px;font-size:14px;color:var(--muted);max-width:60ch}
+nav.tabs{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none}
+nav.tabs::-webkit-scrollbar{display:none}
+nav.tabs button{
+  appearance:none;border:0;background:none;cursor:pointer;white-space:nowrap;
+  font:inherit;font-weight:600;font-size:14px;color:var(--muted);
+  padding:10px 13px;border-bottom:2px solid transparent;
+}
+nav.tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+nav.tabs button:focus-visible{outline:2px solid var(--accent);outline-offset:-2px;border-radius:4px}
+
+.panel{background:var(--surface);border:1px solid var(--hair);border-radius:10px;box-shadow:var(--shadow)}
+.section-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin:26px 0 10px;flex-wrap:wrap}
+.section-head h2{font-size:19px;font-weight:700}
+.note{font-size:13.5px;color:var(--muted);max-width:66ch}
+button.act{
+  appearance:none;font:inherit;font-weight:600;font-size:13.5px;cursor:pointer;
+  background:var(--surface);color:var(--ink);border:1px solid var(--hair);
+  border-radius:7px;padding:8px 13px;
+}
+button.act:hover{border-color:var(--accent);color:var(--accent)}
+button.act.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+button.act.primary:hover{color:#fff;filter:brightness(1.08)}
+button.act:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.row-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+
+.macros{display:flex;gap:6px;flex-wrap:wrap}
+.mchip{
+  font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;
+  font-size:11.5px;padding:2px 7px;border-radius:5px;background:var(--surface-2);color:var(--body);white-space:nowrap;
+}
+.mchip b{font-weight:600;color:var(--ink)}
+.mchip.c{background:var(--accent-soft);color:var(--accent)}
+.mchip.c b{color:var(--accent)}
+.mchip.short{background:var(--warn-soft);color:var(--warn)}
+.mchip.short b{color:var(--warn)}
+
+.filters{display:flex;gap:6px;flex-wrap:wrap;margin:14px 0 4px}
+.chip{
+  appearance:none;font:inherit;font-size:13px;font-weight:600;cursor:pointer;
+  border:1px solid var(--hair);background:var(--surface);color:var(--muted);
+  border-radius:999px;padding:5px 12px;
+}
+.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--ground)}
+.chip:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.cards{display:grid;gap:10px;margin-top:14px}
+@media(min-width:700px){.cards{grid-template-columns:1fr 1fr}}
+.card{background:var(--surface);border:1px solid var(--hair);border-radius:10px;padding:13px 14px;display:flex;flex-direction:column;gap:8px}
+.card .id{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--muted);letter-spacing:.05em}
+.card h3{font-size:15.5px;font-weight:600;line-height:1.3}
+.card .meta{font-size:12.5px;color:var(--muted)}
+.card .base{font-size:12.5px;color:var(--body)}
+.card .base b{color:var(--honey);font-weight:600}
+.card.isnew{border-left:3px solid var(--honey)}
+.tagnew{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--honey)}
+details.ing summary{cursor:pointer;font-size:12.5px;color:var(--muted);list-style:none}
+details.ing summary::-webkit-details-marker{display:none}
+details.ing summary::before{content:"▸ ";color:var(--accent)}
+details.ing[open] summary::before{content:"▾ "}
+details.ing p{margin:6px 0 0;font-size:12.5px;color:var(--muted);line-height:1.6}
+.addbar{display:flex;gap:4px;flex-wrap:wrap;align-items:center;padding-top:6px;border-top:1px dashed var(--hair)}
+.addbar span.lbl2{font-size:11.5px;color:var(--muted);margin-right:2px}
+.daybtn{
+  appearance:none;font-family:"IBM Plex Mono",monospace;font-size:11.5px;font-weight:600;cursor:pointer;
+  border:1px solid var(--hair);background:var(--surface);color:var(--body);
+  border-radius:5px;padding:4px 8px;
+}
+.daybtn:hover{border-color:var(--accent);color:var(--accent)}
+.daybtn[data-on="1"]{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
+.daybtn:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+
+.day{background:var(--surface);border:1px solid var(--hair);border-radius:10px;margin-bottom:12px;overflow:hidden}
+.day-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 14px;background:var(--surface-2);flex-wrap:wrap}
+.day-head .dname{font-family:"Bricolage Grotesque",sans-serif;font-weight:700;font-size:16px;color:var(--ink)}
+.dtype{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:4px;background:var(--surface);color:var(--muted);border:1px solid var(--hair)}
+.dtype.lift{color:var(--accent);border-color:var(--accent)}
+.dtype.long{color:var(--honey);border-color:var(--honey)}
+.slot{display:flex;gap:10px;align-items:flex-start;padding:9px 14px;border-top:1px solid var(--hair)}
+.slot .lab{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);width:66px;flex:none;padding-top:3px}
+.slot .body{flex:1;min-width:0}
+.slot .pick{font-size:14.5px;color:var(--ink);font-weight:600}
+.slot .empty{font-size:14px;color:var(--muted);font-style:italic}
+.slot .scale{font-size:12px;color:var(--honey);margin-top:2px}
+.slot .x{appearance:none;border:0;background:none;cursor:pointer;color:var(--muted);font-size:18px;line-height:1;padding:2px 6px}
+.slot .x:hover{color:var(--warn)}
+.totals{padding:11px 14px;border-top:2px solid var(--hair);display:flex;flex-direction:column;gap:7px}
+.tline{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.tline .tl{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);width:66px;flex:none}
+.fix{background:var(--warn-soft);border-radius:7px;padding:9px 11px;font-size:13.5px;color:var(--warn);line-height:1.5}
+.fix b{font-weight:600}
+.ok{font-size:13px;color:var(--accent);font-weight:600}
+
+.dept{margin-bottom:18px}
+.dept h3{font-family:"IBM Plex Mono",monospace;font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:6px}
+.glist{list-style:none;margin:0;padding:0;background:var(--surface);border:1px solid var(--hair);border-radius:10px;overflow:hidden}
+.glist li{display:flex;justify-content:space-between;gap:12px;padding:8px 13px;font-size:14px;border-top:1px solid var(--hair)}
+.glist li:first-child{border-top:0}
+.glist li .q{font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;font-size:13px;color:var(--muted);white-space:nowrap}
+.glist li.staple .n::after{content:" · check on hand";font-size:11.5px;color:var(--honey);font-family:"IBM Plex Mono",monospace}
+
+/* recipes */
+.rec{background:var(--surface);border:1px solid var(--hair);border-radius:10px;margin-bottom:14px;overflow:hidden}
+.rec-head{padding:13px 15px;border-bottom:1px solid var(--hair)}
+.rec-head h3{font-size:17px;font-weight:700;margin-bottom:3px}
+.rec-head .when{font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--accent);letter-spacing:.04em}
+.rec-body{padding:13px 15px;display:flex;flex-direction:column;gap:13px}
+.rec h4{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:5px}
+table.ingt{width:100%;border-collapse:collapse;font-size:14px}
+table.ingt td{padding:4px 0;border-bottom:1px solid var(--hair);vertical-align:top}
+table.ingt td.q{text-align:right;font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;color:var(--ink);white-space:nowrap;padding-left:12px}
+table.ingt tr:last-child td{border-bottom:0}
+table.ingt.three{table-layout:auto}
+table.ingt thead th{
+  font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--muted);font-weight:600;text-align:left;padding:0 0 6px;border-bottom:1px solid var(--hair);
+  line-height:1.5;vertical-align:bottom;white-space:nowrap;
+}
+table.ingt thead th.q{text-align:right;padding-left:14px}
+table.ingt thead th .hd{font-weight:400;letter-spacing:.04em;text-transform:none;opacity:.75}
+table.ingt td.raw{color:var(--ink);font-weight:600}
+table.ingt td.cooked{color:var(--muted);font-weight:400}
+table.ingt td.same{color:var(--muted);font-weight:400;opacity:.55;font-style:italic}
+.mchip.fib{background:var(--surface-2);color:var(--muted)}
+.mchip.fib b{color:var(--body)}
+.mchip.fib.sol{background:var(--accent-soft);color:var(--accent)}
+.mchip.fib.sol b{color:var(--accent)}
+.mchip.ferm{background:var(--warn-soft);color:var(--warn)}
+.chip.sol[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.fermtxt{color:var(--warn)}
+.ast{color:var(--honey);font-weight:700;padding-left:1px}
+.legend{font-size:12.5px;line-height:1.55;color:var(--muted);margin:9px 0 0;max-width:62ch}
+.legend b{color:var(--ink)}
+.legend .same{font-style:italic;opacity:.7}
+.legend.flagnote{border-left:2px solid var(--honey);padding-left:10px;margin-top:7px}
+.rawck{font-family:"IBM Plex Mono",monospace;font-size:11.5px;line-height:1.7;color:var(--muted)}
+.rawck .rw{color:var(--ink);font-weight:600}
+.rawck .ck{color:var(--accent)}
+.basemini{font-size:12px;color:var(--muted);margin-top:3px}
+.basemini::first-letter{text-transform:uppercase}
+ol.steps{margin:0;padding-left:20px;font-size:14px;line-height:1.6}
+ol.steps li{margin-bottom:6px}
+ol.steps li:last-child{margin-bottom:0}
+.kv{font-size:13.5px;line-height:1.6}
+.kv b{color:var(--ink);font-weight:600}
+.scroll{overflow-x:auto}
+table.ingt td.sub{color:var(--muted);font-weight:400;opacity:.7;font-size:13px}
+.persrv{display:none}
+@media(max-width:620px){
+  table.ingt th.sub, table.ingt td.sub{display:none}
+  .persrv{display:block;font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--muted);opacity:.8;margin-top:1px}
+}
+.svgrow{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:9px}
+.svglab{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.svgbtn{appearance:none;font:inherit;font-weight:700;font-size:15px;line-height:1;cursor:pointer;border:1px solid var(--hair);background:var(--surface);color:var(--ink);border-radius:6px;width:30px;height:30px}
+.svgbtn:hover{border-color:var(--accent);color:var(--accent)}
+.svgbtn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.svgbtn.link{width:auto;height:auto;padding:4px 9px;font-size:12px;font-weight:600;color:var(--muted);border-style:dashed}
+.svgn{font-family:"IBM Plex Mono",monospace;font-size:18px;font-weight:600;color:var(--ink);min-width:24px;text-align:center}
+.svghint{font-size:11.5px;color:var(--muted)}
+.serve{color:var(--honey);font-weight:600}
+.card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.retire{appearance:none;font:inherit;font-size:11.5px;font-weight:600;cursor:pointer;border:1px solid var(--hair);background:var(--surface);color:var(--muted);border-radius:6px;padding:3px 8px;flex:none;white-space:nowrap}
+.retire:hover{border-color:var(--warn);color:var(--warn)}
+.retire:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.card.gone{opacity:.55;border-style:dashed}
+.retirebar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px;padding:9px 12px;border:1px dashed var(--hair);border-radius:8px;font-size:13px;color:var(--muted)}
+.retirebar b{color:var(--ink)}
+table.inglist{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:6px}
+table.inglist td{padding:2px 0;border-bottom:1px solid var(--hair);color:var(--muted)}
+table.inglist td.q{text-align:right;font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;color:var(--ink);white-space:nowrap;padding-left:10px}
+table.inglist td.ck{text-align:right;font-family:"IBM Plex Mono",monospace;color:var(--accent);white-space:nowrap;padding-left:10px;font-size:12px}
+table.inglist tr:last-child td{border-bottom:0}
+.builtfor{font-size:13px;color:var(--body);line-height:1.7}
+.builtfor .bx{font-family:"IBM Plex Mono",monospace;color:var(--accent);font-weight:600}
+
+.checkgrid{background:var(--surface);border:1px solid var(--hair);border-radius:10px;overflow:hidden}
+.crow{display:flex;align-items:center;gap:8px;padding:10px 13px;border-top:1px solid var(--hair);flex-wrap:wrap}
+.crow:first-child{border-top:0}
+.crow .cd{font-family:"IBM Plex Mono",monospace;font-size:12.5px;font-weight:600;color:var(--ink);width:52px;flex:none}
+.boxes{display:flex;gap:6px;flex-wrap:wrap;flex:1}
+.box{
+  appearance:none;font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:600;cursor:pointer;
+  border:1px solid var(--hair);background:var(--surface);color:var(--muted);
+  border-radius:6px;padding:5px 9px;letter-spacing:.04em;
+}
+.box[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.box:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.crow .score{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--muted);width:34px;text-align:right;flex:none}
+.meter{height:8px;border-radius:4px;background:var(--surface-2);overflow:hidden;margin-top:8px}
+.meter i{display:block;height:100%;background:var(--accent)}
+.big{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:34px;color:var(--ink);line-height:1}
+.stat{display:flex;gap:22px;flex-wrap:wrap;padding:14px}
+.stat > div{min-width:110px}
+.stat .lbl{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:4px}
+textarea.out{width:100%;min-height:160px;font-family:"IBM Plex Mono",monospace;font-size:12px;line-height:1.6;padding:11px;border-radius:8px;border:1px solid var(--hair);background:var(--surface-2);color:var(--body);resize:vertical}
+.hidden{display:none}
+.foot{margin-top:34px;padding-top:14px;border-top:1px solid var(--hair);font-size:12.5px;color:var(--muted)}
+.savebar{position:fixed;left:0;right:0;bottom:0;background:var(--surface);border-top:1px solid var(--hair);padding:9px 16px;display:flex;gap:9px;align-items:center;justify-content:space-between;flex-wrap:wrap;z-index:5}
+.savebar .status{font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--muted)}
+.savebar .status.on{color:var(--accent)}
+.savebar .status.warn{color:var(--warn)}
+.dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--muted);margin-right:6px;vertical-align:middle}
+.dot.on{background:var(--accent)}
+.dot.warn{background:var(--warn)}
+@media(prefers-reduced-motion:no-preference){.day,.card{transition:border-color .15s ease}}
+</style>
+
+<header class="mast">
+  <div class="mast-in">
+    <div class="eyebrow">Grams only · floors, not ceilings</div>
+    <h1>Karlee's Meal Bank</h1>
+    <p class="sub">Every option costed bottom-up from raw and dry weights, with the cooked weight shown alongside and the starch base written in. Pick a meal into a day and the week does the arithmetic — totals against target, a weighed fix when carbohydrate lands short, the recipes for what you chose, and the shop built from it. Per-meal split is Revision 4: <span class="mono">37 / 43 / 15 / 37 / 18</span>.</p>
+    <nav class="tabs" role="tablist">
+      <button role="tab" aria-selected="true" data-tab="bank">Bank</button>
+      <button role="tab" aria-selected="false" data-tab="week">This week</button>
+      <button role="tab" aria-selected="false" data-tab="recipes">Recipes</button>
+      <button role="tab" aria-selected="false" data-tab="shop">Shop</button>
+      <button role="tab" aria-selected="false" data-tab="check">Daily check</button>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+  <section id="tab-bank"></section>
+  <section id="tab-week" class="hidden"></section>
+  <section id="tab-recipes" class="hidden"></section>
+  <section id="tab-shop" class="hidden"></section>
+  <section id="tab-check" class="hidden"></section>
+  <p class="foot">Night snack is fixed on every day and already counted in every total: 150 g plain nonfat Greek yogurt + 75 g frozen blueberries + 7 g peanut butter — 17.3 P / 4.3 F / 17.7 C.</p>
+</div>
+
+<div class="savebar">
+  <span class="status" id="status"><span class="dot" id="dot"></span>Loading…</span>
+  <div class="row-actions">
+    <button class="act" id="clearWeek">Clear week</button>
+  </div>
+</div>
+
+<script>
+(function(){
+"use strict";
+
+var TARGET = { lift:{p:150,f:70,c:293}, rest:{p:150,f:70,c:218}, long:{p:150,f:70,c:343} };
+var SLOT_TARGET = {
+  breakfast:{lift:[37,17,99], rest:[37,17,72], long:[37,17,117]},
+  lunch:    {lift:[43,19,68], rest:[43,19,50], long:[43,19,80]},
+  snack:    {lift:[15,8,30],  rest:[15,8,22],  long:[15,8,35]},
+  dinner:   {lift:[37,22,78], rest:[37,22,56], long:[37,22,93]}
+};
+var NIGHT = {p:17.3, f:4.3, c:17.7};
+var DAYS = [
+  {k:"mon",n:"Monday",t:"lift"},{k:"tue",n:"Tuesday",t:"lift"},{k:"wed",n:"Wednesday",t:"lift"},
+  {k:"thu",n:"Thursday",t:"lift"},{k:"fri",n:"Friday",t:"lift"},
+  {k:"sat",n:"Saturday",t:"long"},{k:"sun",n:"Sunday",t:"rest"}
+];
+var SLOTS = ["breakfast","lunch","snack","dinner"];
+var SLOT_LABEL = {breakfast:"Breakfast", lunch:"Lunch", snack:"Snack", dinner:"Dinner"};
+var SHIFT = { breakfast:{rest:-27,long:18}, lunch:{rest:-18,long:12}, snack:{rest:-8,long:5}, dinner:{rest:-22,long:15} };
+var SHIFT_FOOD = {
+  breakfast:{rest:"rest size — 40 g less dry oats (or 54 g less sourdough)", long:"long-run size — 27 g more dry oats (or 79 g more banana)"},
+  lunch:{rest:"rest size — 23 g less dry rice (or 24 g less dry pasta)", long:"long-run size — 15 g more dry rice (or 69 g more raw potato)"},
+  snack:{rest:"rest size — 35 g less banana (or 10 g less pretzels)", long:"long-run size — 22 g more banana (or 6 g more pretzels)"},
+  dinner:{rest:"rest size — 28 g less dry rice (or 126 g less raw potato)", long:"long-run size — 19 g more dry rice (or 86 g more raw potato)"}
+};
+
+/* ============================== THE BANK ============================== */
+var M = [
+/* ---- BREAKFASTS ---- */
+{id:"B1",slot:"breakfast",name:"Big Oat Jar with chia",lane:"jar",p:37.1,f:18.2,c:99.2,wt:"440 g jar + banana on the side",min:5,batch:4,base:"70 g dry oats + 10 g chia + banana",
+ ing:"rolled oats 70 g; cottage cheese 2% 175 g; milk 2% 100 g; chia seeds 10 g; blueberries 75 g; banana 100 g; peanut butter 8 g",
+ steps:["Stir oats, cottage cheese, milk and chia together in a 32 oz jar.","Top with the blueberries and peanut butter. Do not stir them in.","Fridge at least 8 hours — chia is still gritty at four. Banana eaten on the side in the car."],
+ store:"Batch four at once, keeps 4 days. Day four is noticeably stiffer — loosen with a splash of milk.",
+ note:"Flax version: swap 10 g ground flax for the chia and drop peanut butter to 6 g. Use ground, never whole."},
+{id:"B2",slot:"breakfast",name:"Protein Pancakes",lane:"griddle",p:38.1,f:17.4,c:98.4,wt:"~250 g plus toppings",min:15,batch:1,base:"55 g dry oats + banana",
+ ing:"rolled oats 55 g; cottage cheese 2% 120 g; egg 50 g; protein powder 10 g; peanut butter 10 g; banana 110 g; maple syrup 25 g; blueberries 75 g",
+ steps:["Blend oats, cottage cheese, egg and protein powder smooth, 45 seconds.","Nonstick pan or griddle at medium, lightly greased. Quarter-cup pancakes, 2–3 min a side.","Top with peanut butter, sliced banana, blueberries and the syrup."],
+ store:"Batter keeps 3 days blended. Cooked pancakes freeze and go straight into a toaster.",
+ note:"Cook these Sunday and freeze them if they are for a Thursday or Friday — three days is the fridge limit."},
+{id:"B3",slot:"breakfast",name:"Greek Yogurt Bowl",lane:"no cook",p:36.9,f:18.3,c:102.6,wt:"~560 g",min:3,batch:1,base:"25 g Three Wishes + 25 g rice crisps + banana",
+ ing:"greek yogurt nonfat 200 g; three wishes cereal 25 g; one degree brown rice crisps 25 g; blueberries 100 g; banana 120 g; peanut butter 27 g; honey 15 g",
+ steps:["Yogurt into the bowl, cereal and fruit over.","Peanut butter and honey last."],
+ store:"Assemble fresh — cereal goes soft within the hour.",
+ note:"The 25 g of peanut butter and the full banana are what close this against slot. Weigh both; eyeballed, this bowl runs 7 g fat and 16 g carb short."},
+{id:"B4",slot:"breakfast",name:"Banana-PB Overnight Oats",lane:"jar",p:36.5,f:17.1,c:100.2,wt:"~470 g jar",min:5,batch:3,base:"70 g dry oats + banana",
+ ing:"rolled oats 70 g; greek yogurt nonfat 170 g; milk 2% 100 g; banana 130 g; peanut butter 20 g; honey 10 g",
+ steps:["Mash half the banana into the oats, yogurt and milk.","Slice the rest on top with the peanut butter and honey.","Fridge at least 4 hours."],
+ store:"Four days in the jar is the outer limit and it stiffens by then. Build it two nights ahead, not on Sunday.",
+ note:"Same jar format as B1, completely different texture — creamy rather than curdy. This is the cottage-cheese-fatigue option."},
+{id:"B5",slot:"breakfast",name:"Freezer Breakfast Burrito",lane:"savoury · handheld",p:38.2,f:16.8,c:99.9,wt:"1 burrito + yogurt + banana",min:45,batch:4,base:"72 g tortilla + 170 g raw potato",
+ ing:"flour tortilla 72 g; egg 75 g; potato 170 g; cheddar 10 g; salsa 40 g; greek yogurt nonfat 150 g; banana 110 g",
+ steps:["Microwave the diced potato 7 min until just tender, then griddle over medium-high 8–10 min to crisp, seasoning with cumin, garlic powder, paprika and salt as it goes.","Scramble the eggs soft and pull them 30 seconds early — they finish cooking on reheat.","Warm the tortillas 15 seconds so they roll without cracking. Fill with potato, egg, cheddar, salsa. Roll tight, seam-side down, wrap individually in foil then a freezer bag.","From frozen: unwrap the foil, 2 min in the microwave on a paper towel, or 8 min in the air fryer at 350 °F."],
+ store:"Freezer 2 months, fridge 4 days.",
+ note:"Yogurt and banana on the side are part of the serving, not extras — the burrito alone is well short of slot."},
+{id:"B6",slot:"breakfast",name:"Blueberry Baked Oatmeal, 2 squares",lane:"grab and go",p:37.6,f:17.3,c:100.3,wt:"2 squares ~195 g + 60 g yogurt",min:45,batch:8,base:"75 g dry oats per serving",
+ ing:"rolled oats 75 g; egg 25 g; milk 2% 75 g; greek yogurt nonfat 110 g; banana 65 g; blueberries 75 g; peanut butter 15 g; honey 15 g; protein powder 8 g",
+ steps:["Oven 350 °F. Whisk eggs, milk, yogurt, mashed banana, honey and melted peanut butter.","Stir in oats, protein powder, baking powder, cinnamon and a pinch of salt. Fold in the blueberries.","Into a greased 9×13, bake 35–40 min until the centre is set and the top springs back.","Cool completely before cutting — warm oatmeal crumbles. Cut into 8."],
+ store:"Fridge 5 days, freezer 3 months. 45 seconds from the fridge, 90 from frozen.",
+ note:"The most hands-off breakfast here — bake once and there are no morning decisions for most of a week. A serving is two squares plus 60 g of yogurt spooned over."},
+{id:"B7",slot:"breakfast",name:"Cottage Cheese French Toast",lane:"sat down",p:36.5,f:17.3,c:98.2,wt:"2 thick slices + fruit",min:15,batch:1,base:"100 g sourdough",
+ ing:"sourdough 100 g; egg 50 g; cottage cheese 2% 140 g; milk 2% 50 g; maple syrup 20 g; blueberries 100 g; peanut butter 12 g; banana 40 g",
+ steps:["Blend the cottage cheese, egg and milk smooth, 30 seconds. Blending is what makes it a custard rather than scrambled egg on bread.","Soak each slice 20 seconds a side. Thick-cut sourdough holds; thin sandwich bread collapses.","Griddle or nonstick at medium, lightly greased, 3 min a side to deep golden.","Fruit, peanut butter and syrup over."],
+ store:"Best fresh. Cooked slices keep 2 days and re-crisp in a toaster oven.",
+ note:"The weekend one — this is breakfast sat down, not breakfast in the car."},
+{id:"B8",slot:"breakfast",name:"Oats Overnight, cottage cheese base",lane:"packet",p:40.7,f:15.5,c:100.6,wt:"shaker + banana on the side",min:2,batch:1,base:"packet + 20 g dry oats + banana",
+ ing:"oats overnight packet 76 g; cottage cheese 2% 120 g; rolled oats 20 g; frozen blueberries 75 g; peanut butter 12 g; banana 120 g",
+ steps:["Blend the cottage cheese with 120 ml water until completely smooth, 30–45 seconds. Skip this and you get curds suspended in oats.","Blended base into the shaker, then the packet, the extra oats and the peanut butter.","Frozen blueberries in last — they thaw overnight and release liquid, which loosens the thicker base back to spoonable.","Shake hard 20 seconds, fridge overnight. If it is still too thick, thin with water, not milk."],
+ store:"Overnight. Blend a week of cottage-cheese base at once — it holds 4 days.",
+ note:"Everything here except the pouch and the added oats gives 46 g of carbohydrate, so the pouch plus the oats have to supply about 53 g to reach slot. This build carries the pouch at 54.3 g carbohydrate per 100 g — read your own pouch’s panel and adjust: 10 g of dry oats adds 6.8 g of carbohydrate, so for every 7 g the pouch is short, add 10 g of oats. ⚠️ Protein is unresolved — this build costs the pouch at 26.3 g protein per 100 g, the value Close the Carbs ships; the custom food entered by hand says 10.7. Read the panel before trusting this row."},
+{id:"B9",slot:"breakfast",name:"Saturday run window",lane:"long run only",p:39.8,f:16.9,c:121.7,native:"long",wt:"three servings across the morning",min:10,batch:1,base:"40 g dry oats pre · honey during · yogurt bowl post",
+ ing:"rolled oats 40 g; milk 2% 100 g; banana 130 g; honey 25 g; greek yogurt nonfat 200 g; three wishes cereal 13 g; one degree brown rice crisps 12 g; blueberries 75 g; peanut butter 19 g",
+ steps:["60–75 min before the run: 40 g dry oats, 100 ml milk, 100 g banana, 5 g honey. Low fat, low fibre.","From about 45 minutes in: 15–20 g of carbohydrate an hour — 20 g honey and 30 g banana, or an equivalent gel.","Within 45 min of finishing: 200 g Greek yogurt, 13 g Three Wishes + 12 g rice crisps, 75 g blueberries, 15 g peanut butter."],
+ store:"Assemble the pre-run bowl the night before; the post-run bowl fresh.",
+ note:"117 g of carbohydrate does not go on one plate, and Saturday is the only morning breakfast is not your post-lift meal. Presenting this as a single serving is the failure mode."},
+
+/* ---- LUNCHES ---- */
+{id:"L1",slot:"lunch",name:"Chipotle-Honey Chicken & Rice Bowl",lane:"Mexican",p:42,f:17.2,c:74,wt:"~470 g",min:35,batch:3,base:"150 g cooked white rice",
+ ing:"chicken breast 133 g; white rice dry 50 g; black beans canned 50 g; corn frozen 40 g; bell pepper 60 g; olive oil 4 g; honey 8 g; chipotle in adobo 5 g; lime juice 10 g; cheddar 10 g; pico de gallo 50 g; avocado 35 g",
+ steps:["Oven 425 °F. Cube the chicken, toss with the oil, cumin, garlic powder, paprika and salt. Diced pepper on the same pan. Roast 18 min.","Rice 1:1.75 by volume — 18 min covered on low, then 10 min off the heat with the lid on.","Whisk the honey, chipotle and lime into a glaze, pour over the chicken, back in 5 min to 165 °F and caramelised at the edges.","Layer rice, beans, corn, pepper, chicken, cheddar. Pico in a separate cup."],
+ store:"Fridge 4 days. Avocado cut morning-of, never Sunday.",
+ note:"Low smell, good cold or hot."},
+{id:"L2",slot:"lunch",name:"Greek Orzo Salad + Turkey Meatballs",lane:"Mediterranean",p:46.9,f:24.1,c:79.7,wt:"~580 g",min:30,batch:3,base:"156 g cooked orzo",
+ ing:"ground turkey 93/7 136 g; panko 13 g; egg 20 g; orzo dry 65 g; cucumber 100 g; cherry tomatoes 100 g; red onion 20 g; kalamata olives 8 g; feta 15 g; olive oil 4 g; lemon juice 15 g; garlic 5 g; chickpeas canned 50 g",
+ steps:["Oven 425 °F. Mix turkey, panko, egg, half the garlic, oregano, salt and pepper. Do not overwork. Roll 30 g meatballs.","Bake 16–18 min to 165 °F. Do not sear — baked meatballs hold their texture cold, seared ones go greasy in the fridge.","Orzo 8–9 min al dente in well-salted water. Drain, rinse briefly cold, spread on a tray to cool.","Whisk oil, lemon, remaining garlic and oregano. Taste it cold and push the salt and acid further than feels right — chilling flattens both.","Toss the cooled orzo with cucumber, tomato and onion. Meatballs, olives and feta on top.","Drain and rinse the chickpeas well and fold them in with the vegetables. They are the fibre in this bowl — orzo, cucumber and tomato carry almost none between them."],
+ store:"Fridge 4 days. Do not reheat — cucumber goes limp and orzo tightens. Meatballs freeze 2 months.",
+ note:"Zero office smell and the most fork-friendly item in the bank. Chickpeas added 19 Sep: 4.9 g of fibre to 8.7 for 50 g of beans, and it is the difference between this lunch holding to 3:30 and not."},
+{id:"L3",slot:"lunch",name:"Chicken Burrito Bowl",lane:"Mexican",p:41.5,f:19.5,c:68.4,wt:"~490 g",min:35,batch:5,base:"174 g cooked white rice",
+ ing:"chicken breast 123 g; white rice dry 58 g; black beans canned 80 g; cheddar 15 g; pico de gallo 60 g; avocado 45 g; olive oil 4 g; lime juice 10 g",
+ steps:["Warm the diced chicken through with cumin, chili powder, garlic powder and lime.","Warm the beans and drain them well so they don't water the container.","Layer rice, chicken, beans, cheese. Pico and avocado added morning-of."],
+ store:"Fridge 4 days, good cold or reheated.",
+ note:"The chicken went up with Revision 4 — 89 g cooked instead of 79. The rice did not move; carbohydrate is untouched by the redistribution."},
+{id:"L4",slot:"lunch",name:"Mediterranean Chicken & Couscous",lane:"Mediterranean",p:43.1,f:19.2,c:67.8,wt:"~510 g",min:30,batch:5,base:"162 g cooked pearl couscous",
+ ing:"chicken breast 120 g; pearl couscous dry 65 g; chickpeas canned 50 g; cucumber 80 g; cherry tomatoes 80 g; feta 20 g; kalamata olives 12 g; olive oil 8 g; lemon juice 15 g",
+ steps:["Bake the chicken at 400 °F, 22–25 min to 165 °F. Rest, then slice.","Cook the couscous per package, rinse briefly and cool so it doesn't clump.","Whisk oil, lemon, zest and oregano. Toss with couscous, chickpeas, cucumber and tomato.","Chicken, feta and olives over."],
+ store:"Fridge 4–5 days. Best cold.",
+ note:"One of the three strongest zero-smell options, alongside L2 and L6."},
+{id:"L6",slot:"lunch",name:"Turkey Pesto Pasta Salad",lane:"Mediterranean",p:47,f:22.8,c:77.1,wt:"~530 g",min:25,batch:5,base:"192 g cooked pasta",
+ ing:"pasta dry 80 g; ground turkey 93/7 111 g; pesto 18 g; greek yogurt nonfat 40 g; cherry tomatoes 100 g; mozzarella 20 g; spinach 20 g; lemon juice 10 g; chickpeas canned 50 g",
+ steps:["Brown the turkey, season well, cool.","Pasta al dente, drain, rinse cold.","Thin the pesto with the Greek yogurt and lemon — that is what lets 18 g dress a whole bowl instead of 40 g.","Toss everything together.","Chickpeas drained, rinsed and tossed through at the end. Pesto clings to them better than it does to the pasta."],
+ store:"Fridge 4 days. Cold only, zero smell.",
+ note:"Chickpeas added 19 Sep — this was the lowest-fibre lunch in the bank at 4.7 g, which is what refined pasta plus lean turkey gets you. Now 8.4."},
+{id:"L7",slot:"lunch",name:"BBQ Chicken & Baked Potato Bowl",lane:"American",p:43,f:18.3,c:73.2,wt:"~450 g",min:45,batch:5,base:"203 g roasted potato",
+ ing:"chicken breast 129 g; potato 260 g; bbq sauce 35 g; cheddar 15 g; corn frozen 50 g; red onion 25 g; olive oil 9 g; greek yogurt nonfat 30 g",
+ steps:["Oven 425 °F. Cube the potato, toss with oil and salt, roast 28–30 min.","Chicken on the same pan for the last 18 min.","Shred the chicken and toss it with the BBQ sauce.","Build: potato, chicken, corn, onion, cheddar, yogurt on top in place of sour cream."],
+ store:"Fridge 4 days. Eat hot.",
+ note:"The one lunch that needs a microwave, and it carries a BBQ smell — save it for a day you are not in a small shared kitchen."},
+{id:"L8",slot:"lunch",name:"Adult Lunchable",lane:"bento · no cook",p:45.1,f:21.3,c:81,wt:"bento ~645 g",min:15,batch:5,base:"40 g crackers + 20 g pretzels",
+ ing:"deli turkey 134 g; cheddar 25 g; whole-grain crackers 40 g; egg 50 g; grapes 100 g; cucumber 80 g; cherry tomatoes 80 g; pretzels 20 g; baby carrots 80 g; sugar snap peas 60 g",
+ steps:["Boil the eggs 12 min, straight into an ice bath, peel.","Portion into bento containers.","Crackers and pretzels in their own compartment so they stay crisp.","Carrots and snap peas raw in their own compartment. They are not garnish — they are 140 g of the box and most of its fibre."],
+ store:"Fridge 5 days — the longest keeper in the lunch set.",
+ note:"The original version of this was 33 g of carbohydrate under slot: it read as complete because it had five components, but four of them were protein, fat or vegetables. The crackers, weighed grapes and pretzels fixed the carbohydrate; the carrots and snap peas added 19 Sep fixed the fibre, 5.3 g to 9.1."},
+{id:"L9",slot:"lunch",name:"Turkey & Provolone on Sourdough + Grapes",lane:"sandwich",p:45.2,f:19.8,c:87.6,wt:"sandwich + sides",min:10,batch:5,base:"100 g sourdough",
+ ing:"deli turkey 150 g; sourdough 100 g; provolone 25 g; mayonnaise 10 g; dijon mustard 8 g; romaine 20 g; cherry tomatoes 40 g; cucumber 60 g; grapes 100 g; baby carrots 80 g; sugar snap peas 60 g",
+ steps:["Mayo and Dijon edge to edge on both slices — fat is the moisture barrier.","Provolone, turkey, romaine.","Tomato in a separate cup, added at lunch. That is what makes a sandwich soggy, not the mustard.","Carrots and snap peas raw, bagged separately. With L21 retired this sandwich carries the bread lane on its own, so it needs to be the good one."],
+ store:"3 days assembled, 5 days as components.",
+ note:"This was the only lunch in the August audit that cleared its carbohydrate slot, and it cleared because it was the only one built on bread. Bread alone does not keep you full, though — 4.8 g of fibre was the lowest of any sandwich. Raw veg added 19 Sep takes it to 8.7."},
+{id:"L10",slot:"lunch",name:"Bruschetta Chicken + Sourdough",lane:"Mediterranean",p:45.8,f:17.7,c:82.1,wt:"~540 g",min:30,batch:5,base:"110 g sourdough",
+ ing:"chicken breast 116 g; sourdough 110 g; cherry tomatoes 130 g; mozzarella 20 g; olive oil 8 g; balsamic vinegar 10 g; garlic 5 g; basil 5 g; grapes 60 g; chickpeas canned 40 g",
+ steps:["Season and bake the chicken at 400 °F, 20–22 min to 165 °F.","Macerate the chopped tomato with garlic, basil, oil and balsamic for at least 20 minutes. This is the whole recipe.","Toast the sourdough fresh each morning — packing it pre-toasted does not work.","Chickpeas drained and marinated with the tomatoes — they take on the garlic and balsamic in the same 20 minutes."],
+ store:"Chicken and topping keep 4 days, separately. Toast day-of.",
+ note:"Was 9 g short of slot before the sourdough went to 110 g. Chickpeas added 19 Sep for fibre, 5.0 g to 8.0, marinated with the bruschetta rather than added as a side."},
+{id:"L11",slot:"lunch",name:"No-Cook Mezze Box",lane:"bento · no cook",p:43.4,f:18.9,c:67.3,wt:"bento ~510 g",min:15,batch:5,base:"75 g whole-wheat pita",
+ ing:"whole-wheat pita 75 g; hummus 35 g; chickpeas canned 50 g; feta 25 g; cucumber 100 g; cherry tomatoes 100 g; kalamata olives 12 g; deli turkey 144 g",
+ steps:["Everything into a bento.","Pita cut into wedges, hummus in its own cup."],
+ store:"Fridge 4 days.",
+ note:"The pita is the base. Treating hummus and chickpeas as the carbohydrate is what left the original 10 g short."},
+{id:"L12",slot:"lunch",name:"Steak & Potato Salad",lane:"American",p:43,f:19.2,c:69.4,wt:"~600 g",min:35,batch:5,base:"265 g boiled potato",
+ ing:"sirloin steak 126 g; potato 340 g; olive oil 8 g; dijon mustard 12 g; greek yogurt nonfat 40 g; parmesan 10 g; red onion 25 g; cherry tomatoes 80 g; romaine 40 g; lemon juice 10 g",
+ steps:["Boil the potatoes whole in salted water 18–20 min, then quarter. Boiling them whole is what keeps them from going waterlogged.","Dress them while still warm — cold potatoes will not take dressing.","Sear the steak 3–4 min a side, rest 5 min, slice thin against the grain.","Fold everything together with the romaine last."],
+ store:"Fridge 4 days. Good cold — the steak stays tender because it is sliced thin into a dressed salad.",
+ note:"265 g of cooked potato is roughly double what a potato salad normally carries. That is the point."},
+{id:"L13",slot:"lunch",name:"Chicken, Wild Rice & Roasted Squash",lane:"American",p:43.1,f:17.7,c:72.1,wt:"~450 g",min:45,batch:5,base:"135 g cooked wild rice",
+ ing:"chicken breast 141 g; wild rice dry 45 g; butternut squash 180 g; olive oil 9 g; dried cranberries 15 g; sliced almonds 8 g; spinach 40 g; balsamic vinegar 10 g",
+ steps:["Wild rice takes 45–50 minutes — start it first.","Squash in 2 cm cubes at 425 °F, 25 min. Chicken on the same pan the last 18.","Toss with spinach, cranberries, almonds and balsamic once everything has cooled."],
+ store:"Fridge 4 days. Good cold or reheated.",
+ note:"The cranberries carry 12 g of carbohydrate on their own, which is why the rice can stay at 45 g dry."},
+{id:"L14",slot:"lunch",name:"Chicken, Sweet Potato & Black Bean Bowl",lane:"Mexican",p:41.9,f:20.5,c:69.5,wt:"~480 g",min:40,batch:5,base:"188 g roasted sweet potato",
+ ing:"chicken breast 133 g; sweet potato 250 g; black beans canned 70 g; olive oil 8 g; avocado 35 g; salsa 50 g; cheddar 10 g; lime juice 10 g",
+ steps:["Sweet potato in 2 cm cubes at 425 °F, 25 min.","Chicken alongside for the last 18 min, seasoned with cumin and chili powder.","Build with the beans, salsa, cheddar and lime."],
+ store:"Fridge 4 days, reheats well. Avocado day-of.",
+ note:"Was 15 g short of slot — the worst of the August six. 188 g of roasted sweet potato is what fixed it."},
+{id:"L15",slot:"lunch",name:"Honey-Mustard Chicken & Farro Salad",lane:"Mediterranean",p:43.2,f:17.1,c:70.6,wt:"~440 g",min:35,batch:5,base:"143 g cooked farro",
+ ing:"farro dry 55 g; chicken breast 130 g; apple 90 g; spinach 40 g; red onion 20 g; feta 18 g; sliced almonds 8 g; dijon mustard 12 g; honey 14 g; olive oil 4 g; lemon juice 10 g",
+ steps:["Farro in salted boiling water 25–28 min to chewy. Drain and cool.","Season the chicken, bake at 400 °F 20–22 min to 165 °F, rest, dice.","Whisk Dijon, honey, oil and lemon. Toss everything."],
+ store:"Fridge 4 days, cold only, zero smell.",
+ note:"Farro is the one grain here that does not go stodgy — it holds its bite four days where rice and pasta don't. Put it on Thursday and Friday."},
+{id:"L16",slot:"lunch",name:"Chicken Tinga Rice Bowl",lane:"Mexican",p:42,f:19.3,c:72.3,wt:"~500 g",min:35,batch:5,base:"174 g cooked white rice",
+ ing:"chicken breast 118 g; white rice dry 58 g; crushed tomatoes 90 g; chipotle in adobo 12 g; onion 50 g; olive oil 7 g; black beans canned 50 g; cotija 12 g; greek yogurt nonfat 30 g; avocado 35 g; lime juice 8 g",
+ steps:["Poach or bake the chicken, then shred it. Shredding rather than dicing is what makes it tinga — it lets the sauce coat everything.","Soften the onion in the oil 6 min, add chipotle and crushed tomato, simmer 10 min, then blend smooth.","Return the shredded chicken to the sauce for 5 minutes.","Over rice with the beans, cotija and yogurt."],
+ store:"Fridge 4 days, reheats very well. Freezes 2 months.",
+ note:"Avocado day-of."},
+{id:"L17",slot:"lunch",name:"Turkey, Hummus & Roasted Veg Wrap",lane:"Mediterranean",p:42.4,f:20.4,c:74,wt:"wrap + fruit",min:25,batch:5,base:"70 g wrap + 10 g pretzels",
+ ing:"large tortilla wrap 70 g; deli turkey 162 g; hummus 40 g; roasted red pepper 50 g; zucchini 60 g; spinach 25 g; feta 18 g; grapes 90 g; pretzels 10 g",
+ steps:["Roast the zucchini at 425 °F for 15 min and cool it completely before it goes near the wrap.","Hummus spread edge to edge — that is the moisture barrier that stops a made-ahead wrap going limp.","Fill, roll tight, wrap in foil, cut in half at lunch."],
+ store:"3 days wrapped. Cold, zero smell.",
+ note:""},
+{id:"L18",slot:"lunch",isnew:true,name:"Hot Honey Turkey & Sweet Potato Bowl",lane:"bowl · hot honey",p:40.3,f:23,c:69,wt:"~445 g",min:35,batch:5,base:"180 g roasted sweet potato",
+ ing:"ground turkey 93/7 115 g; sweet potato 240 g; cottage cheese 2% 110 g; avocado 40 g; hot honey 14 g; olive oil 5 g; spinach 30 g; lime juice 8 g",
+ steps:["Oven 425 °F. Sweet potato in 2 cm cubes tossed with the olive oil, smoked paprika, cumin and salt. Spread across two pans rather than crowding one — crowded sweet potato steams and is mush by Wednesday. Roast 25 min, tossing once.","Brown the turkey over medium-high with garlic powder and cumin, 8 min, breaking it up fine. Season assertively: this eats cold or barely warm and cold flattens salt.","Cool both completely before boxing. Warm food in a sealed container makes condensation and condensation makes a soggy bowl.","Layer spinach, sweet potato, turkey. Lime over.","Morning-of: cottage cheese spooned on, avocado, and the hot honey drizzled last."],
+ store:"Fridge 4 days. Low smell, good cold or reheated.",
+ note:"Yours, built from the brief. The cottage cheese goes on cold and does the job sour cream would, at a much better protein-to-fat ratio — and it keeps the bowl from being dry on day three. The honey goes on in the morning; packed Sunday it soaks into the potato and disappears."},
+{id:"L19",slot:"lunch",isnew:true,name:"Hot Honey Chicken & Cheddar Bento",lane:"bento",p:44.9,f:21.6,c:79.8,wt:"~580 g",min:30,batch:5,base:"65 g sourdough",
+ ing:"chicken breast 131 g; olive oil 6 g; hot honey 18 g; cheddar 20 g; sourdough 65 g; apple 70 g; grapes 40 g; cucumber 80 g; almonds 8 g; baby carrots 80 g; sugar snap peas 60 g",
+ steps:["Oven 425 °F. Chicken in 2 cm cubes tossed with the oil, garlic powder, smoked paprika and salt. Single layer, 18 min to 165 °F. Cool completely.","Cut the sourdough into fingers, not slices — a slice gets crushed in a bento and a finger doesn't. Leave it untoasted; toasted bread goes leathery in a box.","Box the chicken, cheddar, sourdough, cucumber and almonds. Grapes in their own compartment.","Morning-of: slice the apple, and take the hot honey in a small cup to pour over the chicken at lunch.","Carrots and snap peas raw in their own compartment — they also give you something to eat the hot honey with once the chicken is gone."],
+ store:"Fridge 4 days. Zero smell, no reheating.",
+ note:"The lunchable idea with something actually cooked in it, so it doesn’t read as a snack plate at 1 pm. Glazing the chicken on Sunday means the honey soaks in and the chicken goes tacky — hence the cup. Raw veg added 19 Sep: 5.0 g of fibre to 8.9."},
+{id:"L20",slot:"lunch",isnew:true,name:"Caprese Turkey Bento",lane:"bento · no cook",p:45.5,f:19.6,c:79.1,wt:"~610 g",min:10,batch:5,base:"80 g sourdough",
+ ing:"deli turkey 154 g; fresh mozzarella 45 g; cherry tomatoes 120 g; balsamic glaze 12 g; sourdough 80 g; olive oil 5 g; grapes 70 g; kalamata olives 12 g; basil 4 g; baby carrots 80 g; sugar snap peas 60 g",
+ steps:["Halve the tomatoes, toss with the olive oil, flaky salt and pepper, and let them sit 10 minutes while you box everything else. That brief salting is the difference between caprese and cold tomato.","Roll the turkey into loose bundles rather than folding it flat — it eats with fingers that way.","Sourdough torn into pieces, mozzarella pearls drained well.","Balsamic glaze in its own small cup. Basil torn in the morning, never Sunday — it blackens.","Carrots and snap peas raw alongside. This box was 4.5 g of fibre before them — the lowest in the bank, because mozzarella, turkey and white bread carry none."],
+ store:"Fridge 4 days. Zero cooking, zero smell.",
+ note:"The fastest lunch in the bank and the one for a Sunday with no prep window. Dressed on Sunday, the mozzarella goes grey-brown by Wednesday and the bread goes purple. Raw veg added 19 Sep."},
+{id:"S1",slot:"snack",name:"Yogurt, cereal, banana & PB",lane:"spoon · sweet",p:15.6,f:8.2,c:33.2,wt:"~160 g",min:3,batch:1,base:"13 g Three Wishes + 12 g rice crisps + banana",
+ ing:"greek yogurt nonfat 80 g; three wishes cereal 13 g; one degree brown rice crisps 12 g; banana 45 g; peanut butter 12 g",
+ steps:["Yogurt, cereal, sliced banana, peanut butter."],
+ store:"Assemble fresh.",
+ note:"Half the yogurt it used to carry. Doubles as Wednesday pre-run fuel — eat it 60\u201390 min before; if the run is inside 45 minutes drop the peanut butter to 6 g and add 20 g more banana."},
+{id:"S2",slot:"snack",name:"Cottage cheese, pineapple & crackers",lane:"spoon · sweet",p:15.7,f:8.4,c:30.1,wt:"~230 g",min:3,batch:1,base:"12 g crackers + pineapple",
+ ing:"cottage cheese 2% 110 g; pineapple 110 g; whole-grain crackers 12 g; cashews 10 g",
+ steps:["Cottage cheese in the tub, pineapple over.","Crackers and cashews in a separate bag so they stay crisp."],
+ store:"2 days assembled.",
+ note:""},
+{id:"S3",slot:"snack",name:"Turkey, pretzels & grapes",lane:"desk · savoury",p:15.2,f:7.5,c:31.6,wt:"~155 g",min:3,batch:1,base:"22 g pretzels + grapes",
+ ing:"deli turkey 60 g; pretzels 22 g; grapes 60 g; almonds 11 g",
+ steps:["Roll the turkey, bag the rest separately."],
+ store:"2 days.",
+ note:"No spoon, no smell, no cheese \u2014 useful on a day already heavy on dairy."},
+{id:"S4",slot:"snack",name:"Apple, peanut butter & a yogurt cup",lane:"spoon · sweet",p:15.3,f:7.4,c:31,wt:"~270 g",min:2,batch:1,base:"apple + 6 g honey",
+ ing:"apple 140 g; peanut butter 14 g; greek yogurt nonfat 110 g; honey 6 g",
+ steps:["Honey stirred through the yogurt.","Apple sliced at your desk, peanut butter for dipping."],
+ store:"Slice the apple day-of.",
+ note:"The plainest thing in the bank and probably the one you will reach for most. This is what a snack is supposed to look like."},
+{id:"S6",slot:"snack",name:"Desk-drawer kit",lane:"desk · shelf-stable",p:15.4,f:7.8,c:30.6,wt:"three small bags",min:1,batch:1,base:"30 g pretzels",
+ ing:"pretzels 30 g; turkey jerky 30 g; almonds 12 g",
+ steps:["Keep a bag of pretzels, a bag of jerky and a bag of almonds permanently in your desk. Restock monthly.","Weigh them into small bags on Sunday if you want it exact."],
+ store:"Shelf-stable. Nothing here needs a fridge or a shaker.",
+ note:"At 24 g of protein this kit needed a scoop of powder and a shaker bottle. At 15 it is three bags of food. That is the clearest single argument for the redistribution \u2014 the option that exists for the day you forgot to pack anything just got much easier to actually keep stocked. Weigh the pretzels: a poured handful is anywhere from 20 to 60 g, which is 30 g of carbohydrate."},
+{id:"S10",slot:"snack",name:"PB & honey on sourdough + yogurt",lane:"desk · sweet",p:16.6,f:7.9,c:30.3,wt:"1 slice + cup",min:4,batch:1,base:"42 g sourdough",
+ ing:"sourdough 42 g; peanut butter 14 g; greek yogurt nonfat 90 g; honey 4 g",
+ steps:["Make the sandwich in the morning and wrap it.","Small cup of yogurt alongside \u2014 no shaker needed now."],
+ store:"Same day.",
+ note:"Used to need a scoop of protein powder to reach slot. It doesn't any more."},
+{id:"S11",slot:"snack",name:"Hot honey cottage cheese & pretzels",lane:"spoon · sweet-savoury",p:16.3,f:7.3,c:30.6,wt:"~150 g",min:2,batch:1,base:"25 g pretzels",
+ ing:"cottage cheese 2% 110 g; pretzels 25 g; hot honey 6 g; almonds 8 g",
+ steps:["Cottage cheese in the tub, hot honey over it, crack black pepper on top.","Pretzels and almonds in a separate bag \u2014 dip them rather than mixing them in, or they are soft by 3:30."],
+ store:"Tub the night before; dry things separate.",
+ note:"Eats like a treat. 110 g of cottage cheese is half a normal tub \u2014 it now reads as a dip rather than a meal."},
+{id:"S12",slot:"snack",name:"Popcorn, jerky & grapes",lane:"desk · high volume",p:15.1,f:7.9,c:29.3,wt:"~105 g",min:2,batch:1,base:"20 g popcorn",
+ ing:"air-popped popcorn 20 g; turkey jerky 30 g; grapes 40 g; almonds 12 g",
+ steps:["Air-pop the corn at home \u2014 20 g of kernels is about three and a half cups popped.","Salt it, do not butter it; the fat slot is small."],
+ store:"Popcorn holds 2 days sealed.",
+ note:"By a distance the biggest-looking snack here, which matters on a day you are actually hungry rather than just due."},
+{id:"S13",slot:"snack",name:"Chocolate cottage cheese pudding",lane:"spoon · dessert",p:15.9,f:8.0,c:31.6,wt:"~180 g",min:4,batch:1,base:"9 g graham crackers + banana",
+ ing:"cottage cheese 2% 110 g; cocoa powder 4 g; honey 8 g; banana 40 g; graham crackers 9 g; peanut butter 8 g",
+ steps:["Blend the cottage cheese, cocoa, honey and peanut butter completely smooth \u2014 45 seconds, and smooth is the whole point; grainy cocoa cottage cheese is unpleasant.","Into a tub, banana sliced on top.","Graham crackers in a separate bag, crumbled over at 3:30."],
+ store:"Blends fine on Sunday and holds 4 days \u2014 it thickens slightly, which is an improvement.",
+ note:"The closest thing here to dessert."},
+{id:"S14",slot:"snack",name:"Chia pudding, granola & berries",lane:"spoon · make ahead",p:16.9,f:7.4,c:31.1,wt:"~270 g",min:4,batch:4,base:"24 g granola + strawberries",
+ ing:"greek yogurt nonfat 110 g; milk 2% 50 g; chia seeds 7 g; granola 24 g; strawberries 80 g",
+ steps:["Stir the yogurt, milk and chia together. Fridge overnight \u2014 chia wants 8 hours, not 4.","Strawberries sliced in.","Granola in a separate bag, over the top at 3:30 or it dissolves."],
+ store:"Batch four at once, holds 4 days.",
+ note:"Make it Sunday alongside the lunches and the snack slot is decided for half the week."},
+{id:"S16",slot:"snack",name:"Everything-bagel cottage cheese rice cakes",lane:"desk · savoury",p:15.5,f:8.5,c:29.9,wt:"~225 g",min:3,batch:1,base:"24 g rice cakes",
+ ing:"rice cakes 24 g; cottage cheese 2% 110 g; cherry tomatoes 60 g; avocado 32 g; everything bagel seasoning 2 g",
+ steps:["Cottage cheese, halved tomatoes and seasoning in a tub; avocado added in the morning.","Rice cakes in a separate bag \u2014 top them at your desk, because spread ahead they are soft within the hour."],
+ store:"Tub holds 2 days; avocado the morning you eat it.",
+ note:""},
+{id:"S17",slot:"snack",name:"Mango, yogurt & cashews",lane:"spoon · fruit-forward",p:16.7,f:6.8,c:29.6,wt:"~220 g",min:2,batch:1,base:"16 g dried mango + pineapple",
+ ing:"greek yogurt nonfat 130 g; dried mango 16 g; cashews 15 g; pineapple 60 g",
+ steps:["Yogurt in the tub with the fresh pineapple stirred through.","Mango and cashews in a separate bag \u2014 mango goes leathery-soft sitting in yogurt."],
+ store:"2 days.",
+ note:"Buy dried mango with no added sugar. The sweetened kind is nearly double the carbohydrate per gram and would put this well over slot. Weigh it \u2014 16 g is a small amount."},
+{id:"S18",slot:"snack",name:"Edamame & apple",lane:"desk · no dairy",p:16.3,f:7.1,c:30.7,wt:"~245 g",min:3,batch:1,base:"apple + 5 g pretzels",
+ ing:"shelled edamame frozen 130 g; apple 110 g; pretzels 5 g",
+ steps:["Steam or microwave the edamame 3 min from frozen, cool completely, salt it well.","Bag it with the sliced apple."],
+ store:"3 days. Good cold, zero smell.",
+ note:"The only option with no dairy in it at all \u2014 the one for a heavy-yogurt day."},
+{id:"S19",slot:"snack",name:"Berry smoothie in a thermos",lane:"drinkable",p:15.9,f:7.2,c:30,wt:"~300 ml",min:3,batch:1,base:"frozen berries + 10 g oats",
+ ing:"greek yogurt nonfat 90 g; frozen mixed berries 122 g; milk 2% 80 g; almond butter 8 g; rolled oats 10 g",
+ steps:["Blend everything, 45 seconds. The oats are what give it body \u2014 without them it drinks thin and you are hungry at four.","Into an insulated bottle in the morning; it holds cold until mid-afternoon."],
+ store:"Blend the morning of. Overnight it separates and the oats swell.",
+ note:"A different format rather than a different flavour, and that matters on a day when chewing another packed thing is the problem."},
+{id:"S20",slot:"snack",name:"Stuffed dates & jerky",lane:"desk · shelf-stable · treat",p:15,f:8.6,c:30.7,wt:"~80 g",min:2,batch:1,base:"30 g medjool dates",
+ ing:"medjool dates 30 g; peanut butter 12 g; turkey jerky 33 g; almonds 3 g",
+ steps:["Split the dates, remove the stones, fill with peanut butter, press an almond in. Flaky salt if you have it.","Jerky alongside."],
+ store:"Dates keep for weeks. Stuff a week\u2019s worth at once and keep them in the drawer.",
+ note:"The second shelf-stable option, and it no longer needs a shaker either. 30 g is about one and a bit \u2014 weigh them, medjools vary enormously."},
+{id:"S21",slot:"snack",isnew:true,name:"Caprese plate",lane:"desk · savoury",p:15.6,f:8.2,c:30.1,wt:"~210 g",min:3,batch:1,base:"45 g sourdough",
+ ing:"fresh mozzarella 40 g; cherry tomatoes 100 g; sourdough 45 g; deli turkey 20 g; balsamic glaze 5 g",
+ steps:["Halve the tomatoes and salt them lightly.","Sourdough torn into pieces, mozzarella pearls drained, turkey rolled.","Balsamic glaze in its own small cup \u2014 dressed ahead, the mozzarella goes grey."],
+ store:"2 days.",
+ note:"New at the smaller size. At 24 g of protein a caprese snack was impossible without a pile of cheese that blew the fat slot; at 15 it works."},
+{id:"S22",slot:"snack",isnew:true,name:"Parmesan, turkey & pretzels",lane:"desk · savoury",p:15.1,f:7.5,c:36.4,wt:"~200 g",min:5,batch:1,base:"22 g pretzels + grapes",
+ ing:"parmesan snack cheese 21 g; deli turkey 30 g; pretzels 22 g; grapes 70 g; baby carrots 60 g",
+ steps:["One BelGioioso Power-Full parmesan piece, the turkey rolled into loose bundles, everything else bagged separately.","Pretzels stay in their own bag until 3:30 or they soften against the grapes."],
+ store:"Assemble the night before; the cheese keeps its texture 2 days out of the fridge and a week in it.",
+ note:"The parmesan is a hard cheese, not a spoonable one \u2014 that is the whole point of it here. One 21 g piece carries 7 g of protein and 6 g of fat, so it does most of the work of a yogurt cup without being a yogurt cup, and the turkey closes the gap rather than a second piece of cheese doing it. Two pieces would put fat 4 g over slot. Carbohydrate runs 6 g above slot, which is the right direction."},
+{id:"S23",slot:"snack",isnew:true,name:"Turkey stick, apple & crackers",lane:"desk · no dairy",p:16.2,f:9,c:34.1,wt:"~180 g",min:2,batch:1,base:"25 g crackers + apple",
+ ing:"turkey snack stick 33 g; whole-grain crackers 25 g; apple 120 g; almonds 5 g",
+ steps:["One Chomps turkey stick, crackers and almonds in the drawer permanently; apple sliced at your desk.","Nothing here needs a fridge except the apple, and the apple does not really need one either."],
+ store:"Stick and crackers keep for months. Restock monthly alongside the desk-drawer kit.",
+ note:"No dairy at all and no spoon \u2014 the second option in the bank you can build entirely from a desk drawer, and unlike S6 it does not lean on jerky sugar to get there. A turkey stick is 12 g of protein for 3.5 g of fat, which is the leanest protein-per-gram of anything shelf-stable here. Weigh the crackers: a sleeve poured by hand is easily double 25 g."},
+{id:"S24",slot:"snack",isnew:true,name:"Protein bar & apple",lane:"travel · zero prep",p:12.4,f:12.3,c:30.9,wt:"bar + 1 apple ~175 g",min:0,batch:1,base:"the bar + 130 g apple",
+ ing:"protein bar high fibre 45 g; apple 130 g",
+ steps:["Keep two in your bag. That is the recipe."],
+ store:"Months. This is the option for a day that goes sideways.",
+ note:"Honest assessment: this is the worst macro fit in the snack bank and it is here because a bar in your bag beats a skipped snack. An IQBAR runs 12 g of fat against an 8 g slot and only 13 g of carbohydrate against 30, so the apple is not a garnish \u2014 it is most of the carbohydrate. It still lands 2.6 g under on protein, which is left alone deliberately. The bigger flag is fibre: one bar carries 10 g, nearly all of it chicory-root type that ferments fast. Given slow transit that is a lot to arrive at once, so treat this as the travel option rather than the Tuesday one, and do not run it on a day with a bean-based lunch."},
+{id:"S25",slot:"snack",isnew:true,name:"Peanut butter power balls",lane:"make ahead · no spoon",p:15.3,f:8,c:33.1,wt:"3 balls ~65 g",min:15,batch:6,base:"32 g dry oats + 10 g honey",
+ ing:"rolled oats 32 g; peanut butter 10 g; honey 10 g; protein powder 12 g",
+ steps:["Scale every line by the number of servings you are making \u2014 six servings is eighteen balls and about a week and a half.","Stir the oats and protein powder together dry first. Powder added to wet mix clumps and you get chalky pockets.","Warm the peanut butter and honey together 20 seconds in the microwave so they pour, then stir them through. The mix should hold when squeezed; if it crumbles add water a teaspoon at a time, never more oil.","Chill the mix 20 minutes before rolling \u2014 warm mix sticks to your hands and you lose a third of it.","Roll into 22 g balls, three to a serving. A scale is faster than eyeballing and the whole point is that a serving is a known quantity."],
+ store:"Fridge 2 weeks, freezer 3 months. They go rock-hard frozen \u2014 take a serving out the night before.",
+ note:"Exactly on slot at 15.3 / 8.0 / 33.1, which is the tightest fit of any snack here, and it is the only make-ahead option that is not a tub. The ratio matters: 10 g of peanut butter per serving looks mean, and it is what keeps fat at slot \u2014 the usual internet ratio is nearly double that and lands 12 g of fat, which is where a power ball quietly becomes a fat bomb. The honey does the binding that the extra peanut butter would have. Chocolate chips would add about 3 g of fat per serving; if you want them, that is the trade."},
+
+/* ---- DINNERS ---- */
+{id:"D1",slot:"dinner",name:"Honey-Garlic Salmon, Jasmine Rice, Broccolini",lane:"American",p:45,f:26.9,c:86.7,wt:"~525 g",min:30,batch:2,base:"210 g cooked jasmine rice",
+ ing:"salmon 128 g; jasmine rice dry 70 g; broccolini 150 g; olive oil 5 g; honey 15 g; soy sauce low sodium 15 g; garlic 6 g; edamame frozen 70 g",
+ steps:["Oven 425 °F. Rice on: 1:1.5 by volume, 15 min covered low plus 10 min rest.","Whisk the honey, soy and garlic into a glaze.","Broccolini tossed with oil, salt and pepper on a sheet pan. Push to one side, salmon on the other, brushed generously with the glaze.","Roast 12–14 min until the salmon flakes at the thickest point and the broccolini is charring at the tips. Lemon and the rest of the glaze at the end.","Edamame from frozen, steamed 3 min and salted, tipped into the bowl at the end. Broccolini alone left this at 4.9 g of fibre."],
+ store:"Fridge 3 days. Salmon is good cold over the rice the next day.",
+ note:"Full batch for two: 340 g salmon, 150 g dry rice, 350 g broccolini, 12 g oil, 30 g honey, 30 g soy, 12 g garlic."},
+{id:"D2",slot:"dinner",name:"Blackstone Smash Burgers + Griddled Wedges",lane:"burgers",p:37.6,f:23.6,c:78.5,wt:"~500 g",min:40,batch:2,base:"60 g bun + 179 g roasted wedges",
+ ing:"ground beef 90/10 119 g; burger bun 60 g; american cheese 15 g; potato 230 g; olive oil 5 g; ketchup 15 g; onion 30 g; romaine 25 g; cherry tomatoes 40 g",
+ steps:["Par-cook the wedges first — microwave the cut potatoes 6–7 min until just fork-tender, then toss with oil, paprika, garlic powder and salt. This is the whole trick.","Blackstone at medium-high. Wedges down cut-side first, 10–12 min turning twice, then move to a cool zone.","Divide the beef into 85 g balls — two thin patties per burger beats one thick one for crust. Griddle screaming hot, ball down, smash flat and hard for 10 seconds, salt.","90 seconds, then flip: the crust releases when it is ready, not before. Cheese on immediately, 60 seconds more.","Toast the cut buns in the beef fat, 45 seconds. Build."],
+ store:"Best fresh. Cooked patties keep 3 days — reheat in a dry pan, never the microwave. Wedges do not survive reheating.",
+ note:"Full batch for two: 340 g beef, 2 buns, 2 slices cheese, 550 g potatoes, 12 g oil, 30 g ketchup, 60 g onion, 60 g romaine, 90 g tomato."},
+{id:"D3",slot:"dinner",name:"Pineapple Chicken Stir Fry + Jasmine Rice",lane:"stir fry",p:41.9,f:22.9,c:89.5,wt:"~618 g",min:25,batch:2,base:"135 g cooked jasmine rice",
+ ing:"chicken breast 118 g; jasmine rice dry 45 g; pineapple 90 g; bell pepper 80 g; sugar snap peas 60 g; red onion 40 g; cashews 22 g; soy sauce low sodium 20 g; honey 10 g; sesame oil 9 g; cornstarch 4 g; garlic 6 g; ginger 5 g; broccoli 100 g",
+ steps:["Rice on first: 15 min covered low plus 10 min rest.","Toss the sliced chicken with half the cornstarch — the velveting step, and it is why the chicken stays tender at high heat.","Whisk the sauce: soy, honey, rice vinegar, remaining cornstarch, 30 ml water.","Wok on high with half the sesame oil. Chicken in a single layer, do not stir for 90 seconds, then toss 2–3 min and remove.","Remaining oil, garlic and ginger 30 seconds, then pepper, snap peas and onion 3–4 min to crisp-tender. Pineapple 1 min. Chicken back, sauce in, toss 60–90 seconds to gloss. Cashews off the heat.","Broccoli in with the peppers and snap peas, 3–4 min to tender-crisp."],
+ store:"Fridge 3 days. Reheats well; the snap peas soften. Keep the cashews separate if you want them crisp.",
+ note:"The rice base is smaller here than in other dinners because the pineapple, honey and cashews already carry about 25 g of carbohydrate between them. The slot is still met — do not add rice back without re-checking."},
+{id:"D4",slot:"dinner",name:"Chicken Souvlaki + Greek Lemon Potatoes",lane:"Mediterranean",p:37.4,f:21.3,c:78.3,wt:"~580 g",min:45,batch:2,base:"312 g Greek lemon potatoes",
+ ing:"chicken breast 118 g; potato 400 g; olive oil 14 g; tzatziki 60 g; cucumber 60 g; cherry tomatoes 60 g; lemon juice 20 g",
+ steps:["Marinate first: chicken with olive oil, lemon, garlic, oregano, salt and pepper. Leave 20 min while the potatoes start.","Oven 425 °F. Potato wedges tossed with oil, lemon, garlic and oregano into a baking dish. Pour stock around them, not over, and cover tightly with foil.","Roast covered 25 min. Uncover, toss, roast a further 15–18 min until the liquid has gone and the edges are browned and sticky. That two-stage method is what makes them Greek rather than just roasted.","Chicken on a second pan, 14–16 min to 165 °F, or on the Blackstone 3–4 min a side.","Build with cucumber, tomato and tzatziki spooned over."],
+ store:"Fridge 4 days — the best keeper of the Week 7 set. Potatoes re-crisp in the air fryer, 5 min at 400 °F. Tzatziki separately.",
+ note:"312 g of roasted potato on your plate is more starch than any other dinner in the library carries, and it is the cleanest way to hit a 78 g slot without rice."},
+{id:"D5",slot:"dinner",name:"Blackstone Breakfast-for-Dinner",lane:"breakfast-for-dinner",p:42.6,f:28.8,c:94.5,wt:"~630 g",min:20,batch:2,base:"100 g sourdough + 150 g hash browns",
+ ing:"egg 100 g; liquid egg white 42 g; turkey bacon 30 g; sourdough 100 g; butter 4 g; frozen hash browns 150 g; spinach 100 g; cherry tomatoes 120 g; black beans canned 45 g",
+ steps:["Blackstone to medium. Turkey bacon first, 4–5 min turning once. Set aside — it renders enough fat to cook the eggs in.","Hash browns into the rendered fat, spread thin, press down and leave 5 minutes undisturbed. Flip in sections, another 4–5 min. Not moving them is the entire technique.","Butter a clear zone and toast the sourdough, 90 seconds a side.","Eggs in the remaining space, 2–3 min.","Blacken the tomatoes cut-side down on the griddle 3 min, wilt the spinach beside them in the last minute, and warm the black beans through. This plate had 2.4 g of fibre without them — the lowest of any dinner here, because eggs, bacon, toast and hash browns carry none at all."],
+ store:"Eat fresh. Eggs and toast do not hold — this is the one dinner with no leftover plan, which is why it belongs on a Friday.",
+ note:"The library version of this was coded rest-day and landed 37 g short. Both the sourdough and the hash browns are weighed components here, not 'add hash browns for higher-carb days'."},
+{id:"D6",slot:"dinner",name:"Ground Turkey Taco Skillet + Rice",lane:"Mexican",p:35.9,f:24.3,c:79.6,wt:"~490 g",min:30,batch:2,base:"195 g cooked white rice",
+ ing:"ground turkey 93/7 109 g; white rice dry 65 g; black beans canned 80 g; bell pepper 60 g; onion 40 g; olive oil 4 g; salsa 50 g; cheddar 12 g; avocado 45 g",
+ steps:["Rice on: 18 min covered low plus 10 min rest.","Brown the turkey in the oil over medium-high with chili powder, cumin, garlic powder and salt, breaking it up, 8 min to no pink.","Pepper and onion in, 5 min until softened.","Beans and salsa, warm through 2 min. Serve over the rice with cheddar and avocado."],
+ store:"Fridge 4 days, reheats well. Avocado always cut day-of.",
+ note:"Reserve a portion before plating if you want it for a lunch — easier than trying to save it afterwards."},
+{id:"D7",slot:"dinner",name:"Garlic-Parm Chicken & Crispy Potatoes",lane:"American",p:42.2,f:22.3,c:64.7,native:"rest",wt:"~478 g",min:35,batch:2,base:"226 g roasted potato",
+ ing:"chicken breast 97 g; potato 290 g; olive oil 9 g; milk 2% 40 g; light cream cheese 25 g; parmesan 12 g; mozzarella 15 g; garlic 8 g; broccoli 100 g",
+ steps:["Toss the chicken cubes with half the oil, garlic, onion powder, dried herbs, paprika, chili flakes and salt. Potato cubes with the other half and the same seasoning.","Air fry separately at 400 °F: potatoes 20–23 min, chicken 16–18 to 165 °F, shaking the baskets halfway. Oven alternative: both at 425 °F, potatoes 28 min, chicken 18.","Sauce: warm the milk, cream cheese and parmesan over low, stirring smooth, 3–4 min. Mozzarella off the heat. Do not boil it or it splits.","Toss the chicken and potatoes through the sauce. Parsley.","Broccoli tossed in with the potatoes for the last 15 min, then through the sauce with everything else."],
+ store:"Fridge 4 days. A splash of milk when reheating loosens the sauce.",
+ note:"Built at rest-day size — this is the Sunday dinner. On a lifting day it needs about 28 g more dry rice or another 126 g of raw potato."},
+{id:"D8",slot:"dinner",name:"Shrimp Fajita Bowls + Cilantro-Lime Rice",lane:"Mexican",p:38.9,f:20.2,c:77.8,wt:"~630 g",min:25,batch:2,base:"225 g cooked white rice",
+ ing:"shrimp 140 g; white rice dry 75 g; bell pepper 90 g; onion 50 g; olive oil 8 g; avocado 45 g; pico de gallo 50 g; cheddar 12 g; lime juice 10 g",
+ steps:["Rice on: 18 min low plus 10 min rest. Fold lime juice and chopped cilantro through off the heat.","Cast iron or Blackstone on high. Peppers and onion in the oil, 5–6 min until they take colour and still have bite. Push aside.","Shrimp tossed in chili powder, cumin, smoked paprika and garlic powder, 2 min a side to pink and opaque. Stop there — shrimp is ninety seconds from perfect to rubber.","Build: rice, vegetables, shrimp, avocado, pico, cheddar."],
+ store:"Fridge 3 days. Reheat the shrimp gently or eat it cold over the rice.",
+ note:"The fastest dinner in the bank — this is the one for 6:40 pm with nothing started."},
+{id:"D9",slot:"dinner",name:"Ground Turkey Bolognese over Rigatoni",lane:"Italian",p:38.7,f:20.5,c:79.3,wt:"~560 g",min:40,batch:2,base:"168 g cooked rigatoni",
+ ing:"ground turkey 93/7 100 g; rigatoni dry 70 g; crushed tomatoes 150 g; tomato paste 20 g; onion 40 g; carrot 40 g; celery 30 g; olive oil 7 g; parmesan 12 g; milk 2% 30 g; garlic 6 g",
+ steps:["Dice the onion, carrot and celery fine — the finer the dice, the better the sauce. Sweat in the olive oil over medium, 8 min, until soft and sweet.","Garlic 30 seconds. Turkey in, broken up fine, 6–8 min to no pink.","Tomato paste in, 2 min. Cooking the paste out is what gives this depth without a long simmer. Then crushed tomatoes, oregano, bay leaf, salt.","Simmer 20 min uncovered, stirring occasionally. Milk stirred in for the last 5.","Pasta al dente, reserve 100 ml of the water, toss sauce and pasta together in the pan with a splash. Parmesan at the table."],
+ store:"The best keeper in the bank — sauce holds 5 days and freezes 3 months. Make a double batch of sauce and two dinners' work is behind you.",
+ note:"Use regular semolina pasta. High-protein pasta runs about 9 g less carbohydrate and 6 g more protein at the same dry weight — the wrong direction on both axes at once."},
+{id:"D10",slot:"dinner",name:"Honey-Garlic Chicken Thighs + Sweet Potato",lane:"American",p:37.2,f:22,c:81,wt:"~470 g",min:40,batch:2,base:"210 g roasted sweet potato",
+ ing:"chicken thigh 155 g; sweet potato 280 g; green beans 130 g; olive oil 9 g; honey 15 g; soy sauce low sodium 12 g; garlic 8 g",
+ steps:["Oven 425 °F. Sweet potato in 2 cm cubes tossed with oil and salt. Roast 22 min.","Whisk honey, soy, garlic, rice vinegar and red pepper flakes.","Green beans onto the pan, thighs alongside brushed with half the glaze. Roast 15–18 min to 175 °F — thighs want to go past 165, unlike breast; that is where they get tender.","Remaining glaze over at the table."],
+ store:"Fridge 4 days, reheats well.",
+ note:"The only place in the bank where the protein brings real fat with it, which is why the added oil is low."},
+{id:"D11",slot:"dinner",name:"Blackstone Steak & Loaded Baked Potato",lane:"American",p:37.3,f:20.8,c:77.2,wt:"~570 g",min:40,batch:2,base:"296 g baked potato",
+ ing:"sirloin steak 85 g; potato 380 g; butter 6 g; greek yogurt nonfat 40 g; cheddar 18 g; scallions 10 g; olive oil 4 g; broccoli 120 g",
+ steps:["Microwave the potatoes 8–10 min, then finish in a 425 °F oven 15 min for a crisp skin. Straight oven-baking is 55 minutes; this gets the same result inside the weeknight window.","Broccoli tossed in oil, roasted alongside 15 min.","Blackstone screaming hot. Steak salted heavily, 3–4 min a side to medium. Rest 5 minutes — non-negotiable — then slice against the grain.","Split the potatoes, fork the insides up, butter, yogurt, cheddar, scallions, steak over the top."],
+ store:"Fridge 3 days. Reheat the steak in short bursts.",
+ note:"The steak is deliberately light. Protein is already covered by breakfast and lunch; the potato is doing the work here."},
+{id:"D12",slot:"dinner",name:"Spicy Salmon Rice Bowls with Cucumber",lane:"bowls",p:38.6,f:26.6,c:83.4,wt:"~620 g",min:25,batch:2,base:"240 g cooked jasmine rice",
+ ing:"salmon 112 g; jasmine rice dry 80 g; cucumber 100 g; avocado 25 g; edamame frozen 50 g; mayonnaise 4 g; sriracha 10 g; soy sauce low sodium 12 g; sesame seeds 3 g; scallions 10 g; cabbage slaw mix 100 g",
+ steps:["Rice on. Season it with a splash of rice vinegar while warm.","Salmon skin-side down in a hot dry pan, 4 min, flip 2–3 min. Or roast at 425 °F for 12 min. Flake into large pieces.","Whisk the mayo, sriracha and soy into a thin sauce. This is a drizzle, not a dressing.","Build: rice, salmon, cucumber, edamame, avocado, sauce, sesame, scallion.","Shredded cabbage raw under the rice — it stays crisp under the sauce where the cucumber goes soft."],
+ store:"Fridge 2 days — the shortest here. Good cold the next day.",
+ note:"Salmon plus avocado plus mayo runs this to the top of the fat slot. The avocado is at 25 g rather than the usual 45 for exactly that reason — do not add more."},
+{id:"D13",slot:"dinner",name:"Turkey Smash Burger Tacos + Street-Corn Rice",lane:"burgers × Mexican",p:39,f:21.2,c:77.9,wt:"3 tacos + rice",min:30,batch:2,base:"78 g corn tortillas + 99 g cooked rice",
+ ing:"ground turkey 93/7 110 g; corn tortillas 78 g; american cheese 15 g; white rice dry 33 g; corn frozen 60 g; cotija 12 g; greek yogurt nonfat 30 g; mayonnaise 4 g; onion 25 g; lime juice 8 g",
+ steps:["Rice on. Fold through the corn, cotija, yogurt, a little mayo, chili powder and lime — this is elote in rice form and it is where a third of the carbohydrate lives.","Blackstone or a heavy pan on high. Press 40 g of turkey directly onto each tortilla in a thin layer, meat side down. 2 min until the edges brown and crisp.","Flip so the tortilla toasts, 1 min, cheese on, fold.","Diced onion, cilantro, lime."],
+ store:"Components hold 3 days; assemble fresh. The rice is a good bonus lunch base.",
+ note:"Burger night and taco night in one, on a lifting day."},
+{id:"D14",slot:"dinner",name:"Pesto Chicken Pasta",lane:"Mediterranean",p:43.7,f:22.2,c:87.6,wt:"~582 g",min:30,batch:2,base:"221 g cooked pasta",
+ ing:"chicken breast 80 g; pasta dry 92 g; pesto 20 g; cherry tomatoes 110 g; parmesan 12 g; greek yogurt nonfat 30 g; olive oil 6 g; garlic 6 g; broccoli 150 g",
+ steps:["Sear the seasoned chicken 5–6 min a side to 165 °F, rest, slice.","Blister the tomatoes with garlic in the same pan, 3–4 min.","Toss the pasta with the pesto loosened by the Greek yogurt and a splash of pasta water.","Chicken and parmesan over.","Broccoli blanched 2 min in the pasta water before the pasta goes in — one pan, and it takes the pesto as well as the pasta does."],
+ store:"Fridge 3 days. Reheat with a splash of water.",
+ note:"Dead on slot — the tightest fit in the bank. The old version of this was the highest-fat dinner in the library and still 10 g short on carbohydrate, and it was being reached for whenever fat ran low. That was the wrong instinct: fat is not your gap."},
+{id:"D15",slot:"dinner",name:"Ground Turkey Pasta Bake",lane:"Italian",p:41,f:21.2,c:77.1,wt:"~490 g",min:45,batch:2,base:"180 g cooked pasta",
+ ing:"ground turkey 93/7 85 g; pasta dry 75 g; marinara 130 g; cottage cheese 2% 40 g; zucchini 80 g; broccoli 80 g; mozzarella 20 g; olive oil 6 g",
+ steps:["Brown the turkey, set aside.","Zucchini and broccoli in the oil, 5–7 min tender-crisp.","Blend the marinara with the cottage cheese until smooth — that is the creaminess without cream.","Combine everything, top with mozzarella, bake at 350 °F for 15–20 min, then broil 3 min to brown."],
+ store:"Fridge 5 days, freezes 3 months in individual portions. Reheats better than anything else here.",
+ note:"Regular pasta, not Barilla Protein Plus. Switching to regular drops 5 g of protein and frees the room for 10 g more dry pasta — protein pasta is solving a problem you do not have."},
+{id:"D16",slot:"dinner",name:"Buffalo Chicken & Sweet Potato Bowl",lane:"American",p:40,f:20.1,c:80.8,wt:"~590 g",min:40,batch:2,base:"188 g sweet potato + 84 g cooked rice",
+ ing:"chicken breast 110 g; sweet potato 250 g; white rice dry 28 g; buffalo sauce 30 g; greek yogurt nonfat 45 g; blue cheese 18 g; olive oil 11 g; celery 40 g; carrot 40 g; scallions 10 g",
+ steps:["Sweet potato in 2 cm cubes at 425 °F, 25 min.","Rice on — a small pot; this is a supporting base, not the main one.","Chicken roasted or griddled to 165 °F, then shredded, not diced. Buffalo sauce clings to shredded chicken and slides off cubes. Toss it hot.","Thin the Greek yogurt with a splash of water and a little blue cheese into a ranch-style drizzle.","Build: sweet potato and rice, chicken, celery, carrot, drizzle, remaining blue cheese, scallion."],
+ store:"Fridge 4 days. Reheats well; keep the drizzle separate.",
+ note:"Two bases rather than one, because a single sweet potato big enough to carry 78 g would be about 390 g raw. The yogurt-and-blue-cheese drizzle instead of ranch is what leaves room for them."},
+{id:"D17",slot:"dinner",name:"Sheet-Pan Chicken Fajitas + Tortillas & Rice",lane:"Mexican",p:37.3,f:22.1,c:83.5,wt:"~570 g",min:35,batch:2,base:"2 corn tortillas + 150 g cooked rice",
+ ing:"chicken breast 99 g; corn tortillas 52 g; white rice dry 50 g; bell pepper 100 g; onion 60 g; olive oil 7 g; pico de gallo 50 g; avocado 51 g; cheddar 10 g; greek yogurt nonfat 30 g",
+ steps:["Oven 450 °F — hotter than usual, because fajita vegetables want char, not steam.","Peppers, onion and sliced chicken tossed in oil, chili powder, cumin, smoked paprika, garlic powder and oregano. Spread across two pans rather than crowding one. Roast 18–20 min, tossing once.","Rice on alongside.","Warm the tortillas directly over a gas flame or on the Blackstone, 20 seconds a side. Lime over everything at the end."],
+ store:"Filling holds 4 days. Assemble fresh.",
+ note:""},
+{id:"D18",slot:"dinner",name:"Teriyaki Salmon & Broccoli Rice Bowl",lane:"stir fry",p:45.2,f:27.4,c:85.8,wt:"~560 g",min:25,batch:2,base:"174 g cooked jasmine rice",
+ ing:"salmon 124 g; jasmine rice dry 58 g; broccoli 150 g; soy sauce low sodium 25 g; honey 16 g; ginger 6 g; garlic 6 g; cornstarch 5 g; sesame oil 4 g; sesame seeds 4 g; scallions 10 g; edamame frozen 70 g",
+ steps:["Rice on. Broccoli roasted at 425 °F for 15 min, or steamed 5.","Reduce the teriyaki before it goes near the fish: soy, honey, ginger, garlic and the cornstarch slurry simmered 2–3 min until it coats a spoon. Glazing with unreduced sauce is why home teriyaki turns watery.","Salmon skin-side down in a hot pan 4 min, flip 2–3 min, brushing with the glaze in the last minute so the sugar does not burn.","Sesame seeds and scallion over.","Edamame steamed from frozen and tipped over at the end with the sesame seeds."],
+ store:"Fridge 3 days.",
+ note:"Different enough from D12 to run both in a month — that one is cold and spicy, this is hot and sweet."},
+{id:"D19",slot:"dinner",name:"Chicken Parmesan with Spaghetti",lane:"Italian",p:42.9,f:21.1,c:87.2,wt:"~592 g",min:40,batch:2,base:"173 g cooked spaghetti",
+ ing:"chicken breast 70 g; panko 16 g; egg 15 g; spaghetti dry 72 g; marinara 130 g; mozzarella 20 g; parmesan 8 g; olive oil 8 g; broccoli 150 g",
+ steps:["Butterfly and pound the breasts to an even 1.5 cm. Even thickness matters more than thinness — the coating burns before a thick end cooks.","Flour, egg, panko. Shallow-fry in the oil 3 min a side until deep gold, then transfer to a baking dish.","Sauce and cheese on top, oven 400 °F, 10 min to melt. Do not sauce it before it goes in the pan — that is how the crust goes soft.","Spaghetti al dente, tossed with the remaining marinara.","Broccoli roasted alongside the cutlet for the last 12 min, or blanched in the pasta water. Chicken parm and spaghetti alone is 5.1 g of fibre."],
+ store:"Fridge 3 days. Reheat the cutlet in the oven, never the microwave.",
+ note:"Your cutlet is small — 50 g cooked. Chicken parm is normally 200 g of chicken under cheese, and even at a 37 P dinner slot that arithmetic does not work. The pasta is the meal here."},
+{id:"D20",slot:"dinner",name:"Blackstone Chicken Quesadillas + Mexican Rice",lane:"Mexican",p:39.7,f:20.5,c:89,wt:"~520 g",min:30,batch:2,base:"90 g flour tortillas + 84 g cooked rice",
+ ing:"chicken breast 75 g; flour tortillas 90 g; cheddar 20 g; white rice dry 28 g; crushed tomatoes 40 g; onion 30 g; bell pepper 50 g; olive oil 4 g; greek yogurt nonfat 40 g; pico de gallo 40 g; black beans canned 50 g",
+ steps:["Mexican rice: toast the dry rice in a little oil 2 min until it smells nutty, then add the crushed tomato, stock and cumin and cook covered 18 min. Toasting first is the whole difference.","Griddle the diced chicken with peppers and onion, 8 min.","Tortilla down on the Blackstone, cheese, filling, cheese, fold. Cheese on both sides of the filling — it is the glue. 2–3 min a side, pressed.","Black beans warmed and drained well, spread inside the quesadilla with the chicken. Wet beans make a soggy tortilla — drain them properly."],
+ store:"Fridge 3 days. Re-crisp in a dry pan.",
+ note:""},
+{id:"D21",slot:"dinner",name:"Shrimp Scampi with Linguine",lane:"Mediterranean",p:42.5,f:22.9,c:88.6,wt:"~632 g",min:25,batch:2,base:"221 g cooked linguine",
+ ing:"shrimp 100 g; linguine dry 92 g; butter 8 g; olive oil 11 g; garlic 10 g; white wine 30 g; lemon juice 15 g; parmesan 10 g; cherry tomatoes 80 g; spinach 40 g; broccolini 150 g",
+ steps:["Pasta into heavily salted water. Reserve 150 ml of the water before draining — the starch in it is what makes the sauce a sauce instead of oil.","Garlic gently in the oil and butter, 90 seconds, no colour. Burnt garlic ruins scampi.","Wine in, reduce by half, 2 min. Tomatoes, then shrimp, 2 min a side.","Pasta straight from the pot into the pan with a splash of the water, spinach folded through, lemon and parmesan off the heat.","Broccolini blanched 2 min in the pasta water, then into the pan with the shrimp for the last minute."],
+ store:"Fridge 2 days, and it is noticeably better fresh.",
+ note:"Cook this on a night you are both home."},
+{id:"D22",slot:"dinner",name:"Turkey Sloppy Joes with Oven Fries",lane:"burgers",p:37.9,f:23.7,c:81.8,wt:"~480 g",min:30,batch:2,base:"60 g bun + 136 g oven fries",
+ ing:"ground turkey 93/7 124 g; burger bun 60 g; ketchup 30 g; tomato paste 15 g; brown sugar 6 g; onion 40 g; bell pepper 40 g; potato 175 g; olive oil 7 g; cheddar 12 g",
+ steps:["Fries first: cut, soak 10 min in cold water and dry thoroughly. Wet fries steam instead of crisping. Oil, salt, 425 °F for 25 min, flipping once.","Brown the turkey with the onion and pepper, 8 min. Tomato paste 2 min.","Ketchup, brown sugar, Worcestershire, mustard powder and 60 ml water. Simmer 10 min until it holds on a spoon.","Toast the buns cut-side down in a dry pan. Cheddar on the hot meat."],
+ store:"The meat holds 4 days and freezes 3 months. Fries do not keep.",
+ note:""},
+{id:"D23",slot:"dinner",name:"Beef & Broccoli Stir Fry with Rice",lane:"stir fry",p:38.9,f:22,c:88.6,wt:"~592 g",min:30,batch:2,base:"162 g cooked jasmine rice",
+ ing:"sirloin steak 107 g; jasmine rice dry 54 g; broccoli 180 g; soy sauce low sodium 25 g; oyster sauce 20 g; honey 10 g; cornstarch 6 g; sesame oil 9 g; cashews 12 g; garlic 8 g; ginger 6 g; scallions 15 g; sugar snap peas 80 g",
+ steps:["Freeze the beef 15 minutes and slice it against the grain as thinly as you can — frozen, it cuts like paper. Toss with half the cornstarch.","Rice on. Broccoli blanched 2 min and shocked cold, so it finishes crisp in the wok rather than steaming.","Sauce: soy, oyster, honey, remaining cornstarch, 60 ml water.","Wok on high with half the sesame oil. Beef in one layer, 60 seconds untouched, toss 1 min, remove — it finishes in the sauce.","Garlic and ginger 30 seconds, broccoli 2 min, beef back, sauce in, toss 60–90 seconds to gloss. Cashews and scallion off the heat.","Snap peas into the wok with the broccoli — 60 seconds, they want to stay loud."],
+ store:"Fridge 3 days.",
+ note:"On a long-run Saturday, take the sesame oil to 15 g rather than 9 — that extra 6 g is what brings the day's fat to target."},
+{id:"D24",slot:"dinner",name:"Garlic Butter Steak Bites & Crispy Potatoes",lane:"American",p:36.9,f:22.2,c:79,wt:"~570 g",min:40,batch:2,base:"292 g roasted potato",
+ ing:"sirloin steak 108 g; potato 375 g; butter 8 g; olive oil 6 g; garlic 12 g; parmesan 10 g; green beans 130 g",
+ steps:["Potatoes: par-boil 8 min, drain, and shake them hard in the dry pan to rough up the edges. Those torn edges are what go crisp. Oil, 425 °F for 25 min or air fryer 20 min.","Green beans in for the last 12 min.","Steak bites: pan or Blackstone screaming hot, cubes dried on paper towel, in one layer, 90 seconds without moving, then toss 60–90 seconds.","Butter, garlic and parsley in at the very end, off the heat — 30 seconds, no more. Parmesan over the potatoes."],
+ store:"Fridge 3 days. Potatoes re-crisp in the air fryer.",
+ note:""},
+{id:"D25",slot:"dinner",name:"Blackstone Philly Cheesesteak + Oven Fries",lane:"American",p:37.7,f:24.5,c:79.4,wt:"~440 g",min:35,batch:2,base:"100 g hoagie roll + 70 g oven fries",
+ ing:"sirloin steak 96 g; hoagie roll 100 g; provolone 18 g; green bell pepper 80 g; onion 80 g; olive oil 10 g; potato 90 g",
+ steps:["Fries first: cut, soak 10 min in cold water, dry thoroughly. Oil, salt, 425 °F for 25 min, flipping once.","Freeze the steak 15 minutes and slice it as thinly as you can against the grain — that is the whole difference between a cheesesteak and a beef sandwich.","Blackstone to medium-high. Peppers and onions in the oil, 6–7 min until soft and browning. Push aside.","Steak onto the bare griddle, 90 seconds without touching it, then chop and toss with the vegetables, 2 min more. Provolone laid over the pile, lid or a splash of water for 60 seconds to melt.","Split and toast the rolls cut-side down in the griddle fat, 45 seconds. Scoop the pile straight in."],
+ store:"Eat fresh. The steak-and-pepper mix holds 2 days; fries do not keep.",
+ note:"Untested — cooked once and not yet judged. The roll carries 52 g of carbohydrate on its own, which is why the fries alongside stay small. 90 g of raw potato is a small handful and that is correct."},
+{id:"D26",slot:"dinner",name:"French Onion Smothered Chicken + Garlic Mash",lane:"American",p:37.9,f:23.1,c:81,wt:"~590 g",min:40,batch:2,base:"250 g garlic mashed potato",
+ ing:"chicken breast 89 g; potato 275 g; onion 150 g; gruyere 15 g; butter 12 g; olive oil 4 g; all-purpose flour 4 g; chicken stock 100 g; milk 2% 50 g; garlic 6 g; green beans 150 g",
+ steps:["Onions first — they are the recipe and they cannot be rushed under about 25 minutes. Slice thin, into a wide pan with the olive oil and half the butter over medium-low. Stir every few minutes: translucent at 10, gold at 18, deep brown and jammy at 25–30. If they are browning at 8 minutes the heat is too high and you are frying, not caramelising.","Potatoes peeled, cut into even 4 cm chunks, into cold salted water, brought to a boil, 18–20 min to falling apart. Starting them cold is what stops the outsides going gluey before the middles cook.","Butterfly the chicken into even cutlets, season, sear in a separate pan 4–5 min a side to 165 °F. Set aside to rest.","Flour stirred into the onions, 1 min, then stock and Worcestershire. Simmer 5 min to a gravy. Chicken back in, cheese over, lid on 3 min to melt.","Mash: drain the potatoes and let them steam dry in the pan for 2 minutes before anything goes in — this is what keeps mash from being watery. Warm milk, remaining butter, grated raw garlic, salt. Green beans steamed or roasted 12 min."],
+ store:"Fridge 4 days. Mash reheats with a splash of milk. Freezes poorly — eat it in the week.",
+ note:"Untested. The mash is the point: 275 g of raw potato carries 48 g of carbohydrate in a form you will actually finish, where the same carbohydrate as roasted wedges is a much bigger-looking plate. You had no mashed-potato dish in the library at all, which is an odd gap for someone whose only structural shortfall is starch."},
+{id:"L22",slot:"lunch",isnew:true,name:"Chicken Caesar Pasta Salad",lane:"American \u00b7 from Instagram",p:49.4,f:19.1,c:82.3,wt:"~560 g",min:30,batch:5,base:"163 g cooked pasta",
+ ing:"chicken breast 88 g; pasta dry 68 g; greek yogurt nonfat 60 g; parmesan 16 g; dijon mustard 8 g; lemon juice 12 g; olive oil 7 g; kale 45 g; romaine 35 g; cherry tomatoes 70 g; croutons 14 g; chickpeas canned 60 g",
+ steps:["Season and roast the chicken at 400 \u00b0F, 20\u201322 min to 165 \u00b0F. Rest, then slice thin.","Pasta al dente \u2014 short shapes only, no long strands. Drain, rinse cold, spread to cool.","Caesar dressing: blend the Greek yogurt, parmesan, Dijon, lemon, olive oil, a grated garlic clove and plenty of black pepper. Anchovy paste if you have it. Thin with water to pourable.","Massage the chopped kale with a little dressing and leave it 10 minutes \u2014 that takes the squeak out of raw kale and is why this holds four days where a romaine-only caesar does not.","Toss pasta, kale, tomatoes and chicken. Romaine and croutons in a separate cup, added at lunch.","Air-fry the drained chickpeas with a teaspoon of cornstarch, smoked paprika, onion and garlic powder, 400 °F for 12–15 min until they rattle. Cornstarch is what makes them crunch rather than wrinkle. Keep them with the croutons, not in the dressed salad."],
+ store:"Fridge 4 days. Cold only. Croutons and romaine stay out until you eat it.",
+ note:"From your saved collection, rebuilt. The reason it earns its place is Friday: a chicken caesar at the pizza restaurant lands about 18 g of carbohydrate against a 78 g slot, and you keep ordering it. This is the same flavour carrying 82 g. The air-fried chickpeas are in the original post and were the thing I left out first time round — they take it from 6.2 g of fibre to 10.7, the highest of any pasta lunch here. Use regular semolina pasta, not protein noodles: protein pasta trades away the carbohydrate you are short of."},
+{id:"D27",slot:"dinner",isnew:true,name:"Chicken Gnocchi Soup",lane:"American \u00b7 from Instagram",p:39.3,f:21.7,c:86.2,wt:"~695 g bowl + bread",min:35,batch:2,base:"125 g gnocchi + 30 g sourdough",
+ ing:"chicken breast 60 g; potato gnocchi 125 g; sourdough 30 g; milk 2% 90 g; light cream cheese 22 g; parmesan 8 g; chicken stock 240 g; all-purpose flour 7 g; carrot 50 g; celery 30 g; onion 40 g; spinach 40 g; olive oil 6 g; butter 4 g; kale 60 g",
+ steps:["Dice the carrot, celery and onion fine. Sweat in the olive oil and butter over medium, 7\u20138 min, until soft and sweet.","Flour in, 1 min. Stock a splash at a time, whisking, then the rest. Simmer 5 min to thicken.","Diced chicken in, 6\u20137 min to cooked through. Milk and cream cheese off the boil \u2014 do not let it boil once the dairy is in or it splits.","Gnocchi straight in from the packet, 3\u20134 min until they float. They thicken the soup as they cook; that is the trick, and it is why no extra starch is needed.","Spinach folded through for the last minute. Parmesan at the table, sourdough for dipping.","Kale, stems out and chopped fine, in with the spinach for the last two minutes. This is the Olive Garden version anyway."],
+ store:"Fridge 4 days. It thickens hard in the fridge \u2014 loosen with milk or stock, never water.",
+ note:"From your saved collection. You had no soup anywhere in the bank, and this is the highest-carbohydrate comfort dinner available for how little it feels like eating a carbohydrate. The chicken is deliberately small at 60 g raw: gnocchi and dairy already carry 25 g of protein before any meat goes in, which is not obvious and is why most versions of this land well over slot."},
+{id:"D28",slot:"dinner",isnew:true,name:"Honey-Garlic Chicken & Peanut Noodles",lane:"stir fry \u00b7 from Instagram",p:38.0,f:20.7,c:81.6,wt:"~510 g",min:30,batch:2,base:"151 g cooked rice noodles",
+ ing:"chicken breast 95 g; rice noodles dry 58 g; peanut butter 20 g; soy sauce low sodium 22 g; honey 12 g; rice vinegar 8 g; sesame oil 4 g; ginger 6 g; garlic 8 g; sriracha 8 g; broccoli 120 g; carrot 50 g; scallions 15 g; peanuts 6 g",
+ steps:["Noodles per packet \u2014 usually a soak rather than a boil. Drain, rinse cold, toss with a few drops of the sesame oil so they do not weld together.","Whisk the peanut butter, soy, honey, rice vinegar, ginger, garlic and sriracha with 60 ml hot water into a pourable sauce. It looks split at first and comes together as you whisk.","Broccoli and carrot into a hot wok with the rest of the sesame oil, 3\u20134 min to tender-crisp.","Sliced chicken in one layer, 90 seconds untouched, then toss 2\u20133 min to cooked through.","Noodles and sauce in, toss 60 seconds to coat. Scallions and crushed peanuts off the heat."],
+ store:"Fridge 3 days. Good cold. Long strands are fine here because you eat it at a table \u2014 do not pack it for the office.",
+ note:"From your saved collection. Fills the stir-fry lane with a sauce the bank did not have: your other stir fries are soy-and-honey or oyster-based, and peanut is a genuinely different night. The retired noodle bowl failed as a cold desk lunch, not as food \u2014 this is the same base used the way it actually works."},
+{id:"D29",slot:"dinner",isnew:true,name:"Mexican Street Corn Chicken & Rice",lane:"Mexican \u00b7 from Instagram",p:41.7,f:23.6,c:86.6,wt:"~555 g",min:30,batch:2,base:"192 g cooked white rice",
+ ing:"chicken breast 100 g; white rice dry 64 g; corn frozen 90 g; cotija 16 g; greek yogurt nonfat 40 g; mayonnaise 8 g; lime juice 10 g; bell pepper 60 g; onion 35 g; olive oil 9 g; black beans canned 55 g",
+ steps:["Rice on: 18 min covered low plus 10 min rest.","Char the corn hard in a dry pan or on the Blackstone, 5\u20136 min without stirring much. Blackened spots are the entire point \u2014 pale corn tastes of nothing here.","Chicken cubed, tossed with chili powder, cumin, smoked paprika and garlic powder, griddled 8\u20139 min with the pepper and onion.","Elote sauce: Greek yogurt, mayo, lime, a little cotija and chili powder, thinned with a splash of water.","Build: rice, chicken and vegetables, charred corn, sauce over, remaining cotija and more lime. Cilantro if you have it.","Black beans warmed through and folded in with the corn."],
+ store:"Fridge 4 days, reheats well. Keep the sauce separate.",
+ note:"From your saved collection. The street-corn flavour is already proven for you in D13, where it lives in the rice \u2014 here it is the dish. Yogurt carries most of the sauce rather than mayo, which is what leaves room for the rice to be a real 64 g dry."},
+{id:"L24",slot:"lunch",isnew:true,name:"Street Corn Chicken Bowl",lane:"Mexican \u00b7 from Instagram",p:41.6,f:19.2,c:69.7,wt:"~480 g",min:30,batch:5,base:"138 g cooked white rice",
+ ing:"chicken breast 110 g; white rice dry 46 g; corn frozen 80 g; cotija 12 g; greek yogurt nonfat 45 g; mayonnaise 4 g; lime juice 10 g; bell pepper 60 g; onion 30 g; olive oil 5 g; black beans canned 40 g; avocado 25 g",
+ steps:["Rice on: 18 min covered low plus 10 min rest.","Char the corn hard in a dry pan, 5\u20136 min without stirring much. The blackened spots are the point.","Chicken cubed with chili powder, cumin, smoked paprika and garlic powder, griddled 8\u20139 min with the pepper and onion.","Elote sauce: Greek yogurt, mayo, lime, a little cotija, chili powder, thinned with water. Pack it in its own cup.","Layer rice, beans, chicken and vegetables, charred corn on top. Avocado and sauce added morning-of."],
+ store:"Fridge 4 days, good cold or reheated, low smell. Avocado day-of, sauce separate.",
+ note:"From your saved collection, where it is literally photographed in meal-prep containers. This is the lunch plating of D29 \u2014 same cook, two slots \u2014 so a single batch of street corn chicken covers a dinner for two and three packed lunches. Black beans are in the lunch and not the dinner because the lunch has room for them and they are the cheapest fibre in the dish."},
+{id:"L25",slot:"lunch",isnew:true,name:"Sweet Chilli Chicken Crispy Rice Salad",lane:"bowl \u00b7 from Instagram",p:43.7,f:20.6,c:69.6,wt:"~490 g",min:35,batch:5,base:"120 g crisped white rice",
+ ing:"chicken breast 125 g; white rice dry 40 g; sweet chilli sauce 25 g; soy sauce low sodium 10 g; rice vinegar 8 g; sesame oil 5 g; cabbage slaw mix 80 g; carrot 50 g; cucumber 60 g; shelled edamame frozen 60 g; peanuts 10 g; scallions 12 g; mayonnaise 5 g",
+ steps:["Cook the rice, spread it on a tray and cool it completely \u2014 warm rice will not crisp.","Crisp it: a thin layer in a hot pan with a little of the sesame oil, pressed down and left 4\u20135 min before stirring, or 12 min in the air fryer at 400 \u00b0F shaking twice. You want crunchy edges, not uniform toast.","Chicken griddled and sliced, tossed hot with half the sweet chilli so it glazes.","Dressing: the rest of the sweet chilli, soy, rice vinegar, mayo and remaining sesame oil.","Pack the rice separately from everything else and combine at your desk. That is the whole difference between this working and not."],
+ store:"Fridge 4 days, cold only. **Rice in its own container** \u2014 dressed rice goes soft overnight and the crunch is the recipe.",
+ note:"From your saved collection, and the riskiest thing in the bank. It is cold and Asian-leaning, which is exactly the profile L5 failed on. The differences are real \u2014 crispy rice is chunky and holds dressing where noodles shed it, and the sweet chilli is loud enough to survive chilling \u2014 but the failure mode is the same shape, so cook it once before you batch five. Use **regular sweet chilli sauce, not sugar-free**: the regular carries about 24 g more carbohydrate per 40 g serving, and that is the entire point of it being here."},
+{id:"L26",slot:"lunch",isnew:true,name:"Southwest Chicken Salad + Sourdough",lane:"Mexican · from Instagram",p:43.1,f:18.9,c:80.9,wt:"~555 g",min:25,batch:5,base:"80 g sourdough + 90 g black beans",
+ ing:"chicken breast 78 g; black beans canned 90 g; corn frozen 70 g; cherry tomatoes 80 g; bell pepper 60 g; red onion 25 g; greek yogurt nonfat 60 g; mayonnaise 8 g; lime juice 12 g; olive oil 4 g; cheddar 12 g; sourdough 80 g; cilantro",
+ steps:["Poach or roast the chicken, cool it completely, then shred rather than dice. Shredded holds dressing; cubes shed it.","Char the corn in a dry pan 5\u20136 min without stirring much, then cool. Raw-from-frozen corn tastes of nothing here.","Drain and rinse the beans properly and let them dry a few minutes \u2014 wet beans water the whole salad by Wednesday.","Dressing: Greek yogurt, mayo, lime, a grated garlic clove, cumin, chili powder, salt and plenty of pepper. Taste it cold and push the salt and lime further than feels right.","Fold everything together with the cheddar and cilantro. Sourdough packed whole \u2014 build it into a sandwich in the morning or eat the salad with the bread torn alongside."],
+ store:"Fridge 4 days. Zero smell, no reheating. Gets better on day two as the beans take the dressing.",
+ note:"From your saved collection, added 19 September to replace L23. Same cold chicken-salad format, built to keep you full: 12.8 g of fibre against L23's 4.2, because the volume comes from beans, corn and peppers rather than from bread alone. 78 g of raw chicken looks small \u2014 the beans, yogurt, cheddar and sourdough bring 26 g of protein before any chicken goes in, which is exactly why most versions of this land over on protein and under on starch."},
+{id:"L27",slot:"lunch",isnew:true,name:"Crockpot Chicken Enchilada Bowl",lane:"Mexican · from Instagram",p:43.1,f:19,c:84.1,wt:"~590 g",min:15,batch:6,base:"156 g cooked white rice + 80 g black beans",
+ ing:"chicken breast 100 g; enchilada sauce 90 g; black beans canned 80 g; corn frozen 60 g; onion 30 g; white rice dry 52 g; cheddar 20 g; avocado 45 g; greek yogurt nonfat 30 g; pico de gallo 40 g",
+ steps:["Everything except the rice, cheese, avocado, yogurt and pico into the crockpot: chicken, enchilada sauce, beans, corn, diced onion, taco seasoning. Fifteen minutes of actual work.","Low 5\u20136 hours or high 3\u20134, until the chicken shreds under a fork. Shred it in the pot and stir it back through so everything takes the sauce.","Rice on when you are ready to eat \u2014 18 min covered low plus 10 min rest. Keep it separate from the filling if you are boxing it for the week; rice left in sauce overnight goes to paste.","Build: rice, filling, cheddar. Yogurt, avocado and pico added the morning you eat it."],
+ store:"Fridge 4 days, freezes 3 months. Reheats better than anything else in the lunch set.",
+ note:"From your saved collection, added 19 September. Two things the bank did not have: a crockpot recipe, and a hot lunch that batches six rather than five. 12.6 g of fibre, 590 g on the plate, and the beans and corn are doing that work rather than a bigger pile of rice. Avocado and yogurt go on day-of or they brown and weep."},
+{id:"D30",slot:"dinner",isnew:true,name:"Shrimp Guacamole Tostadas",lane:"Mexican · from Instagram",p:43.8,f:21.8,c:86.5,wt:"4 tostadas ~520 g",min:30,batch:2,base:"104 g corn tortillas + 70 g black beans",
+ ing:"shrimp 150 g; corn tortillas 104 g; black beans canned 70 g; bell pepper 80 g; red onion 40 g; avocado 85 g; olive oil 6 g; hot honey 12 g; lime juice 12 g; cherry tomatoes 60 g; cilantro",
+ steps:["Oven 400 \u00b0F. Lay the tortillas straight on the rack or a sheet pan, spray or brush lightly with oil, and bake 6\u20138 min until they stop flexing. That is the whole tostada \u2014 there is no frying.","Same sheet pan: peppers and onion tossed in the oil with chili powder, cumin, garlic powder, paprika and salt. Roast 12 min.","Shrimp seasoned the same way, added to the pan for the last 6\u20137 min, until just pink and opaque. Shrimp is ninety seconds from perfect to rubber \u2014 pull it the moment it turns.","Warm the black beans and mash them roughly with a little of their liquid and lime. This is the layer that holds everything on the tostada.","Guacamole: avocado, lime, salt, a little diced onion.","Build: beans, shrimp and vegetables, guacamole, tomatoes, cilantro. Hot honey drizzled over at the table."],
+ store:"Eat fresh \u2014 a built tostada is soggy in ten minutes. The shrimp and vegetable mix holds 2 days and the shells keep a week in a tin.",
+ note:"From your saved collection, added 19 September. One sheet pan, 30 minutes, and the highest-fibre format available in the Mexican lane: corn tortillas carry 6.9 g per 100 g against 3.0 for flour, and the mashed beans add more. Hot honey on shrimp is the creator's idea and it is a good one. The bank had no tostada and no crisp-shell dinner at all."},
+{id:"D31",slot:"dinner",isnew:true,name:"Loaded Broccoli-Cheddar Chicken Potato",lane:"American · from Instagram",p:41.5,f:24.9,c:91.8,wt:"~640 g",min:45,batch:2,base:"400 g baked potato",
+ ing:"potato 400 g; broccoli 200 g; chicken breast 60 g; cheddar 25 g; greek yogurt nonfat 50 g; milk 2% 40 g; light cream cheese 20 g; olive oil 6 g; butter 5 g; scallions 12 g; garlic 5 g",
+ steps:["Microwave the potatoes 9\u201310 min, then finish in a 425 \u00b0F oven 15 min for a skin that crackles. Straight oven-baking is nearly an hour; this gets the same result inside a weeknight.","Broccoli in florets tossed with the oil and salt, roasted alongside 15 min. Roast it rather than steam it \u2014 steamed broccoli waters the potato.","Chicken seasoned and roasted or griddled to 165 \u00b0F, then shredded small.","Sauce: warm the milk, cream cheese and grated garlic over low, stirring smooth, 3\u20134 min, then the cheddar off the heat. Do not boil it once the cheese is in or it splits.","Split the potatoes, fork the insides up hard \u2014 that is what lets the sauce get in \u2014 butter, then chicken, broccoli, sauce, yogurt and scallions."],
+ store:"Fridge 3 days. Reheat the potato in the oven, not the microwave, or the skin goes leathery.",
+ note:"From your saved collection, added 19 September, and a rejection reversed: on 12 September this was passed over as duplicating D11 and D24 on base. On the fullness question it is not a duplicate at all \u2014 400 g of potato and 200 g of broccoli is the biggest plate and the most fibre of any dinner here. The chicken is deliberately small at 60 g raw, because potato, cheddar, yogurt and broccoli carry about 25 g of protein before any meat goes in."}
+];
+
+/* ============================== GROCERY ============================== */
+var DEPTS = ["Produce","Protein","Dairy","Pantry","Frozen"];
+var DEPT_RULES = [
+  ["Frozen", ["frozen blueberries","corn frozen","frozen hash browns","edamame frozen","shelled edamame frozen","frozen mixed berries"]],
+  ["Produce", ["banana","blueberries","strawberries","apple","grapes","avocado","sweet potato","potato","red onion","onion","bell pepper","green bell pepper","cucumber","cherry tomatoes","spinach","broccolini","broccoli","green beans","baby carrots","carrot","celery","garlic","ginger","scallions","lemon juice","lime juice","cilantro","basil","romaine","zucchini","pineapple","butternut squash","sugar snap peas","roasted red pepper","medjool dates"]],
+  ["Protein", ["chicken breast","chicken thigh","ground turkey","deli turkey","turkey bacon","turkey jerky","ground beef","sirloin steak","salmon","shrimp","egg"]],
+  ["Dairy", ["greek yogurt","cottage cheese","milk","feta","cheddar","fresh mozzarella","mozzarella","parmesan","provolone","gruyere","cotija","blue cheese","string cheese","butter","light cream cheese","american cheese","tzatziki"]],
+  ["Pantry", []]
+];
+var STAPLES = ["olive oil","sesame oil","soy sauce low sodium","honey","hot honey","maple syrup","cornstarch","all-purpose flour","dijon mustard","mayonnaise","ketchup","balsamic vinegar","balsamic glaze","peanut butter","almond butter","protein powder","rolled oats","white rice dry","jasmine rice dry","panko","brown sugar","sriracha","chicken stock","salsa","cocoa powder","everything bagel seasoning","chia seeds","sesame seeds"];
+
+function deptOf(name){
+  for(var i=0;i<DEPT_RULES.length;i++){
+    var keys=DEPT_RULES[i][1];
+    for(var j=0;j<keys.length;j++){ if(name===keys[j] || name.indexOf(keys[j])===0) return DEPT_RULES[i][0]; }
+  }
+  for(var k=0;k<DEPT_RULES.length;k++){
+    var kk=DEPT_RULES[k][1];
+    for(var m=0;m<kk.length;m++){ if(name.indexOf(kk[m])>=0) return DEPT_RULES[k][0]; }
+  }
+  return "Pantry";
+}
+function parseIng(str){
+  var out=[]; if(!str) return out;
+  str.split(";").forEach(function(part){
+    var s=part.trim(); if(!s) return;
+    var m=s.match(/^(.+?)\s+([\d.]+)\s*(g|ml)$/);
+    if(m) out.push({name:m[1].trim().toLowerCase(), qty:parseFloat(m[2]), unit:m[3]});
+    else out.push({name:s.toLowerCase(), qty:0, unit:""});
+  });
+  return out;
+}
+
+/* ==================== RAW / DRY  →  COOKED YIELDS ====================
+   Factors applied to the raw or dry weight that appears in every ingredient
+   list. Longest-prefix wins, so "sweet potato" never matches "potato".
+   Anything with no entry here does not change weight in cooking and is
+   rendered as "same" — that is a statement, not a gap.
+   Rice is flagged: the yield is still an unmeasured open item. */
+var YIELDS = [
+  ["chicken breast",      0.72, "cooked"],
+  ["chicken thigh",       0.72, "cooked"],
+  ["ground turkey 93/7",  0.75, "browned"],
+  ["ground beef 90/10",   0.73, "cooked"],
+  ["sirloin steak",       0.73, "cooked"],
+  ["salmon",              0.79, "cooked"],
+  ["shrimp",              0.80, "cooked"],
+  ["turkey bacon",        0.70, "cooked"],
+  ["white rice dry",      3.00, "cooked", true],
+  ["jasmine rice dry",    3.00, "cooked", true],
+  ["wild rice dry",       3.00, "cooked", true],
+  ["rigatoni dry",        2.40, "cooked"],
+  ["spaghetti dry",       2.40, "cooked"],
+  ["linguine dry",        2.40, "cooked"],
+  ["pasta dry",           2.40, "cooked"],
+  ["orzo dry",            2.40, "cooked"],
+  ["pearl couscous dry",  2.50, "cooked"],
+  ["rice noodles dry",     2.60, "cooked"],
+  ["potato gnocchi",       1.00, "boiled"],
+  ["farro dry",           2.60, "cooked"],
+  ["sweet potato",        0.75, "roasted"],
+  ["potato",              0.78, "roasted"],
+  ["butternut squash",    0.85, "roasted"],
+  ["broccolini",          0.88, "roasted"],
+  ["broccoli",            0.88, "roasted"],
+  ["green beans",         0.88, "roasted"],
+  ["sugar snap peas",     0.90, "stir-fried"],
+  ["zucchini",            0.80, "roasted"],
+  ["green bell pepper",   0.80, "cooked"],
+  ["bell pepper",         0.80, "cooked"],
+  ["roasted red pepper",  1.00, "as weighed"],
+  ["red onion",           0.75, "cooked"],
+  ["onion",               0.75, "cooked"],
+  ["corn frozen",         1.00, "as weighed"],
+  ["frozen hash browns",  0.85, "griddled"],
+  ["shelled edamame frozen", 1.00, "as weighed"],
+  ["edamame frozen",      1.00, "as weighed"],
+  ["air-popped popcorn",  4.50, "popped"]
+];
+/* Per-option exceptions, where the method changes the yield. */
+var COOKED_OVERRIDE = {
+  "D26|onion": [0.33, "deeply caramelised"],
+  "D4|potato": [0.78, "Greek lemon-roasted"],
+  "L12|potato": [0.78, "boiled"],
+  "D11|potato": [0.78, "baked"],
+  "D26|potato": [0.91, "boiled and mashed"],
+  "D22|potato": [0.78, "oven fries"],
+  "D25|potato": [0.78, "oven fries"],
+  "D2|potato":  [0.78, "griddled wedges"],
+  "L18|ground turkey 93/7": [0.75, "browned"],
+  "B5|potato": [0.78, "griddled"],
+  "L2|ground turkey 93/7": [1.125, "as 6 baked meatballs, panko and egg included"],
+  "L19|chicken breast": [0.72, "roasted"],
+  "L1|chicken breast": [0.72, "roasted"],
+  "D5|egg": [0.90, "scrambled"],
+  "D5|liquid egg white": [0.90, "scrambled"],
+  "B5|egg": [0.90, "scrambled"]
+};
+function yieldFor(name, optId){
+  var ov = COOKED_OVERRIDE[optId + "|" + name];
+  if(ov) return {f:ov[0], label:ov[1], flag:false};
+  var best=null;
+  for(var i=0;i<YIELDS.length;i++){
+    var k=YIELDS[i][0];
+    if(name===k || name.indexOf(k)===0){
+      if(!best || k.length>best[0].length) best=YIELDS[i];
+    }
+  }
+  return best ? {f:best[1], label:best[2], flag:!!best[3]} : null;
+}
+/* Returns the cooked-side cell for one ingredient line. */
+function cookedCell(it, optId){
+  if(!it.qty) return {text:"", note:false, flag:false};
+  var y = yieldFor(it.name, optId);
+  if(!y || y.f === 1) return {text:"same", note:true, flag:false};
+  var q = it.qty * y.f;
+  return {text: (Math.round(q) + " g " + y.label), note:false, flag:y.flag};
+}
+
+/* ==================== FIBRE, PER 100 g ====================
+   Estimated from the ingredient weights, not read off a finished plate.
+   Branded items use their own panel: Three Wishes 8.6, One Degree rice
+   crisps 3.6, both per 100 g from the package. Anything absent from this
+   table contributes no meaningful fibre — meat, dairy, eggs, oils, honey,
+   most sauces. Longest-prefix wins. */
+var FIBRE = [
+  ["rolled oats",10.6],["enchilada sauce",1.5],["protein bar high fibre",22.2],["parmesan snack cheese",0],["turkey snack stick",0],["cabbage slaw mix",2.5],["sweet chilli sauce",0.5],["enchilada sauce",1.5],["turkey bacon",0],["potato gnocchi",2.0],["rice noodles dry",1.6],["croutons",3.5],["kale",3.6],["peanuts",8.5],["oats overnight packet",7.0],["chia seeds",34.4],["ground flaxseed",27.3],
+  ["three wishes cereal",8.6],["one degree brown rice crisps",3.6],["granola",7.0],
+  ["blueberries",2.4],["frozen blueberries",2.4],["frozen mixed berries",3.5],["strawberries",2.0],
+  ["banana",2.6],["apple",2.4],["grapes",0.9],["pineapple",1.4],["dried mango",7.0],
+  ["medjool dates",6.7],["dried cranberries",5.7],["avocado",6.7],
+  ["sweet potato",3.0],["potato",2.2],["butternut squash",2.0],
+  ["broccolini",2.6],["broccoli",2.6],["green beans",3.4],["sugar snap peas",2.6],
+  ["spinach",2.2],["romaine",2.1],["cucumber",0.5],["cherry tomatoes",1.2],
+  ["crushed tomatoes",1.4],["tomato paste",4.1],["marinara",1.8],
+  ["green bell pepper",1.7],["bell pepper",1.7],["roasted red pepper",1.7],
+  ["red onion",1.7],["onion",1.7],["scallions",2.6],["baby carrots",2.9],["carrot",2.8],
+  ["celery",1.6],["zucchini",1.0],["corn frozen",2.4],["garlic",2.1],["ginger",2.0],
+  ["black beans canned",7.5],["chickpeas canned",7.6],["shelled edamame frozen",5.2],["edamame frozen",5.2],
+  ["white rice dry",1.3],["jasmine rice dry",1.3],["wild rice dry",6.2],
+  ["rigatoni dry",3.2],["spaghetti dry",3.2],["linguine dry",3.2],["pasta dry",3.2],["orzo dry",3.2],
+  ["pearl couscous dry",2.5],["farro dry",8.0],
+  ["sourdough",2.4],["whole-wheat pita",7.4],["corn tortillas",6.9],["flour tortillas",3.0],
+  ["flour tortilla",3.0],["small flour tortilla",3.0],["large tortilla wrap",3.0],
+  ["hoagie roll",2.4],["burger bun",2.4],["panko",3.0],["all-purpose flour",2.7],
+  ["whole-grain crackers",6.0],["graham crackers",3.0],["pretzels",3.0],["rice cakes",4.2],
+  ["air-popped popcorn",14.5],
+  ["almonds",12.5],["sliced almonds",12.5],["cashews",3.3],["sesame seeds",11.8],
+  ["peanut butter",6.0],["almond butter",10.0],["hummus",6.0],["pesto",2.5],
+  ["kalamata olives",3.2],["pico de gallo",1.5],["salsa",1.5],["cocoa powder",33.0],
+  ["chipotle in adobo",5.0],["protein powder",2.0],["basil",3.0],["cilantro",2.8],
+  ["bbq sauce",0.9],["ketchup",1.0],["oyster sauce",0.4],["dijon mustard",4.0],["buffalo sauce",0.4]
+];
+function fibrePer100(name){
+  var best=null;
+  for(var i=0;i<FIBRE.length;i++){
+    var k=FIBRE[i][0];
+    if(name===k || name.indexOf(k)===0){ if(!best || k.length>best[0].length) best=FIBRE[i]; }
+  }
+  return best ? best[1] : 0;
+}
+/* Fibre for one option, from its raw/dry ingredient line. */
+var _fibreCache={};
+function fibreOf(o){
+  if(!o) return 0;
+  if(_fibreCache[o.id]!==undefined) return _fibreCache[o.id];
+  var t=0;
+  parseIng(o.ing).forEach(function(it){ t += it.qty * fibrePer100(it.name) / 100; });
+  _fibreCache[o.id]=t;
+  return t;
+}
+var NIGHT_FIBRE = (75*2.4/100) + (7*6.0/100);   /* blueberries and peanut butter; yogurt has none */
+/* Soluble (gel-forming) share of each food's total fibre. Approximate and
+   deliberately coarse — the useful signal is which options lean soluble,
+   not a decimal place. Anything absent defaults to 0.20. */
+var SOLUBLE = [
+  ["protein bar high fibre",0.60],
+  ["rolled oats",0.45],["cabbage slaw mix",0.35],["potato gnocchi",0.30],["rice noodles dry",0.20],["croutons",0.20],["kale",0.30],["peanuts",0.15],["oats overnight packet",0.40],["chia seeds",0.25],["ground flaxseed",0.30],
+  ["sweet potato",0.45],["potato",0.35],["carrot",0.40],["baby carrots",0.40],["onion",0.45],
+  ["red onion",0.45],["garlic",0.50],["zucchini",0.35],["broccoli",0.35],["broccolini",0.35],
+  ["green beans",0.35],["spinach",0.30],["cucumber",0.35],["cherry tomatoes",0.30],
+  ["crushed tomatoes",0.30],["marinara",0.30],["bell pepper",0.30],["green bell pepper",0.30],
+  ["apple",0.35],["banana",0.30],["strawberries",0.30],["blueberries",0.20],["frozen blueberries",0.20],
+  ["frozen mixed berries",0.25],["pineapple",0.25],["dried mango",0.30],["medjool dates",0.25],
+  ["black beans canned",0.30],["chickpeas canned",0.30],["hummus",0.30],["shelled edamame frozen",0.25],
+  ["avocado",0.25],["farro dry",0.25],["pearl couscous dry",0.25],["pasta dry",0.25],
+  ["rigatoni dry",0.25],["spaghetti dry",0.25],["linguine dry",0.25],["orzo dry",0.25],
+  ["sourdough",0.25],["granola",0.25],["three wishes cereal",0.25],
+  ["white rice dry",0.20],["jasmine rice dry",0.20],["wild rice dry",0.20],
+  ["whole-wheat pita",0.20],["corn tortillas",0.15],["flour tortillas",0.15],["flour tortilla",0.15],
+  ["small flour tortilla",0.15],["large tortilla wrap",0.15],["hoagie roll",0.20],["burger bun",0.20],
+  ["one degree brown rice crisps",0.15],["whole-grain crackers",0.15],["graham crackers",0.15],
+  ["pretzels",0.15],["rice cakes",0.15],["air-popped popcorn",0.05],
+  ["almonds",0.10],["sliced almonds",0.10],["cashews",0.15],["sesame seeds",0.15],
+  ["peanut butter",0.20],["almond butter",0.20],["cocoa powder",0.10]
+];
+function solubleShare(name){
+  var best=null;
+  for(var i=0;i<SOLUBLE.length;i++){
+    var k=SOLUBLE[i][0];
+    if(name===k || name.indexOf(k)===0){ if(!best || k.length>best[0].length) best=SOLUBLE[i]; }
+  }
+  return best ? best[1] : 0.20;
+}
+/* Foods whose fibre ferments briskly. Not a verdict — a marker, so a day
+   that stacks several of them is visible rather than a mystery. */
+var FERMENTABLE = ["protein bar high fibre","onion","red onion","garlic","black beans canned","chickpeas canned","hummus",
+  "shelled edamame frozen","edamame frozen","apple","dried mango","medjool dates","cashews",
+  "sugar snap peas","broccoli","broccolini"];
+function isFermentable(name){
+  for(var i=0;i<FERMENTABLE.length;i++){ if(name===FERMENTABLE[i] || name.indexOf(FERMENTABLE[i])===0) return true; }
+  return false;
+}
+var _fbCache={};
+/* {total, soluble, ferm, top:[{name,g}]} for one option. */
+function fibreDetail(o){
+  if(!o) return {total:0, soluble:0, ferm:0, top:[]};
+  if(_fbCache[o.id]) return _fbCache[o.id];
+  var tot=0, sol=0, ferm=0, rows=[];
+  parseIng(o.ing).forEach(function(it){
+    var f = it.qty * fibrePer100(it.name) / 100;
+    if(f <= 0.05) return;
+    tot += f; sol += f * solubleShare(it.name);
+    if(isFermentable(it.name)) ferm += f;
+    rows.push({name:it.name, g:f});
+  });
+  rows.sort(function(a,b){ return b.g-a.g; });
+  var d={total:tot, soluble:sol, ferm:ferm, top:rows.slice(0,3)};
+  _fbCache[o.id]=d;
+  return d;
+}
+var NIGHT_SOL = (75*2.4/100)*0.20 + (7*6.0/100)*0.20;
+
+/* ============ EXPORT TO CLOSE THE CARBS ============
+   The check-in app holds its own copy of the bank — two artifacts cannot
+   share a database. This builds that copy in one action instead of pasting
+   meals one at a time. CTC_FOOD maps each bank ingredient wording onto the
+   name the check-in costs it from; it was taken from the check-in's own
+   9 Sep snapshot, so the two cannot drift apart on naming. */
+var CTC_FOOD = {"rolled oats":"Rolled oats, dry","cottage cheese 2%":"Cottage cheese 2%","milk 2%":"Milk 2%","chia seeds":"Chia seeds","blueberries":"Blueberries, frozen","banana":"Banana","peanut butter":"Peanut butter","egg":"Egg, whole","protein powder":"Protein powder","maple syrup":"Maple syrup","greek yogurt nonfat":"Fage 0% Greek yogurt","protein cereal":"Protein cereal","honey":"Honey","flour tortilla":"Tortilla, large flour","potato":"Potato, raw","cheddar":"Cheddar","salsa":"Salsa","sourdough":"Sourdough","oats overnight packet":"Oats overnight packet","frozen blueberries":"Blueberries, frozen","chicken breast":"Chicken breast, raw","white rice dry":"White rice, dry","black beans canned":"Black beans, canned drained","corn frozen":"Corn","bell pepper":"Bell pepper","olive oil":"Olive oil","chipotle in adobo":"Chipotle in adobo","lime juice":"Lime juice","pico de gallo":"Salsa","avocado":"Avocado","ground turkey 93/7":"Ground turkey 93/7","panko":"Panko/breadcrumbs","orzo dry":"Orzo, dry","cucumber":"Cucumber","cherry tomatoes":"Tomato","red onion":"Onion","kalamata olives":"Kalamata olives","feta":"Feta","lemon juice":"Lemon juice","garlic":"Garlic","pearl couscous dry":"Couscous, dry","chickpeas canned":"Chickpeas, canned drained","pasta dry":"Pasta, dry","pesto":"Pesto","mozzarella":"Mozzarella, part-skim","spinach":"Spinach","bbq sauce":"BBQ sauce","deli turkey":"Deli turkey, low sodium","whole-grain crackers":"Whole-grain crackers","grapes":"Grapes","pretzels":"Pretzels","provolone":"Provolone","mayonnaise":"Mayonnaise","dijon mustard":"Dijon mustard","romaine":"Romaine","balsamic vinegar":"Balsamic vinegar","basil":"Basil","whole-wheat pita":"Whole-wheat pita","hummus":"Hummus","sirloin steak":"Sirloin steak, raw","parmesan":"Parmesan","wild rice dry":"Wild rice, dry","butternut squash":"Butternut squash","dried cranberries":"Dried cranberries","sliced almonds":"Almonds","sweet potato":"Sweet potato, raw","farro dry":"Farro, dry","apple":"Apple","crushed tomatoes":"Crushed tomatoes","onion":"Onion","cotija":"Cotija","large tortilla wrap":"Tortilla, large flour","roasted red pepper":"Roasted red pepper","zucchini":"Zucchini","hot honey":"Hot honey","almonds":"Almonds","fresh mozzarella":"Fresh mozzarella","balsamic glaze":"Balsamic glaze","baby carrots":"Baby carrots","pineapple":"Pineapple","cashews":"Cashews","turkey jerky":"Turkey jerky","air-popped popcorn":"Popcorn, popped","cocoa powder":"Cocoa powder","graham crackers":"Graham crackers","granola":"Granola","strawberries":"Strawberries","rice cakes":"Rice cakes","everything bagel seasoning":"Everything bagel seasoning","dried mango":"Dried mango","shelled edamame frozen":"Edamame, shelled","frozen mixed berries":"Frozen mixed berries","almond butter":"Almond butter","medjool dates":"Dates, Medjool","salmon":"Salmon, raw","jasmine rice dry":"Jasmine rice, dry","broccolini":"Broccolini","soy sauce low sodium":"Soy sauce","ground beef 90/10":"Ground beef 90/10","burger bun":"Burger bun","american cheese":"American cheese","ketchup":"Ketchup","sugar snap peas":"Sugar snap peas","sesame oil":"Sesame oil","cornstarch":"Cornstarch","ginger":"Ginger","tzatziki":"Tzatziki","liquid egg white":"Egg white","turkey bacon":"Turkey bacon","butter":"Butter","frozen hash browns":"Frozen hash browns","light cream cheese":"Light cream cheese","shrimp":"Shrimp, raw","rigatoni dry":"Pasta, dry","tomato paste":"Tomato paste","carrot":"Carrot","celery":"Celery","chicken thigh":"Chicken thigh, raw","green beans":"Green beans","scallions":"Scallions","broccoli":"Broccoli, raw","edamame frozen":"Edamame, shelled","sriracha":"Sriracha","sesame seeds":"Sesame seeds","corn tortillas":"Tortilla, corn","marinara":"Marinara sauce","buffalo sauce":"Buffalo sauce","blue cheese":"Blue cheese","spaghetti dry":"Pasta, dry","flour tortillas":"Tortilla, large flour","linguine dry":"Pasta, dry","white wine":"White wine","brown sugar":"Brown sugar","oyster sauce":"Oyster sauce","hoagie roll":"Hoagie roll","green bell pepper":"Bell pepper","gruyere":"Gruyere","all-purpose flour":"All-purpose flour","chicken stock":"Chicken stock","rice noodles dry":"Rice noodles, dry","cabbage slaw mix":"Cabbage slaw mix","sweet chilli sauce":"Sweet chilli sauce","turkey bacon":"Turkey bacon","potato gnocchi":"Potato gnocchi","croutons":"Croutons","kale":"Kale","peanuts":"Peanuts","rice vinegar":"Rice vinegar","light cream cheese":"Light cream cheese","chicken stock":"Chicken stock","cotija":"Cotija","sriracha":"Sriracha","three wishes cereal":"Three Wishes cereal","one degree brown rice crisps":"One Degree brown rice crisps","enchilada sauce":"Enchilada sauce","cilantro":"Cilantro","parmesan snack cheese":"Parmesan snack cheese","turkey snack stick":"Turkey snack stick","protein bar high fibre":"Protein bar, high fibre"};
+function ctcPayload(){
+  return M.filter(function(o){ return !state.hidden[o.id]; }).map(function(o){
+    return {
+      id:o.id, s:o.slot, n:o.name, l:o.lane, b:o.base, w:o.wt,
+      p:+r1(o.p), f:+r1(o.f), c:+r1(o.c), nat:o.native||"lift",
+      i: parseIng(o.ing).filter(function(it){return it.qty>0;}).map(function(it){
+           return [it.name, it.qty, CTC_FOOD[it.name] || it.name];
+         })
+    };
+  });
+}
+function ctcUnmapped(){
+  var out={};
+  M.forEach(function(o){ parseIng(o.ing).forEach(function(it){ if(it.qty>0 && !CTC_FOOD[it.name]) out[it.name]=1; }); });
+  return Object.keys(out);
+}
+
+/* ============================== STATE ============================== */
+var byId={}; M.forEach(function(o){ byId[o.id]=o; });
+var LS_KEY="kmb-state-v2";
+var state = { week:{}, checks:{}, servings:{}, hidden:{} };
+DAYS.forEach(function(d){ state.week[d.k]={breakfast:null,lunch:null,snack:null,dinner:null}; state.checks[d.k]=[false,false,false,false]; });
+var filters = {slot:"lunch", lane:"all"};
+var goneShown = false;
+
+function applyIncoming(src){
+  if(!src || typeof src!=="object") return false;
+  var changed=false;
+  if(src.week) DAYS.forEach(function(d){
+    var row=src.week[d.k]; if(!row) return;
+    SLOTS.forEach(function(s){
+      var v=row[s];
+      var nv = (v && byId[v]) ? v : null;
+      if(state.week[d.k][s]!==nv){ state.week[d.k][s]=nv; changed=true; }
+    });
+  });
+  if(src.checks) DAYS.forEach(function(d){
+    var row=src.checks[d.k]; if(!Array.isArray(row)) return;
+    for(var i=0;i<4;i++){ var nv=!!row[i]; if(state.checks[d.k][i]!==nv){ state.checks[d.k][i]=nv; changed=true; } }
+  });
+  if(src.hidden && typeof src.hidden==="object"){
+    Object.keys(src.hidden).forEach(function(k){
+      if(byId[k] && src.hidden[k] && !state.hidden[k]){ state.hidden[k]=true; changed=true; }
+    });
+    Object.keys(state.hidden).forEach(function(k){
+      if(!src.hidden[k]){ delete state.hidden[k]; changed=true; }
+    });
+  }
+  if(src.servings && typeof src.servings==="object"){
+    Object.keys(src.servings).forEach(function(k){
+      var v=+src.servings[k];
+      if(byId[k] && v>0 && v<=24 && state.servings[k]!==v){ state.servings[k]=v; changed=true; }
+    });
+    Object.keys(state.servings).forEach(function(k){
+      if(!(k in src.servings)){ delete state.servings[k]; changed=true; }
+    });
+  }
+  return changed;
+}
+function snapshot(){ return { week:JSON.parse(JSON.stringify(state.week)), checks:JSON.parse(JSON.stringify(state.checks)), servings:JSON.parse(JSON.stringify(state.servings)), hidden:JSON.parse(JSON.stringify(state.hidden)), updatedAt: Date.now() }; }
+
+/* local storage — best effort, may be unavailable in some views */
+var lsOk=true;
+try{ localStorage.setItem("kmb-probe","1"); localStorage.removeItem("kmb-probe"); }catch(e){ lsOk=false; }
+function readLocal(){ if(!lsOk) return null; try{ return JSON.parse(localStorage.getItem(LS_KEY)||"null"); }catch(e){ return null; } }
+function writeLocal(){ if(!lsOk) return; try{ localStorage.setItem(LS_KEY, JSON.stringify(snapshot())); }catch(e){ lsOk=false; } }
+
+/* remote store — the authoritative copy, follows her across devices */
+var dbRef=null, lastWrite=0, writeTimer=null, remoteReady=false;
+var statusEl=document.getElementById("status"), dotEl=document.getElementById("dot");
+function setStatus(txt, cls){
+  statusEl.className = "status" + (cls?" "+cls:"");
+  dotEl.className = "dot" + (cls?" "+cls:"");
+  statusEl.innerHTML = '<span class="dot '+(cls||"")+'"></span>' + txt;
+}
+function pushRemote(){
+  if(!dbRef) return;
+  if(writeTimer) clearTimeout(writeTimer);
+  writeTimer = setTimeout(function(){
+    var snap = snapshot();
+    lastWrite = snap.updatedAt;
+    dbRef.set(snap).then(function(){
+      setStatus("Saved to your account", "on");
+    }).catch(function(){
+      setStatus(lsOk ? "Saved on this device only" : "Not saving — reopen the page", "warn");
+    });
+  }, 500);
+}
+function save(){
+  writeLocal();
+  if(dbRef){ setStatus("Saving…"); pushRemote(); }
+  else setStatus(lsOk ? "Saved on this device" : "Not saving — reopen the page", lsOk?"":"warn");
+}
+
+/* ============================== MATH ============================== */
+function carbFor(opt, slot, dayType){
+  if(!opt) return 0;
+  if(opt.native === dayType) return opt.c;
+  if(opt.native) return opt.c - (SHIFT[slot][opt.native]||0) + (SHIFT[slot][dayType]||0);
+  return opt.c + (SHIFT[slot][dayType] || 0);
+}
+function shiftNote(opt, slot, dayType){
+  if(!opt || opt.native===dayType) return "";
+  if(dayType==="lift") return opt.native ? ("lifting size — reverse the "+(opt.native==="rest"?"rest-day":"long-run")+" scaling") : "";
+  return SHIFT_FOOD[slot][dayType] || "";
+}
+function dayTotals(dk){
+  var d=DAYS.filter(function(x){return x.k===dk;})[0];
+  var t={p:NIGHT.p,f:NIGHT.f,c:NIGHT.c,filled:0};
+  SLOTS.forEach(function(s){
+    var id=state.week[dk][s]; if(!id) return;
+    var o=byId[id]; if(!o) return;
+    t.filled++; t.p+=o.p; t.f+=o.f; t.c+=carbFor(o,s,d.t);
+  });
+  t.target=TARGET[d.t];
+  return t;
+}
+function r1(n){ return Math.round(n*10)/10; }
+function r0(n){ return Math.round(n); }
+function carbFix(gap){
+  return ["+"+r0(gap/0.229)+" g banana", "+"+r0(gap/0.80)+" g pretzels", "+"+r0(gap/0.51)+" g sourdough"];
+}
+/* ---- servings: how many portions of one option you are actually cooking ----
+   Defaults to the number of days it sits on in the week. An explicit choice
+   overrides that and is what the recipe totals and the shop are built from. */
+function weekServings(id){
+  var o = byId[id]; if(!o) return 1;
+  var d = daysWith(id).length; if(d < 1) d = 1;
+  /* Dinner cooks for two — one night on the plan is two portions out of the pan.
+     Breakfast, lunch and snack are hers alone, so a day is a portion. */
+  return o.slot === "dinner" ? d * 2 : d;
+}
+function servingsFor(id){
+  var n = state.servings[id];
+  if(typeof n === "number" && n > 0) return n;
+  return weekServings(id);
+}
+/* Weight with a sensible unit. Everything in this bank is grams unless stated. */
+function wq(x, u){
+  u = u || "g";
+  if(u === "g" && x >= 1000) return r1(x/1000) + " kg";
+  return r1(x) + " " + u;
+}
+/* The plated serving weight as a number, only when the stated weight is a
+   single unambiguous figure. "~445 g" yes; "2 squares ~195 g + 60 g yogurt" no,
+   because multiplying the first number would quietly drop the second. */
+function platedGrams(o){
+  var m = (o.wt || "").match(/(\d+(?:\.\d+)?)\s*g/g);
+  if(!m || m.length !== 1) return 0;
+  return parseFloat(m[0]);
+}
+
+/* ============================== BANK ============================== */
+var bankEl=document.getElementById("tab-bank");
+function lanesFor(slot){
+  var set={}; M.forEach(function(o){ if(o.slot===slot) set[o.lane]=1; });
+  return Object.keys(set).sort();
+}
+function daysWith(id){
+  var out=[]; DAYS.forEach(function(d){ SLOTS.forEach(function(s){ if(state.week[d.k][s]===id) out.push(d.k); }); });
+  return out;
+}
+function renderBank(){
+  var slot=filters.slot, lane=filters.lane;
+  var counts={}; SLOTS.forEach(function(s){ counts[s]=M.filter(function(o){return o.slot===s && !state.hidden[o.id];}).length; });
+  var goneIds=M.filter(function(o){ return state.hidden[o.id]; }).map(function(o){return o.id;});
+  var st=SLOT_TARGET[slot];
+  var h='';
+  h+='<div class="section-head"><h2>Pick from the bank</h2><p class="note">'+M.length+' options, each costed bottom-up with its starch base written in. Tap a day to drop one into the week — a lunch tapped into three days batches for three.</p></div>';
+  h+='<div class="filters">';
+  SLOTS.forEach(function(s){ h+='<button class="chip" data-fslot="'+s+'" aria-pressed="'+(s===slot)+'">'+SLOT_LABEL[s]+' <span class="mono">'+counts[s]+'</span></button>'; });
+  h+='</div><div class="filters">';
+  h+='<button class="chip" data-flane="all" aria-pressed="'+(lane==="all")+'">All</button>';
+  h+='<button class="chip sol" data-flane="__sol" aria-pressed="'+(lane==="__sol")+'">Soluble-leaning</button>';
+  h+='<button class="chip" data-flane="__full" aria-pressed="'+(lane==="__full")+'">Most filling first</button>';
+  lanesFor(slot).forEach(function(L){ h+='<button class="chip" data-flane="'+L+'" aria-pressed="'+(lane===L)+'">'+L+'</button>'; });
+  h+='</div>';
+  h+='<p class="note" style="margin-top:12px">Slot target — lifting <span class="mono">'+st.lift[0]+' P / '+st.lift[1]+' F / '+st.lift[2]+' C</span> · long run <span class="mono">'+st.long[2]+' C</span> · rest <span class="mono">'+st.rest[2]+' C</span>. Everything is written at lifting size; the week rescales it for Saturday and Sunday and says what to change.</p>';
+  h+='<p class="note" style="border-left:3px solid var(--accent);padding-left:11px"><b style="color:var(--ink)">Fibre is shown but not targeted.</b> Your days already run 29–33 g, which is at the top of the usual range — the lever for slow transit is which <em>kind</em> of fibre, not more of it. <b style="color:var(--ink)">% sol</b> is the share that is soluble and gel-forming; the <span class="mchip fib sol" style="padding:1px 5px">highlighted</span> chips are 32% or above. <span class="mchip ferm" style="padding:1px 5px">brisk</span> marks options carrying a lot of quickly-fermenting fibre — onion, garlic, beans, apple, brassicas. That is a marker so a day stacking several of them is visible, not a verdict on any of them.</p>';
+  if(slot==="snack") h+='<p class="note" style="border-left:3px solid var(--honey);padding-left:11px">Revision 4, 30 August: the snack dropped from 24 g of protein to 15, and lunch and dinner picked it up. <b style="color:var(--ink)">Carbohydrate did not move — it is still a full 30 g here</b>, which is the part that matters. What shrank is the tub, not the fuel.</p>';
+  if(slot==="lunch") h+='<p class="note" style="border-left:3px solid var(--honey);padding-left:11px">Revision 4, 30 August: lunch went from 38 g of protein to 43 — about 20 g more cooked chicken or three more slices of turkey. Every starch base is unchanged.</p>';
+  if(slot==="dinner") h+='<p class="note" style="border-left:3px solid var(--honey);padding-left:11px">Revision 4, 30 August: dinner went from 33 g of protein to 37. Eleven of these already cleared 37 and did not change at all; the rest gained 4–25 g of raw protein. No starch base moved.</p>';
+  var list=M.filter(function(o){
+    if(o.slot!==slot) return false;
+    if(state.hidden[o.id] && !goneShown) return false;
+    if(lane==="all"||lane==="__full") return true;
+    if(lane==="__sol"){ var d=fibreDetail(o); return d.total>0 && (d.soluble/d.total)>=0.32; }
+    return o.lane===lane;
+  });
+  if(lane==="__sol") list.sort(function(a,b){ var x=fibreDetail(a),y=fibreDetail(b); return (y.soluble/y.total)-(x.soluble/x.total); });
+  if(lane==="__full") list.sort(function(a,b){ return fibreDetail(b).total - fibreDetail(a).total; });
+  if(goneIds.length) h+='<div class="retirebar"><b>'+goneIds.length+' retired</b> — '+goneIds.join(', ')
+    +'<button class="chip" data-gone="'+(goneShown?'0':'1')+'" style="margin-left:auto">'+(goneShown?'Hide them again':'Show them')+'</button></div>';
+  h+='<div class="cards">';
+  list.forEach(function(o){
+    var dc=r1(o.c-st.lift[2]), on=daysWith(o.id);
+    var gone=!!state.hidden[o.id];
+    h+='<article class="card'+(o.isnew?' isnew':'')+(gone?' gone':'')+'">';
+    h+='<div class="card-top"><div><div class="id">'+o.id+(o.isnew?' <span class="tagnew">new</span>':'')+'</div><h3>'+o.name+'</h3></div>';
+    h+= gone
+      ? '<button class="retire" data-unhide="'+o.id+'">Bring back</button>'
+      : '<button class="retire" data-hide="'+o.id+'" title="Take this out of the bank">Retire</button>';
+    h+='</div>';
+    var fd=fibreDetail(o), sp=fd.total? Math.round(100*fd.soluble/fd.total):0;
+    h+='<div class="macros"><span class="mchip"><b>'+r1(o.p)+'</b> P</span><span class="mchip"><b>'+r1(o.f)+'</b> F</span><span class="mchip c"><b>'+r1(o.c)+'</b> C <span style="opacity:.75">'+(dc>=0?'+':'')+dc+'</span></span>';
+    h+='<span class="mchip fib'+(sp>=32?' sol':'')+'"><b>'+r1(fd.total)+'</b> fibre · '+sp+'% sol</span>';
+    if(fd.ferm>=3) h+='<span class="mchip ferm" title="carries fibre that ferments briskly">brisk '+r1(fd.ferm)+'</span>';
+    h+='</div>';
+    h+='<div class="base">Base, cooked: <b>'+o.base+'</b></div>';
+    h+='<details class="ing"><summary>What is in it — all '+parseIng(o.ing).length+' ingredients</summary>';
+    h+='<table class="inglist"><tbody>';
+    parseIng(o.ing).forEach(function(it){
+      var cc=cookedCell(it,o.id);
+      h+='<tr><td>'+it.name+'</td><td class="q">'+(it.qty? r1(it.qty)+' '+it.unit : 'to taste')+'</td>'
+        +'<td class="ck">'+(cc.note||!cc.text ? '' : '→ '+cc.text)+'</td></tr>';
+    });
+    h+='</tbody></table><p class="legend" style="margin-top:5px">Left column is what you weigh, raw or dry. Green is what it becomes cooked.</p></details>';
+    h+='<div class="meta">'+o.wt+' · '+o.min+' min'+(o.batch>1?' · batches '+o.batch:'')+' · '+o.lane+'</div>';
+    if(o.note) h+='<details class="ing"><summary>Why this one</summary><p>'+o.note+'</p></details>';
+    h+='<div class="addbar"><span class="lbl2">Add to</span>';
+    DAYS.forEach(function(d){
+      var isOn = on.indexOf(d.k)>=0;
+      h+='<button class="daybtn" data-add="'+o.id+'" data-day="'+d.k+'"'+(isOn?' data-on="1"':'')+'>'+d.n.slice(0,3)+'</button>';
+    });
+    h+='</div></article>';
+  });
+  h+='</div>';
+  h+='<div class="section-head"><h2>Sync to Close the Carbs</h2></div>';
+  h+='<div class="panel" style="padding:14px">';
+  h+='<p class="note" style="margin:0 0 10px">The check-in app keeps its own copy of this bank — two artifacts cannot share a database, so the copy goes stale every time a meal changes here. This exports all '+M.length+' options in one block. Paste it into <b>Close the Carbs → Meals → Replace bank from Meal Bank</b>, and its copy matches this page exactly.</p>';
+  h+='<div class="row-actions"><button class="act primary" id="ctcCopy">Copy the whole bank</button><button class="act" id="ctcShow">Show the block</button></div>';
+  h+='<textarea class="out hidden" id="ctcOut" readonly></textarea>';
+  h+='<p class="note" id="ctcNote" style="margin-top:9px"></p>';
+  h+='</div>';
+  bankEl.innerHTML=h;
+  (function(){
+    var un=ctcUnmapped();
+    document.getElementById("ctcNote").innerHTML = un.length
+      ? '<b style="color:var(--warn)">'+un.length+' ingredient'+(un.length>1?'s':'')+' have no name the check-in recognises</b> — '+un.join(', ')+'. They will arrive uncosted and need adding there under <em>My added foods</em> first.'
+      : 'Every ingredient in the bank maps onto a food the check-in already costs. Nothing will arrive uncosted.';
+  })();
+}
+
+/* ============================== WEEK ============================== */
+var weekEl=document.getElementById("tab-week");
+function renderWeek(){
+  var h='', wc=0, wdays=0;
+  DAYS.forEach(function(d){ var t=dayTotals(d.k); if(t.filled===4){ wdays++; if(t.c>=t.target.c) wc++; } });
+  h+='<div class="section-head"><h2>The week</h2><p class="note">Wednesday takes the full lifting-day target. Sunday is the only rest day. Every total already includes the fixed night snack.</p></div>';
+  if(wdays>0) h+='<div class="panel" style="padding:12px 14px;margin-bottom:14px"><span class="ok">'+wc+' of '+wdays+' complete days land carbohydrate at or above target.</span></div>';
+  DAYS.forEach(function(d){
+    var t=dayTotals(d.k), tgt=t.target;
+    h+='<div class="day"><div class="day-head"><span class="dname">'+d.n+'</span><span class="dtype '+d.t+'">'+(d.t==="lift"?"Lifting":d.t==="long"?"Long run":"Rest")+' · '+tgt.c+' C</span></div>';
+    SLOTS.forEach(function(s){
+      var id=state.week[d.k][s], o=id?byId[id]:null;
+      h+='<div class="slot"><span class="lab">'+SLOT_LABEL[s]+'</span><div class="body">';
+      if(o){
+        var cc=carbFor(o,s,d.t), sn=shiftNote(o,s,d.t);
+        h+='<div class="pick">'+o.name+'</div><div class="macros" style="margin-top:4px"><span class="mchip"><b>'+r1(o.p)+'</b> P</span><span class="mchip"><b>'+r1(o.f)+'</b> F</span><span class="mchip c"><b>'+r1(cc)+'</b> C</span></div>';
+        h+='<div class="basemini">Base, cooked: '+o.base+'</div>';
+        if(sn) h+='<div class="scale">'+sn+'</div>';
+      } else h+='<div class="empty">nothing picked</div>';
+      h+='</div>';
+      if(o) h+='<button class="x" data-del="'+d.k+'" data-slot="'+s+'" aria-label="Remove">×</button>';
+      h+='</div>';
+    });
+    h+='<div class="slot"><span class="lab">Night</span><div class="body"><div class="pick" style="font-weight:400;color:var(--muted)">Fixed yogurt bowl</div><div class="macros" style="margin-top:4px"><span class="mchip"><b>17.3</b> P</span><span class="mchip"><b>4.3</b> F</span><span class="mchip c"><b>17.7</b> C</span></div></div></div>';
+    var dp=r1(t.p-tgt.p), df=r1(t.f-tgt.f), dc=r1(t.c-tgt.c);
+    h+='<div class="totals"><div class="tline"><span class="tl">Day total</span>';
+    h+='<span class="mchip"><b>'+r1(t.p)+'</b> P <span style="opacity:.75">'+(dp>=0?'+':'')+dp+'</span></span>';
+    h+='<span class="mchip'+(df<-5?' short':'')+'"><b>'+r1(t.f)+'</b> F <span style="opacity:.75">'+(df>=0?'+':'')+df+'</span></span>';
+    h+='<span class="mchip '+(dc<0?'short':'c')+'"><b>'+r1(t.c)+'</b> C <span style="opacity:.75">'+(dc>=0?'+':'')+dc+'</span></span></div>';
+    var df=NIGHT_FIBRE, ds=NIGHT_SOL, dferm=0;
+    SLOTS.forEach(function(s){ var id=state.week[d.k][s]; if(!id) return; var fo=fibreDetail(byId[id]); df+=fo.total; ds+=fo.soluble; dferm+=fo.ferm; });
+    var dsp = df? Math.round(100*ds/df):0;
+    h+='<div class="tline"><span class="tl">Fibre</span><span class="mchip fib'+(dsp>=32?' sol':'')+'"><b>'+r1(df)+'</b> g total</span><span class="mchip fib"><b>'+r1(ds)+'</b> g soluble · '+dsp+'%</span>'+(dferm>=10?'<span class="mchip ferm">brisk-fermenting '+r1(dferm)+' g</span>':'')+'</div>';
+    if(t.filled===4 && df<20) h+='<div class="fix"><b>Fibre is low for you at '+r1(df)+' g.</b> Not a target miss — you have no fibre target — but this is well under your usual 29–33 g, and days like this are almost always the restaurant ones.</div>';
+    else if(t.filled===4 && (df>=45 || dferm>=15)) h+='<div class="fix"><b>This day stacks '+r1(df)+' g of fibre'+(dferm>=15?', '+r1(dferm)+' g of it brisk-fermenting':'')+'.</b> Your usual is 29–33 g. Nothing here is wrong and no portion should come off — but with slow transit, two bean-heavy meals on the same day is the thing worth spreading out. Swapping one of them for a vegetable-based option in the same slot keeps the fullness and drops the fermentable load.</div>';
+    if(t.filled<4) h+='<div class="note">'+(4-t.filled)+' slot'+((4-t.filled)>1?'s':'')+' still empty — totals are partial.</div>';
+    else if(dc<0){
+      var gap=Math.abs(dc);
+      h+='<div class="fix"><b>'+r1(gap)+' g of carbohydrate short.</b> Put it in the afternoon snack, not dinner — dinner is cooked for two. Any one of: '+carbFix(gap).join(' · ')+'.</div>';
+    }
+    else if(df<-5) h+='<div class="fix"><b>Carbohydrate lands. Fat is '+r1(Math.abs(df))+' g under.</b> Add <b>'+r0(Math.abs(df)/0.9)+' g olive oil</b> to the dinner, or <b>'+r0(Math.abs(df)/0.147)+' g avocado</b> to the lunch.</div>';
+    else h+='<div class="ok">Lands. Carbohydrate '+(dc>0?'+'+dc+' g over':'on')+' target.</div>';
+    h+='</div></div>';
+  });
+  weekEl.innerHTML=h;
+}
+
+/* ============================== RECIPES ============================== */
+var recEl=document.getElementById("tab-recipes");
+function renderRecipes(){
+  var picked=[], seen={};
+  ["breakfast","lunch","snack","dinner"].forEach(function(s){
+    DAYS.forEach(function(d){
+      var id=state.week[d.k][s];
+      if(id && !seen[id]){ seen[id]=true; picked.push(id); }
+    });
+  });
+  var h='<div class="section-head"><h2>Recipes for what you picked</h2><p class="note">Only the meals in your week, in the order they are cooked. <b>Set how many servings you are making and every ingredient weight scales with it</b> — the totals are what you weigh, and the individual cooked serving is stated separately underneath. Raw and dry weights never mix with cooked ones.</p></div>';
+  if(!picked.length){
+    h+='<div class="panel" style="padding:16px"><p class="note" style="margin:0">Nothing picked yet. Choose meals in the Bank and their recipes appear here.</p></div>';
+    recEl.innerHTML=h; return;
+  }
+  picked.forEach(function(id){
+    var o=byId[id];
+    var on=daysWith(id).map(function(k){ return DAYS.filter(function(d){return d.k===k;})[0].n; });
+    var nights=on.length>0?on.length:1, dayN=weekServings(id), n=servingsFor(id), plural=(n===1?"":"s");
+    var weekWhy = o.slot==="dinner"
+      ? nights+(nights===1?" night":" nights")+" cooked for two"
+      : nights+(nights===1?" day":" days")+" on the plan";
+    h+='<div class="rec"><div class="rec-head"><h3>'+o.name+'</h3>';
+    h+='<div class="when">'+SLOT_LABEL[o.slot]+(on.length?' · '+on.join(', '):'')+'</div>';
+    h+='<div class="svgrow"><span class="svglab">Cook</span>';
+    h+='<button class="svgbtn" data-svg="'+id+'" data-d="-1" aria-label="One serving fewer">&minus;</button>';
+    h+='<span class="svgn mono">'+n+'</span>';
+    h+='<button class="svgbtn" data-svg="'+id+'" data-d="1" aria-label="One serving more">+</button>';
+    h+='<span class="svglab">serving'+plural+'</span>';
+    if(n!==dayN) h+='<button class="svgbtn link" data-svgreset="'+id+'">back to '+dayN+' — '+weekWhy+'</button>';
+    else h+='<span class="svghint">your week: '+weekWhy+'</span>';
+    if(o.batch>1) h+='<span class="svghint">· built to batch '+o.batch+'</span>';
+    h+='</div></div>';
+    h+='<div class="rec-body">';
+    var rfd=fibreDetail(o), rsp=rfd.total? Math.round(100*rfd.soluble/rfd.total):0;
+    h+='<div><h4>Per serving</h4><div class="macros"><span class="mchip"><b>'+r1(o.p)+'</b> P</span><span class="mchip"><b>'+r1(o.f)+'</b> F</span><span class="mchip c"><b>'+r1(o.c)+'</b> C</span><span class="mchip fib'+(rsp>=32?' sol':'')+'"><b>'+r1(rfd.total)+'</b> fibre · '+rsp+'% soluble</span><span class="mchip">'+o.min+' min</span></div>';
+    if(rfd.top.length) h+='<p class="legend" style="margin-top:7px">Fibre comes mostly from '+rfd.top.map(function(x){return x.name+' <b>'+r1(x.g)+' g</b>';}).join(', ')+'.'+(rfd.ferm>=3?' <span class="fermtxt">'+r1(rfd.ferm)+' g of it ferments briskly.</span>':'')+'</p>';
+    h+='</div>';
+    var anyFlag=false, lines=parseIng(o.ing);
+    h+='<div><h4>Shopping and weighing — total for '+n+' serving'+plural+'</h4><div class="scroll"><table class="ingt three">';
+    h+='<thead><tr><th>Ingredient</th><th class="q">Weigh this<br><span class="hd">total, raw / dry</span></th><th class="q sub">One serving<br><span class="hd">raw / dry</span></th><th class="q">One serving<br><span class="hd">cooked / plated</span></th></tr></thead><tbody>';
+    lines.forEach(function(it){
+      var cc=cookedCell(it, o.id); if(cc.flag) anyFlag=true;
+      h+='<tr><td>'+it.name+(it.qty?'<span class="persrv">'+r1(it.qty)+' '+it.unit+' per serving</span>':'')+'</td>'
+        +'<td class="q raw">'+(it.qty? wq(it.qty*n, it.unit) : "")+'</td>'
+        +'<td class="q sub">'+(it.qty? (r1(it.qty)+" "+it.unit) : "")+'</td>'
+        +'<td class="q '+(cc.note?"same":"cooked")+'">'+cc.text+(cc.flag?'<span class="ast">*</span>':'')+'</td></tr>';
+    });
+    h+='</tbody></table></div>';
+    h+='<p class="legend"><b>Weigh the second column.</b> It is the whole batch at '+n+' serving'+plural+', already multiplied — nothing here needs doing in your head. One serving raw is shown alongside — on a narrow screen it sits under the ingredient name — for splitting a cooked batch into containers, and the last column is what that ingredient weighs once cooked, so you can check a plate against it. <span class="same">same</span> means it goes on the plate as weighed.</p>';
+    if(anyFlag) h+='<p class="legend flagnote"><span class="ast">*</span> Rice is estimated at three times its dry weight. That yield is still unmeasured and is the one number in this bank I am not confident in — weigh one cooked batch and the whole library gets more accurate.</p>';
+    h+='</div>';
+    h+='<div><h4>Method</h4><ol class="steps">'+o.steps.map(function(s){return '<li>'+s+'</li>';}).join('')+'</ol>';
+    if(n>1) h+='<p class="legend">Times and temperatures are for the batch as written. Spread across more than one pan rather than crowding one — crowded food steams.</p>';
+    h+='</div>';
+    h+='<div class="kv"><b>Individual serving, cooked:</b> <span class="serve">'+o.wt+'</span> — one portion, plated.</div>';
+    var pg=platedGrams(o);
+    if(pg && n>1) h+='<div class="kv"><b>Whole batch, cooked:</b> about '+wq(pg*n,"g")+' out of the pan, divided '+n+' ways.</div>';
+    h+='<div class="kv"><b>Starch base, one serving, cooked:</b> <span style="color:var(--honey);font-weight:600">'+o.base+'</span> — weigh this one on the plate, not in the pan.</div>';
+    if(o.store) h+='<div class="kv"><b>Storage:</b> '+o.store+'</div>';
+    var scal=[];
+    daysWith(id).forEach(function(k){
+      var d=DAYS.filter(function(x){return x.k===k;})[0];
+      var sn=shiftNote(o,o.slot,d.t);
+      if(sn && scal.indexOf(d.n+": "+sn)<0) scal.push(d.n+": "+sn);
+    });
+    if(scal.length) h+='<div class="kv" style="color:var(--honey)"><b>Scaling:</b> '+scal.join(' &nbsp;·&nbsp; ')+'</div>';
+    if(o.note) h+='<div class="kv" style="color:var(--muted)">'+o.note+'</div>';
+    h+='</div></div>';
+  });
+  recEl.innerHTML=h;
+}
+
+/* ============================== SHOP ============================== */
+var shopEl=document.getElementById("tab-shop");
+function renderShop(){
+  var agg={}, used=0, built=[];
+  var pickedIds=[];
+  DAYS.forEach(function(d){ SLOTS.forEach(function(s){
+    var id=state.week[d.k][s];
+    if(id && byId[id] && pickedIds.indexOf(id)<0) pickedIds.push(id);
+  }); });
+  pickedIds.forEach(function(id){
+    var o=byId[id], n=servingsFor(id); used++;
+    built.push({o:o, n:n, def:(servingsFor(id)===weekServings(id))});
+    parseIng(o.ing).forEach(function(it){
+      if(!agg[it.name]) agg[it.name]={qty:0, unit:it.unit||"g"};
+      agg[it.name].qty += it.qty * n;
+    });
+  });
+  var h='<div class="section-head"><h2>Shop</h2><p class="note">Built from what you picked, multiplied by the servings you set on the Recipes tab. <b>Every weight here is raw or dry — this is what you buy and what you weigh before cooking</b>, never a cooked weight. The fixed night snack for seven nights is included. Flagged items are staples worth checking before you buy them again.</p></div>';
+  if(!used){ h+='<div class="panel" style="padding:16px"><p class="note" style="margin:0">Nothing picked yet.</p></div>'; shopEl.innerHTML=h; return; }
+  h+='<div class="panel" style="padding:13px 14px;margin-bottom:16px"><h4 style="font-family:\'IBM Plex Mono\',monospace;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:6px">This list buys</h4><div class="builtfor">'
+    + built.map(function(b){ return b.o.name+' <span class="bx">&times;'+b.n+'</span>'; }).join('<br>')
+    + '<br>the fixed night snack <span class="bx">&times;7</span></div>'
+    + '<p class="note" style="margin:8px 0 0">Change a serving count on the Recipes tab and this list follows it.</p></div>';
+  [["greek yogurt nonfat",150*7],["frozen blueberries",75*7],["peanut butter",7*7]].forEach(function(x){
+    if(!agg[x[0]]) agg[x[0]]={qty:0,unit:"g"};
+    agg[x[0]].qty += x[1];
+  });
+  var buckets={}; DEPTS.forEach(function(d){ buckets[d]=[]; });
+  Object.keys(agg).forEach(function(n){
+    var d=deptOf(n); if(!buckets[d]) d="Pantry";
+    buckets[d].push({n:n, q:agg[n].qty, u:agg[n].unit});
+  });
+  DEPTS.forEach(function(D){
+    var items=buckets[D]; if(!items.length) return;
+    items.sort(function(a,b){ return b.q-a.q; });
+    h+='<div class="dept"><h3>'+D+'</h3><ul class="glist">';
+    items.forEach(function(it){
+      var q = it.q>=1000 ? (r1(it.q/1000)+" kg") : (r0(it.q)+" "+(it.u||"g"));
+      h+='<li'+(STAPLES.indexOf(it.n)>=0?' class="staple"':'')+'><span class="n">'+it.n+'</span><span class="q">'+q+'</span></li>';
+    });
+    h+='</ul></div>';
+  });
+  h+='<p class="note">Spices, salt and pepper are not listed — check the rack against the recipes on the Recipes tab.</p>';
+  shopEl.innerHTML=h;
+}
+
+/* ============================== CHECK ============================== */
+var checkEl=document.getElementById("tab-check");
+var BOXES=["Breakfast","Lunch","Snack","Dinner base weighed"];
+function renderCheck(){
+  var hit=0, slotMiss=[0,0,0,0];
+  DAYS.forEach(function(d){
+    var c=state.checks[d.k], n=c.filter(Boolean).length;
+    if(n===4) hit++;
+    c.forEach(function(v,i){ if(!v) slotMiss[i]++; });
+  });
+  var h='';
+  h+='<div class="section-head"><h2>Daily check</h2><p class="note">Four taps at the end of the day. The food log records grams; this records <em>which slot leaked</em>, which is the only thing that says where to intervene. Complete means the whole thing — the banana on the side, the starch base, not most of the rice.</p></div>';
+  h+='<div class="panel" style="margin-bottom:14px"><div class="stat">';
+  h+='<div><div class="big mono">'+hit+'/7</div><div class="lbl">Complete days</div></div>';
+  h+='<div><div class="big mono">'+r0(100*hit/7)+'%</div><div class="lbl">Hit rate</div></div>';
+  h+='<div style="flex:1;min-width:180px"><div class="lbl" style="margin:0 0 4px">Toward 6 of 7 by week three</div><div class="meter"><i style="width:'+(100*hit/7)+'%"></i></div></div>';
+  h+='</div></div><div class="checkgrid">';
+  DAYS.forEach(function(d){
+    var c=state.checks[d.k];
+    h+='<div class="crow"><span class="cd">'+d.n.slice(0,3)+'</span><div class="boxes">';
+    BOXES.forEach(function(b,i){ h+='<button class="box" data-chk="'+d.k+'" data-i="'+i+'" aria-pressed="'+(c[i]?"true":"false")+'">'+b+'</button>'; });
+    h+='</div><span class="score mono">'+c.filter(Boolean).length+'/4</span></div>';
+  });
+  h+='</div>';
+  if(Math.max.apply(null,slotMiss)>0){
+    h+='<div class="section-head"><h2>Where it leaked</h2></div><ul class="glist">';
+    BOXES.map(function(b,i){return {b:b,n:slotMiss[i]};}).sort(function(a,b){return b.n-a.n;}).forEach(function(x){
+      h+='<li><span class="n">'+x.b+'</span><span class="q">'+x.n+' missed</span></li>';
+    });
+    h+='</ul><p class="note" style="margin-top:10px">If the same slot leaks two weeks running, the recipe changes — not the instruction.</p>';
+  }
+  h+='<div class="section-head"><h2>Sunday check-in</h2><p class="note">Copy this and paste it to me before the shop. Add the one line only you can write: what was actually going on for the biggest miss, and anything you are tired of.</p></div>';
+  h+='<textarea class="out" id="summary" readonly></textarea>';
+  h+='<div class="row-actions" style="margin-top:9px"><button class="act primary" id="copySum">Copy for check-in</button><button class="act" id="resetChecks">Reset the boxes</button></div>';
+  checkEl.innerHTML=h;
+  var lines=["Weekly check-in","Complete days: "+hit+" of 7"];
+  DAYS.forEach(function(d){
+    var t=dayTotals(d.k), c=state.checks[d.k];
+    var names=SLOTS.map(function(s){ var id=state.week[d.k][s]; return id?byId[id].name:"—"; });
+    lines.push(d.n.slice(0,3)+" ["+d.t+"] "+c.filter(Boolean).length+"/4 boxes · planned "+r1(t.p)+" P / "+r1(t.f)+" F / "+r1(t.c)+" C vs "+t.target.p+"/"+t.target.f+"/"+t.target.c);
+    lines.push("    "+names.join(" | "));
+  });
+  lines.push("Slots missed: "+BOXES.map(function(b,i){return b+" "+slotMiss[i];}).join(", "));
+  lines.push("Cooked but skipped: ");
+  lines.push("Biggest miss, and what was going on: ");
+  lines.push("Tired of / not worth eating: ");
+  document.getElementById("summary").value = lines.join("\n");
+}
+
+/* ============================== TABS & EVENTS ============================== */
+var PANELS={bank:bankEl, week:weekEl, recipes:recEl, shop:shopEl, check:checkEl};
+var RENDER={bank:renderBank, week:renderWeek, recipes:renderRecipes, shop:renderShop, check:renderCheck};
+var current="bank";
+function rerender(){ RENDER[current](); }
+function show(tab){
+  current=tab;
+  Object.keys(PANELS).forEach(function(k){ PANELS[k].classList.toggle("hidden", k!==tab); });
+  document.querySelectorAll("nav.tabs button").forEach(function(b){ b.setAttribute("aria-selected", String(b.dataset.tab===tab)); });
+  RENDER[tab]();
+  window.scrollTo(0,0);
+}
+document.querySelector("nav.tabs").addEventListener("click", function(e){
+  var b=e.target.closest("button[data-tab]"); if(b) show(b.dataset.tab);
+});
+document.addEventListener("click", function(e){
+  var t=e.target;
+  var fs=t.closest("[data-fslot]"); if(fs){ filters.slot=fs.dataset.fslot; filters.lane="all"; renderBank(); return; }
+  var fl=t.closest("[data-flane]"); if(fl){ filters.lane=fl.dataset.flane; renderBank(); return; }
+  var ad=t.closest("[data-add]");
+  if(ad){
+    var o=byId[ad.dataset.add], dk=ad.dataset.day;
+    if(state.week[dk][o.slot]===o.id) state.week[dk][o.slot]=null;
+    else state.week[dk][o.slot]=o.id;
+    save(); renderBank(); return;
+  }
+  var dl=t.closest("[data-del]"); if(dl){ state.week[dl.dataset.del][dl.dataset.slot]=null; save(); renderWeek(); return; }
+  var sv=t.closest("[data-svg]");
+  if(sv){
+    var sid=sv.dataset.svg, step=+sv.dataset.d, cur=servingsFor(sid);
+    var nv=Math.max(1, Math.min(24, cur+step));
+    state.servings[sid]=nv; save(); renderRecipes(); return;
+  }
+  var hd=t.closest("[data-hide]");
+  if(hd){
+    var hid=hd.dataset.hide;
+    state.hidden[hid]=true;
+    DAYS.forEach(function(d){ SLOTS.forEach(function(sl){ if(state.week[d.k][sl]===hid) state.week[d.k][sl]=null; }); });
+    save(); renderBank(); return;
+  }
+  var uh=t.closest("[data-unhide]");
+  if(uh){ delete state.hidden[uh.dataset.unhide]; save(); renderBank(); return; }
+  var gb=t.closest("[data-gone]");
+  if(gb){ goneShown = gb.dataset.gone==="1"; renderBank(); return; }
+  var sr=t.closest("[data-svgreset]");
+  if(sr){ delete state.servings[sr.dataset.svgreset]; save(); renderRecipes(); return; }
+  var ck=t.closest("[data-chk]");
+  if(ck){ var i=+ck.dataset.i; state.checks[ck.dataset.chk][i]=!state.checks[ck.dataset.chk][i]; save(); renderCheck(); return; }
+  if(t.id==="copySum"){
+    var ta=document.getElementById("summary"); ta.select(); ta.setSelectionRange(0,99999);
+    try{ document.execCommand("copy"); t.textContent="Copied"; setTimeout(function(){ t.textContent="Copy for check-in"; },1400); }catch(err){}
+    return;
+  }
+  if(t.id==="resetChecks"){ DAYS.forEach(function(d){ state.checks[d.k]=[false,false,false,false]; }); save(); renderCheck(); return; }
+  if(t.id==="ctcCopy" || t.id==="ctcShow"){
+    var ta=document.getElementById("ctcOut");
+    ta.value = JSON.stringify(ctcPayload());
+    ta.classList.remove("hidden");
+    if(t.id==="ctcCopy"){
+      ta.select(); ta.setSelectionRange(0,999999999);
+      try{ document.execCommand("copy"); t.textContent="Copied — "+M.length+" options"; setTimeout(function(){ t.textContent="Copy the whole bank"; },2000); }catch(err){}
+    }
+    return;
+  }
+  if(t.id==="clearWeek"){ DAYS.forEach(function(d){ SLOTS.forEach(function(s){ state.week[d.k][s]=null; }); }); save(); rerender(); return; }
+});
+
+/* first paint from whatever is local */
+applyIncoming(readLocal());
+show("bank");
+setStatus(lsOk ? "Saved on this device" : "Not saving yet", lsOk?"":"warn");
+
+/* then connect the store, which is authoritative */
+if(window.claude && typeof window.claude.use==="function"){
+  window.claude.use("db").then(function(db){
+    if(!db){ return; }
+    dbRef = db.doc("state/current");
+    remoteReady = true;
+    dbRef.onSnapshot(function(snap){
+      if(!snap.exists) { pushRemote(); return; }
+      var data = snap.data() || {};
+      if(data.updatedAt && data.updatedAt <= lastWrite) return;   /* our own echo */
+      if(applyIncoming(data)){ writeLocal(); rerender(); }
+      setStatus("Saved to your account", "on");
+    }, function(){
+      setStatus(lsOk ? "Saved on this device only" : "Not saving — reopen the page", "warn");
+    });
+    setStatus("Saved to your account", "on");
+  }).catch(function(){});
+}
+})();
+</script>
