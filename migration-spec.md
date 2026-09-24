@@ -264,6 +264,7 @@ These were approved in the Prompt 1 migration review and are encoded in `migrati
 13. The earlier Lift gate "150/293/343" was a typo, corrected above to 150/293/70.
 14. `data/targets.json` holds daily targets only; remaining macros are daily target − logged P/C/F.
 15. Meal Instance logging slots are `breakfast`, `lunch`, `snack_afternoon`, `dinner`, `snack_night`; Library Meals keep `mealType: "snack"`.
+16. The approved targets are the initial seed for `data/targets.json`. The migration creates that file only if it is missing and never overwrites it; after seeding it is current-target configuration owned by the app. Validation checks the seed values and the file's shape, not equality with the seed.
 
 ## Implementation
 
@@ -273,6 +274,9 @@ See `migration/README.md`. In short:
 node migration/migrate.js           # generate, validate, write (never overwrites user-data/)
 node migration/migrate.js --check   # prove the committed output equals a fresh run
 node migration/validate.js          # run the validation gates against the files on disk
+node migration/test-target-preservation.js   # re-runs never overwrite data/targets.json or user-data/
 ```
+
+`migration/` is historical migration evidence only; runtime code must never read from it.
 
 Note: the legacy generator file is named `gen-bank-docs.js` in the repository (the table above says `gen-bank-doc.js`).

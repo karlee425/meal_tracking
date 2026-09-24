@@ -7,7 +7,8 @@
  * migrate.js also calls validateBundle() on its in-memory output before writing
  * anything, so a failing migration never reaches disk.
  *
- * Every gate is blocking. Non-blocking warnings and manual-review items are
+ * Every gate is blocking. Seed-once files (data/targets.json, user-data/*) are checked for
+ * validity only, never for equality with their seed, because the app owns them after seeding. Non-blocking warnings and manual-review items are
  * produced by migrate.js and recorded in migration/migration-report.json.
  *
  * JSON Schema checking uses the small subset validator below (no dependencies).
@@ -340,22 +341,37 @@ function validateBundle(bundle) {
   }
 
   // G09 targets
+  // The approved values are the INITIAL SEED for data/targets.json. After seeding, that file is
+  // current-target configuration owned by the app and may change, so the live file is checked
+  // for shape only (daily-only, canonical keys, schema via G02) — never for equality with the seed.
   {
     const errs = [];
-    if (!deepEqual(targets, decisions.approvedTargets)) errs.push(`targets ${JSON.stringify(targets)} != approved ${JSON.stringify(decisions.approvedTargets)}`);
-    if (!deepEqual(targets, sourceMap.targetValues)) errs.push('targets differ from migration-source-map.json targetValues');
+    const seed = decisions.approvedTargets;
+    const APPROVED_INITIAL = {
+      lift: { protein: 150, carbs: 293, fat: 70 },
+      long_run: { protein: 150, carbs: 343, fat: 70 },
+      rest: { protein: 150, carbs: 218, fat: 70 }
+    };
+    if (!deepEqual(seed, APPROVED_INITIAL)) errs.push(`approved seed ${JSON.stringify(seed)} != 150/293/70, 150/343/70, 150/218/70`);
+    if (!deepEqual(seed, sourceMap.targetValues)) errs.push('approved seed differs from migration-source-map.json targetValues');
     const src = readJSON('targets.json').daily;
     const legacyAsCanonical = {
       lift: { protein: src.lift.p, carbs: src.lift.c, fat: src.lift.f },
       long_run: { protein: src.long.p, carbs: src.long.c, fat: src.long.f },
       rest: { protein: src.rest.p, carbs: src.rest.c, fat: src.rest.f }
     };
-    if (!deepEqual(targets, legacyAsCanonical)) errs.push('targets differ from legacy targets.json daily values');
+    if (!deepEqual(seed, legacyAsCanonical)) errs.push('approved seed differs from legacy targets.json daily values');
+    if (bundle.seeds && 'data/targets.json' in bundle.seeds && !deepEqual(bundle.seeds['data/targets.json'], seed)) {
+      errs.push('the migration would seed data/targets.json with values other than the approved seed');
+    }
+    // live file: shape only
+    if (!targets || typeof targets !== 'object' || Array.isArray(targets)) errs.push('data/targets.json is not an object');
+    else if (!deepEqual(Object.keys(targets).sort(), ['lift', 'long_run', 'rest'])) errs.push(`data/targets.json day types are ${Object.keys(targets).join(', ')}`);
     const bad = [];
     const walk = (o, w) => { if (o && typeof o === 'object') for (const [k, v] of Object.entries(o)) { if (['p', 'f', 'c', 'perSlot', 'nightSnack', 'carbShiftByDayType', 'daily', 'long'].includes(k)) bad.push(`${w}.${k}`); walk(v, `${w}.${k}`); } };
     walk(targets, 'targets');
     errs.push(...bad.map((b) => `legacy key ${b}`));
-    gate('G09', 'Targets are exactly Lift 150/293/70, Long Run 150/343/70, Rest 150/218/70 (P/C/F), daily only, no legacy keys', errs);
+    gate('G09', 'Initial target seed is exactly Lift 150/293/70, Long Run 150/343/70, Rest 150/218/70 (P/C/F) and matches the legacy daily targets; data/targets.json is daily-only with canonical keys (its values may change after seeding)', errs);
   }
 
   // G10 forbidden nutrition unit scan
@@ -374,8 +390,8 @@ function validateBundle(bundle) {
       if (!deepEqual(bundle.seeds['user-data/daily-logs.json'], [])) errs.push('daily-logs seed is not empty');
       if (!deepEqual(bundle.seeds['user-data/saved-meals.json'], [])) errs.push('saved-meals seed is not empty');
     }
-    gate('G11', 'The migration generates no Days, Meal Instances or Saved Meals', errs,
-      { dailyLogsOnDisk: Array.isArray(logs) ? logs.length : null, savedMealsOnDisk: Array.isArray(saved) ? saved.length : null });
+    // No on-disk counts recorded: user records change after migration and must not alter the report.
+    gate('G11', 'The migration generates no Days, Meal Instances or Saved Meals', errs);
   }
 
   // G12 no V2 runtime file depends on legacy duplicates
@@ -468,6 +484,11 @@ if (require.main === module) {
     for (const e of g.errors.slice(0, 20)) console.log(`        - ${e}`);
     if (g.errors.length > 20) console.log(`        … ${g.errors.length - 20} more`);
   }
+  try {
+    const seedText = JSON.stringify(readJSON('migration/migration-decisions.json').approvedTargets, null, 2) + '\n';
+    const live = fs.readFileSync(rel('data/targets.json'), 'utf8');
+    console.log(`\nnote: data/targets.json ${live === seedText ? 'equals the initial seed' : 'differs from the initial seed (current targets changed after seeding — allowed)'}`);
+  } catch (e) { /* reported by the gates */ }
   console.log(result.passed ? `\nAll ${result.gates.length} gates passed.` : '\nVALIDATION FAILED');
   process.exit(result.passed ? 0 : 1);
 }

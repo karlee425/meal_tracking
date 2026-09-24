@@ -16,7 +16,8 @@
     "12. Nutrition-data audit issues are not resolved during this migration.",
     "13. The '150/293/343' Lift gate in migration-spec.md is a typo; Lift is 150P / 293C / 70F.",
     "14. data/targets.json holds daily targets only. perSlot, nightSnack and carbShiftByDayType are not authoritative V2 targets.",
-    "15. Meal Instance logging slots are breakfast, lunch, snack_afternoon, dinner, snack_night. Library Meals keep mealType 'snack'."
+    "15. Meal Instance logging slots are breakfast, lunch, snack_afternoon, dinner, snack_night. Library Meals keep mealType 'snack'.",
+    "16. approvedTargets is the INITIAL SEED for data/targets.json. The migration creates that file only if it is missing and never overwrites it; afterwards it is current-target configuration owned by the app."
   ],
   "approvedTargets": {
     "lift": { "protein": 150, "carbs": 293, "fat": 70 },

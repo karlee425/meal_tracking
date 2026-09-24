@@ -181,6 +181,8 @@ The source repo calls the long-run type `long`; the canonical model calls it `lo
 
 Do not migrate the legacy `perSlot`, `nightSnack`, or `carbShiftByDayType` structures as authoritative targets. They become future coaching heuristics if needed. Targets are daily only; remaining macros are always daily target − logged P/C/F.
 
+`data/targets.json` is seeded once by the migration with the values above and is never overwritten by a re-run. After that it is current-target configuration owned by the app; changing it affects new Days only.
+
 ### Preferences
 
 V1 is intentionally lightweight:

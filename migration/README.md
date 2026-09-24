@@ -10,6 +10,7 @@ No dependencies beyond Node (tested on Node 22).
 node migration/migrate.js           # generate → validate → write
 node migration/migrate.js --check   # regenerate in memory; exit 1 if any generated file on disk differs
 node migration/validate.js          # run the validation gates against the files on disk
+node migration/test-target-preservation.js   # regression test: re-runs never overwrite seed-once files
 ```
 
 ## Files
@@ -19,6 +20,7 @@ node migration/validate.js          # run the validation gates against the files
 | `migrate.js` | The migration runner. Reads only the legacy sources and `migration-decisions.json`. |
 | `validate.js` | The 16 blocking validation gates (G01–G16) and a small, dependency-free JSON Schema validator for the keyword subset the V2 schemas use. Unknown schema keywords throw rather than pass. |
 | `macro-calc.js` | The one P/C/F formula the migration uses (`quantity / 100 × per-100 g value`, grams only). Migration tooling, not the V2 runtime utility — Prompt 2 owns that and the migration should import it once it exists, so there is still one formula. |
+| `test-target-preservation.js` | Regression test, run against a throwaway copy of the repo: clean run seeds the approved targets; changed targets and user records survive re-runs byte-for-byte; `--check`, `validate.js` and the report are unaffected by them; legacy-shaped targets still fail. |
 | `migration-decisions.json` | The approved decisions (retired meals, garnish lines, brand names, food-state rules, known audit issues). Change a decision here, re-run, review the report. |
 | `expected-output-manifest.json`, `migration-source-map.json` | From the V2 package; the validator checks against both. |
 | `migration-report.json` | Generated. Counts, conflicts, warnings, manual-review items, gate results. |
@@ -27,16 +29,20 @@ node migration/validate.js          # run the validation gates against the files
 
 ## Guarantees
 
-- **Deterministic.** No timestamps or randomness; source order is preserved; output is
-  byte-identical on every run (`--check` proves it).
+- **Deterministic.** No timestamps or randomness; source order is preserved; generated
+  output is byte-identical on every run (`--check` proves it).
 - **Nothing written on failure.** Everything is generated and validated in memory first.
 - **Blocking vs non-blocking.** `blockingErrors` (unresolved ingredient, non-gram unit,
-  unapproved unquantified line, duplicate ID, targets ≠ approved, missing state rule) and
+  unapproved unquantified line, duplicate ID, legacy `targets.json` ≠ approved seed, missing state rule) and
   any failed gate stop the run. `warnings` (preserved source anomalies) and `manualReview`
   (decisions that need a person) are recorded and do not stop it.
-- **user-data is never overwritten.** Each `user-data/` file is seeded only if missing
-  (written with the `wx` flag). The report records whether the existing file still equals
-  the seed.
+- **Seed-once files are never overwritten.** `data/targets.json` and every `user-data/`
+  file are created from their seed only if missing (written with the `wx` flag). After
+  that the app owns them: a re-run keeps them byte-for-byte, `--check` only requires them
+  to exist and pass validation, and the report never records their contents, so changed
+  targets or new logs cannot cause a false mismatch. `data/targets.json` is seeded from
+  `approvedTargets` (Lift 150/293/70, Long Run 150/343/70, Rest 150/218/70).
+- **`migration/` is historical evidence only.** Runtime code must never read from it.
 - **Legacy files are only read**, never moved or edited.
 - **Only P/C/F.** The validator scans every canonical and generated file for forbidden
   nutrition-unit keys and values.

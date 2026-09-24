@@ -47,7 +47,7 @@
     "savedMeals": 0,
     "dailyLogs": 0
   },
-  "targets": {
+  "targetSeed": {
     "lift": {
       "protein": 150,
       "carbs": 293,
@@ -1537,23 +1537,15 @@
     "meal_library_D30",
     "meal_library_D31"
   ],
-  "userData": {
-    "user-data/custom-foods.json": {
-      "neverOverwritten": true,
-      "matchesMigrationSeed": true
-    },
-    "user-data/saved-meals.json": {
-      "neverOverwritten": true,
-      "matchesMigrationSeed": true
-    },
-    "user-data/daily-logs.json": {
-      "neverOverwritten": true,
-      "matchesMigrationSeed": true
-    },
-    "user-data/preferences.json": {
-      "neverOverwritten": true,
-      "matchesMigrationSeed": true
-    }
+  "seedOnceFiles": {
+    "policy": "created from the seed only when missing; never overwritten; live contents deliberately not recorded here",
+    "files": [
+      "data/targets.json",
+      "user-data/custom-foods.json",
+      "user-data/saved-meals.json",
+      "user-data/daily-logs.json",
+      "user-data/preferences.json"
+    ]
   },
   "notMigrated": [
     {
@@ -1799,7 +1791,7 @@
       },
       {
         "id": "G09",
-        "description": "Targets are exactly Lift 150/293/70, Long Run 150/343/70, Rest 150/218/70 (P/C/F), daily only, no legacy keys",
+        "description": "Initial target seed is exactly Lift 150/293/70, Long Run 150/343/70, Rest 150/218/70 (P/C/F) and matches the legacy daily targets; data/targets.json is daily-only with canonical keys (its values may change after seeding)",
         "passed": true,
         "errors": []
       },
@@ -1813,11 +1805,7 @@
         "id": "G11",
         "description": "The migration generates no Days, Meal Instances or Saved Meals",
         "passed": true,
-        "errors": [],
-        "info": {
-          "dailyLogsOnDisk": 0,
-          "savedMealsOnDisk": 0
-        }
+        "errors": []
       },
       {
         "id": "G12",

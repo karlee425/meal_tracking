@@ -11,7 +11,11 @@
  *
  * Safe to re-run:
  *   - data/ and migration/ outputs are generated and are rewritten identically.
- *   - user-data/ files are NEVER overwritten. They are seeded only when missing.
+ *   - Seed-once files are NEVER overwritten. They are created only when missing:
+ *       user-data/*.json   (user records)
+ *       data/targets.json  (current targets; seeded from the approved initial targets)
+ *     Their live contents are not recorded in the report, so later edits (changed
+ *     targets, new logs) never make --check report a false mismatch.
  *   - Legacy source files are only read (decision 10).
  *
  * Fails (exit 1, nothing written) on any blocking error or failed validation gate.
@@ -441,8 +445,11 @@ function run() {
   for (const d of discrepancies) manualReview.push({ code: 'LEGACY_MACRO_DISCREPANCY', mealId: d.mealId, detail: d.difference });
   for (const issue of decisions.knownAuditIssuesCarriedForward) manualReview.push({ code: 'NUTRITION_AUDIT_ISSUE_NOT_RESOLVED', detail: issue });
 
-  /* ---------------- user-data seeds (never overwrite) ---------------- */
+  /* ---------------- seed-once files (created when missing, never overwritten) ---------------- */
+  // data/targets.json is current-target configuration: the approved initial targets seed it
+  // once, after which it belongs to the app and a re-run must not reset it.
   const seeds = {
+    'data/targets.json': decisions.approvedTargets,
     'user-data/custom-foods.json': customFoods,
     'user-data/saved-meals.json': [],
     'user-data/daily-logs.json': [],
@@ -460,27 +467,24 @@ function run() {
   const generated = {
     'data/foods/core-foods.json': toJSON(coreFoods),
     'data/meals/library-meals.json': toJSON(libraryMeals),
-    'data/targets.json': toJSON(targets),
     'data/reference/yields.json': sourceText['yields.json'],
     'data/reference/portion-bounds.json': sourceText['portion-bounds.json'],
     'migration/food-id-map.json': toJSON(foodIdMap),
     'migration/meal-id-map.json': toJSON(mealIdMap)
   };
 
-  // Effective user-data: existing files win; seeds only fill gaps.
-  const userData = {};
-  const userDataStatus = {};
+  // Effective seed-once files: an existing file wins byte-for-byte; the seed only fills a gap.
+  // Whether a file was seeded or kept, and whether it still equals its seed, is printed to
+  // the console only — never written into the report — so the report stays identical no
+  // matter how the app has changed these files since the first run.
+  const seedOnce = {};
   for (const [p, seed] of Object.entries(seeds)) {
     const seedText = toJSON(seed);
-    // The report records only whether the file equals the seed, so it stays identical
-    // between a first run (seeded) and a re-run (kept). The action is printed to the console.
     if (fs.existsSync(rel(p))) {
       const text = readText(p);
-      userData[p] = { text, write: false };
-      userDataStatus[p] = { neverOverwritten: true, matchesMigrationSeed: text === seedText };
+      seedOnce[p] = { text, write: false, matchesSeed: text === seedText };
     } else {
-      userData[p] = { text: seedText, write: true };
-      userDataStatus[p] = { neverOverwritten: true, matchesMigrationSeed: true };
+      seedOnce[p] = { text: seedText, write: true, matchesSeed: true };
     }
   }
 
@@ -505,7 +509,7 @@ function run() {
       savedMeals: 0,
       dailyLogs: 0
     },
-    targets,
+    targetSeed: decisions.approvedTargets,
     duplicateMealSource: {
       source: 'live-settings-doc.json#bank.meals',
       disposition: 'discarded as duplicate; not migrated',
@@ -539,7 +543,10 @@ function run() {
     generatedFoodIds: coreFoods.map((f) => f.id),
     customFoodIds: customFoods.map((f) => f.id),
     generatedMealIds: libraryMeals.map((m) => m.id),
-    userData: userDataStatus,
+    seedOnceFiles: {
+      policy: 'created from the seed only when missing; never overwritten; live contents deliberately not recorded here',
+      files: Object.keys(seeds)
+    },
     notMigrated: [
       { source: 'live-settings-doc.json#bank.meals', reason: 'duplicate of meal-options.json' },
       { source: 'live-settings-doc.json#measured', reason: 'empty object; no preference found' },
@@ -561,17 +568,17 @@ function run() {
     validation: null
   };
 
-  return { generated, userData, report, seeds, blocking };
+  return { generated, seedOnce, report, seeds, blocking };
 }
 
 function main() {
   const check = process.argv.includes('--check');
-  const { generated, userData, report, seeds, blocking } = run();
+  const { generated, seedOnce, report, seeds, blocking } = run();
 
   const files = {};
   const rawText = {};
   for (const [p, t] of Object.entries(generated)) { rawText[p] = t; files[p] = JSON.parse(t); }
-  for (const [p, u] of Object.entries(userData)) { rawText[p] = u.text; files[p] = JSON.parse(u.text); }
+  for (const [p, u] of Object.entries(seedOnce)) { rawText[p] = u.text; files[p] = JSON.parse(u.text); }
   files['migration/migration-report.json'] = report; // placeholder for the manifest gate
 
   let validation;
@@ -604,11 +611,24 @@ function main() {
     process.exit(1);
   }
 
+  const seedOnceStatus = () => {
+    for (const [p, u] of Object.entries(seedOnce)) {
+      console.log(`seed-once: ${p} — ${u.write ? 'missing (a real run seeds it)' : u.matchesSeed ? 'present, equals initial seed' : 'present, changed since seeding (kept as-is)'}`);
+    }
+  };
+
   if (check) {
+    // Generated files must match a fresh run exactly. Seed-once files are only required to
+    // exist (and to pass the validation gates above); their contents may legitimately differ
+    // from the seed, so they are never compared.
     const drift = Object.entries(generated).filter(([p, t]) => !fs.existsSync(rel(p)) || fs.readFileSync(rel(p), 'utf8') !== t).map(([p]) => p);
+    const missing = Object.entries(seedOnce).filter(([, u]) => u.write).map(([p]) => p);
     summary();
-    if (drift.length) { console.error('\nCHECK FAILED — generated output differs from disk:\n  ' + drift.join('\n  ')); process.exit(1); }
-    console.log('\ncheck: every generated file on disk matches a fresh migration run');
+    seedOnceStatus();
+    if (drift.length) console.error('\nCHECK FAILED — generated output differs from disk:\n  ' + drift.join('\n  '));
+    if (missing.length) console.error('\nCHECK FAILED — seed-once files missing:\n  ' + missing.join('\n  '));
+    if (drift.length || missing.length) process.exit(1);
+    console.log('\ncheck: every generated file on disk matches a fresh migration run; seed-once files present');
     return;
   }
 
@@ -616,11 +636,11 @@ function main() {
     fs.mkdirSync(path.dirname(rel(p)), { recursive: true });
     fs.writeFileSync(rel(p), t);
   }
-  for (const [p, u] of Object.entries(userData)) {
-    if (!u.write) { console.log(`user-data: kept existing ${p}`); continue; }
+  for (const [p, u] of Object.entries(seedOnce)) {
+    if (!u.write) { console.log(`seed-once: kept existing ${p}${u.matchesSeed ? '' : ' (changed since seeding)'}`); continue; }
     fs.mkdirSync(path.dirname(rel(p)), { recursive: true });
     fs.writeFileSync(rel(p), u.text, { flag: 'wx' }); // wx: refuse to overwrite even under a race
-    console.log(`user-data: seeded ${p}`);
+    console.log(`seed-once: seeded ${p}`);
   }
   summary();
 }
