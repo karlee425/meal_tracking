@@ -18,8 +18,8 @@ node migration/test-target-preservation.js   # regression test: re-runs never ov
 | File | Role |
 |---|---|
 | `migrate.js` | The migration runner. Reads only the legacy sources and `migration-decisions.json`. |
-| `validate.js` | The 16 blocking validation gates (G01–G16) and a small, dependency-free JSON Schema validator for the keyword subset the V2 schemas use. Unknown schema keywords throw rather than pass. |
-| `macro-calc.js` | The one P/C/F formula the migration uses (`quantity / 100 × per-100 g value`, grams only). Migration tooling, not the V2 runtime utility — Prompt 2 owns that and the migration should import it once it exists, so there is still one formula. |
+| `validate.js` | The 16 blocking validation gates (G01–G16). JSON Schema checks use the shared, dependency-free validator in `src/domain/schema-validator.js` (unknown schema keywords throw rather than pass), and Food IDs use the shared `slug` rule in `src/domain/util.js`. |
+| `macro-calc.js` | Re-exports the canonical runtime calculator (`src/domain/macros.js`) and contains no formula of its own. Its only addition is strictness: `calculateMealMacros` throws on a missing Food or bad ingredient, because a migration must stop on bad data, while the runtime reports the meal as invalid instead. |
 | `test-target-preservation.js` | Regression test, run against a throwaway copy of the repo: clean run seeds the approved targets; changed targets and user records survive re-runs byte-for-byte; `--check`, `validate.js` and the report are unaffected by them; legacy-shaped targets still fail. |
 | `migration-decisions.json` | The approved decisions (retired meals, garnish lines, brand names, food-state rules, known audit issues). Change a decision here, re-run, review the report. |
 | `expected-output-manifest.json`, `migration-source-map.json` | From the V2 package; the validator checks against both. |
@@ -42,7 +42,7 @@ node migration/test-target-preservation.js   # regression test: re-runs never ov
   to exist and pass validation, and the report never records their contents, so changed
   targets or new logs cannot cause a false mismatch. `data/targets.json` is seeded from
   `approvedTargets` (Lift 150/293/70, Long Run 150/343/70, Rest 150/218/70).
-- **`migration/` is historical evidence only.** Runtime code must never read from it.
+- **`migration/` is historical evidence only.** Runtime code must never read from it. (The dependency runs one way: the migration imports the calculator and validator from `src/domain/`.)
 - **Legacy files are only read**, never moved or edited.
 - **Only P/C/F.** The validator scans every canonical and generated file for forbidden
   nutrition-unit keys and values.

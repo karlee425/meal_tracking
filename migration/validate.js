@@ -11,9 +11,10 @@
  * validity only, never for equality with their seed, because the app owns them after seeding. Non-blocking warnings and manual-review items are
  * produced by migrate.js and recorded in migration/migration-report.json.
  *
- * JSON Schema checking uses the small subset validator below (no dependencies).
- * It supports exactly the keywords the six V2 schemas use and throws on any
- * keyword it does not know, so a schema change can never be silently ignored.
+ * JSON Schema checking uses the dependency-free subset validator in
+ * src/domain/schema-validator.js (shared with the runtime data layer). It supports
+ * exactly the keywords the six V2 schemas use and throws on any keyword it does not
+ * know, so a schema change can never be silently ignored.
  */
 
 const fs = require('fs');
@@ -49,90 +50,12 @@ const CANONICAL_JSON = [
 ];
 
 /* ------------------------------------------------------------------ */
-/* Minimal JSON Schema (draft 2020-12 subset) validator                */
+/* JSON Schema validation                                              */
 /* ------------------------------------------------------------------ */
 
-const KNOWN_KEYWORDS = new Set([
-  '$schema', '$id', 'title', '$defs', 'type', 'enum', 'const', 'required', 'properties',
-  'additionalProperties', 'items', 'minItems', 'minLength', 'minimum', 'exclusiveMinimum',
-  '$ref', 'format'
-]);
-
-function typeOf(v) {
-  if (v === null) return 'null';
-  if (Array.isArray(v)) return 'array';
-  if (typeof v === 'number') return Number.isInteger(v) ? 'integer' : 'number';
-  return typeof v;
-}
-function typeMatches(v, t) {
-  const actual = typeOf(v);
-  if (t === 'number') return actual === 'number' || actual === 'integer';
-  return actual === t;
-}
-
-function makeSchemaValidator(schemasByFile) {
-  function resolveRef(ref, rootSchema) {
-    if (ref.startsWith('#/')) {
-      return { schema: ref.slice(2).split('/').reduce((o, k) => o[k], rootSchema), root: rootSchema };
-    }
-    const target = schemasByFile[ref];
-    if (!target) throw new Error(`schema $ref not found: ${ref}`);
-    return { schema: target, root: target };
-  }
-
-  function check(value, schema, root, where, errors) {
-    for (const k of Object.keys(schema)) {
-      if (!KNOWN_KEYWORDS.has(k)) throw new Error(`schema keyword not supported by validator: ${k}`);
-    }
-    if (schema.$ref) {
-      const r = resolveRef(schema.$ref, root);
-      check(value, r.schema, r.root, where, errors);
-      return;
-    }
-    if (schema.type !== undefined) {
-      const types = Array.isArray(schema.type) ? schema.type : [schema.type];
-      if (!types.some((t) => typeMatches(value, t))) {
-        errors.push(`${where}: expected type ${types.join('|')}, got ${typeOf(value)}`);
-        return;
-      }
-    }
-    if (schema.enum && !schema.enum.some((e) => e === value)) {
-      errors.push(`${where}: ${JSON.stringify(value)} not in enum ${JSON.stringify(schema.enum)}`);
-    }
-    if (schema.const !== undefined && value !== schema.const) {
-      errors.push(`${where}: expected const ${JSON.stringify(schema.const)}`);
-    }
-    if (typeof value === 'string') {
-      if (schema.minLength !== undefined && value.length < schema.minLength) errors.push(`${where}: shorter than minLength`);
-      if (schema.format === 'date' && !/^\d{4}-\d{2}-\d{2}$/.test(value)) errors.push(`${where}: not a date`);
-      if (schema.format === 'date-time' && !/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?(Z|[+-]\d{2}:\d{2})$/.test(value)) errors.push(`${where}: not a date-time`);
-    }
-    if (typeof value === 'number') {
-      if (schema.minimum !== undefined && value < schema.minimum) errors.push(`${where}: below minimum ${schema.minimum}`);
-      if (schema.exclusiveMinimum !== undefined && !(value > schema.exclusiveMinimum)) errors.push(`${where}: must be > ${schema.exclusiveMinimum}`);
-    }
-    if (Array.isArray(value)) {
-      if (schema.minItems !== undefined && value.length < schema.minItems) errors.push(`${where}: fewer than ${schema.minItems} items`);
-      if (schema.items) value.forEach((v, i) => check(v, schema.items, root, `${where}[${i}]`, errors));
-    }
-    if (typeOf(value) === 'object') {
-      for (const r of schema.required || []) if (!(r in value)) errors.push(`${where}: missing required "${r}"`);
-      const props = schema.properties || {};
-      for (const [k, v] of Object.entries(value)) {
-        if (props[k]) check(v, props[k], root, `${where}.${k}`, errors);
-        else if (schema.additionalProperties === false) errors.push(`${where}: unexpected property "${k}"`);
-      }
-    }
-  }
-
-  return function validate(value, schemaFile, where) {
-    const schema = schemasByFile[schemaFile];
-    if (!schema) throw new Error(`unknown schema ${schemaFile}`);
-    const errors = [];
-    check(value, schema, schema, where, errors);
-    return errors;
-  };
-}
+// One validator for the whole repository: the runtime data layer and the migration
+// both use src/domain/schema-validator.js (moved there unchanged in Prompt 2).
+const { makeSchemaValidator } = require('../src/domain/schema-validator.js');
 
 /* ------------------------------------------------------------------ */
 /* Helpers                                                             */
@@ -163,9 +86,8 @@ function findMacroKeys(obj, where, hits) {
   }
 }
 
-function slug(name) {
-  return name.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '');
-}
+// Food ID rule shared with the runtime (custom Foods created in the app use the same rule).
+const { slug } = require('../src/domain/util.js');
 
 function listRepoFiles(dir = ROOT, prefix = '') {
   const out = [];
