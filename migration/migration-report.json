@@ -1,0 +1,1863 @@
+{
+  "reportVersion": 1,
+  "status": "passed",
+  "sourceFiles": {
+    "foods.json": {
+      "sha256": "aa39eb3fae39fea562d463791823754183f829a02bf94fcf2495326a625d6a39"
+    },
+    "meal-options.json": {
+      "sha256": "683a959aaeea31b6ab364855fd1998d7079ec75a7387b1708e04b3239dff3b20"
+    },
+    "targets.json": {
+      "sha256": "9c2d4915d9a59550f1dd7211e54c3e4601f14bf83718a2197dad33c7c8585c8b"
+    },
+    "live-settings-doc.json": {
+      "sha256": "24452dbd2a6393c3042e01247738c71b11fc6455fd4925a6eb4bc1c9a59e6406"
+    },
+    "yields.json": {
+      "sha256": "608171c04056010c04fde2d333e134f68d312e4f88a328b93796dc2211736a70"
+    },
+    "portion-bounds.json": {
+      "sha256": "bd91f46cc56d3dbd1391cc22cad8b455c1b5a3f326298a66b189694a759332f4"
+    },
+    "meal-bank.html": {
+      "sha256": "28b6b60c1d7b76f0bde1c301b16061f08e863523c6fcfd90afb210f24158a961"
+    },
+    "ingredient-name-map.json": {
+      "sha256": "d94bd288d243c571c47076d377e20ea8e694cac7b153ae8fad7d34fc7dd2060a"
+    },
+    "ingredients-flat.json": {
+      "sha256": "3ddde8c219d8e26c288731a1cce43b9aa1eb65e6fa216c39eaa17dce661c656d"
+    }
+  },
+  "sourceCounts": {
+    "foods.json": 182,
+    "meal-options.json": 84,
+    "live-settings-doc.json#bank.meals": 82,
+    "live-settings-doc.json#customFoods": 2,
+    "ingredientLines": 707
+  },
+  "destinationCounts": {
+    "coreFoods": 182,
+    "libraryMeals": 84,
+    "retiredLibraryMeals": 2,
+    "customFoods": 2,
+    "structuredIngredientLines": 705,
+    "garnishLines": 2,
+    "savedMeals": 0,
+    "dailyLogs": 0
+  },
+  "targets": {
+    "lift": {
+      "protein": 150,
+      "carbs": 293,
+      "fat": 70
+    },
+    "long_run": {
+      "protein": 150,
+      "carbs": 343,
+      "fat": 70
+    },
+    "rest": {
+      "protein": 150,
+      "carbs": 218,
+      "fat": 70
+    }
+  },
+  "duplicateMealSource": {
+    "source": "live-settings-doc.json#bank.meals",
+    "disposition": "discarded as duplicate; not migrated",
+    "meals": 82,
+    "idsInMealOptionsOnly": [
+      "L13",
+      "L16"
+    ],
+    "embeddedMealBankArrayMatchesMealOptions": true,
+    "recordsDifferingFromMealOptions": []
+  },
+  "duplicateMealIds": [],
+  "unresolvedIngredients": [],
+  "ambiguousIngredients": [],
+  "garnishes": [
+    {
+      "mealId": "L26",
+      "text": "cilantro",
+      "foodId": "food_core_cilantro",
+      "note": "No quantity in source; not included in macro calculation."
+    },
+    {
+      "mealId": "D30",
+      "text": "cilantro",
+      "foodId": "food_core_cilantro",
+      "note": "No quantity in source; not included in macro calculation."
+    }
+  ],
+  "legacyMacroComparison": {
+    "method": "unrounded calculated P/C/F vs legacy meal p/f/c (which are rounded to 0.1 g); flagged when the difference exceeds 0.05 g, i.e. the legacy value is not a correct rounding of the calculation",
+    "mealsCompared": 84,
+    "discrepancies": [],
+    "maxAbsoluteUnroundedDifference": {
+      "protein": 0.048,
+      "carbs": 0.05,
+      "fat": 0.05
+    }
+  },
+  "foodStates": {
+    "explicit": 33,
+    "inferred": 151,
+    "inferredDetail": [
+      {
+        "foodId": "food_core_fage_0_greek_yogurt",
+        "name": "Fage 0% Greek yogurt",
+        "state": "prepared",
+        "basis": "category \"dairy\" default"
+      },
+      {
+        "foodId": "food_core_fage_2_greek_yogurt",
+        "name": "Fage 2% Greek yogurt",
+        "state": "prepared",
+        "basis": "category \"dairy\" default"
+      },
+      {
+        "foodId": "food_core_fage_5_greek_yogurt",
+        "name": "Fage 5% Greek yogurt",
+        "state": "prepared",
+        "basis": "category \"dairy\" default"
+      },
+      {
+        "foodId": "food_core_cottage_cheese_2",
+        "name": "Cottage cheese 2%",
+        "state": "prepared",
+        "basis": "category \"dairy\" default"
+      },
+      {
+        "foodId": "food_core_cottage_cheese_4",
+        "name": "Cottage cheese 4%",
+        "state": "prepared",
+        "basis": "category \"dairy\" default"
+      },
+      {
+        "foodId": "food_core_skim_milk",
+        "name": "Skim milk",
+        "state": "prepared",
+        "basis": "category \"dairy\" default"
+      },
+      {
+        "foodId": "food_core_whole_milk",
+        "name": "Whole milk",
+        "state": "prepared",
+        "basis": "category \"dairy\" default"
+      },
+      {
+        "foodId": "food_core_chocolate_milk",
+        "name": "Chocolate milk",
+        "state": "prepared",
+        "basis": "category \"dairy\" default"
+      },
+      {
+        "foodId": "food_core_kefir_plain",
+        "name": "Kefir, plain",
+        "state": "prepared",
+        "basis": "category \"dairy\" default"
+      },
+      {
+        "foodId": "food_core_ricotta_part_skim",
+        "name": "Ricotta, part-skim",
+        "state": "prepared",
+        "basis": "category \"dairy\" default"
+      },
+      {
+        "foodId": "food_core_granola",
+        "name": "Granola",
+        "state": "prepared",
+        "basis": "category \"cereal\" default"
+      },
+      {
+        "foodId": "food_core_three_wishes_cereal",
+        "name": "Three Wishes cereal",
+        "state": "prepared",
+        "basis": "category \"cereal\" default"
+      },
+      {
+        "foodId": "food_core_one_degree_brown_rice_crisps",
+        "name": "One Degree brown rice crisps",
+        "state": "prepared",
+        "basis": "category \"cereal\" default"
+      },
+      {
+        "foodId": "food_core_rice_cakes",
+        "name": "Rice cakes",
+        "state": "prepared",
+        "basis": "category \"cracker\" default"
+      },
+      {
+        "foodId": "food_core_honey",
+        "name": "Honey",
+        "state": "prepared",
+        "basis": "category \"syrup\" default"
+      },
+      {
+        "foodId": "food_core_hot_honey",
+        "name": "Hot honey",
+        "state": "prepared",
+        "basis": "category \"syrup\" default"
+      },
+      {
+        "foodId": "food_core_maple_syrup",
+        "name": "Maple syrup",
+        "state": "prepared",
+        "basis": "category \"syrup\" default"
+      },
+      {
+        "foodId": "food_core_chia_seeds",
+        "name": "Chia seeds",
+        "state": "raw",
+        "basis": "category \"nut\" default",
+        "review": true
+      },
+      {
+        "foodId": "food_core_banana",
+        "name": "Banana",
+        "state": "raw",
+        "basis": "category \"fruit\" default"
+      },
+      {
+        "foodId": "food_core_strawberries",
+        "name": "Strawberries",
+        "state": "raw",
+        "basis": "category \"fruit\" default"
+      },
+      {
+        "foodId": "food_core_raspberries",
+        "name": "Raspberries",
+        "state": "raw",
+        "basis": "category \"fruit\" default"
+      },
+      {
+        "foodId": "food_core_grapes",
+        "name": "Grapes",
+        "state": "raw",
+        "basis": "category \"fruit\" default"
+      },
+      {
+        "foodId": "food_core_apple",
+        "name": "Apple",
+        "state": "raw",
+        "basis": "category \"fruit\" default"
+      },
+      {
+        "foodId": "food_core_mango",
+        "name": "Mango",
+        "state": "raw",
+        "basis": "category \"fruit\" default"
+      },
+      {
+        "foodId": "food_core_pineapple",
+        "name": "Pineapple",
+        "state": "raw",
+        "basis": "category \"fruit\" default"
+      },
+      {
+        "foodId": "food_core_orange",
+        "name": "Orange",
+        "state": "raw",
+        "basis": "category \"fruit\" default"
+      },
+      {
+        "foodId": "food_core_applesauce_unsweetened",
+        "name": "Applesauce, unsweetened",
+        "state": "raw",
+        "basis": "category \"fruit\" default"
+      },
+      {
+        "foodId": "food_core_dates_medjool",
+        "name": "Dates, Medjool",
+        "state": "prepared",
+        "basis": "category \"driedfruit\" default"
+      },
+      {
+        "foodId": "food_core_raisins",
+        "name": "Raisins",
+        "state": "prepared",
+        "basis": "category \"driedfruit\" default"
+      },
+      {
+        "foodId": "food_core_sourdough",
+        "name": "Sourdough",
+        "state": "baked",
+        "basis": "category \"bread\" default"
+      },
+      {
+        "foodId": "food_core_whole_wheat_bread",
+        "name": "Whole wheat bread",
+        "state": "baked",
+        "basis": "category \"bread\" default"
+      },
+      {
+        "foodId": "food_core_bagel_plain",
+        "name": "Bagel, plain",
+        "state": "baked",
+        "basis": "category \"bread\" default"
+      },
+      {
+        "foodId": "food_core_english_muffin",
+        "name": "English muffin",
+        "state": "baked",
+        "basis": "category \"bread\" default"
+      },
+      {
+        "foodId": "food_core_tortilla_large_flour",
+        "name": "Tortilla, large flour",
+        "state": "baked",
+        "basis": "category \"tortilla\" default"
+      },
+      {
+        "foodId": "food_core_tortilla_corn",
+        "name": "Tortilla, corn",
+        "state": "baked",
+        "basis": "category \"tortilla\" default"
+      },
+      {
+        "foodId": "food_core_pita_white",
+        "name": "Pita, white",
+        "state": "baked",
+        "basis": "category \"bread\" default"
+      },
+      {
+        "foodId": "food_core_naan",
+        "name": "Naan",
+        "state": "baked",
+        "basis": "category \"bread\" default"
+      },
+      {
+        "foodId": "food_core_tortilla_chips",
+        "name": "Tortilla chips",
+        "state": "prepared",
+        "basis": "category \"cracker\" default"
+      },
+      {
+        "foodId": "food_core_pretzels",
+        "name": "Pretzels",
+        "state": "prepared",
+        "basis": "category \"cracker\" default"
+      },
+      {
+        "foodId": "food_core_corn",
+        "name": "Corn",
+        "state": "frozen",
+        "basis": "every bank line using it reads 'corn frozen'",
+        "review": true
+      },
+      {
+        "foodId": "food_core_rotisserie_chicken_meat",
+        "name": "Rotisserie chicken meat",
+        "state": "cooked",
+        "basis": "rotisserie chicken is sold cooked"
+      },
+      {
+        "foodId": "food_core_ground_turkey_93_7",
+        "name": "Ground turkey 93/7",
+        "state": "raw",
+        "basis": "category \"meat\" default"
+      },
+      {
+        "foodId": "food_core_ground_beef_93_7",
+        "name": "Ground beef 93/7",
+        "state": "raw",
+        "basis": "category \"meat\" default"
+      },
+      {
+        "foodId": "food_core_deli_turkey_low_sodium",
+        "name": "Deli turkey, low sodium",
+        "state": "prepared",
+        "basis": "deli meat is sold cooked"
+      },
+      {
+        "foodId": "food_core_beef_jerky",
+        "name": "Beef jerky",
+        "state": "prepared",
+        "basis": "category \"cracker\" default"
+      },
+      {
+        "foodId": "food_core_turkey_bacon",
+        "name": "Turkey bacon",
+        "state": "raw",
+        "basis": "yields.json lists a cooking factor for it, so values are as-packaged/uncooked; turkey bacon is often sold pre-cooked",
+        "review": true
+      },
+      {
+        "foodId": "food_core_egg_whole",
+        "name": "Egg, whole",
+        "state": "raw",
+        "basis": "category \"egg\" default"
+      },
+      {
+        "foodId": "food_core_egg_white",
+        "name": "Egg white",
+        "state": "raw",
+        "basis": "category \"egg\" default"
+      },
+      {
+        "foodId": "food_core_tofu_extra_firm",
+        "name": "Tofu, extra firm",
+        "state": "prepared",
+        "basis": "packaged tofu"
+      },
+      {
+        "foodId": "food_core_edamame_shelled",
+        "name": "Edamame, shelled",
+        "state": "frozen",
+        "basis": "every bank line using it reads '... edamame frozen'",
+        "review": true
+      },
+      {
+        "foodId": "food_core_refried_beans",
+        "name": "Refried beans",
+        "state": "prepared",
+        "basis": "category \"legume\" default"
+      },
+      {
+        "foodId": "food_core_peanut_butter",
+        "name": "Peanut butter",
+        "state": "prepared",
+        "basis": "category \"nutbutter\" default"
+      },
+      {
+        "foodId": "food_core_almond_butter",
+        "name": "Almond butter",
+        "state": "prepared",
+        "basis": "category \"nutbutter\" default"
+      },
+      {
+        "foodId": "food_core_almonds",
+        "name": "Almonds",
+        "state": "raw",
+        "basis": "category \"nut\" default",
+        "review": true
+      },
+      {
+        "foodId": "food_core_walnuts",
+        "name": "Walnuts",
+        "state": "raw",
+        "basis": "category \"nut\" default",
+        "review": true
+      },
+      {
+        "foodId": "food_core_cashews",
+        "name": "Cashews",
+        "state": "raw",
+        "basis": "category \"nut\" default",
+        "review": true
+      },
+      {
+        "foodId": "food_core_avocado",
+        "name": "Avocado",
+        "state": "raw",
+        "basis": "category \"veg\" default"
+      },
+      {
+        "foodId": "food_core_olive_oil",
+        "name": "Olive oil",
+        "state": "prepared",
+        "basis": "category \"oil\" default"
+      },
+      {
+        "foodId": "food_core_butter",
+        "name": "Butter",
+        "state": "prepared",
+        "basis": "category \"oil\" default"
+      },
+      {
+        "foodId": "food_core_feta",
+        "name": "Feta",
+        "state": "prepared",
+        "basis": "category \"cheese\" default"
+      },
+      {
+        "foodId": "food_core_cheddar",
+        "name": "Cheddar",
+        "state": "prepared",
+        "basis": "category \"cheese\" default"
+      },
+      {
+        "foodId": "food_core_mozzarella_part_skim",
+        "name": "Mozzarella, part-skim",
+        "state": "prepared",
+        "basis": "category \"cheese\" default"
+      },
+      {
+        "foodId": "food_core_parmesan",
+        "name": "Parmesan",
+        "state": "prepared",
+        "basis": "category \"cheese\" default"
+      },
+      {
+        "foodId": "food_core_cream_cheese",
+        "name": "Cream cheese",
+        "state": "prepared",
+        "basis": "category \"cheese\" default"
+      },
+      {
+        "foodId": "food_core_sour_cream",
+        "name": "Sour cream",
+        "state": "prepared",
+        "basis": "category \"sauce\" default"
+      },
+      {
+        "foodId": "food_core_guacamole",
+        "name": "Guacamole",
+        "state": "prepared",
+        "basis": "category \"sauce\" default"
+      },
+      {
+        "foodId": "food_core_salsa",
+        "name": "Salsa",
+        "state": "prepared",
+        "basis": "category \"sauce\" default"
+      },
+      {
+        "foodId": "food_core_hummus",
+        "name": "Hummus",
+        "state": "prepared",
+        "basis": "category \"sauce\" default"
+      },
+      {
+        "foodId": "food_core_marinara_sauce",
+        "name": "Marinara sauce",
+        "state": "prepared",
+        "basis": "category \"sauce\" default"
+      },
+      {
+        "foodId": "food_core_soy_sauce",
+        "name": "Soy sauce",
+        "state": "prepared",
+        "basis": "category \"sauce\" default"
+      },
+      {
+        "foodId": "food_core_bell_pepper",
+        "name": "Bell pepper",
+        "state": "raw",
+        "basis": "category \"veg\" default"
+      },
+      {
+        "foodId": "food_core_zucchini",
+        "name": "Zucchini",
+        "state": "raw",
+        "basis": "category \"veg\" default"
+      },
+      {
+        "foodId": "food_core_spinach",
+        "name": "Spinach",
+        "state": "raw",
+        "basis": "category \"veg\" default"
+      },
+      {
+        "foodId": "food_core_onion",
+        "name": "Onion",
+        "state": "raw",
+        "basis": "category \"veg\" default"
+      },
+      {
+        "foodId": "food_core_mushrooms",
+        "name": "Mushrooms",
+        "state": "raw",
+        "basis": "category \"veg\" default"
+      },
+      {
+        "foodId": "food_core_asparagus",
+        "name": "Asparagus",
+        "state": "raw",
+        "basis": "category \"veg\" default"
+      },
+      {
+        "foodId": "food_core_green_beans",
+        "name": "Green beans",
+        "state": "raw",
+        "basis": "category \"veg\" default"
+      },
+      {
+        "foodId": "food_core_tomato",
+        "name": "Tomato",
+        "state": "raw",
+        "basis": "category \"veg\" default"
+      },
+      {
+        "foodId": "food_core_cucumber",
+        "name": "Cucumber",
+        "state": "raw",
+        "basis": "category \"veg\" default"
+      },
+      {
+        "foodId": "food_core_romaine",
+        "name": "Romaine",
+        "state": "raw",
+        "basis": "category \"veg\" default"
+      },
+      {
+        "foodId": "food_core_cabbage_slaw_mix",
+        "name": "Cabbage slaw mix",
+        "state": "raw",
+        "basis": "category \"veg\" default"
+      },
+      {
+        "foodId": "food_core_panko_breadcrumbs",
+        "name": "Panko/breadcrumbs",
+        "state": "prepared",
+        "basis": "category \"cracker\" default"
+      },
+      {
+        "foodId": "food_core_milk_2",
+        "name": "Milk 2%",
+        "state": "prepared",
+        "basis": "category \"dairy\" default"
+      },
+      {
+        "foodId": "food_core_whole_grain_crackers",
+        "name": "Whole-grain crackers",
+        "state": "prepared",
+        "basis": "category \"cracker\" default"
+      },
+      {
+        "foodId": "food_core_whole_wheat_pita",
+        "name": "Whole-wheat pita",
+        "state": "baked",
+        "basis": "category \"bread\" default"
+      },
+      {
+        "foodId": "food_core_kalamata_olives",
+        "name": "Kalamata olives",
+        "state": "prepared",
+        "basis": "category \"sauce\" default"
+      },
+      {
+        "foodId": "food_core_mayonnaise",
+        "name": "Mayonnaise",
+        "state": "prepared",
+        "basis": "category \"oil\" default"
+      },
+      {
+        "foodId": "food_core_dijon_mustard",
+        "name": "Dijon mustard",
+        "state": "prepared",
+        "basis": "category \"sauce\" default"
+      },
+      {
+        "foodId": "food_core_lemon_juice",
+        "name": "Lemon juice",
+        "state": "prepared",
+        "basis": "category \"sauce\" default"
+      },
+      {
+        "foodId": "food_core_lime_juice",
+        "name": "Lime juice",
+        "state": "prepared",
+        "basis": "category \"sauce\" default"
+      },
+      {
+        "foodId": "food_core_garlic",
+        "name": "Garlic",
+        "state": "raw",
+        "basis": "category \"veg\" default"
+      },
+      {
+        "foodId": "food_core_ginger",
+        "name": "Ginger",
+        "state": "raw",
+        "basis": "category \"veg\" default"
+      },
+      {
+        "foodId": "food_core_basil",
+        "name": "Basil",
+        "state": "raw",
+        "basis": "category \"veg\" default"
+      },
+      {
+        "foodId": "food_core_scallions",
+        "name": "Scallions",
+        "state": "raw",
+        "basis": "category \"veg\" default"
+      },
+      {
+        "foodId": "food_core_celery",
+        "name": "Celery",
+        "state": "raw",
+        "basis": "category \"veg\" default"
+      },
+      {
+        "foodId": "food_core_carrot",
+        "name": "Carrot",
+        "state": "raw",
+        "basis": "category \"veg\" default"
+      },
+      {
+        "foodId": "food_core_baby_carrots",
+        "name": "Baby carrots",
+        "state": "raw",
+        "basis": "category \"veg\" default"
+      },
+      {
+        "foodId": "food_core_everything_bagel_seasoning",
+        "name": "Everything bagel seasoning",
+        "state": "prepared",
+        "basis": "seasoning blend"
+      },
+      {
+        "foodId": "food_core_white_wine",
+        "name": "White wine",
+        "state": "prepared",
+        "basis": "category \"sauce\" default"
+      },
+      {
+        "foodId": "food_core_chicken_stock",
+        "name": "Chicken stock",
+        "state": "prepared",
+        "basis": "category \"sauce\" default"
+      },
+      {
+        "foodId": "food_core_crushed_tomatoes",
+        "name": "Crushed tomatoes",
+        "state": "prepared",
+        "basis": "category \"sauce\" default"
+      },
+      {
+        "foodId": "food_core_tomato_paste",
+        "name": "Tomato paste",
+        "state": "prepared",
+        "basis": "category \"sauce\" default"
+      },
+      {
+        "foodId": "food_core_pesto",
+        "name": "Pesto",
+        "state": "prepared",
+        "basis": "category \"sauce\" default"
+      },
+      {
+        "foodId": "food_core_tzatziki",
+        "name": "Tzatziki",
+        "state": "prepared",
+        "basis": "category \"sauce\" default"
+      },
+      {
+        "foodId": "food_core_bbq_sauce",
+        "name": "BBQ sauce",
+        "state": "prepared",
+        "basis": "category \"sauce\" default"
+      },
+      {
+        "foodId": "food_core_ketchup",
+        "name": "Ketchup",
+        "state": "prepared",
+        "basis": "category \"sauce\" default"
+      },
+      {
+        "foodId": "food_core_buffalo_sauce",
+        "name": "Buffalo sauce",
+        "state": "prepared",
+        "basis": "category \"sauce\" default"
+      },
+      {
+        "foodId": "food_core_oyster_sauce",
+        "name": "Oyster sauce",
+        "state": "prepared",
+        "basis": "category \"sauce\" default"
+      },
+      {
+        "foodId": "food_core_sriracha",
+        "name": "Sriracha",
+        "state": "prepared",
+        "basis": "category \"sauce\" default"
+      },
+      {
+        "foodId": "food_core_balsamic_vinegar",
+        "name": "Balsamic vinegar",
+        "state": "prepared",
+        "basis": "category \"sauce\" default"
+      },
+      {
+        "foodId": "food_core_balsamic_glaze",
+        "name": "Balsamic glaze",
+        "state": "prepared",
+        "basis": "category \"sauce\" default"
+      },
+      {
+        "foodId": "food_core_brown_sugar",
+        "name": "Brown sugar",
+        "state": "prepared",
+        "basis": "category \"syrup\" default"
+      },
+      {
+        "foodId": "food_core_cornstarch",
+        "name": "Cornstarch",
+        "state": "prepared",
+        "basis": "category \"syrup\" default"
+      },
+      {
+        "foodId": "food_core_all_purpose_flour",
+        "name": "All-purpose flour",
+        "state": "dry",
+        "basis": "dry milled grain"
+      },
+      {
+        "foodId": "food_core_cocoa_powder",
+        "name": "Cocoa powder",
+        "state": "prepared",
+        "basis": "processed powder"
+      },
+      {
+        "foodId": "food_core_sesame_oil",
+        "name": "Sesame oil",
+        "state": "prepared",
+        "basis": "category \"oil\" default"
+      },
+      {
+        "foodId": "food_core_sesame_seeds",
+        "name": "Sesame seeds",
+        "state": "raw",
+        "basis": "category \"nut\" default",
+        "review": true
+      },
+      {
+        "foodId": "food_core_protein_powder",
+        "name": "Protein powder",
+        "state": "prepared",
+        "basis": "processed powder"
+      },
+      {
+        "foodId": "food_core_protein_cereal",
+        "name": "Protein cereal",
+        "state": "prepared",
+        "basis": "category \"cereal\" default"
+      },
+      {
+        "foodId": "food_core_oats_overnight_packet",
+        "name": "Oats overnight packet",
+        "state": "prepared",
+        "basis": "category \"cereal\" default"
+      },
+      {
+        "foodId": "food_core_graham_crackers",
+        "name": "Graham crackers",
+        "state": "prepared",
+        "basis": "category \"cracker\" default"
+      },
+      {
+        "foodId": "food_core_turkey_jerky",
+        "name": "Turkey jerky",
+        "state": "prepared",
+        "basis": "category \"cracker\" default"
+      },
+      {
+        "foodId": "food_core_dried_mango",
+        "name": "Dried mango",
+        "state": "prepared",
+        "basis": "category \"driedfruit\" default"
+      },
+      {
+        "foodId": "food_core_dried_cranberries",
+        "name": "Dried cranberries",
+        "state": "prepared",
+        "basis": "category \"driedfruit\" default"
+      },
+      {
+        "foodId": "food_core_cotija",
+        "name": "Cotija",
+        "state": "prepared",
+        "basis": "category \"cheese\" default"
+      },
+      {
+        "foodId": "food_core_provolone",
+        "name": "Provolone",
+        "state": "prepared",
+        "basis": "category \"cheese\" default"
+      },
+      {
+        "foodId": "food_core_gruyere",
+        "name": "Gruyere",
+        "state": "prepared",
+        "basis": "category \"cheese\" default"
+      },
+      {
+        "foodId": "food_core_blue_cheese",
+        "name": "Blue cheese",
+        "state": "prepared",
+        "basis": "category \"cheese\" default"
+      },
+      {
+        "foodId": "food_core_american_cheese",
+        "name": "American cheese",
+        "state": "prepared",
+        "basis": "category \"cheese\" default"
+      },
+      {
+        "foodId": "food_core_light_cream_cheese",
+        "name": "Light cream cheese",
+        "state": "prepared",
+        "basis": "category \"cheese\" default"
+      },
+      {
+        "foodId": "food_core_fresh_mozzarella",
+        "name": "Fresh mozzarella",
+        "state": "prepared",
+        "basis": "category \"cheese\" default"
+      },
+      {
+        "foodId": "food_core_burger_bun",
+        "name": "Burger bun",
+        "state": "baked",
+        "basis": "category \"bread\" default"
+      },
+      {
+        "foodId": "food_core_hoagie_roll",
+        "name": "Hoagie roll",
+        "state": "baked",
+        "basis": "category \"bread\" default"
+      },
+      {
+        "foodId": "food_core_butternut_squash",
+        "name": "Butternut squash",
+        "state": "raw",
+        "basis": "category \"starchveg\" default"
+      },
+      {
+        "foodId": "food_core_broccolini",
+        "name": "Broccolini",
+        "state": "raw",
+        "basis": "category \"veg\" default"
+      },
+      {
+        "foodId": "food_core_sugar_snap_peas",
+        "name": "Sugar snap peas",
+        "state": "raw",
+        "basis": "category \"veg\" default"
+      },
+      {
+        "foodId": "food_core_ground_beef_90_10",
+        "name": "Ground beef 90/10",
+        "state": "raw",
+        "basis": "category \"meat\" default"
+      },
+      {
+        "foodId": "food_core_chipotle_in_adobo",
+        "name": "Chipotle in adobo",
+        "state": "prepared",
+        "basis": "category \"sauce\" default"
+      },
+      {
+        "foodId": "food_core_potato_gnocchi",
+        "name": "Potato gnocchi",
+        "state": "prepared",
+        "basis": "shelf-stable prepared gnocchi"
+      },
+      {
+        "foodId": "food_core_croutons",
+        "name": "Croutons",
+        "state": "prepared",
+        "basis": "category \"cracker\" default"
+      },
+      {
+        "foodId": "food_core_kale",
+        "name": "Kale",
+        "state": "raw",
+        "basis": "category \"veg\" default"
+      },
+      {
+        "foodId": "food_core_peanuts",
+        "name": "Peanuts",
+        "state": "raw",
+        "basis": "category \"nut\" default",
+        "review": true
+      },
+      {
+        "foodId": "food_core_rice_vinegar",
+        "name": "Rice vinegar",
+        "state": "prepared",
+        "basis": "category \"sauce\" default"
+      },
+      {
+        "foodId": "food_core_sweet_chilli_sauce",
+        "name": "Sweet chilli sauce",
+        "state": "prepared",
+        "basis": "category \"sauce\" default"
+      },
+      {
+        "foodId": "food_core_enchilada_sauce",
+        "name": "Enchilada sauce",
+        "state": "prepared",
+        "basis": "category \"sauce\" default"
+      },
+      {
+        "foodId": "food_core_cilantro",
+        "name": "Cilantro",
+        "state": "raw",
+        "basis": "category \"vegetable\" default"
+      },
+      {
+        "foodId": "food_core_parmesan_snack_cheese",
+        "name": "Parmesan snack cheese",
+        "state": "prepared",
+        "basis": "category \"cheese\" default"
+      },
+      {
+        "foodId": "food_core_turkey_snack_stick",
+        "name": "Turkey snack stick",
+        "state": "prepared",
+        "basis": "shelf-stable meat snack"
+      },
+      {
+        "foodId": "food_core_protein_bar_high_fibre",
+        "name": "Protein bar, high fibre",
+        "state": "prepared",
+        "basis": "category \"cracker\" default"
+      },
+      {
+        "foodId": "food_custom_oats_overnight",
+        "name": "Oats overnight",
+        "state": "prepared",
+        "basis": "same packaged product as 'Oats overnight packet'"
+      },
+      {
+        "foodId": "food_custom_oats_overnight_brand",
+        "name": "Oats Overnight Brand",
+        "state": "prepared",
+        "basis": "same packaged product as 'Oats overnight packet'"
+      }
+    ]
+  },
+  "nativeDayType": {
+    "defaultedToLift": 82,
+    "note": "meal-options.json omits native for lifting-day meals (README: absent means a lifting day)"
+  },
+  "sourceDataConflicts": {
+    "yieldConflicts": [
+      {
+        "foodId": "food_core_chicken_thigh_raw",
+        "foodName": "Chicken thigh, raw",
+        "foodsJsonFactor": 0.75,
+        "yieldsJsonKey": "chicken thigh",
+        "yieldsJsonFactor": 0.72,
+        "yieldsJsonMethod": "cooked"
+      },
+      {
+        "foodId": "food_core_ground_turkey_93_7",
+        "foodName": "Ground turkey 93/7",
+        "foodsJsonFactor": 0.69,
+        "yieldsJsonKey": "ground turkey 93/7",
+        "yieldsJsonFactor": 0.75,
+        "yieldsJsonMethod": "browned"
+      },
+      {
+        "foodId": "food_core_ground_beef_90_10",
+        "foodName": "Ground beef 90/10",
+        "foodsJsonFactor": 0.75,
+        "yieldsJsonKey": "ground beef 90/10",
+        "yieldsJsonFactor": 0.73,
+        "yieldsJsonMethod": "cooked"
+      },
+      {
+        "foodId": "food_core_sirloin_steak_raw",
+        "foodName": "Sirloin steak, raw",
+        "foodsJsonFactor": 0.75,
+        "yieldsJsonKey": "sirloin steak",
+        "yieldsJsonFactor": 0.73,
+        "yieldsJsonMethod": "cooked"
+      },
+      {
+        "foodId": "food_core_shrimp_raw",
+        "foodName": "Shrimp, raw",
+        "foodsJsonFactor": 0.72,
+        "yieldsJsonKey": "shrimp",
+        "yieldsJsonFactor": 0.8,
+        "yieldsJsonMethod": "cooked"
+      },
+      {
+        "foodId": "food_core_white_rice_dry",
+        "foodName": "White rice, dry",
+        "foodsJsonFactor": 2.9,
+        "yieldsJsonKey": "white rice dry",
+        "yieldsJsonFactor": 3,
+        "yieldsJsonMethod": "cooked",
+        "yieldsJsonFlaggedUnmeasured": true
+      },
+      {
+        "foodId": "food_core_jasmine_rice_dry",
+        "foodName": "Jasmine rice, dry",
+        "foodsJsonFactor": 2.9,
+        "yieldsJsonKey": "jasmine rice dry",
+        "yieldsJsonFactor": 3,
+        "yieldsJsonMethod": "cooked",
+        "yieldsJsonFlaggedUnmeasured": true
+      },
+      {
+        "foodId": "food_core_pasta_dry",
+        "foodName": "Pasta, dry",
+        "foodsJsonFactor": 2.3,
+        "yieldsJsonKey": "pasta dry",
+        "yieldsJsonFactor": 2.4,
+        "yieldsJsonMethod": "cooked"
+      },
+      {
+        "foodId": "food_core_orzo_dry",
+        "foodName": "Orzo, dry",
+        "foodsJsonFactor": 2.3,
+        "yieldsJsonKey": "orzo dry",
+        "yieldsJsonFactor": 2.4,
+        "yieldsJsonMethod": "cooked"
+      },
+      {
+        "foodId": "food_core_farro_dry",
+        "foodName": "Farro, dry",
+        "foodsJsonFactor": 2.7,
+        "yieldsJsonKey": "farro dry",
+        "yieldsJsonFactor": 2.6,
+        "yieldsJsonMethod": "cooked"
+      },
+      {
+        "foodId": "food_core_sweet_potato_raw",
+        "foodName": "Sweet potato, raw",
+        "foodsJsonFactor": 0.78,
+        "yieldsJsonKey": "sweet potato",
+        "yieldsJsonFactor": 0.75,
+        "yieldsJsonMethod": "roasted"
+      },
+      {
+        "foodId": "food_core_broccolini",
+        "foodName": "Broccolini",
+        "foodsJsonFactor": 0.9,
+        "yieldsJsonKey": "broccolini",
+        "yieldsJsonFactor": 0.88,
+        "yieldsJsonMethod": "roasted"
+      },
+      {
+        "foodId": "food_core_broccoli_raw",
+        "foodName": "Broccoli, raw",
+        "foodsJsonFactor": 0.9,
+        "yieldsJsonKey": "broccoli",
+        "yieldsJsonFactor": 0.88,
+        "yieldsJsonMethod": "roasted"
+      }
+    ],
+    "yieldReferenceNotes": {
+      "yieldRowsWithoutFood": [
+        "rigatoni dry",
+        "spaghetti dry",
+        "linguine dry",
+        "pearl couscous dry",
+        "green bell pepper",
+        "red onion",
+        "corn frozen",
+        "shelled edamame frozen",
+        "edamame frozen",
+        "air-popped popcorn"
+      ],
+      "yieldRowsForFoodsWithoutFactor": [
+        {
+          "foodId": "food_core_turkey_bacon",
+          "yieldsKey": "turkey bacon",
+          "yieldsFactor": 0.7
+        },
+        {
+          "foodId": "food_core_potato_gnocchi",
+          "yieldsKey": "potato gnocchi",
+          "yieldsFactor": 1
+        },
+        {
+          "foodId": "food_core_butternut_squash",
+          "yieldsKey": "butternut squash",
+          "yieldsFactor": 0.85
+        },
+        {
+          "foodId": "food_core_green_beans",
+          "yieldsKey": "green beans",
+          "yieldsFactor": 0.88
+        },
+        {
+          "foodId": "food_core_sugar_snap_peas",
+          "yieldsKey": "sugar snap peas",
+          "yieldsFactor": 0.9
+        },
+        {
+          "foodId": "food_core_zucchini",
+          "yieldsKey": "zucchini",
+          "yieldsFactor": 0.8
+        },
+        {
+          "foodId": "food_core_bell_pepper",
+          "yieldsKey": "bell pepper",
+          "yieldsFactor": 0.8
+        },
+        {
+          "foodId": "food_core_roasted_red_pepper",
+          "yieldsKey": "roasted red pepper",
+          "yieldsFactor": 1
+        },
+        {
+          "foodId": "food_core_onion",
+          "yieldsKey": "onion",
+          "yieldsFactor": 0.75
+        },
+        {
+          "foodId": "food_core_frozen_hash_browns",
+          "yieldsKey": "frozen hash browns",
+          "yieldsFactor": 0.85
+        }
+      ],
+      "foodsWithFactorButNoYieldRow": [
+        "food_core_rolled_oats_dry",
+        "food_core_steel_cut_oats_dry",
+        "food_core_brown_rice_dry",
+        "food_core_quinoa_dry",
+        "food_core_couscous_dry",
+        "food_core_ground_beef_93_7",
+        "food_core_pork_tenderloin_raw",
+        "food_core_bacon_raw"
+      ]
+    },
+    "oatsOvernight": {
+      "detail": "Built-in packet row and the two hand-entered Custom Foods disagree; all three kept as separate Foods, nothing merged or substituted.",
+      "foods": [
+        {
+          "foodId": "food_core_oats_overnight_packet",
+          "name": "Oats overnight packet",
+          "source": "core",
+          "per100g": {
+            "protein": 26.3,
+            "carbs": 54.3,
+            "fat": 6.3
+          }
+        },
+        {
+          "foodId": "food_custom_oats_overnight",
+          "name": "Oats overnight",
+          "source": "custom",
+          "per100g": {
+            "protein": 10.7,
+            "carbs": 66.3,
+            "fat": 6.9
+          }
+        },
+        {
+          "foodId": "food_custom_oats_overnight_brand",
+          "name": "Oats Overnight Brand",
+          "source": "custom",
+          "per100g": {
+            "protein": 10,
+            "carbs": 66,
+            "fat": 5
+          }
+        }
+      ],
+      "libraryMealsUsingCoreRow": [
+        "B8"
+      ]
+    },
+    "swapReferences": [
+      {
+        "code": "SELF_SWAP_REFERENCE",
+        "foodId": "food_core_sweet_chilli_sauce",
+        "detail": "\"Sweet chilli sauce\" lists itself as its swap; kept as metadata.legacySwap, no swapFoodId"
+      },
+      {
+        "code": "BROKEN_SWAP_REFERENCE",
+        "foodId": "food_core_cilantro",
+        "detail": "\"Cilantro\" swaps to \"Parsley\", which is not a Food; kept as metadata.legacySwap, not repaired"
+      }
+    ]
+  },
+  "generatedFoodIds": [
+    "food_core_fage_0_greek_yogurt",
+    "food_core_fage_2_greek_yogurt",
+    "food_core_fage_5_greek_yogurt",
+    "food_core_cottage_cheese_2",
+    "food_core_cottage_cheese_4",
+    "food_core_skim_milk",
+    "food_core_whole_milk",
+    "food_core_chocolate_milk",
+    "food_core_kefir_plain",
+    "food_core_ricotta_part_skim",
+    "food_core_rolled_oats_dry",
+    "food_core_steel_cut_oats_dry",
+    "food_core_granola",
+    "food_core_three_wishes_cereal",
+    "food_core_one_degree_brown_rice_crisps",
+    "food_core_rice_cakes",
+    "food_core_honey",
+    "food_core_hot_honey",
+    "food_core_maple_syrup",
+    "food_core_chia_seeds",
+    "food_core_banana",
+    "food_core_blueberries_frozen",
+    "food_core_strawberries",
+    "food_core_raspberries",
+    "food_core_grapes",
+    "food_core_apple",
+    "food_core_mango",
+    "food_core_pineapple",
+    "food_core_orange",
+    "food_core_applesauce_unsweetened",
+    "food_core_dates_medjool",
+    "food_core_raisins",
+    "food_core_white_rice_dry",
+    "food_core_jasmine_rice_dry",
+    "food_core_brown_rice_dry",
+    "food_core_quinoa_dry",
+    "food_core_couscous_dry",
+    "food_core_farro_dry",
+    "food_core_orzo_dry",
+    "food_core_pasta_dry",
+    "food_core_rice_noodles_dry",
+    "food_core_sourdough",
+    "food_core_whole_wheat_bread",
+    "food_core_bagel_plain",
+    "food_core_english_muffin",
+    "food_core_tortilla_large_flour",
+    "food_core_tortilla_corn",
+    "food_core_pita_white",
+    "food_core_naan",
+    "food_core_tortilla_chips",
+    "food_core_pretzels",
+    "food_core_popcorn_popped",
+    "food_core_potato_raw",
+    "food_core_sweet_potato_raw",
+    "food_core_corn",
+    "food_core_peas_frozen",
+    "food_core_chicken_breast_raw",
+    "food_core_chicken_thigh_raw",
+    "food_core_rotisserie_chicken_meat",
+    "food_core_ground_turkey_93_7",
+    "food_core_ground_beef_93_7",
+    "food_core_sirloin_steak_raw",
+    "food_core_pork_tenderloin_raw",
+    "food_core_salmon_raw",
+    "food_core_shrimp_raw",
+    "food_core_tuna_steak_raw",
+    "food_core_tuna_canned_in_water",
+    "food_core_deli_turkey_low_sodium",
+    "food_core_beef_jerky",
+    "food_core_bacon_raw",
+    "food_core_turkey_bacon",
+    "food_core_egg_whole",
+    "food_core_egg_white",
+    "food_core_tofu_extra_firm",
+    "food_core_edamame_shelled",
+    "food_core_black_beans_canned_drained",
+    "food_core_pinto_beans_canned_drained",
+    "food_core_refried_beans",
+    "food_core_chickpeas_canned_drained",
+    "food_core_peanut_butter",
+    "food_core_almond_butter",
+    "food_core_almonds",
+    "food_core_walnuts",
+    "food_core_cashews",
+    "food_core_avocado",
+    "food_core_olive_oil",
+    "food_core_butter",
+    "food_core_feta",
+    "food_core_cheddar",
+    "food_core_mozzarella_part_skim",
+    "food_core_parmesan",
+    "food_core_cream_cheese",
+    "food_core_sour_cream",
+    "food_core_guacamole",
+    "food_core_salsa",
+    "food_core_hummus",
+    "food_core_marinara_sauce",
+    "food_core_soy_sauce",
+    "food_core_broccoli_raw",
+    "food_core_bell_pepper",
+    "food_core_zucchini",
+    "food_core_spinach",
+    "food_core_onion",
+    "food_core_mushrooms",
+    "food_core_asparagus",
+    "food_core_green_beans",
+    "food_core_tomato",
+    "food_core_cucumber",
+    "food_core_romaine",
+    "food_core_cabbage_slaw_mix",
+    "food_core_panko_breadcrumbs",
+    "food_core_milk_2",
+    "food_core_whole_grain_crackers",
+    "food_core_whole_wheat_pita",
+    "food_core_kalamata_olives",
+    "food_core_mayonnaise",
+    "food_core_dijon_mustard",
+    "food_core_lemon_juice",
+    "food_core_lime_juice",
+    "food_core_garlic",
+    "food_core_ginger",
+    "food_core_basil",
+    "food_core_scallions",
+    "food_core_celery",
+    "food_core_carrot",
+    "food_core_baby_carrots",
+    "food_core_everything_bagel_seasoning",
+    "food_core_white_wine",
+    "food_core_chicken_stock",
+    "food_core_crushed_tomatoes",
+    "food_core_tomato_paste",
+    "food_core_pesto",
+    "food_core_tzatziki",
+    "food_core_bbq_sauce",
+    "food_core_ketchup",
+    "food_core_buffalo_sauce",
+    "food_core_oyster_sauce",
+    "food_core_sriracha",
+    "food_core_balsamic_vinegar",
+    "food_core_balsamic_glaze",
+    "food_core_brown_sugar",
+    "food_core_cornstarch",
+    "food_core_all_purpose_flour",
+    "food_core_cocoa_powder",
+    "food_core_sesame_oil",
+    "food_core_sesame_seeds",
+    "food_core_protein_powder",
+    "food_core_protein_cereal",
+    "food_core_oats_overnight_packet",
+    "food_core_graham_crackers",
+    "food_core_turkey_jerky",
+    "food_core_dried_mango",
+    "food_core_dried_cranberries",
+    "food_core_frozen_mixed_berries",
+    "food_core_cotija",
+    "food_core_provolone",
+    "food_core_gruyere",
+    "food_core_blue_cheese",
+    "food_core_american_cheese",
+    "food_core_light_cream_cheese",
+    "food_core_fresh_mozzarella",
+    "food_core_burger_bun",
+    "food_core_hoagie_roll",
+    "food_core_frozen_hash_browns",
+    "food_core_butternut_squash",
+    "food_core_broccolini",
+    "food_core_sugar_snap_peas",
+    "food_core_wild_rice_dry",
+    "food_core_ground_beef_90_10",
+    "food_core_roasted_red_pepper",
+    "food_core_chipotle_in_adobo",
+    "food_core_potato_gnocchi",
+    "food_core_croutons",
+    "food_core_kale",
+    "food_core_peanuts",
+    "food_core_rice_vinegar",
+    "food_core_sweet_chilli_sauce",
+    "food_core_enchilada_sauce",
+    "food_core_cilantro",
+    "food_core_parmesan_snack_cheese",
+    "food_core_turkey_snack_stick",
+    "food_core_protein_bar_high_fibre"
+  ],
+  "customFoodIds": [
+    "food_custom_oats_overnight",
+    "food_custom_oats_overnight_brand"
+  ],
+  "generatedMealIds": [
+    "meal_library_B1",
+    "meal_library_B2",
+    "meal_library_B3",
+    "meal_library_B4",
+    "meal_library_B5",
+    "meal_library_B6",
+    "meal_library_B7",
+    "meal_library_B8",
+    "meal_library_B9",
+    "meal_library_L1",
+    "meal_library_L2",
+    "meal_library_L3",
+    "meal_library_L4",
+    "meal_library_L6",
+    "meal_library_L7",
+    "meal_library_L8",
+    "meal_library_L9",
+    "meal_library_L10",
+    "meal_library_L11",
+    "meal_library_L12",
+    "meal_library_L13",
+    "meal_library_L14",
+    "meal_library_L15",
+    "meal_library_L16",
+    "meal_library_L17",
+    "meal_library_L18",
+    "meal_library_L19",
+    "meal_library_L20",
+    "meal_library_S1",
+    "meal_library_S2",
+    "meal_library_S3",
+    "meal_library_S4",
+    "meal_library_S6",
+    "meal_library_S10",
+    "meal_library_S11",
+    "meal_library_S12",
+    "meal_library_S13",
+    "meal_library_S14",
+    "meal_library_S16",
+    "meal_library_S17",
+    "meal_library_S18",
+    "meal_library_S19",
+    "meal_library_S20",
+    "meal_library_S21",
+    "meal_library_S22",
+    "meal_library_S23",
+    "meal_library_S24",
+    "meal_library_S25",
+    "meal_library_D1",
+    "meal_library_D2",
+    "meal_library_D3",
+    "meal_library_D4",
+    "meal_library_D5",
+    "meal_library_D6",
+    "meal_library_D7",
+    "meal_library_D8",
+    "meal_library_D9",
+    "meal_library_D10",
+    "meal_library_D11",
+    "meal_library_D12",
+    "meal_library_D13",
+    "meal_library_D14",
+    "meal_library_D15",
+    "meal_library_D16",
+    "meal_library_D17",
+    "meal_library_D18",
+    "meal_library_D19",
+    "meal_library_D20",
+    "meal_library_D21",
+    "meal_library_D22",
+    "meal_library_D23",
+    "meal_library_D24",
+    "meal_library_D25",
+    "meal_library_D26",
+    "meal_library_L22",
+    "meal_library_D27",
+    "meal_library_D28",
+    "meal_library_D29",
+    "meal_library_L24",
+    "meal_library_L25",
+    "meal_library_L26",
+    "meal_library_L27",
+    "meal_library_D30",
+    "meal_library_D31"
+  ],
+  "userData": {
+    "user-data/custom-foods.json": {
+      "neverOverwritten": true,
+      "matchesMigrationSeed": true
+    },
+    "user-data/saved-meals.json": {
+      "neverOverwritten": true,
+      "matchesMigrationSeed": true
+    },
+    "user-data/daily-logs.json": {
+      "neverOverwritten": true,
+      "matchesMigrationSeed": true
+    },
+    "user-data/preferences.json": {
+      "neverOverwritten": true,
+      "matchesMigrationSeed": true
+    }
+  },
+  "notMigrated": [
+    {
+      "source": "live-settings-doc.json#bank.meals",
+      "reason": "duplicate of meal-options.json"
+    },
+    {
+      "source": "live-settings-doc.json#measured",
+      "reason": "empty object; no preference found"
+    },
+    {
+      "source": "live-settings-doc.json#yields",
+      "reason": "empty object; yield references live in data/reference/yields.json"
+    },
+    {
+      "source": "live-settings-doc.json#updatedAt",
+      "reason": "storage bookkeeping"
+    },
+    {
+      "source": "Close the Carbs hosted days/<date> logs",
+      "reason": "not imported (decision 11); not in this repository"
+    },
+    {
+      "source": "targets.json#perSlot",
+      "reason": "not an authoritative V2 target (decision 14)"
+    },
+    {
+      "source": "targets.json#nightSnack",
+      "reason": "not an authoritative V2 target (decision 14)"
+    },
+    {
+      "source": "targets.json#carbShiftByDayType",
+      "reason": "not an authoritative V2 target (decision 14)"
+    },
+    {
+      "source": "meal-options.json p/f/c",
+      "reason": "legacy totals are validation evidence only"
+    },
+    {
+      "source": "meal-bank.html M, CTC_FOOD, TARGET, SLOT_TARGET, SHIFT, SHIFT_FOOD, DAYS, NIGHT, FIBRE/SOLUBLE/FERMENTABLE tables",
+      "reason": "embedded legacy data; CTC_FOOD used once as the alias map"
+    },
+    {
+      "source": "fibre.json",
+      "reason": "V2 is protein/carbs/fat only; no fibre dimension"
+    },
+    {
+      "source": "ingredient-name-map.json, ingredients-flat.json",
+      "reason": "cross-check evidence only"
+    },
+    {
+      "source": "close-the-carbs.html, meal-bank.html, recost.js, gen-bank-docs.js, README.md",
+      "reason": "legacy app/tools; left in place (decision 10), replaced in later prompts"
+    }
+  ],
+  "warnings": [
+    {
+      "code": "CTC_FOOD_DUPLICATE_KEYS",
+      "detail": "CTC_FOOD literal repeats 5 keys",
+      "keys": [
+        {
+          "key": "turkey bacon",
+          "sameTarget": true
+        },
+        {
+          "key": "light cream cheese",
+          "sameTarget": true
+        },
+        {
+          "key": "chicken stock",
+          "sameTarget": true
+        },
+        {
+          "key": "cotija",
+          "sameTarget": true
+        },
+        {
+          "key": "sriracha",
+          "sameTarget": true
+        }
+      ]
+    },
+    {
+      "code": "SINGLE_USE_TAG",
+      "detail": "tag \"mexican\" used by one food only (Enchilada sauce); preserved as-is"
+    },
+    {
+      "code": "SINGLE_USE_CATEGORY",
+      "detail": "category \"vegetable\" used by one food only (Cilantro); preserved as-is"
+    },
+    {
+      "code": "CATEGORY_WITHOUT_PORTION_BOUNDS",
+      "detail": "category \"vegetable\" has no entry in portion-bounds.json"
+    }
+  ],
+  "manualReview": [
+    {
+      "code": "SELF_SWAP_REFERENCE",
+      "foodId": "food_core_sweet_chilli_sauce",
+      "detail": "\"Sweet chilli sauce\" lists itself as its swap; kept as metadata.legacySwap, no swapFoodId"
+    },
+    {
+      "code": "BROKEN_SWAP_REFERENCE",
+      "foodId": "food_core_cilantro",
+      "detail": "\"Cilantro\" swaps to \"Parsley\", which is not a Food; kept as metadata.legacySwap, not repaired"
+    },
+    {
+      "code": "YIELD_CONFLICTS",
+      "detail": "13 foods have a different factor in foods.json and yields.json; both preserved (Food metadata keeps foods.json, data/reference/yields.json keeps yields.json)"
+    },
+    {
+      "code": "OATS_OVERNIGHT_DISCREPANCY",
+      "detail": "Core packet row vs two Custom Foods; used by B8"
+    },
+    {
+      "code": "FOOD_STATE_REVIEW",
+      "foodId": "food_core_chia_seeds",
+      "detail": "state \"raw\" inferred (category \"nut\" default)"
+    },
+    {
+      "code": "FOOD_STATE_REVIEW",
+      "foodId": "food_core_corn",
+      "detail": "state \"frozen\" inferred (every bank line using it reads 'corn frozen')"
+    },
+    {
+      "code": "FOOD_STATE_REVIEW",
+      "foodId": "food_core_turkey_bacon",
+      "detail": "state \"raw\" inferred (yields.json lists a cooking factor for it, so values are as-packaged/uncooked; turkey bacon is often sold pre-cooked)"
+    },
+    {
+      "code": "FOOD_STATE_REVIEW",
+      "foodId": "food_core_edamame_shelled",
+      "detail": "state \"frozen\" inferred (every bank line using it reads '... edamame frozen')"
+    },
+    {
+      "code": "FOOD_STATE_REVIEW",
+      "foodId": "food_core_almonds",
+      "detail": "state \"raw\" inferred (category \"nut\" default)"
+    },
+    {
+      "code": "FOOD_STATE_REVIEW",
+      "foodId": "food_core_walnuts",
+      "detail": "state \"raw\" inferred (category \"nut\" default)"
+    },
+    {
+      "code": "FOOD_STATE_REVIEW",
+      "foodId": "food_core_cashews",
+      "detail": "state \"raw\" inferred (category \"nut\" default)"
+    },
+    {
+      "code": "FOOD_STATE_REVIEW",
+      "foodId": "food_core_sesame_seeds",
+      "detail": "state \"raw\" inferred (category \"nut\" default)"
+    },
+    {
+      "code": "FOOD_STATE_REVIEW",
+      "foodId": "food_core_peanuts",
+      "detail": "state \"raw\" inferred (category \"nut\" default)"
+    },
+    {
+      "code": "NUTRITION_AUDIT_ISSUE_NOT_RESOLVED",
+      "detail": "Cooked rice yield: foods.json x2.9 vs yields.json / Meal Bank x3.0 (open measurement item)."
+    },
+    {
+      "code": "NUTRITION_AUDIT_ISSUE_NOT_RESOLVED",
+      "detail": "Oats Overnight: core 'Oats overnight packet' vs the two hand-entered custom Foods disagree on protein (see sourceDataConflicts.oatsOvernight)."
+    },
+    {
+      "code": "NUTRITION_AUDIT_ISSUE_NOT_RESOLVED",
+      "detail": "Chicken, salmon and potato yields are unmeasured reference values."
+    },
+    {
+      "code": "NUTRITION_AUDIT_ISSUE_NOT_RESOLVED",
+      "detail": "Potato yield 0.78 is a roasting yield; boiled potato is closer to 1.0."
+    },
+    {
+      "code": "NUTRITION_AUDIT_ISSUE_NOT_RESOLVED",
+      "detail": "Branded items at implied or published-panel values (granola, protein powder, crackers, jerky, and the 19 Sep snack additions) are unverified against packs bought."
+    }
+  ],
+  "blockingErrors": [],
+  "validation": {
+    "passed": true,
+    "gates": [
+      {
+        "id": "G01",
+        "description": "Every file in expected-output-manifest.json exists, and the six schemas are present",
+        "passed": true,
+        "errors": []
+      },
+      {
+        "id": "G02",
+        "description": "Canonical data validates against the V2 JSON schemas",
+        "passed": true,
+        "errors": []
+      },
+      {
+        "id": "G03",
+        "description": "Every Core Food has a unique, identity-derived stable ID and unchanged source nutrition",
+        "passed": true,
+        "errors": []
+      },
+      {
+        "id": "G04",
+        "description": "Both Custom Foods are represented with source values preserved",
+        "passed": true,
+        "errors": []
+      },
+      {
+        "id": "G05",
+        "description": "All meal-options.json meals are represented once; the live-settings duplicate is not a source",
+        "passed": true,
+        "errors": [],
+        "info": {
+          "sourceMeals": 84,
+          "duplicateSourceMeals": 82,
+          "presentOnlyInMealOptions": [
+            "L13",
+            "L16"
+          ]
+        }
+      },
+      {
+        "id": "G06",
+        "description": "Every ingredient, garnish and swap reference resolves to an existing Food ID; quantities > 0 g",
+        "passed": true,
+        "errors": [],
+        "info": {
+          "structuredIngredientLines": 705
+        }
+      },
+      {
+        "id": "G07",
+        "description": "No Library or Saved Meal stores P/C/F totals",
+        "passed": true,
+        "errors": []
+      },
+      {
+        "id": "G08",
+        "description": "Every Library Meal calculates through migration/macro-calc.js",
+        "passed": true,
+        "errors": []
+      },
+      {
+        "id": "G09",
+        "description": "Targets are exactly Lift 150/293/70, Long Run 150/343/70, Rest 150/218/70 (P/C/F), daily only, no legacy keys",
+        "passed": true,
+        "errors": []
+      },
+      {
+        "id": "G10",
+        "description": "No forbidden nutrition-unit key or value anywhere in canonical data, schemas or migration outputs",
+        "passed": true,
+        "errors": []
+      },
+      {
+        "id": "G11",
+        "description": "The migration generates no Days, Meal Instances or Saved Meals",
+        "passed": true,
+        "errors": [],
+        "info": {
+          "dailyLogsOnDisk": 0,
+          "savedMealsOnDisk": 0
+        }
+      },
+      {
+        "id": "G12",
+        "description": "No V2 runtime or canonical data file references live-settings-doc, CTC_FOOD, the M array, SLOT_TARGET or carbShiftByDayType",
+        "passed": true,
+        "errors": [],
+        "info": {
+          "legacyInputsStillContaining": [
+            "gen-bank-docs.js: SLOT_TARGET",
+            "meal-bank.html: CTC_FOOD, \\bvar M\\s*=, SLOT_TARGET",
+            "recost.js: CTC_FOOD, SLOT_TARGET",
+            "targets.json: carbShiftByDayType"
+          ],
+          "note": "Legacy inputs stay in place until Prompt 3 removes them as runtime dependencies."
+        }
+      },
+      {
+        "id": "G13",
+        "description": "Exactly the approved meals carry metadata.retired: true",
+        "passed": true,
+        "errors": []
+      },
+      {
+        "id": "G14",
+        "description": "Only the approved unquantified lines are stored as garnishes",
+        "passed": true,
+        "errors": []
+      },
+      {
+        "id": "G15",
+        "description": "Reference data (yields, portion bounds) is copied unchanged",
+        "passed": true,
+        "errors": []
+      },
+      {
+        "id": "G16",
+        "description": "Source counts equal the counts recorded in migration-source-map.json",
+        "passed": true,
+        "errors": []
+      }
+    ]
+  }
+}

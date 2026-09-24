@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "macro-app/targets.schema.json",
+  "title": "Targets",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "lift",
+    "long_run",
+    "rest"
+  ],
+  "properties": {
+    "lift": {
+      "$ref": "#/$defs/macros"
+    },
+    "long_run": {
+      "$ref": "#/$defs/macros"
+    },
+    "rest": {
+      "$ref": "#/$defs/macros"
+    }
+  },
+  "$defs": {
+    "macros": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "protein",
+        "carbs",
+        "fat"
+      ],
+      "properties": {
+        "protein": {
+          "type": "number",
+          "minimum": 0
+        },
+        "carbs": {
+          "type": "number",
+          "minimum": 0
+        },
+        "fat": {
+          "type": "number",
+          "minimum": 0
+        }
+      }
+    }
+  }
+}

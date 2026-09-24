@@ -1,0 +1,6863 @@
+{
+  "B1": {
+    "id": "meal_library_B1",
+    "name": "Big Oat Jar with chia",
+    "ingredientLines": [
+      {
+        "line": "rolled oats 70 g",
+        "kind": "ingredient",
+        "wording": "rolled oats",
+        "quantity": 70,
+        "unit": "g",
+        "foodId": "food_core_rolled_oats_dry",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "cottage cheese 2% 175 g",
+        "kind": "ingredient",
+        "wording": "cottage cheese 2%",
+        "quantity": 175,
+        "unit": "g",
+        "foodId": "food_core_cottage_cheese_2",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "milk 2% 100 g",
+        "kind": "ingredient",
+        "wording": "milk 2%",
+        "quantity": 100,
+        "unit": "g",
+        "foodId": "food_core_milk_2",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "chia seeds 10 g",
+        "kind": "ingredient",
+        "wording": "chia seeds",
+        "quantity": 10,
+        "unit": "g",
+        "foodId": "food_core_chia_seeds",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "blueberries 75 g",
+        "kind": "ingredient",
+        "wording": "blueberries",
+        "quantity": 75,
+        "unit": "g",
+        "foodId": "food_core_blueberries_frozen",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "banana 100 g",
+        "kind": "ingredient",
+        "wording": "banana",
+        "quantity": 100,
+        "unit": "g",
+        "foodId": "food_core_banana",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "peanut butter 8 g",
+        "kind": "ingredient",
+        "wording": "peanut butter",
+        "quantity": 8,
+        "unit": "g",
+        "foodId": "food_core_peanut_butter",
+        "resolvedVia": "CTC_FOOD"
+      }
+    ]
+  },
+  "B2": {
+    "id": "meal_library_B2",
+    "name": "Protein Pancakes",
+    "ingredientLines": [
+      {
+        "line": "rolled oats 55 g",
+        "kind": "ingredient",
+        "wording": "rolled oats",
+        "quantity": 55,
+        "unit": "g",
+        "foodId": "food_core_rolled_oats_dry",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "cottage cheese 2% 120 g",
+        "kind": "ingredient",
+        "wording": "cottage cheese 2%",
+        "quantity": 120,
+        "unit": "g",
+        "foodId": "food_core_cottage_cheese_2",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "egg 50 g",
+        "kind": "ingredient",
+        "wording": "egg",
+        "quantity": 50,
+        "unit": "g",
+        "foodId": "food_core_egg_whole",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "protein powder 10 g",
+        "kind": "ingredient",
+        "wording": "protein powder",
+        "quantity": 10,
+        "unit": "g",
+        "foodId": "food_core_protein_powder",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "peanut butter 10 g",
+        "kind": "ingredient",
+        "wording": "peanut butter",
+        "quantity": 10,
+        "unit": "g",
+        "foodId": "food_core_peanut_butter",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "banana 110 g",
+        "kind": "ingredient",
+        "wording": "banana",
+        "quantity": 110,
+        "unit": "g",
+        "foodId": "food_core_banana",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "maple syrup 25 g",
+        "kind": "ingredient",
+        "wording": "maple syrup",
+        "quantity": 25,
+        "unit": "g",
+        "foodId": "food_core_maple_syrup",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "blueberries 75 g",
+        "kind": "ingredient",
+        "wording": "blueberries",
+        "quantity": 75,
+        "unit": "g",
+        "foodId": "food_core_blueberries_frozen",
+        "resolvedVia": "CTC_FOOD"
+      }
+    ]
+  },
+  "B3": {
+    "id": "meal_library_B3",
+    "name": "Greek Yogurt Bowl",
+    "ingredientLines": [
+      {
+        "line": "greek yogurt nonfat 200 g",
+        "kind": "ingredient",
+        "wording": "greek yogurt nonfat",
+        "quantity": 200,
+        "unit": "g",
+        "foodId": "food_core_fage_0_greek_yogurt",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "three wishes cereal 25 g",
+        "kind": "ingredient",
+        "wording": "three wishes cereal",
+        "quantity": 25,
+        "unit": "g",
+        "foodId": "food_core_three_wishes_cereal",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "one degree brown rice crisps 25 g",
+        "kind": "ingredient",
+        "wording": "one degree brown rice crisps",
+        "quantity": 25,
+        "unit": "g",
+        "foodId": "food_core_one_degree_brown_rice_crisps",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "blueberries 100 g",
+        "kind": "ingredient",
+        "wording": "blueberries",
+        "quantity": 100,
+        "unit": "g",
+        "foodId": "food_core_blueberries_frozen",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "banana 120 g",
+        "kind": "ingredient",
+        "wording": "banana",
+        "quantity": 120,
+        "unit": "g",
+        "foodId": "food_core_banana",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "peanut butter 27 g",
+        "kind": "ingredient",
+        "wording": "peanut butter",
+        "quantity": 27,
+        "unit": "g",
+        "foodId": "food_core_peanut_butter",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "honey 15 g",
+        "kind": "ingredient",
+        "wording": "honey",
+        "quantity": 15,
+        "unit": "g",
+        "foodId": "food_core_honey",
+        "resolvedVia": "CTC_FOOD"
+      }
+    ]
+  },
+  "B4": {
+    "id": "meal_library_B4",
+    "name": "Banana-PB Overnight Oats",
+    "ingredientLines": [
+      {
+        "line": "rolled oats 70 g",
+        "kind": "ingredient",
+        "wording": "rolled oats",
+        "quantity": 70,
+        "unit": "g",
+        "foodId": "food_core_rolled_oats_dry",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "greek yogurt nonfat 170 g",
+        "kind": "ingredient",
+        "wording": "greek yogurt nonfat",
+        "quantity": 170,
+        "unit": "g",
+        "foodId": "food_core_fage_0_greek_yogurt",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "milk 2% 100 g",
+        "kind": "ingredient",
+        "wording": "milk 2%",
+        "quantity": 100,
+        "unit": "g",
+        "foodId": "food_core_milk_2",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "banana 130 g",
+        "kind": "ingredient",
+        "wording": "banana",
+        "quantity": 130,
+        "unit": "g",
+        "foodId": "food_core_banana",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "peanut butter 20 g",
+        "kind": "ingredient",
+        "wording": "peanut butter",
+        "quantity": 20,
+        "unit": "g",
+        "foodId": "food_core_peanut_butter",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "honey 10 g",
+        "kind": "ingredient",
+        "wording": "honey",
+        "quantity": 10,
+        "unit": "g",
+        "foodId": "food_core_honey",
+        "resolvedVia": "CTC_FOOD"
+      }
+    ]
+  },
+  "B5": {
+    "id": "meal_library_B5",
+    "name": "Freezer Breakfast Burrito",
+    "ingredientLines": [
+      {
+        "line": "flour tortilla 72 g",
+        "kind": "ingredient",
+        "wording": "flour tortilla",
+        "quantity": 72,
+        "unit": "g",
+        "foodId": "food_core_tortilla_large_flour",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "egg 75 g",
+        "kind": "ingredient",
+        "wording": "egg",
+        "quantity": 75,
+        "unit": "g",
+        "foodId": "food_core_egg_whole",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "potato 170 g",
+        "kind": "ingredient",
+        "wording": "potato",
+        "quantity": 170,
+        "unit": "g",
+        "foodId": "food_core_potato_raw",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "cheddar 10 g",
+        "kind": "ingredient",
+        "wording": "cheddar",
+        "quantity": 10,
+        "unit": "g",
+        "foodId": "food_core_cheddar",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "salsa 40 g",
+        "kind": "ingredient",
+        "wording": "salsa",
+        "quantity": 40,
+        "unit": "g",
+        "foodId": "food_core_salsa",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "greek yogurt nonfat 150 g",
+        "kind": "ingredient",
+        "wording": "greek yogurt nonfat",
+        "quantity": 150,
+        "unit": "g",
+        "foodId": "food_core_fage_0_greek_yogurt",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "banana 110 g",
+        "kind": "ingredient",
+        "wording": "banana",
+        "quantity": 110,
+        "unit": "g",
+        "foodId": "food_core_banana",
+        "resolvedVia": "CTC_FOOD"
+      }
+    ]
+  },
+  "B6": {
+    "id": "meal_library_B6",
+    "name": "Blueberry Baked Oatmeal, 2 squares",
+    "ingredientLines": [
+      {
+        "line": "rolled oats 75 g",
+        "kind": "ingredient",
+        "wording": "rolled oats",
+        "quantity": 75,
+        "unit": "g",
+        "foodId": "food_core_rolled_oats_dry",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "egg 25 g",
+        "kind": "ingredient",
+        "wording": "egg",
+        "quantity": 25,
+        "unit": "g",
+        "foodId": "food_core_egg_whole",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "milk 2% 75 g",
+        "kind": "ingredient",
+        "wording": "milk 2%",
+        "quantity": 75,
+        "unit": "g",
+        "foodId": "food_core_milk_2",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "greek yogurt nonfat 110 g",
+        "kind": "ingredient",
+        "wording": "greek yogurt nonfat",
+        "quantity": 110,
+        "unit": "g",
+        "foodId": "food_core_fage_0_greek_yogurt",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "banana 65 g",
+        "kind": "ingredient",
+        "wording": "banana",
+        "quantity": 65,
+        "unit": "g",
+        "foodId": "food_core_banana",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "blueberries 75 g",
+        "kind": "ingredient",
+        "wording": "blueberries",
+        "quantity": 75,
+        "unit": "g",
+        "foodId": "food_core_blueberries_frozen",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "peanut butter 15 g",
+        "kind": "ingredient",
+        "wording": "peanut butter",
+        "quantity": 15,
+        "unit": "g",
+        "foodId": "food_core_peanut_butter",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "honey 15 g",
+        "kind": "ingredient",
+        "wording": "honey",
+        "quantity": 15,
+        "unit": "g",
+        "foodId": "food_core_honey",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "protein powder 8 g",
+        "kind": "ingredient",
+        "wording": "protein powder",
+        "quantity": 8,
+        "unit": "g",
+        "foodId": "food_core_protein_powder",
+        "resolvedVia": "CTC_FOOD"
+      }
+    ]
+  },
+  "B7": {
+    "id": "meal_library_B7",
+    "name": "Cottage Cheese French Toast",
+    "ingredientLines": [
+      {
+        "line": "sourdough 100 g",
+        "kind": "ingredient",
+        "wording": "sourdough",
+        "quantity": 100,
+        "unit": "g",
+        "foodId": "food_core_sourdough",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "egg 50 g",
+        "kind": "ingredient",
+        "wording": "egg",
+        "quantity": 50,
+        "unit": "g",
+        "foodId": "food_core_egg_whole",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "cottage cheese 2% 140 g",
+        "kind": "ingredient",
+        "wording": "cottage cheese 2%",
+        "quantity": 140,
+        "unit": "g",
+        "foodId": "food_core_cottage_cheese_2",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "milk 2% 50 g",
+        "kind": "ingredient",
+        "wording": "milk 2%",
+        "quantity": 50,
+        "unit": "g",
+        "foodId": "food_core_milk_2",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "maple syrup 20 g",
+        "kind": "ingredient",
+        "wording": "maple syrup",
+        "quantity": 20,
+        "unit": "g",
+        "foodId": "food_core_maple_syrup",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "blueberries 100 g",
+        "kind": "ingredient",
+        "wording": "blueberries",
+        "quantity": 100,
+        "unit": "g",
+        "foodId": "food_core_blueberries_frozen",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "peanut butter 12 g",
+        "kind": "ingredient",
+        "wording": "peanut butter",
+        "quantity": 12,
+        "unit": "g",
+        "foodId": "food_core_peanut_butter",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "banana 40 g",
+        "kind": "ingredient",
+        "wording": "banana",
+        "quantity": 40,
+        "unit": "g",
+        "foodId": "food_core_banana",
+        "resolvedVia": "CTC_FOOD"
+      }
+    ]
+  },
+  "B8": {
+    "id": "meal_library_B8",
+    "name": "Oats Overnight, cottage cheese base",
+    "ingredientLines": [
+      {
+        "line": "oats overnight packet 76 g",
+        "kind": "ingredient",
+        "wording": "oats overnight packet",
+        "quantity": 76,
+        "unit": "g",
+        "foodId": "food_core_oats_overnight_packet",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "cottage cheese 2% 120 g",
+        "kind": "ingredient",
+        "wording": "cottage cheese 2%",
+        "quantity": 120,
+        "unit": "g",
+        "foodId": "food_core_cottage_cheese_2",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "rolled oats 20 g",
+        "kind": "ingredient",
+        "wording": "rolled oats",
+        "quantity": 20,
+        "unit": "g",
+        "foodId": "food_core_rolled_oats_dry",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "frozen blueberries 75 g",
+        "kind": "ingredient",
+        "wording": "frozen blueberries",
+        "quantity": 75,
+        "unit": "g",
+        "foodId": "food_core_blueberries_frozen",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "peanut butter 12 g",
+        "kind": "ingredient",
+        "wording": "peanut butter",
+        "quantity": 12,
+        "unit": "g",
+        "foodId": "food_core_peanut_butter",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "banana 120 g",
+        "kind": "ingredient",
+        "wording": "banana",
+        "quantity": 120,
+        "unit": "g",
+        "foodId": "food_core_banana",
+        "resolvedVia": "CTC_FOOD"
+      }
+    ]
+  },
+  "B9": {
+    "id": "meal_library_B9",
+    "name": "Saturday run window",
+    "ingredientLines": [
+      {
+        "line": "rolled oats 40 g",
+        "kind": "ingredient",
+        "wording": "rolled oats",
+        "quantity": 40,
+        "unit": "g",
+        "foodId": "food_core_rolled_oats_dry",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "milk 2% 100 g",
+        "kind": "ingredient",
+        "wording": "milk 2%",
+        "quantity": 100,
+        "unit": "g",
+        "foodId": "food_core_milk_2",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "banana 130 g",
+        "kind": "ingredient",
+        "wording": "banana",
+        "quantity": 130,
+        "unit": "g",
+        "foodId": "food_core_banana",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "honey 25 g",
+        "kind": "ingredient",
+        "wording": "honey",
+        "quantity": 25,
+        "unit": "g",
+        "foodId": "food_core_honey",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "greek yogurt nonfat 200 g",
+        "kind": "ingredient",
+        "wording": "greek yogurt nonfat",
+        "quantity": 200,
+        "unit": "g",
+        "foodId": "food_core_fage_0_greek_yogurt",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "three wishes cereal 13 g",
+        "kind": "ingredient",
+        "wording": "three wishes cereal",
+        "quantity": 13,
+        "unit": "g",
+        "foodId": "food_core_three_wishes_cereal",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "one degree brown rice crisps 12 g",
+        "kind": "ingredient",
+        "wording": "one degree brown rice crisps",
+        "quantity": 12,
+        "unit": "g",
+        "foodId": "food_core_one_degree_brown_rice_crisps",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "blueberries 75 g",
+        "kind": "ingredient",
+        "wording": "blueberries",
+        "quantity": 75,
+        "unit": "g",
+        "foodId": "food_core_blueberries_frozen",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "peanut butter 19 g",
+        "kind": "ingredient",
+        "wording": "peanut butter",
+        "quantity": 19,
+        "unit": "g",
+        "foodId": "food_core_peanut_butter",
+        "resolvedVia": "CTC_FOOD"
+      }
+    ]
+  },
+  "L1": {
+    "id": "meal_library_L1",
+    "name": "Chipotle-Honey Chicken & Rice Bowl",
+    "ingredientLines": [
+      {
+        "line": "chicken breast 133 g",
+        "kind": "ingredient",
+        "wording": "chicken breast",
+        "quantity": 133,
+        "unit": "g",
+        "foodId": "food_core_chicken_breast_raw",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "white rice dry 50 g",
+        "kind": "ingredient",
+        "wording": "white rice dry",
+        "quantity": 50,
+        "unit": "g",
+        "foodId": "food_core_white_rice_dry",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "black beans canned 50 g",
+        "kind": "ingredient",
+        "wording": "black beans canned",
+        "quantity": 50,
+        "unit": "g",
+        "foodId": "food_core_black_beans_canned_drained",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "corn frozen 40 g",
+        "kind": "ingredient",
+        "wording": "corn frozen",
+        "quantity": 40,
+        "unit": "g",
+        "foodId": "food_core_corn",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "bell pepper 60 g",
+        "kind": "ingredient",
+        "wording": "bell pepper",
+        "quantity": 60,
+        "unit": "g",
+        "foodId": "food_core_bell_pepper",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "olive oil 4 g",
+        "kind": "ingredient",
+        "wording": "olive oil",
+        "quantity": 4,
+        "unit": "g",
+        "foodId": "food_core_olive_oil",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "honey 8 g",
+        "kind": "ingredient",
+        "wording": "honey",
+        "quantity": 8,
+        "unit": "g",
+        "foodId": "food_core_honey",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "chipotle in adobo 5 g",
+        "kind": "ingredient",
+        "wording": "chipotle in adobo",
+        "quantity": 5,
+        "unit": "g",
+        "foodId": "food_core_chipotle_in_adobo",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "lime juice 10 g",
+        "kind": "ingredient",
+        "wording": "lime juice",
+        "quantity": 10,
+        "unit": "g",
+        "foodId": "food_core_lime_juice",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "cheddar 10 g",
+        "kind": "ingredient",
+        "wording": "cheddar",
+        "quantity": 10,
+        "unit": "g",
+        "foodId": "food_core_cheddar",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "pico de gallo 50 g",
+        "kind": "ingredient",
+        "wording": "pico de gallo",
+        "quantity": 50,
+        "unit": "g",
+        "foodId": "food_core_salsa",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "avocado 35 g",
+        "kind": "ingredient",
+        "wording": "avocado",
+        "quantity": 35,
+        "unit": "g",
+        "foodId": "food_core_avocado",
+        "resolvedVia": "CTC_FOOD"
+      }
+    ]
+  },
+  "L2": {
+    "id": "meal_library_L2",
+    "name": "Greek Orzo Salad + Turkey Meatballs",
+    "ingredientLines": [
+      {
+        "line": "ground turkey 93/7 136 g",
+        "kind": "ingredient",
+        "wording": "ground turkey 93/7",
+        "quantity": 136,
+        "unit": "g",
+        "foodId": "food_core_ground_turkey_93_7",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "panko 13 g",
+        "kind": "ingredient",
+        "wording": "panko",
+        "quantity": 13,
+        "unit": "g",
+        "foodId": "food_core_panko_breadcrumbs",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "egg 20 g",
+        "kind": "ingredient",
+        "wording": "egg",
+        "quantity": 20,
+        "unit": "g",
+        "foodId": "food_core_egg_whole",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "orzo dry 65 g",
+        "kind": "ingredient",
+        "wording": "orzo dry",
+        "quantity": 65,
+        "unit": "g",
+        "foodId": "food_core_orzo_dry",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "cucumber 100 g",
+        "kind": "ingredient",
+        "wording": "cucumber",
+        "quantity": 100,
+        "unit": "g",
+        "foodId": "food_core_cucumber",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "cherry tomatoes 100 g",
+        "kind": "ingredient",
+        "wording": "cherry tomatoes",
+        "quantity": 100,
+        "unit": "g",
+        "foodId": "food_core_tomato",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "red onion 20 g",
+        "kind": "ingredient",
+        "wording": "red onion",
+        "quantity": 20,
+        "unit": "g",
+        "foodId": "food_core_onion",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "kalamata olives 8 g",
+        "kind": "ingredient",
+        "wording": "kalamata olives",
+        "quantity": 8,
+        "unit": "g",
+        "foodId": "food_core_kalamata_olives",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "feta 15 g",
+        "kind": "ingredient",
+        "wording": "feta",
+        "quantity": 15,
+        "unit": "g",
+        "foodId": "food_core_feta",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "olive oil 4 g",
+        "kind": "ingredient",
+        "wording": "olive oil",
+        "quantity": 4,
+        "unit": "g",
+        "foodId": "food_core_olive_oil",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "lemon juice 15 g",
+        "kind": "ingredient",
+        "wording": "lemon juice",
+        "quantity": 15,
+        "unit": "g",
+        "foodId": "food_core_lemon_juice",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "garlic 5 g",
+        "kind": "ingredient",
+        "wording": "garlic",
+        "quantity": 5,
+        "unit": "g",
+        "foodId": "food_core_garlic",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "chickpeas canned 50 g",
+        "kind": "ingredient",
+        "wording": "chickpeas canned",
+        "quantity": 50,
+        "unit": "g",
+        "foodId": "food_core_chickpeas_canned_drained",
+        "resolvedVia": "CTC_FOOD"
+      }
+    ]
+  },
+  "L3": {
+    "id": "meal_library_L3",
+    "name": "Chicken Burrito Bowl",
+    "ingredientLines": [
+      {
+        "line": "chicken breast 123 g",
+        "kind": "ingredient",
+        "wording": "chicken breast",
+        "quantity": 123,
+        "unit": "g",
+        "foodId": "food_core_chicken_breast_raw",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "white rice dry 58 g",
+        "kind": "ingredient",
+        "wording": "white rice dry",
+        "quantity": 58,
+        "unit": "g",
+        "foodId": "food_core_white_rice_dry",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "black beans canned 80 g",
+        "kind": "ingredient",
+        "wording": "black beans canned",
+        "quantity": 80,
+        "unit": "g",
+        "foodId": "food_core_black_beans_canned_drained",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "cheddar 15 g",
+        "kind": "ingredient",
+        "wording": "cheddar",
+        "quantity": 15,
+        "unit": "g",
+        "foodId": "food_core_cheddar",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "pico de gallo 60 g",
+        "kind": "ingredient",
+        "wording": "pico de gallo",
+        "quantity": 60,
+        "unit": "g",
+        "foodId": "food_core_salsa",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "avocado 45 g",
+        "kind": "ingredient",
+        "wording": "avocado",
+        "quantity": 45,
+        "unit": "g",
+        "foodId": "food_core_avocado",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "olive oil 4 g",
+        "kind": "ingredient",
+        "wording": "olive oil",
+        "quantity": 4,
+        "unit": "g",
+        "foodId": "food_core_olive_oil",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "lime juice 10 g",
+        "kind": "ingredient",
+        "wording": "lime juice",
+        "quantity": 10,
+        "unit": "g",
+        "foodId": "food_core_lime_juice",
+        "resolvedVia": "CTC_FOOD"
+      }
+    ]
+  },
+  "L4": {
+    "id": "meal_library_L4",
+    "name": "Mediterranean Chicken & Couscous",
+    "ingredientLines": [
+      {
+        "line": "chicken breast 120 g",
+        "kind": "ingredient",
+        "wording": "chicken breast",
+        "quantity": 120,
+        "unit": "g",
+        "foodId": "food_core_chicken_breast_raw",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "pearl couscous dry 65 g",
+        "kind": "ingredient",
+        "wording": "pearl couscous dry",
+        "quantity": 65,
+        "unit": "g",
+        "foodId": "food_core_couscous_dry",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "chickpeas canned 50 g",
+        "kind": "ingredient",
+        "wording": "chickpeas canned",
+        "quantity": 50,
+        "unit": "g",
+        "foodId": "food_core_chickpeas_canned_drained",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "cucumber 80 g",
+        "kind": "ingredient",
+        "wording": "cucumber",
+        "quantity": 80,
+        "unit": "g",
+        "foodId": "food_core_cucumber",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "cherry tomatoes 80 g",
+        "kind": "ingredient",
+        "wording": "cherry tomatoes",
+        "quantity": 80,
+        "unit": "g",
+        "foodId": "food_core_tomato",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "feta 20 g",
+        "kind": "ingredient",
+        "wording": "feta",
+        "quantity": 20,
+        "unit": "g",
+        "foodId": "food_core_feta",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "kalamata olives 12 g",
+        "kind": "ingredient",
+        "wording": "kalamata olives",
+        "quantity": 12,
+        "unit": "g",
+        "foodId": "food_core_kalamata_olives",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "olive oil 8 g",
+        "kind": "ingredient",
+        "wording": "olive oil",
+        "quantity": 8,
+        "unit": "g",
+        "foodId": "food_core_olive_oil",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "lemon juice 15 g",
+        "kind": "ingredient",
+        "wording": "lemon juice",
+        "quantity": 15,
+        "unit": "g",
+        "foodId": "food_core_lemon_juice",
+        "resolvedVia": "CTC_FOOD"
+      }
+    ]
+  },
+  "L6": {
+    "id": "meal_library_L6",
+    "name": "Turkey Pesto Pasta Salad",
+    "ingredientLines": [
+      {
+        "line": "pasta dry 80 g",
+        "kind": "ingredient",
+        "wording": "pasta dry",
+        "quantity": 80,
+        "unit": "g",
+        "foodId": "food_core_pasta_dry",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "ground turkey 93/7 111 g",
+        "kind": "ingredient",
+        "wording": "ground turkey 93/7",
+        "quantity": 111,
+        "unit": "g",
+        "foodId": "food_core_ground_turkey_93_7",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "pesto 18 g",
+        "kind": "ingredient",
+        "wording": "pesto",
+        "quantity": 18,
+        "unit": "g",
+        "foodId": "food_core_pesto",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "greek yogurt nonfat 40 g",
+        "kind": "ingredient",
+        "wording": "greek yogurt nonfat",
+        "quantity": 40,
+        "unit": "g",
+        "foodId": "food_core_fage_0_greek_yogurt",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "cherry tomatoes 100 g",
+        "kind": "ingredient",
+        "wording": "cherry tomatoes",
+        "quantity": 100,
+        "unit": "g",
+        "foodId": "food_core_tomato",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "mozzarella 20 g",
+        "kind": "ingredient",
+        "wording": "mozzarella",
+        "quantity": 20,
+        "unit": "g",
+        "foodId": "food_core_mozzarella_part_skim",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "spinach 20 g",
+        "kind": "ingredient",
+        "wording": "spinach",
+        "quantity": 20,
+        "unit": "g",
+        "foodId": "food_core_spinach",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "lemon juice 10 g",
+        "kind": "ingredient",
+        "wording": "lemon juice",
+        "quantity": 10,
+        "unit": "g",
+        "foodId": "food_core_lemon_juice",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "chickpeas canned 50 g",
+        "kind": "ingredient",
+        "wording": "chickpeas canned",
+        "quantity": 50,
+        "unit": "g",
+        "foodId": "food_core_chickpeas_canned_drained",
+        "resolvedVia": "CTC_FOOD"
+      }
+    ]
+  },
+  "L7": {
+    "id": "meal_library_L7",
+    "name": "BBQ Chicken & Baked Potato Bowl",
+    "ingredientLines": [
+      {
+        "line": "chicken breast 129 g",
+        "kind": "ingredient",
+        "wording": "chicken breast",
+        "quantity": 129,
+        "unit": "g",
+        "foodId": "food_core_chicken_breast_raw",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "potato 260 g",
+        "kind": "ingredient",
+        "wording": "potato",
+        "quantity": 260,
+        "unit": "g",
+        "foodId": "food_core_potato_raw",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "bbq sauce 35 g",
+        "kind": "ingredient",
+        "wording": "bbq sauce",
+        "quantity": 35,
+        "unit": "g",
+        "foodId": "food_core_bbq_sauce",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "cheddar 15 g",
+        "kind": "ingredient",
+        "wording": "cheddar",
+        "quantity": 15,
+        "unit": "g",
+        "foodId": "food_core_cheddar",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "corn frozen 50 g",
+        "kind": "ingredient",
+        "wording": "corn frozen",
+        "quantity": 50,
+        "unit": "g",
+        "foodId": "food_core_corn",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "red onion 25 g",
+        "kind": "ingredient",
+        "wording": "red onion",
+        "quantity": 25,
+        "unit": "g",
+        "foodId": "food_core_onion",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "olive oil 9 g",
+        "kind": "ingredient",
+        "wording": "olive oil",
+        "quantity": 9,
+        "unit": "g",
+        "foodId": "food_core_olive_oil",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "greek yogurt nonfat 30 g",
+        "kind": "ingredient",
+        "wording": "greek yogurt nonfat",
+        "quantity": 30,
+        "unit": "g",
+        "foodId": "food_core_fage_0_greek_yogurt",
+        "resolvedVia": "CTC_FOOD"
+      }
+    ]
+  },
+  "L8": {
+    "id": "meal_library_L8",
+    "name": "Adult Lunchable",
+    "ingredientLines": [
+      {
+        "line": "deli turkey 134 g",
+        "kind": "ingredient",
+        "wording": "deli turkey",
+        "quantity": 134,
+        "unit": "g",
+        "foodId": "food_core_deli_turkey_low_sodium",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "cheddar 25 g",
+        "kind": "ingredient",
+        "wording": "cheddar",
+        "quantity": 25,
+        "unit": "g",
+        "foodId": "food_core_cheddar",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "whole-grain crackers 40 g",
+        "kind": "ingredient",
+        "wording": "whole-grain crackers",
+        "quantity": 40,
+        "unit": "g",
+        "foodId": "food_core_whole_grain_crackers",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "egg 50 g",
+        "kind": "ingredient",
+        "wording": "egg",
+        "quantity": 50,
+        "unit": "g",
+        "foodId": "food_core_egg_whole",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "grapes 100 g",
+        "kind": "ingredient",
+        "wording": "grapes",
+        "quantity": 100,
+        "unit": "g",
+        "foodId": "food_core_grapes",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "cucumber 80 g",
+        "kind": "ingredient",
+        "wording": "cucumber",
+        "quantity": 80,
+        "unit": "g",
+        "foodId": "food_core_cucumber",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "cherry tomatoes 80 g",
+        "kind": "ingredient",
+        "wording": "cherry tomatoes",
+        "quantity": 80,
+        "unit": "g",
+        "foodId": "food_core_tomato",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "pretzels 20 g",
+        "kind": "ingredient",
+        "wording": "pretzels",
+        "quantity": 20,
+        "unit": "g",
+        "foodId": "food_core_pretzels",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "baby carrots 80 g",
+        "kind": "ingredient",
+        "wording": "baby carrots",
+        "quantity": 80,
+        "unit": "g",
+        "foodId": "food_core_baby_carrots",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "sugar snap peas 60 g",
+        "kind": "ingredient",
+        "wording": "sugar snap peas",
+        "quantity": 60,
+        "unit": "g",
+        "foodId": "food_core_sugar_snap_peas",
+        "resolvedVia": "CTC_FOOD"
+      }
+    ]
+  },
+  "L9": {
+    "id": "meal_library_L9",
+    "name": "Turkey & Provolone on Sourdough + Grapes",
+    "ingredientLines": [
+      {
+        "line": "deli turkey 150 g",
+        "kind": "ingredient",
+        "wording": "deli turkey",
+        "quantity": 150,
+        "unit": "g",
+        "foodId": "food_core_deli_turkey_low_sodium",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "sourdough 100 g",
+        "kind": "ingredient",
+        "wording": "sourdough",
+        "quantity": 100,
+        "unit": "g",
+        "foodId": "food_core_sourdough",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "provolone 25 g",
+        "kind": "ingredient",
+        "wording": "provolone",
+        "quantity": 25,
+        "unit": "g",
+        "foodId": "food_core_provolone",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "mayonnaise 10 g",
+        "kind": "ingredient",
+        "wording": "mayonnaise",
+        "quantity": 10,
+        "unit": "g",
+        "foodId": "food_core_mayonnaise",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "dijon mustard 8 g",
+        "kind": "ingredient",
+        "wording": "dijon mustard",
+        "quantity": 8,
+        "unit": "g",
+        "foodId": "food_core_dijon_mustard",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "romaine 20 g",
+        "kind": "ingredient",
+        "wording": "romaine",
+        "quantity": 20,
+        "unit": "g",
+        "foodId": "food_core_romaine",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "cherry tomatoes 40 g",
+        "kind": "ingredient",
+        "wording": "cherry tomatoes",
+        "quantity": 40,
+        "unit": "g",
+        "foodId": "food_core_tomato",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "cucumber 60 g",
+        "kind": "ingredient",
+        "wording": "cucumber",
+        "quantity": 60,
+        "unit": "g",
+        "foodId": "food_core_cucumber",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "grapes 100 g",
+        "kind": "ingredient",
+        "wording": "grapes",
+        "quantity": 100,
+        "unit": "g",
+        "foodId": "food_core_grapes",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "baby carrots 80 g",
+        "kind": "ingredient",
+        "wording": "baby carrots",
+        "quantity": 80,
+        "unit": "g",
+        "foodId": "food_core_baby_carrots",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "sugar snap peas 60 g",
+        "kind": "ingredient",
+        "wording": "sugar snap peas",
+        "quantity": 60,
+        "unit": "g",
+        "foodId": "food_core_sugar_snap_peas",
+        "resolvedVia": "CTC_FOOD"
+      }
+    ]
+  },
+  "L10": {
+    "id": "meal_library_L10",
+    "name": "Bruschetta Chicken + Sourdough",
+    "ingredientLines": [
+      {
+        "line": "chicken breast 116 g",
+        "kind": "ingredient",
+        "wording": "chicken breast",
+        "quantity": 116,
+        "unit": "g",
+        "foodId": "food_core_chicken_breast_raw",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "sourdough 110 g",
+        "kind": "ingredient",
+        "wording": "sourdough",
+        "quantity": 110,
+        "unit": "g",
+        "foodId": "food_core_sourdough",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "cherry tomatoes 130 g",
+        "kind": "ingredient",
+        "wording": "cherry tomatoes",
+        "quantity": 130,
+        "unit": "g",
+        "foodId": "food_core_tomato",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "mozzarella 20 g",
+        "kind": "ingredient",
+        "wording": "mozzarella",
+        "quantity": 20,
+        "unit": "g",
+        "foodId": "food_core_mozzarella_part_skim",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "olive oil 8 g",
+        "kind": "ingredient",
+        "wording": "olive oil",
+        "quantity": 8,
+        "unit": "g",
+        "foodId": "food_core_olive_oil",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "balsamic vinegar 10 g",
+        "kind": "ingredient",
+        "wording": "balsamic vinegar",
+        "quantity": 10,
+        "unit": "g",
+        "foodId": "food_core_balsamic_vinegar",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "garlic 5 g",
+        "kind": "ingredient",
+        "wording": "garlic",
+        "quantity": 5,
+        "unit": "g",
+        "foodId": "food_core_garlic",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "basil 5 g",
+        "kind": "ingredient",
+        "wording": "basil",
+        "quantity": 5,
+        "unit": "g",
+        "foodId": "food_core_basil",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "grapes 60 g",
+        "kind": "ingredient",
+        "wording": "grapes",
+        "quantity": 60,
+        "unit": "g",
+        "foodId": "food_core_grapes",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "chickpeas canned 40 g",
+        "kind": "ingredient",
+        "wording": "chickpeas canned",
+        "quantity": 40,
+        "unit": "g",
+        "foodId": "food_core_chickpeas_canned_drained",
+        "resolvedVia": "CTC_FOOD"
+      }
+    ]
+  },
+  "L11": {
+    "id": "meal_library_L11",
+    "name": "No-Cook Mezze Box",
+    "ingredientLines": [
+      {
+        "line": "whole-wheat pita 75 g",
+        "kind": "ingredient",
+        "wording": "whole-wheat pita",
+        "quantity": 75,
+        "unit": "g",
+        "foodId": "food_core_whole_wheat_pita",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "hummus 35 g",
+        "kind": "ingredient",
+        "wording": "hummus",
+        "quantity": 35,
+        "unit": "g",
+        "foodId": "food_core_hummus",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "chickpeas canned 50 g",
+        "kind": "ingredient",
+        "wording": "chickpeas canned",
+        "quantity": 50,
+        "unit": "g",
+        "foodId": "food_core_chickpeas_canned_drained",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "feta 25 g",
+        "kind": "ingredient",
+        "wording": "feta",
+        "quantity": 25,
+        "unit": "g",
+        "foodId": "food_core_feta",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "cucumber 100 g",
+        "kind": "ingredient",
+        "wording": "cucumber",
+        "quantity": 100,
+        "unit": "g",
+        "foodId": "food_core_cucumber",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "cherry tomatoes 100 g",
+        "kind": "ingredient",
+        "wording": "cherry tomatoes",
+        "quantity": 100,
+        "unit": "g",
+        "foodId": "food_core_tomato",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "kalamata olives 12 g",
+        "kind": "ingredient",
+        "wording": "kalamata olives",
+        "quantity": 12,
+        "unit": "g",
+        "foodId": "food_core_kalamata_olives",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "deli turkey 144 g",
+        "kind": "ingredient",
+        "wording": "deli turkey",
+        "quantity": 144,
+        "unit": "g",
+        "foodId": "food_core_deli_turkey_low_sodium",
+        "resolvedVia": "CTC_FOOD"
+      }
+    ]
+  },
+  "L12": {
+    "id": "meal_library_L12",
+    "name": "Steak & Potato Salad",
+    "ingredientLines": [
+      {
+        "line": "sirloin steak 126 g",
+        "kind": "ingredient",
+        "wording": "sirloin steak",
+        "quantity": 126,
+        "unit": "g",
+        "foodId": "food_core_sirloin_steak_raw",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "potato 340 g",
+        "kind": "ingredient",
+        "wording": "potato",
+        "quantity": 340,
+        "unit": "g",
+        "foodId": "food_core_potato_raw",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "olive oil 8 g",
+        "kind": "ingredient",
+        "wording": "olive oil",
+        "quantity": 8,
+        "unit": "g",
+        "foodId": "food_core_olive_oil",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "dijon mustard 12 g",
+        "kind": "ingredient",
+        "wording": "dijon mustard",
+        "quantity": 12,
+        "unit": "g",
+        "foodId": "food_core_dijon_mustard",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "greek yogurt nonfat 40 g",
+        "kind": "ingredient",
+        "wording": "greek yogurt nonfat",
+        "quantity": 40,
+        "unit": "g",
+        "foodId": "food_core_fage_0_greek_yogurt",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "parmesan 10 g",
+        "kind": "ingredient",
+        "wording": "parmesan",
+        "quantity": 10,
+        "unit": "g",
+        "foodId": "food_core_parmesan",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "red onion 25 g",
+        "kind": "ingredient",
+        "wording": "red onion",
+        "quantity": 25,
+        "unit": "g",
+        "foodId": "food_core_onion",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "cherry tomatoes 80 g",
+        "kind": "ingredient",
+        "wording": "cherry tomatoes",
+        "quantity": 80,
+        "unit": "g",
+        "foodId": "food_core_tomato",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "romaine 40 g",
+        "kind": "ingredient",
+        "wording": "romaine",
+        "quantity": 40,
+        "unit": "g",
+        "foodId": "food_core_romaine",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "lemon juice 10 g",
+        "kind": "ingredient",
+        "wording": "lemon juice",
+        "quantity": 10,
+        "unit": "g",
+        "foodId": "food_core_lemon_juice",
+        "resolvedVia": "CTC_FOOD"
+      }
+    ]
+  },
+  "L13": {
+    "id": "meal_library_L13",
+    "name": "Chicken, Wild Rice & Roasted Squash",
+    "ingredientLines": [
+      {
+        "line": "chicken breast 141 g",
+        "kind": "ingredient",
+        "wording": "chicken breast",
+        "quantity": 141,
+        "unit": "g",
+        "foodId": "food_core_chicken_breast_raw",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "wild rice dry 45 g",
+        "kind": "ingredient",
+        "wording": "wild rice dry",
+        "quantity": 45,
+        "unit": "g",
+        "foodId": "food_core_wild_rice_dry",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "butternut squash 180 g",
+        "kind": "ingredient",
+        "wording": "butternut squash",
+        "quantity": 180,
+        "unit": "g",
+        "foodId": "food_core_butternut_squash",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "olive oil 9 g",
+        "kind": "ingredient",
+        "wording": "olive oil",
+        "quantity": 9,
+        "unit": "g",
+        "foodId": "food_core_olive_oil",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "dried cranberries 15 g",
+        "kind": "ingredient",
+        "wording": "dried cranberries",
+        "quantity": 15,
+        "unit": "g",
+        "foodId": "food_core_dried_cranberries",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "sliced almonds 8 g",
+        "kind": "ingredient",
+        "wording": "sliced almonds",
+        "quantity": 8,
+        "unit": "g",
+        "foodId": "food_core_almonds",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "spinach 40 g",
+        "kind": "ingredient",
+        "wording": "spinach",
+        "quantity": 40,
+        "unit": "g",
+        "foodId": "food_core_spinach",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "balsamic vinegar 10 g",
+        "kind": "ingredient",
+        "wording": "balsamic vinegar",
+        "quantity": 10,
+        "unit": "g",
+        "foodId": "food_core_balsamic_vinegar",
+        "resolvedVia": "CTC_FOOD"
+      }
+    ]
+  },
+  "L14": {
+    "id": "meal_library_L14",
+    "name": "Chicken, Sweet Potato & Black Bean Bowl",
+    "ingredientLines": [
+      {
+        "line": "chicken breast 133 g",
+        "kind": "ingredient",
+        "wording": "chicken breast",
+        "quantity": 133,
+        "unit": "g",
+        "foodId": "food_core_chicken_breast_raw",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "sweet potato 250 g",
+        "kind": "ingredient",
+        "wording": "sweet potato",
+        "quantity": 250,
+        "unit": "g",
+        "foodId": "food_core_sweet_potato_raw",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "black beans canned 70 g",
+        "kind": "ingredient",
+        "wording": "black beans canned",
+        "quantity": 70,
+        "unit": "g",
+        "foodId": "food_core_black_beans_canned_drained",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "olive oil 8 g",
+        "kind": "ingredient",
+        "wording": "olive oil",
+        "quantity": 8,
+        "unit": "g",
+        "foodId": "food_core_olive_oil",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "avocado 35 g",
+        "kind": "ingredient",
+        "wording": "avocado",
+        "quantity": 35,
+        "unit": "g",
+        "foodId": "food_core_avocado",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "salsa 50 g",
+        "kind": "ingredient",
+        "wording": "salsa",
+        "quantity": 50,
+        "unit": "g",
+        "foodId": "food_core_salsa",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "cheddar 10 g",
+        "kind": "ingredient",
+        "wording": "cheddar",
+        "quantity": 10,
+        "unit": "g",
+        "foodId": "food_core_cheddar",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "lime juice 10 g",
+        "kind": "ingredient",
+        "wording": "lime juice",
+        "quantity": 10,
+        "unit": "g",
+        "foodId": "food_core_lime_juice",
+        "resolvedVia": "CTC_FOOD"
+      }
+    ]
+  },
+  "L15": {
+    "id": "meal_library_L15",
+    "name": "Honey-Mustard Chicken & Farro Salad",
+    "ingredientLines": [
+      {
+        "line": "farro dry 55 g",
+        "kind": "ingredient",
+        "wording": "farro dry",
+        "quantity": 55,
+        "unit": "g",
+        "foodId": "food_core_farro_dry",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "chicken breast 130 g",
+        "kind": "ingredient",
+        "wording": "chicken breast",
+        "quantity": 130,
+        "unit": "g",
+        "foodId": "food_core_chicken_breast_raw",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "apple 90 g",
+        "kind": "ingredient",
+        "wording": "apple",
+        "quantity": 90,
+        "unit": "g",
+        "foodId": "food_core_apple",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "spinach 40 g",
+        "kind": "ingredient",
+        "wording": "spinach",
+        "quantity": 40,
+        "unit": "g",
+        "foodId": "food_core_spinach",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "red onion 20 g",
+        "kind": "ingredient",
+        "wording": "red onion",
+        "quantity": 20,
+        "unit": "g",
+        "foodId": "food_core_onion",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "feta 18 g",
+        "kind": "ingredient",
+        "wording": "feta",
+        "quantity": 18,
+        "unit": "g",
+        "foodId": "food_core_feta",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "sliced almonds 8 g",
+        "kind": "ingredient",
+        "wording": "sliced almonds",
+        "quantity": 8,
+        "unit": "g",
+        "foodId": "food_core_almonds",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "dijon mustard 12 g",
+        "kind": "ingredient",
+        "wording": "dijon mustard",
+        "quantity": 12,
+        "unit": "g",
+        "foodId": "food_core_dijon_mustard",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "honey 14 g",
+        "kind": "ingredient",
+        "wording": "honey",
+        "quantity": 14,
+        "unit": "g",
+        "foodId": "food_core_honey",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "olive oil 4 g",
+        "kind": "ingredient",
+        "wording": "olive oil",
+        "quantity": 4,
+        "unit": "g",
+        "foodId": "food_core_olive_oil",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "lemon juice 10 g",
+        "kind": "ingredient",
+        "wording": "lemon juice",
+        "quantity": 10,
+        "unit": "g",
+        "foodId": "food_core_lemon_juice",
+        "resolvedVia": "CTC_FOOD"
+      }
+    ]
+  },
+  "L16": {
+    "id": "meal_library_L16",
+    "name": "Chicken Tinga Rice Bowl",
+    "ingredientLines": [
+      {
+        "line": "chicken breast 118 g",
+        "kind": "ingredient",
+        "wording": "chicken breast",
+        "quantity": 118,
+        "unit": "g",
+        "foodId": "food_core_chicken_breast_raw",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "white rice dry 58 g",
+        "kind": "ingredient",
+        "wording": "white rice dry",
+        "quantity": 58,
+        "unit": "g",
+        "foodId": "food_core_white_rice_dry",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "crushed tomatoes 90 g",
+        "kind": "ingredient",
+        "wording": "crushed tomatoes",
+        "quantity": 90,
+        "unit": "g",
+        "foodId": "food_core_crushed_tomatoes",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "chipotle in adobo 12 g",
+        "kind": "ingredient",
+        "wording": "chipotle in adobo",
+        "quantity": 12,
+        "unit": "g",
+        "foodId": "food_core_chipotle_in_adobo",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "onion 50 g",
+        "kind": "ingredient",
+        "wording": "onion",
+        "quantity": 50,
+        "unit": "g",
+        "foodId": "food_core_onion",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "olive oil 7 g",
+        "kind": "ingredient",
+        "wording": "olive oil",
+        "quantity": 7,
+        "unit": "g",
+        "foodId": "food_core_olive_oil",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "black beans canned 50 g",
+        "kind": "ingredient",
+        "wording": "black beans canned",
+        "quantity": 50,
+        "unit": "g",
+        "foodId": "food_core_black_beans_canned_drained",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "cotija 12 g",
+        "kind": "ingredient",
+        "wording": "cotija",
+        "quantity": 12,
+        "unit": "g",
+        "foodId": "food_core_cotija",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "greek yogurt nonfat 30 g",
+        "kind": "ingredient",
+        "wording": "greek yogurt nonfat",
+        "quantity": 30,
+        "unit": "g",
+        "foodId": "food_core_fage_0_greek_yogurt",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "avocado 35 g",
+        "kind": "ingredient",
+        "wording": "avocado",
+        "quantity": 35,
+        "unit": "g",
+        "foodId": "food_core_avocado",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "lime juice 8 g",
+        "kind": "ingredient",
+        "wording": "lime juice",
+        "quantity": 8,
+        "unit": "g",
+        "foodId": "food_core_lime_juice",
+        "resolvedVia": "CTC_FOOD"
+      }
+    ]
+  },
+  "L17": {
+    "id": "meal_library_L17",
+    "name": "Turkey, Hummus & Roasted Veg Wrap",
+    "ingredientLines": [
+      {
+        "line": "large tortilla wrap 70 g",
+        "kind": "ingredient",
+        "wording": "large tortilla wrap",
+        "quantity": 70,
+        "unit": "g",
+        "foodId": "food_core_tortilla_large_flour",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "deli turkey 162 g",
+        "kind": "ingredient",
+        "wording": "deli turkey",
+        "quantity": 162,
+        "unit": "g",
+        "foodId": "food_core_deli_turkey_low_sodium",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "hummus 40 g",
+        "kind": "ingredient",
+        "wording": "hummus",
+        "quantity": 40,
+        "unit": "g",
+        "foodId": "food_core_hummus",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "roasted red pepper 50 g",
+        "kind": "ingredient",
+        "wording": "roasted red pepper",
+        "quantity": 50,
+        "unit": "g",
+        "foodId": "food_core_roasted_red_pepper",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "zucchini 60 g",
+        "kind": "ingredient",
+        "wording": "zucchini",
+        "quantity": 60,
+        "unit": "g",
+        "foodId": "food_core_zucchini",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "spinach 25 g",
+        "kind": "ingredient",
+        "wording": "spinach",
+        "quantity": 25,
+        "unit": "g",
+        "foodId": "food_core_spinach",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "feta 18 g",
+        "kind": "ingredient",
+        "wording": "feta",
+        "quantity": 18,
+        "unit": "g",
+        "foodId": "food_core_feta",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "grapes 90 g",
+        "kind": "ingredient",
+        "wording": "grapes",
+        "quantity": 90,
+        "unit": "g",
+        "foodId": "food_core_grapes",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "pretzels 10 g",
+        "kind": "ingredient",
+        "wording": "pretzels",
+        "quantity": 10,
+        "unit": "g",
+        "foodId": "food_core_pretzels",
+        "resolvedVia": "CTC_FOOD"
+      }
+    ]
+  },
+  "L18": {
+    "id": "meal_library_L18",
+    "name": "Hot Honey Turkey & Sweet Potato Bowl",
+    "ingredientLines": [
+      {
+        "line": "ground turkey 93/7 115 g",
+        "kind": "ingredient",
+        "wording": "ground turkey 93/7",
+        "quantity": 115,
+        "unit": "g",
+        "foodId": "food_core_ground_turkey_93_7",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "sweet potato 240 g",
+        "kind": "ingredient",
+        "wording": "sweet potato",
+        "quantity": 240,
+        "unit": "g",
+        "foodId": "food_core_sweet_potato_raw",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "cottage cheese 2% 110 g",
+        "kind": "ingredient",
+        "wording": "cottage cheese 2%",
+        "quantity": 110,
+        "unit": "g",
+        "foodId": "food_core_cottage_cheese_2",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "avocado 40 g",
+        "kind": "ingredient",
+        "wording": "avocado",
+        "quantity": 40,
+        "unit": "g",
+        "foodId": "food_core_avocado",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "hot honey 14 g",
+        "kind": "ingredient",
+        "wording": "hot honey",
+        "quantity": 14,
+        "unit": "g",
+        "foodId": "food_core_hot_honey",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "olive oil 5 g",
+        "kind": "ingredient",
+        "wording": "olive oil",
+        "quantity": 5,
+        "unit": "g",
+        "foodId": "food_core_olive_oil",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "spinach 30 g",
+        "kind": "ingredient",
+        "wording": "spinach",
+        "quantity": 30,
+        "unit": "g",
+        "foodId": "food_core_spinach",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "lime juice 8 g",
+        "kind": "ingredient",
+        "wording": "lime juice",
+        "quantity": 8,
+        "unit": "g",
+        "foodId": "food_core_lime_juice",
+        "resolvedVia": "CTC_FOOD"
+      }
+    ]
+  },
+  "L19": {
+    "id": "meal_library_L19",
+    "name": "Hot Honey Chicken & Cheddar Bento",
+    "ingredientLines": [
+      {
+        "line": "chicken breast 131 g",
+        "kind": "ingredient",
+        "wording": "chicken breast",
+        "quantity": 131,
+        "unit": "g",
+        "foodId": "food_core_chicken_breast_raw",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "olive oil 6 g",
+        "kind": "ingredient",
+        "wording": "olive oil",
+        "quantity": 6,
+        "unit": "g",
+        "foodId": "food_core_olive_oil",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "hot honey 18 g",
+        "kind": "ingredient",
+        "wording": "hot honey",
+        "quantity": 18,
+        "unit": "g",
+        "foodId": "food_core_hot_honey",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "cheddar 20 g",
+        "kind": "ingredient",
+        "wording": "cheddar",
+        "quantity": 20,
+        "unit": "g",
+        "foodId": "food_core_cheddar",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "sourdough 65 g",
+        "kind": "ingredient",
+        "wording": "sourdough",
+        "quantity": 65,
+        "unit": "g",
+        "foodId": "food_core_sourdough",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "apple 70 g",
+        "kind": "ingredient",
+        "wording": "apple",
+        "quantity": 70,
+        "unit": "g",
+        "foodId": "food_core_apple",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "grapes 40 g",
+        "kind": "ingredient",
+        "wording": "grapes",
+        "quantity": 40,
+        "unit": "g",
+        "foodId": "food_core_grapes",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "cucumber 80 g",
+        "kind": "ingredient",
+        "wording": "cucumber",
+        "quantity": 80,
+        "unit": "g",
+        "foodId": "food_core_cucumber",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "almonds 8 g",
+        "kind": "ingredient",
+        "wording": "almonds",
+        "quantity": 8,
+        "unit": "g",
+        "foodId": "food_core_almonds",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "baby carrots 80 g",
+        "kind": "ingredient",
+        "wording": "baby carrots",
+        "quantity": 80,
+        "unit": "g",
+        "foodId": "food_core_baby_carrots",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "sugar snap peas 60 g",
+        "kind": "ingredient",
+        "wording": "sugar snap peas",
+        "quantity": 60,
+        "unit": "g",
+        "foodId": "food_core_sugar_snap_peas",
+        "resolvedVia": "CTC_FOOD"
+      }
+    ]
+  },
+  "L20": {
+    "id": "meal_library_L20",
+    "name": "Caprese Turkey Bento",
+    "ingredientLines": [
+      {
+        "line": "deli turkey 154 g",
+        "kind": "ingredient",
+        "wording": "deli turkey",
+        "quantity": 154,
+        "unit": "g",
+        "foodId": "food_core_deli_turkey_low_sodium",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "fresh mozzarella 45 g",
+        "kind": "ingredient",
+        "wording": "fresh mozzarella",
+        "quantity": 45,
+        "unit": "g",
+        "foodId": "food_core_fresh_mozzarella",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "cherry tomatoes 120 g",
+        "kind": "ingredient",
+        "wording": "cherry tomatoes",
+        "quantity": 120,
+        "unit": "g",
+        "foodId": "food_core_tomato",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "balsamic glaze 12 g",
+        "kind": "ingredient",
+        "wording": "balsamic glaze",
+        "quantity": 12,
+        "unit": "g",
+        "foodId": "food_core_balsamic_glaze",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "sourdough 80 g",
+        "kind": "ingredient",
+        "wording": "sourdough",
+        "quantity": 80,
+        "unit": "g",
+        "foodId": "food_core_sourdough",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "olive oil 5 g",
+        "kind": "ingredient",
+        "wording": "olive oil",
+        "quantity": 5,
+        "unit": "g",
+        "foodId": "food_core_olive_oil",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "grapes 70 g",
+        "kind": "ingredient",
+        "wording": "grapes",
+        "quantity": 70,
+        "unit": "g",
+        "foodId": "food_core_grapes",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "kalamata olives 12 g",
+        "kind": "ingredient",
+        "wording": "kalamata olives",
+        "quantity": 12,
+        "unit": "g",
+        "foodId": "food_core_kalamata_olives",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "basil 4 g",
+        "kind": "ingredient",
+        "wording": "basil",
+        "quantity": 4,
+        "unit": "g",
+        "foodId": "food_core_basil",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "baby carrots 80 g",
+        "kind": "ingredient",
+        "wording": "baby carrots",
+        "quantity": 80,
+        "unit": "g",
+        "foodId": "food_core_baby_carrots",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "sugar snap peas 60 g",
+        "kind": "ingredient",
+        "wording": "sugar snap peas",
+        "quantity": 60,
+        "unit": "g",
+        "foodId": "food_core_sugar_snap_peas",
+        "resolvedVia": "CTC_FOOD"
+      }
+    ]
+  },
+  "S1": {
+    "id": "meal_library_S1",
+    "name": "Yogurt, cereal, banana & PB",
+    "ingredientLines": [
+      {
+        "line": "greek yogurt nonfat 80 g",
+        "kind": "ingredient",
+        "wording": "greek yogurt nonfat",
+        "quantity": 80,
+        "unit": "g",
+        "foodId": "food_core_fage_0_greek_yogurt",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "three wishes cereal 13 g",
+        "kind": "ingredient",
+        "wording": "three wishes cereal",
+        "quantity": 13,
+        "unit": "g",
+        "foodId": "food_core_three_wishes_cereal",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "one degree brown rice crisps 12 g",
+        "kind": "ingredient",
+        "wording": "one degree brown rice crisps",
+        "quantity": 12,
+        "unit": "g",
+        "foodId": "food_core_one_degree_brown_rice_crisps",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "banana 45 g",
+        "kind": "ingredient",
+        "wording": "banana",
+        "quantity": 45,
+        "unit": "g",
+        "foodId": "food_core_banana",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "peanut butter 12 g",
+        "kind": "ingredient",
+        "wording": "peanut butter",
+        "quantity": 12,
+        "unit": "g",
+        "foodId": "food_core_peanut_butter",
+        "resolvedVia": "CTC_FOOD"
+      }
+    ]
+  },
+  "S2": {
+    "id": "meal_library_S2",
+    "name": "Cottage cheese, pineapple & crackers",
+    "ingredientLines": [
+      {
+        "line": "cottage cheese 2% 110 g",
+        "kind": "ingredient",
+        "wording": "cottage cheese 2%",
+        "quantity": 110,
+        "unit": "g",
+        "foodId": "food_core_cottage_cheese_2",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "pineapple 110 g",
+        "kind": "ingredient",
+        "wording": "pineapple",
+        "quantity": 110,
+        "unit": "g",
+        "foodId": "food_core_pineapple",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "whole-grain crackers 12 g",
+        "kind": "ingredient",
+        "wording": "whole-grain crackers",
+        "quantity": 12,
+        "unit": "g",
+        "foodId": "food_core_whole_grain_crackers",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "cashews 10 g",
+        "kind": "ingredient",
+        "wording": "cashews",
+        "quantity": 10,
+        "unit": "g",
+        "foodId": "food_core_cashews",
+        "resolvedVia": "CTC_FOOD"
+      }
+    ]
+  },
+  "S3": {
+    "id": "meal_library_S3",
+    "name": "Turkey, pretzels & grapes",
+    "ingredientLines": [
+      {
+        "line": "deli turkey 60 g",
+        "kind": "ingredient",
+        "wording": "deli turkey",
+        "quantity": 60,
+        "unit": "g",
+        "foodId": "food_core_deli_turkey_low_sodium",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "pretzels 22 g",
+        "kind": "ingredient",
+        "wording": "pretzels",
+        "quantity": 22,
+        "unit": "g",
+        "foodId": "food_core_pretzels",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "grapes 60 g",
+        "kind": "ingredient",
+        "wording": "grapes",
+        "quantity": 60,
+        "unit": "g",
+        "foodId": "food_core_grapes",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "almonds 11 g",
+        "kind": "ingredient",
+        "wording": "almonds",
+        "quantity": 11,
+        "unit": "g",
+        "foodId": "food_core_almonds",
+        "resolvedVia": "CTC_FOOD"
+      }
+    ]
+  },
+  "S4": {
+    "id": "meal_library_S4",
+    "name": "Apple, peanut butter & a yogurt cup",
+    "ingredientLines": [
+      {
+        "line": "apple 140 g",
+        "kind": "ingredient",
+        "wording": "apple",
+        "quantity": 140,
+        "unit": "g",
+        "foodId": "food_core_apple",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "peanut butter 14 g",
+        "kind": "ingredient",
+        "wording": "peanut butter",
+        "quantity": 14,
+        "unit": "g",
+        "foodId": "food_core_peanut_butter",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "greek yogurt nonfat 110 g",
+        "kind": "ingredient",
+        "wording": "greek yogurt nonfat",
+        "quantity": 110,
+        "unit": "g",
+        "foodId": "food_core_fage_0_greek_yogurt",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "honey 6 g",
+        "kind": "ingredient",
+        "wording": "honey",
+        "quantity": 6,
+        "unit": "g",
+        "foodId": "food_core_honey",
+        "resolvedVia": "CTC_FOOD"
+      }
+    ]
+  },
+  "S6": {
+    "id": "meal_library_S6",
+    "name": "Desk-drawer kit",
+    "ingredientLines": [
+      {
+        "line": "pretzels 30 g",
+        "kind": "ingredient",
+        "wording": "pretzels",
+        "quantity": 30,
+        "unit": "g",
+        "foodId": "food_core_pretzels",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "turkey jerky 30 g",
+        "kind": "ingredient",
+        "wording": "turkey jerky",
+        "quantity": 30,
+        "unit": "g",
+        "foodId": "food_core_turkey_jerky",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "almonds 12 g",
+        "kind": "ingredient",
+        "wording": "almonds",
+        "quantity": 12,
+        "unit": "g",
+        "foodId": "food_core_almonds",
+        "resolvedVia": "CTC_FOOD"
+      }
+    ]
+  },
+  "S10": {
+    "id": "meal_library_S10",
+    "name": "PB & honey on sourdough + yogurt",
+    "ingredientLines": [
+      {
+        "line": "sourdough 42 g",
+        "kind": "ingredient",
+        "wording": "sourdough",
+        "quantity": 42,
+        "unit": "g",
+        "foodId": "food_core_sourdough",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "peanut butter 14 g",
+        "kind": "ingredient",
+        "wording": "peanut butter",
+        "quantity": 14,
+        "unit": "g",
+        "foodId": "food_core_peanut_butter",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "greek yogurt nonfat 90 g",
+        "kind": "ingredient",
+        "wording": "greek yogurt nonfat",
+        "quantity": 90,
+        "unit": "g",
+        "foodId": "food_core_fage_0_greek_yogurt",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "honey 4 g",
+        "kind": "ingredient",
+        "wording": "honey",
+        "quantity": 4,
+        "unit": "g",
+        "foodId": "food_core_honey",
+        "resolvedVia": "CTC_FOOD"
+      }
+    ]
+  },
+  "S11": {
+    "id": "meal_library_S11",
+    "name": "Hot honey cottage cheese & pretzels",
+    "ingredientLines": [
+      {
+        "line": "cottage cheese 2% 110 g",
+        "kind": "ingredient",
+        "wording": "cottage cheese 2%",
+        "quantity": 110,
+        "unit": "g",
+        "foodId": "food_core_cottage_cheese_2",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "pretzels 25 g",
+        "kind": "ingredient",
+        "wording": "pretzels",
+        "quantity": 25,
+        "unit": "g",
+        "foodId": "food_core_pretzels",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "hot honey 6 g",
+        "kind": "ingredient",
+        "wording": "hot honey",
+        "quantity": 6,
+        "unit": "g",
+        "foodId": "food_core_hot_honey",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "almonds 8 g",
+        "kind": "ingredient",
+        "wording": "almonds",
+        "quantity": 8,
+        "unit": "g",
+        "foodId": "food_core_almonds",
+        "resolvedVia": "CTC_FOOD"
+      }
+    ]
+  },
+  "S12": {
+    "id": "meal_library_S12",
+    "name": "Popcorn, jerky & grapes",
+    "ingredientLines": [
+      {
+        "line": "air-popped popcorn 20 g",
+        "kind": "ingredient",
+        "wording": "air-popped popcorn",
+        "quantity": 20,
+        "unit": "g",
+        "foodId": "food_core_popcorn_popped",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "turkey jerky 30 g",
+        "kind": "ingredient",
+        "wording": "turkey jerky",
+        "quantity": 30,
+        "unit": "g",
+        "foodId": "food_core_turkey_jerky",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "grapes 40 g",
+        "kind": "ingredient",
+        "wording": "grapes",
+        "quantity": 40,
+        "unit": "g",
+        "foodId": "food_core_grapes",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "almonds 12 g",
+        "kind": "ingredient",
+        "wording": "almonds",
+        "quantity": 12,
+        "unit": "g",
+        "foodId": "food_core_almonds",
+        "resolvedVia": "CTC_FOOD"
+      }
+    ]
+  },
+  "S13": {
+    "id": "meal_library_S13",
+    "name": "Chocolate cottage cheese pudding",
+    "ingredientLines": [
+      {
+        "line": "cottage cheese 2% 110 g",
+        "kind": "ingredient",
+        "wording": "cottage cheese 2%",
+        "quantity": 110,
+        "unit": "g",
+        "foodId": "food_core_cottage_cheese_2",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "cocoa powder 4 g",
+        "kind": "ingredient",
+        "wording": "cocoa powder",
+        "quantity": 4,
+        "unit": "g",
+        "foodId": "food_core_cocoa_powder",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "honey 8 g",
+        "kind": "ingredient",
+        "wording": "honey",
+        "quantity": 8,
+        "unit": "g",
+        "foodId": "food_core_honey",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "banana 40 g",
+        "kind": "ingredient",
+        "wording": "banana",
+        "quantity": 40,
+        "unit": "g",
+        "foodId": "food_core_banana",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "graham crackers 9 g",
+        "kind": "ingredient",
+        "wording": "graham crackers",
+        "quantity": 9,
+        "unit": "g",
+        "foodId": "food_core_graham_crackers",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "peanut butter 8 g",
+        "kind": "ingredient",
+        "wording": "peanut butter",
+        "quantity": 8,
+        "unit": "g",
+        "foodId": "food_core_peanut_butter",
+        "resolvedVia": "CTC_FOOD"
+      }
+    ]
+  },
+  "S14": {
+    "id": "meal_library_S14",
+    "name": "Chia pudding, granola & berries",
+    "ingredientLines": [
+      {
+        "line": "greek yogurt nonfat 110 g",
+        "kind": "ingredient",
+        "wording": "greek yogurt nonfat",
+        "quantity": 110,
+        "unit": "g",
+        "foodId": "food_core_fage_0_greek_yogurt",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "milk 2% 50 g",
+        "kind": "ingredient",
+        "wording": "milk 2%",
+        "quantity": 50,
+        "unit": "g",
+        "foodId": "food_core_milk_2",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "chia seeds 7 g",
+        "kind": "ingredient",
+        "wording": "chia seeds",
+        "quantity": 7,
+        "unit": "g",
+        "foodId": "food_core_chia_seeds",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "granola 24 g",
+        "kind": "ingredient",
+        "wording": "granola",
+        "quantity": 24,
+        "unit": "g",
+        "foodId": "food_core_granola",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "strawberries 80 g",
+        "kind": "ingredient",
+        "wording": "strawberries",
+        "quantity": 80,
+        "unit": "g",
+        "foodId": "food_core_strawberries",
+        "resolvedVia": "CTC_FOOD"
+      }
+    ]
+  },
+  "S16": {
+    "id": "meal_library_S16",
+    "name": "Everything-bagel cottage cheese rice cakes",
+    "ingredientLines": [
+      {
+        "line": "rice cakes 24 g",
+        "kind": "ingredient",
+        "wording": "rice cakes",
+        "quantity": 24,
+        "unit": "g",
+        "foodId": "food_core_rice_cakes",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "cottage cheese 2% 110 g",
+        "kind": "ingredient",
+        "wording": "cottage cheese 2%",
+        "quantity": 110,
+        "unit": "g",
+        "foodId": "food_core_cottage_cheese_2",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "cherry tomatoes 60 g",
+        "kind": "ingredient",
+        "wording": "cherry tomatoes",
+        "quantity": 60,
+        "unit": "g",
+        "foodId": "food_core_tomato",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "avocado 32 g",
+        "kind": "ingredient",
+        "wording": "avocado",
+        "quantity": 32,
+        "unit": "g",
+        "foodId": "food_core_avocado",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "everything bagel seasoning 2 g",
+        "kind": "ingredient",
+        "wording": "everything bagel seasoning",
+        "quantity": 2,
+        "unit": "g",
+        "foodId": "food_core_everything_bagel_seasoning",
+        "resolvedVia": "CTC_FOOD"
+      }
+    ]
+  },
+  "S17": {
+    "id": "meal_library_S17",
+    "name": "Mango, yogurt & cashews",
+    "ingredientLines": [
+      {
+        "line": "greek yogurt nonfat 130 g",
+        "kind": "ingredient",
+        "wording": "greek yogurt nonfat",
+        "quantity": 130,
+        "unit": "g",
+        "foodId": "food_core_fage_0_greek_yogurt",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "dried mango 16 g",
+        "kind": "ingredient",
+        "wording": "dried mango",
+        "quantity": 16,
+        "unit": "g",
+        "foodId": "food_core_dried_mango",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "cashews 15 g",
+        "kind": "ingredient",
+        "wording": "cashews",
+        "quantity": 15,
+        "unit": "g",
+        "foodId": "food_core_cashews",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "pineapple 60 g",
+        "kind": "ingredient",
+        "wording": "pineapple",
+        "quantity": 60,
+        "unit": "g",
+        "foodId": "food_core_pineapple",
+        "resolvedVia": "CTC_FOOD"
+      }
+    ]
+  },
+  "S18": {
+    "id": "meal_library_S18",
+    "name": "Edamame & apple",
+    "ingredientLines": [
+      {
+        "line": "shelled edamame frozen 130 g",
+        "kind": "ingredient",
+        "wording": "shelled edamame frozen",
+        "quantity": 130,
+        "unit": "g",
+        "foodId": "food_core_edamame_shelled",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "apple 110 g",
+        "kind": "ingredient",
+        "wording": "apple",
+        "quantity": 110,
+        "unit": "g",
+        "foodId": "food_core_apple",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "pretzels 5 g",
+        "kind": "ingredient",
+        "wording": "pretzels",
+        "quantity": 5,
+        "unit": "g",
+        "foodId": "food_core_pretzels",
+        "resolvedVia": "CTC_FOOD"
+      }
+    ]
+  },
+  "S19": {
+    "id": "meal_library_S19",
+    "name": "Berry smoothie in a thermos",
+    "ingredientLines": [
+      {
+        "line": "greek yogurt nonfat 90 g",
+        "kind": "ingredient",
+        "wording": "greek yogurt nonfat",
+        "quantity": 90,
+        "unit": "g",
+        "foodId": "food_core_fage_0_greek_yogurt",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "frozen mixed berries 122 g",
+        "kind": "ingredient",
+        "wording": "frozen mixed berries",
+        "quantity": 122,
+        "unit": "g",
+        "foodId": "food_core_frozen_mixed_berries",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "milk 2% 80 g",
+        "kind": "ingredient",
+        "wording": "milk 2%",
+        "quantity": 80,
+        "unit": "g",
+        "foodId": "food_core_milk_2",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "almond butter 8 g",
+        "kind": "ingredient",
+        "wording": "almond butter",
+        "quantity": 8,
+        "unit": "g",
+        "foodId": "food_core_almond_butter",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "rolled oats 10 g",
+        "kind": "ingredient",
+        "wording": "rolled oats",
+        "quantity": 10,
+        "unit": "g",
+        "foodId": "food_core_rolled_oats_dry",
+        "resolvedVia": "CTC_FOOD"
+      }
+    ]
+  },
+  "S20": {
+    "id": "meal_library_S20",
+    "name": "Stuffed dates & jerky",
+    "ingredientLines": [
+      {
+        "line": "medjool dates 30 g",
+        "kind": "ingredient",
+        "wording": "medjool dates",
+        "quantity": 30,
+        "unit": "g",
+        "foodId": "food_core_dates_medjool",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "peanut butter 12 g",
+        "kind": "ingredient",
+        "wording": "peanut butter",
+        "quantity": 12,
+        "unit": "g",
+        "foodId": "food_core_peanut_butter",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "turkey jerky 33 g",
+        "kind": "ingredient",
+        "wording": "turkey jerky",
+        "quantity": 33,
+        "unit": "g",
+        "foodId": "food_core_turkey_jerky",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "almonds 3 g",
+        "kind": "ingredient",
+        "wording": "almonds",
+        "quantity": 3,
+        "unit": "g",
+        "foodId": "food_core_almonds",
+        "resolvedVia": "CTC_FOOD"
+      }
+    ]
+  },
+  "S21": {
+    "id": "meal_library_S21",
+    "name": "Caprese plate",
+    "ingredientLines": [
+      {
+        "line": "fresh mozzarella 40 g",
+        "kind": "ingredient",
+        "wording": "fresh mozzarella",
+        "quantity": 40,
+        "unit": "g",
+        "foodId": "food_core_fresh_mozzarella",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "cherry tomatoes 100 g",
+        "kind": "ingredient",
+        "wording": "cherry tomatoes",
+        "quantity": 100,
+        "unit": "g",
+        "foodId": "food_core_tomato",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "sourdough 45 g",
+        "kind": "ingredient",
+        "wording": "sourdough",
+        "quantity": 45,
+        "unit": "g",
+        "foodId": "food_core_sourdough",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "deli turkey 20 g",
+        "kind": "ingredient",
+        "wording": "deli turkey",
+        "quantity": 20,
+        "unit": "g",
+        "foodId": "food_core_deli_turkey_low_sodium",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "balsamic glaze 5 g",
+        "kind": "ingredient",
+        "wording": "balsamic glaze",
+        "quantity": 5,
+        "unit": "g",
+        "foodId": "food_core_balsamic_glaze",
+        "resolvedVia": "CTC_FOOD"
+      }
+    ]
+  },
+  "S22": {
+    "id": "meal_library_S22",
+    "name": "Parmesan, turkey & pretzels",
+    "ingredientLines": [
+      {
+        "line": "parmesan snack cheese 21 g",
+        "kind": "ingredient",
+        "wording": "parmesan snack cheese",
+        "quantity": 21,
+        "unit": "g",
+        "foodId": "food_core_parmesan_snack_cheese",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "deli turkey 30 g",
+        "kind": "ingredient",
+        "wording": "deli turkey",
+        "quantity": 30,
+        "unit": "g",
+        "foodId": "food_core_deli_turkey_low_sodium",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "pretzels 22 g",
+        "kind": "ingredient",
+        "wording": "pretzels",
+        "quantity": 22,
+        "unit": "g",
+        "foodId": "food_core_pretzels",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "grapes 70 g",
+        "kind": "ingredient",
+        "wording": "grapes",
+        "quantity": 70,
+        "unit": "g",
+        "foodId": "food_core_grapes",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "baby carrots 60 g",
+        "kind": "ingredient",
+        "wording": "baby carrots",
+        "quantity": 60,
+        "unit": "g",
+        "foodId": "food_core_baby_carrots",
+        "resolvedVia": "CTC_FOOD"
+      }
+    ]
+  },
+  "S23": {
+    "id": "meal_library_S23",
+    "name": "Turkey stick, apple & crackers",
+    "ingredientLines": [
+      {
+        "line": "turkey snack stick 33 g",
+        "kind": "ingredient",
+        "wording": "turkey snack stick",
+        "quantity": 33,
+        "unit": "g",
+        "foodId": "food_core_turkey_snack_stick",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "whole-grain crackers 25 g",
+        "kind": "ingredient",
+        "wording": "whole-grain crackers",
+        "quantity": 25,
+        "unit": "g",
+        "foodId": "food_core_whole_grain_crackers",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "apple 120 g",
+        "kind": "ingredient",
+        "wording": "apple",
+        "quantity": 120,
+        "unit": "g",
+        "foodId": "food_core_apple",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "almonds 5 g",
+        "kind": "ingredient",
+        "wording": "almonds",
+        "quantity": 5,
+        "unit": "g",
+        "foodId": "food_core_almonds",
+        "resolvedVia": "CTC_FOOD"
+      }
+    ]
+  },
+  "S24": {
+    "id": "meal_library_S24",
+    "name": "Protein bar & apple",
+    "ingredientLines": [
+      {
+        "line": "protein bar high fibre 45 g",
+        "kind": "ingredient",
+        "wording": "protein bar high fibre",
+        "quantity": 45,
+        "unit": "g",
+        "foodId": "food_core_protein_bar_high_fibre",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "apple 130 g",
+        "kind": "ingredient",
+        "wording": "apple",
+        "quantity": 130,
+        "unit": "g",
+        "foodId": "food_core_apple",
+        "resolvedVia": "CTC_FOOD"
+      }
+    ]
+  },
+  "S25": {
+    "id": "meal_library_S25",
+    "name": "Peanut butter power balls",
+    "ingredientLines": [
+      {
+        "line": "rolled oats 32 g",
+        "kind": "ingredient",
+        "wording": "rolled oats",
+        "quantity": 32,
+        "unit": "g",
+        "foodId": "food_core_rolled_oats_dry",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "peanut butter 10 g",
+        "kind": "ingredient",
+        "wording": "peanut butter",
+        "quantity": 10,
+        "unit": "g",
+        "foodId": "food_core_peanut_butter",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "honey 10 g",
+        "kind": "ingredient",
+        "wording": "honey",
+        "quantity": 10,
+        "unit": "g",
+        "foodId": "food_core_honey",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "protein powder 12 g",
+        "kind": "ingredient",
+        "wording": "protein powder",
+        "quantity": 12,
+        "unit": "g",
+        "foodId": "food_core_protein_powder",
+        "resolvedVia": "CTC_FOOD"
+      }
+    ]
+  },
+  "D1": {
+    "id": "meal_library_D1",
+    "name": "Honey-Garlic Salmon, Jasmine Rice, Broccolini",
+    "ingredientLines": [
+      {
+        "line": "salmon 128 g",
+        "kind": "ingredient",
+        "wording": "salmon",
+        "quantity": 128,
+        "unit": "g",
+        "foodId": "food_core_salmon_raw",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "jasmine rice dry 70 g",
+        "kind": "ingredient",
+        "wording": "jasmine rice dry",
+        "quantity": 70,
+        "unit": "g",
+        "foodId": "food_core_jasmine_rice_dry",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "broccolini 150 g",
+        "kind": "ingredient",
+        "wording": "broccolini",
+        "quantity": 150,
+        "unit": "g",
+        "foodId": "food_core_broccolini",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "olive oil 5 g",
+        "kind": "ingredient",
+        "wording": "olive oil",
+        "quantity": 5,
+        "unit": "g",
+        "foodId": "food_core_olive_oil",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "honey 15 g",
+        "kind": "ingredient",
+        "wording": "honey",
+        "quantity": 15,
+        "unit": "g",
+        "foodId": "food_core_honey",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "soy sauce low sodium 15 g",
+        "kind": "ingredient",
+        "wording": "soy sauce low sodium",
+        "quantity": 15,
+        "unit": "g",
+        "foodId": "food_core_soy_sauce",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "garlic 6 g",
+        "kind": "ingredient",
+        "wording": "garlic",
+        "quantity": 6,
+        "unit": "g",
+        "foodId": "food_core_garlic",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "edamame frozen 70 g",
+        "kind": "ingredient",
+        "wording": "edamame frozen",
+        "quantity": 70,
+        "unit": "g",
+        "foodId": "food_core_edamame_shelled",
+        "resolvedVia": "CTC_FOOD"
+      }
+    ]
+  },
+  "D2": {
+    "id": "meal_library_D2",
+    "name": "Blackstone Smash Burgers + Griddled Wedges",
+    "ingredientLines": [
+      {
+        "line": "ground beef 90/10 119 g",
+        "kind": "ingredient",
+        "wording": "ground beef 90/10",
+        "quantity": 119,
+        "unit": "g",
+        "foodId": "food_core_ground_beef_90_10",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "burger bun 60 g",
+        "kind": "ingredient",
+        "wording": "burger bun",
+        "quantity": 60,
+        "unit": "g",
+        "foodId": "food_core_burger_bun",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "american cheese 15 g",
+        "kind": "ingredient",
+        "wording": "american cheese",
+        "quantity": 15,
+        "unit": "g",
+        "foodId": "food_core_american_cheese",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "potato 230 g",
+        "kind": "ingredient",
+        "wording": "potato",
+        "quantity": 230,
+        "unit": "g",
+        "foodId": "food_core_potato_raw",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "olive oil 5 g",
+        "kind": "ingredient",
+        "wording": "olive oil",
+        "quantity": 5,
+        "unit": "g",
+        "foodId": "food_core_olive_oil",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "ketchup 15 g",
+        "kind": "ingredient",
+        "wording": "ketchup",
+        "quantity": 15,
+        "unit": "g",
+        "foodId": "food_core_ketchup",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "onion 30 g",
+        "kind": "ingredient",
+        "wording": "onion",
+        "quantity": 30,
+        "unit": "g",
+        "foodId": "food_core_onion",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "romaine 25 g",
+        "kind": "ingredient",
+        "wording": "romaine",
+        "quantity": 25,
+        "unit": "g",
+        "foodId": "food_core_romaine",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "cherry tomatoes 40 g",
+        "kind": "ingredient",
+        "wording": "cherry tomatoes",
+        "quantity": 40,
+        "unit": "g",
+        "foodId": "food_core_tomato",
+        "resolvedVia": "CTC_FOOD"
+      }
+    ]
+  },
+  "D3": {
+    "id": "meal_library_D3",
+    "name": "Pineapple Chicken Stir Fry + Jasmine Rice",
+    "ingredientLines": [
+      {
+        "line": "chicken breast 118 g",
+        "kind": "ingredient",
+        "wording": "chicken breast",
+        "quantity": 118,
+        "unit": "g",
+        "foodId": "food_core_chicken_breast_raw",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "jasmine rice dry 45 g",
+        "kind": "ingredient",
+        "wording": "jasmine rice dry",
+        "quantity": 45,
+        "unit": "g",
+        "foodId": "food_core_jasmine_rice_dry",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "pineapple 90 g",
+        "kind": "ingredient",
+        "wording": "pineapple",
+        "quantity": 90,
+        "unit": "g",
+        "foodId": "food_core_pineapple",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "bell pepper 80 g",
+        "kind": "ingredient",
+        "wording": "bell pepper",
+        "quantity": 80,
+        "unit": "g",
+        "foodId": "food_core_bell_pepper",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "sugar snap peas 60 g",
+        "kind": "ingredient",
+        "wording": "sugar snap peas",
+        "quantity": 60,
+        "unit": "g",
+        "foodId": "food_core_sugar_snap_peas",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "red onion 40 g",
+        "kind": "ingredient",
+        "wording": "red onion",
+        "quantity": 40,
+        "unit": "g",
+        "foodId": "food_core_onion",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "cashews 22 g",
+        "kind": "ingredient",
+        "wording": "cashews",
+        "quantity": 22,
+        "unit": "g",
+        "foodId": "food_core_cashews",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "soy sauce low sodium 20 g",
+        "kind": "ingredient",
+        "wording": "soy sauce low sodium",
+        "quantity": 20,
+        "unit": "g",
+        "foodId": "food_core_soy_sauce",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "honey 10 g",
+        "kind": "ingredient",
+        "wording": "honey",
+        "quantity": 10,
+        "unit": "g",
+        "foodId": "food_core_honey",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "sesame oil 9 g",
+        "kind": "ingredient",
+        "wording": "sesame oil",
+        "quantity": 9,
+        "unit": "g",
+        "foodId": "food_core_sesame_oil",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "cornstarch 4 g",
+        "kind": "ingredient",
+        "wording": "cornstarch",
+        "quantity": 4,
+        "unit": "g",
+        "foodId": "food_core_cornstarch",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "garlic 6 g",
+        "kind": "ingredient",
+        "wording": "garlic",
+        "quantity": 6,
+        "unit": "g",
+        "foodId": "food_core_garlic",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "ginger 5 g",
+        "kind": "ingredient",
+        "wording": "ginger",
+        "quantity": 5,
+        "unit": "g",
+        "foodId": "food_core_ginger",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "broccoli 100 g",
+        "kind": "ingredient",
+        "wording": "broccoli",
+        "quantity": 100,
+        "unit": "g",
+        "foodId": "food_core_broccoli_raw",
+        "resolvedVia": "CTC_FOOD"
+      }
+    ]
+  },
+  "D4": {
+    "id": "meal_library_D4",
+    "name": "Chicken Souvlaki + Greek Lemon Potatoes",
+    "ingredientLines": [
+      {
+        "line": "chicken breast 118 g",
+        "kind": "ingredient",
+        "wording": "chicken breast",
+        "quantity": 118,
+        "unit": "g",
+        "foodId": "food_core_chicken_breast_raw",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "potato 400 g",
+        "kind": "ingredient",
+        "wording": "potato",
+        "quantity": 400,
+        "unit": "g",
+        "foodId": "food_core_potato_raw",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "olive oil 14 g",
+        "kind": "ingredient",
+        "wording": "olive oil",
+        "quantity": 14,
+        "unit": "g",
+        "foodId": "food_core_olive_oil",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "tzatziki 60 g",
+        "kind": "ingredient",
+        "wording": "tzatziki",
+        "quantity": 60,
+        "unit": "g",
+        "foodId": "food_core_tzatziki",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "cucumber 60 g",
+        "kind": "ingredient",
+        "wording": "cucumber",
+        "quantity": 60,
+        "unit": "g",
+        "foodId": "food_core_cucumber",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "cherry tomatoes 60 g",
+        "kind": "ingredient",
+        "wording": "cherry tomatoes",
+        "quantity": 60,
+        "unit": "g",
+        "foodId": "food_core_tomato",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "lemon juice 20 g",
+        "kind": "ingredient",
+        "wording": "lemon juice",
+        "quantity": 20,
+        "unit": "g",
+        "foodId": "food_core_lemon_juice",
+        "resolvedVia": "CTC_FOOD"
+      }
+    ]
+  },
+  "D5": {
+    "id": "meal_library_D5",
+    "name": "Blackstone Breakfast-for-Dinner",
+    "ingredientLines": [
+      {
+        "line": "egg 100 g",
+        "kind": "ingredient",
+        "wording": "egg",
+        "quantity": 100,
+        "unit": "g",
+        "foodId": "food_core_egg_whole",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "liquid egg white 42 g",
+        "kind": "ingredient",
+        "wording": "liquid egg white",
+        "quantity": 42,
+        "unit": "g",
+        "foodId": "food_core_egg_white",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "turkey bacon 30 g",
+        "kind": "ingredient",
+        "wording": "turkey bacon",
+        "quantity": 30,
+        "unit": "g",
+        "foodId": "food_core_turkey_bacon",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "sourdough 100 g",
+        "kind": "ingredient",
+        "wording": "sourdough",
+        "quantity": 100,
+        "unit": "g",
+        "foodId": "food_core_sourdough",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "butter 4 g",
+        "kind": "ingredient",
+        "wording": "butter",
+        "quantity": 4,
+        "unit": "g",
+        "foodId": "food_core_butter",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "frozen hash browns 150 g",
+        "kind": "ingredient",
+        "wording": "frozen hash browns",
+        "quantity": 150,
+        "unit": "g",
+        "foodId": "food_core_frozen_hash_browns",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "spinach 100 g",
+        "kind": "ingredient",
+        "wording": "spinach",
+        "quantity": 100,
+        "unit": "g",
+        "foodId": "food_core_spinach",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "cherry tomatoes 120 g",
+        "kind": "ingredient",
+        "wording": "cherry tomatoes",
+        "quantity": 120,
+        "unit": "g",
+        "foodId": "food_core_tomato",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "black beans canned 45 g",
+        "kind": "ingredient",
+        "wording": "black beans canned",
+        "quantity": 45,
+        "unit": "g",
+        "foodId": "food_core_black_beans_canned_drained",
+        "resolvedVia": "CTC_FOOD"
+      }
+    ]
+  },
+  "D6": {
+    "id": "meal_library_D6",
+    "name": "Ground Turkey Taco Skillet + Rice",
+    "ingredientLines": [
+      {
+        "line": "ground turkey 93/7 109 g",
+        "kind": "ingredient",
+        "wording": "ground turkey 93/7",
+        "quantity": 109,
+        "unit": "g",
+        "foodId": "food_core_ground_turkey_93_7",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "white rice dry 65 g",
+        "kind": "ingredient",
+        "wording": "white rice dry",
+        "quantity": 65,
+        "unit": "g",
+        "foodId": "food_core_white_rice_dry",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "black beans canned 80 g",
+        "kind": "ingredient",
+        "wording": "black beans canned",
+        "quantity": 80,
+        "unit": "g",
+        "foodId": "food_core_black_beans_canned_drained",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "bell pepper 60 g",
+        "kind": "ingredient",
+        "wording": "bell pepper",
+        "quantity": 60,
+        "unit": "g",
+        "foodId": "food_core_bell_pepper",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "onion 40 g",
+        "kind": "ingredient",
+        "wording": "onion",
+        "quantity": 40,
+        "unit": "g",
+        "foodId": "food_core_onion",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "olive oil 4 g",
+        "kind": "ingredient",
+        "wording": "olive oil",
+        "quantity": 4,
+        "unit": "g",
+        "foodId": "food_core_olive_oil",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "salsa 50 g",
+        "kind": "ingredient",
+        "wording": "salsa",
+        "quantity": 50,
+        "unit": "g",
+        "foodId": "food_core_salsa",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "cheddar 12 g",
+        "kind": "ingredient",
+        "wording": "cheddar",
+        "quantity": 12,
+        "unit": "g",
+        "foodId": "food_core_cheddar",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "avocado 45 g",
+        "kind": "ingredient",
+        "wording": "avocado",
+        "quantity": 45,
+        "unit": "g",
+        "foodId": "food_core_avocado",
+        "resolvedVia": "CTC_FOOD"
+      }
+    ]
+  },
+  "D7": {
+    "id": "meal_library_D7",
+    "name": "Garlic-Parm Chicken & Crispy Potatoes",
+    "ingredientLines": [
+      {
+        "line": "chicken breast 97 g",
+        "kind": "ingredient",
+        "wording": "chicken breast",
+        "quantity": 97,
+        "unit": "g",
+        "foodId": "food_core_chicken_breast_raw",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "potato 290 g",
+        "kind": "ingredient",
+        "wording": "potato",
+        "quantity": 290,
+        "unit": "g",
+        "foodId": "food_core_potato_raw",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "olive oil 9 g",
+        "kind": "ingredient",
+        "wording": "olive oil",
+        "quantity": 9,
+        "unit": "g",
+        "foodId": "food_core_olive_oil",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "milk 2% 40 g",
+        "kind": "ingredient",
+        "wording": "milk 2%",
+        "quantity": 40,
+        "unit": "g",
+        "foodId": "food_core_milk_2",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "light cream cheese 25 g",
+        "kind": "ingredient",
+        "wording": "light cream cheese",
+        "quantity": 25,
+        "unit": "g",
+        "foodId": "food_core_light_cream_cheese",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "parmesan 12 g",
+        "kind": "ingredient",
+        "wording": "parmesan",
+        "quantity": 12,
+        "unit": "g",
+        "foodId": "food_core_parmesan",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "mozzarella 15 g",
+        "kind": "ingredient",
+        "wording": "mozzarella",
+        "quantity": 15,
+        "unit": "g",
+        "foodId": "food_core_mozzarella_part_skim",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "garlic 8 g",
+        "kind": "ingredient",
+        "wording": "garlic",
+        "quantity": 8,
+        "unit": "g",
+        "foodId": "food_core_garlic",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "broccoli 100 g",
+        "kind": "ingredient",
+        "wording": "broccoli",
+        "quantity": 100,
+        "unit": "g",
+        "foodId": "food_core_broccoli_raw",
+        "resolvedVia": "CTC_FOOD"
+      }
+    ]
+  },
+  "D8": {
+    "id": "meal_library_D8",
+    "name": "Shrimp Fajita Bowls + Cilantro-Lime Rice",
+    "ingredientLines": [
+      {
+        "line": "shrimp 140 g",
+        "kind": "ingredient",
+        "wording": "shrimp",
+        "quantity": 140,
+        "unit": "g",
+        "foodId": "food_core_shrimp_raw",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "white rice dry 75 g",
+        "kind": "ingredient",
+        "wording": "white rice dry",
+        "quantity": 75,
+        "unit": "g",
+        "foodId": "food_core_white_rice_dry",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "bell pepper 90 g",
+        "kind": "ingredient",
+        "wording": "bell pepper",
+        "quantity": 90,
+        "unit": "g",
+        "foodId": "food_core_bell_pepper",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "onion 50 g",
+        "kind": "ingredient",
+        "wording": "onion",
+        "quantity": 50,
+        "unit": "g",
+        "foodId": "food_core_onion",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "olive oil 8 g",
+        "kind": "ingredient",
+        "wording": "olive oil",
+        "quantity": 8,
+        "unit": "g",
+        "foodId": "food_core_olive_oil",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "avocado 45 g",
+        "kind": "ingredient",
+        "wording": "avocado",
+        "quantity": 45,
+        "unit": "g",
+        "foodId": "food_core_avocado",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "pico de gallo 50 g",
+        "kind": "ingredient",
+        "wording": "pico de gallo",
+        "quantity": 50,
+        "unit": "g",
+        "foodId": "food_core_salsa",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "cheddar 12 g",
+        "kind": "ingredient",
+        "wording": "cheddar",
+        "quantity": 12,
+        "unit": "g",
+        "foodId": "food_core_cheddar",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "lime juice 10 g",
+        "kind": "ingredient",
+        "wording": "lime juice",
+        "quantity": 10,
+        "unit": "g",
+        "foodId": "food_core_lime_juice",
+        "resolvedVia": "CTC_FOOD"
+      }
+    ]
+  },
+  "D9": {
+    "id": "meal_library_D9",
+    "name": "Ground Turkey Bolognese over Rigatoni",
+    "ingredientLines": [
+      {
+        "line": "ground turkey 93/7 100 g",
+        "kind": "ingredient",
+        "wording": "ground turkey 93/7",
+        "quantity": 100,
+        "unit": "g",
+        "foodId": "food_core_ground_turkey_93_7",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "rigatoni dry 70 g",
+        "kind": "ingredient",
+        "wording": "rigatoni dry",
+        "quantity": 70,
+        "unit": "g",
+        "foodId": "food_core_pasta_dry",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "crushed tomatoes 150 g",
+        "kind": "ingredient",
+        "wording": "crushed tomatoes",
+        "quantity": 150,
+        "unit": "g",
+        "foodId": "food_core_crushed_tomatoes",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "tomato paste 20 g",
+        "kind": "ingredient",
+        "wording": "tomato paste",
+        "quantity": 20,
+        "unit": "g",
+        "foodId": "food_core_tomato_paste",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "onion 40 g",
+        "kind": "ingredient",
+        "wording": "onion",
+        "quantity": 40,
+        "unit": "g",
+        "foodId": "food_core_onion",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "carrot 40 g",
+        "kind": "ingredient",
+        "wording": "carrot",
+        "quantity": 40,
+        "unit": "g",
+        "foodId": "food_core_carrot",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "celery 30 g",
+        "kind": "ingredient",
+        "wording": "celery",
+        "quantity": 30,
+        "unit": "g",
+        "foodId": "food_core_celery",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "olive oil 7 g",
+        "kind": "ingredient",
+        "wording": "olive oil",
+        "quantity": 7,
+        "unit": "g",
+        "foodId": "food_core_olive_oil",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "parmesan 12 g",
+        "kind": "ingredient",
+        "wording": "parmesan",
+        "quantity": 12,
+        "unit": "g",
+        "foodId": "food_core_parmesan",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "milk 2% 30 g",
+        "kind": "ingredient",
+        "wording": "milk 2%",
+        "quantity": 30,
+        "unit": "g",
+        "foodId": "food_core_milk_2",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "garlic 6 g",
+        "kind": "ingredient",
+        "wording": "garlic",
+        "quantity": 6,
+        "unit": "g",
+        "foodId": "food_core_garlic",
+        "resolvedVia": "CTC_FOOD"
+      }
+    ]
+  },
+  "D10": {
+    "id": "meal_library_D10",
+    "name": "Honey-Garlic Chicken Thighs + Sweet Potato",
+    "ingredientLines": [
+      {
+        "line": "chicken thigh 155 g",
+        "kind": "ingredient",
+        "wording": "chicken thigh",
+        "quantity": 155,
+        "unit": "g",
+        "foodId": "food_core_chicken_thigh_raw",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "sweet potato 280 g",
+        "kind": "ingredient",
+        "wording": "sweet potato",
+        "quantity": 280,
+        "unit": "g",
+        "foodId": "food_core_sweet_potato_raw",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "green beans 130 g",
+        "kind": "ingredient",
+        "wording": "green beans",
+        "quantity": 130,
+        "unit": "g",
+        "foodId": "food_core_green_beans",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "olive oil 9 g",
+        "kind": "ingredient",
+        "wording": "olive oil",
+        "quantity": 9,
+        "unit": "g",
+        "foodId": "food_core_olive_oil",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "honey 15 g",
+        "kind": "ingredient",
+        "wording": "honey",
+        "quantity": 15,
+        "unit": "g",
+        "foodId": "food_core_honey",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "soy sauce low sodium 12 g",
+        "kind": "ingredient",
+        "wording": "soy sauce low sodium",
+        "quantity": 12,
+        "unit": "g",
+        "foodId": "food_core_soy_sauce",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "garlic 8 g",
+        "kind": "ingredient",
+        "wording": "garlic",
+        "quantity": 8,
+        "unit": "g",
+        "foodId": "food_core_garlic",
+        "resolvedVia": "CTC_FOOD"
+      }
+    ]
+  },
+  "D11": {
+    "id": "meal_library_D11",
+    "name": "Blackstone Steak & Loaded Baked Potato",
+    "ingredientLines": [
+      {
+        "line": "sirloin steak 85 g",
+        "kind": "ingredient",
+        "wording": "sirloin steak",
+        "quantity": 85,
+        "unit": "g",
+        "foodId": "food_core_sirloin_steak_raw",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "potato 380 g",
+        "kind": "ingredient",
+        "wording": "potato",
+        "quantity": 380,
+        "unit": "g",
+        "foodId": "food_core_potato_raw",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "butter 6 g",
+        "kind": "ingredient",
+        "wording": "butter",
+        "quantity": 6,
+        "unit": "g",
+        "foodId": "food_core_butter",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "greek yogurt nonfat 40 g",
+        "kind": "ingredient",
+        "wording": "greek yogurt nonfat",
+        "quantity": 40,
+        "unit": "g",
+        "foodId": "food_core_fage_0_greek_yogurt",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "cheddar 18 g",
+        "kind": "ingredient",
+        "wording": "cheddar",
+        "quantity": 18,
+        "unit": "g",
+        "foodId": "food_core_cheddar",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "scallions 10 g",
+        "kind": "ingredient",
+        "wording": "scallions",
+        "quantity": 10,
+        "unit": "g",
+        "foodId": "food_core_scallions",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "olive oil 4 g",
+        "kind": "ingredient",
+        "wording": "olive oil",
+        "quantity": 4,
+        "unit": "g",
+        "foodId": "food_core_olive_oil",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "broccoli 120 g",
+        "kind": "ingredient",
+        "wording": "broccoli",
+        "quantity": 120,
+        "unit": "g",
+        "foodId": "food_core_broccoli_raw",
+        "resolvedVia": "CTC_FOOD"
+      }
+    ]
+  },
+  "D12": {
+    "id": "meal_library_D12",
+    "name": "Spicy Salmon Rice Bowls with Cucumber",
+    "ingredientLines": [
+      {
+        "line": "salmon 112 g",
+        "kind": "ingredient",
+        "wording": "salmon",
+        "quantity": 112,
+        "unit": "g",
+        "foodId": "food_core_salmon_raw",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "jasmine rice dry 80 g",
+        "kind": "ingredient",
+        "wording": "jasmine rice dry",
+        "quantity": 80,
+        "unit": "g",
+        "foodId": "food_core_jasmine_rice_dry",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "cucumber 100 g",
+        "kind": "ingredient",
+        "wording": "cucumber",
+        "quantity": 100,
+        "unit": "g",
+        "foodId": "food_core_cucumber",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "avocado 25 g",
+        "kind": "ingredient",
+        "wording": "avocado",
+        "quantity": 25,
+        "unit": "g",
+        "foodId": "food_core_avocado",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "edamame frozen 50 g",
+        "kind": "ingredient",
+        "wording": "edamame frozen",
+        "quantity": 50,
+        "unit": "g",
+        "foodId": "food_core_edamame_shelled",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "mayonnaise 4 g",
+        "kind": "ingredient",
+        "wording": "mayonnaise",
+        "quantity": 4,
+        "unit": "g",
+        "foodId": "food_core_mayonnaise",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "sriracha 10 g",
+        "kind": "ingredient",
+        "wording": "sriracha",
+        "quantity": 10,
+        "unit": "g",
+        "foodId": "food_core_sriracha",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "soy sauce low sodium 12 g",
+        "kind": "ingredient",
+        "wording": "soy sauce low sodium",
+        "quantity": 12,
+        "unit": "g",
+        "foodId": "food_core_soy_sauce",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "sesame seeds 3 g",
+        "kind": "ingredient",
+        "wording": "sesame seeds",
+        "quantity": 3,
+        "unit": "g",
+        "foodId": "food_core_sesame_seeds",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "scallions 10 g",
+        "kind": "ingredient",
+        "wording": "scallions",
+        "quantity": 10,
+        "unit": "g",
+        "foodId": "food_core_scallions",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "cabbage slaw mix 100 g",
+        "kind": "ingredient",
+        "wording": "cabbage slaw mix",
+        "quantity": 100,
+        "unit": "g",
+        "foodId": "food_core_cabbage_slaw_mix",
+        "resolvedVia": "CTC_FOOD"
+      }
+    ]
+  },
+  "D13": {
+    "id": "meal_library_D13",
+    "name": "Turkey Smash Burger Tacos + Street-Corn Rice",
+    "ingredientLines": [
+      {
+        "line": "ground turkey 93/7 110 g",
+        "kind": "ingredient",
+        "wording": "ground turkey 93/7",
+        "quantity": 110,
+        "unit": "g",
+        "foodId": "food_core_ground_turkey_93_7",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "corn tortillas 78 g",
+        "kind": "ingredient",
+        "wording": "corn tortillas",
+        "quantity": 78,
+        "unit": "g",
+        "foodId": "food_core_tortilla_corn",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "american cheese 15 g",
+        "kind": "ingredient",
+        "wording": "american cheese",
+        "quantity": 15,
+        "unit": "g",
+        "foodId": "food_core_american_cheese",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "white rice dry 33 g",
+        "kind": "ingredient",
+        "wording": "white rice dry",
+        "quantity": 33,
+        "unit": "g",
+        "foodId": "food_core_white_rice_dry",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "corn frozen 60 g",
+        "kind": "ingredient",
+        "wording": "corn frozen",
+        "quantity": 60,
+        "unit": "g",
+        "foodId": "food_core_corn",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "cotija 12 g",
+        "kind": "ingredient",
+        "wording": "cotija",
+        "quantity": 12,
+        "unit": "g",
+        "foodId": "food_core_cotija",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "greek yogurt nonfat 30 g",
+        "kind": "ingredient",
+        "wording": "greek yogurt nonfat",
+        "quantity": 30,
+        "unit": "g",
+        "foodId": "food_core_fage_0_greek_yogurt",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "mayonnaise 4 g",
+        "kind": "ingredient",
+        "wording": "mayonnaise",
+        "quantity": 4,
+        "unit": "g",
+        "foodId": "food_core_mayonnaise",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "onion 25 g",
+        "kind": "ingredient",
+        "wording": "onion",
+        "quantity": 25,
+        "unit": "g",
+        "foodId": "food_core_onion",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "lime juice 8 g",
+        "kind": "ingredient",
+        "wording": "lime juice",
+        "quantity": 8,
+        "unit": "g",
+        "foodId": "food_core_lime_juice",
+        "resolvedVia": "CTC_FOOD"
+      }
+    ]
+  },
+  "D14": {
+    "id": "meal_library_D14",
+    "name": "Pesto Chicken Pasta",
+    "ingredientLines": [
+      {
+        "line": "chicken breast 80 g",
+        "kind": "ingredient",
+        "wording": "chicken breast",
+        "quantity": 80,
+        "unit": "g",
+        "foodId": "food_core_chicken_breast_raw",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "pasta dry 92 g",
+        "kind": "ingredient",
+        "wording": "pasta dry",
+        "quantity": 92,
+        "unit": "g",
+        "foodId": "food_core_pasta_dry",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "pesto 20 g",
+        "kind": "ingredient",
+        "wording": "pesto",
+        "quantity": 20,
+        "unit": "g",
+        "foodId": "food_core_pesto",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "cherry tomatoes 110 g",
+        "kind": "ingredient",
+        "wording": "cherry tomatoes",
+        "quantity": 110,
+        "unit": "g",
+        "foodId": "food_core_tomato",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "parmesan 12 g",
+        "kind": "ingredient",
+        "wording": "parmesan",
+        "quantity": 12,
+        "unit": "g",
+        "foodId": "food_core_parmesan",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "greek yogurt nonfat 30 g",
+        "kind": "ingredient",
+        "wording": "greek yogurt nonfat",
+        "quantity": 30,
+        "unit": "g",
+        "foodId": "food_core_fage_0_greek_yogurt",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "olive oil 6 g",
+        "kind": "ingredient",
+        "wording": "olive oil",
+        "quantity": 6,
+        "unit": "g",
+        "foodId": "food_core_olive_oil",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "garlic 6 g",
+        "kind": "ingredient",
+        "wording": "garlic",
+        "quantity": 6,
+        "unit": "g",
+        "foodId": "food_core_garlic",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "broccoli 150 g",
+        "kind": "ingredient",
+        "wording": "broccoli",
+        "quantity": 150,
+        "unit": "g",
+        "foodId": "food_core_broccoli_raw",
+        "resolvedVia": "CTC_FOOD"
+      }
+    ]
+  },
+  "D15": {
+    "id": "meal_library_D15",
+    "name": "Ground Turkey Pasta Bake",
+    "ingredientLines": [
+      {
+        "line": "ground turkey 93/7 85 g",
+        "kind": "ingredient",
+        "wording": "ground turkey 93/7",
+        "quantity": 85,
+        "unit": "g",
+        "foodId": "food_core_ground_turkey_93_7",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "pasta dry 75 g",
+        "kind": "ingredient",
+        "wording": "pasta dry",
+        "quantity": 75,
+        "unit": "g",
+        "foodId": "food_core_pasta_dry",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "marinara 130 g",
+        "kind": "ingredient",
+        "wording": "marinara",
+        "quantity": 130,
+        "unit": "g",
+        "foodId": "food_core_marinara_sauce",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "cottage cheese 2% 40 g",
+        "kind": "ingredient",
+        "wording": "cottage cheese 2%",
+        "quantity": 40,
+        "unit": "g",
+        "foodId": "food_core_cottage_cheese_2",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "zucchini 80 g",
+        "kind": "ingredient",
+        "wording": "zucchini",
+        "quantity": 80,
+        "unit": "g",
+        "foodId": "food_core_zucchini",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "broccoli 80 g",
+        "kind": "ingredient",
+        "wording": "broccoli",
+        "quantity": 80,
+        "unit": "g",
+        "foodId": "food_core_broccoli_raw",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "mozzarella 20 g",
+        "kind": "ingredient",
+        "wording": "mozzarella",
+        "quantity": 20,
+        "unit": "g",
+        "foodId": "food_core_mozzarella_part_skim",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "olive oil 6 g",
+        "kind": "ingredient",
+        "wording": "olive oil",
+        "quantity": 6,
+        "unit": "g",
+        "foodId": "food_core_olive_oil",
+        "resolvedVia": "CTC_FOOD"
+      }
+    ]
+  },
+  "D16": {
+    "id": "meal_library_D16",
+    "name": "Buffalo Chicken & Sweet Potato Bowl",
+    "ingredientLines": [
+      {
+        "line": "chicken breast 110 g",
+        "kind": "ingredient",
+        "wording": "chicken breast",
+        "quantity": 110,
+        "unit": "g",
+        "foodId": "food_core_chicken_breast_raw",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "sweet potato 250 g",
+        "kind": "ingredient",
+        "wording": "sweet potato",
+        "quantity": 250,
+        "unit": "g",
+        "foodId": "food_core_sweet_potato_raw",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "white rice dry 28 g",
+        "kind": "ingredient",
+        "wording": "white rice dry",
+        "quantity": 28,
+        "unit": "g",
+        "foodId": "food_core_white_rice_dry",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "buffalo sauce 30 g",
+        "kind": "ingredient",
+        "wording": "buffalo sauce",
+        "quantity": 30,
+        "unit": "g",
+        "foodId": "food_core_buffalo_sauce",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "greek yogurt nonfat 45 g",
+        "kind": "ingredient",
+        "wording": "greek yogurt nonfat",
+        "quantity": 45,
+        "unit": "g",
+        "foodId": "food_core_fage_0_greek_yogurt",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "blue cheese 18 g",
+        "kind": "ingredient",
+        "wording": "blue cheese",
+        "quantity": 18,
+        "unit": "g",
+        "foodId": "food_core_blue_cheese",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "olive oil 11 g",
+        "kind": "ingredient",
+        "wording": "olive oil",
+        "quantity": 11,
+        "unit": "g",
+        "foodId": "food_core_olive_oil",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "celery 40 g",
+        "kind": "ingredient",
+        "wording": "celery",
+        "quantity": 40,
+        "unit": "g",
+        "foodId": "food_core_celery",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "carrot 40 g",
+        "kind": "ingredient",
+        "wording": "carrot",
+        "quantity": 40,
+        "unit": "g",
+        "foodId": "food_core_carrot",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "scallions 10 g",
+        "kind": "ingredient",
+        "wording": "scallions",
+        "quantity": 10,
+        "unit": "g",
+        "foodId": "food_core_scallions",
+        "resolvedVia": "CTC_FOOD"
+      }
+    ]
+  },
+  "D17": {
+    "id": "meal_library_D17",
+    "name": "Sheet-Pan Chicken Fajitas + Tortillas & Rice",
+    "ingredientLines": [
+      {
+        "line": "chicken breast 99 g",
+        "kind": "ingredient",
+        "wording": "chicken breast",
+        "quantity": 99,
+        "unit": "g",
+        "foodId": "food_core_chicken_breast_raw",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "corn tortillas 52 g",
+        "kind": "ingredient",
+        "wording": "corn tortillas",
+        "quantity": 52,
+        "unit": "g",
+        "foodId": "food_core_tortilla_corn",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "white rice dry 50 g",
+        "kind": "ingredient",
+        "wording": "white rice dry",
+        "quantity": 50,
+        "unit": "g",
+        "foodId": "food_core_white_rice_dry",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "bell pepper 100 g",
+        "kind": "ingredient",
+        "wording": "bell pepper",
+        "quantity": 100,
+        "unit": "g",
+        "foodId": "food_core_bell_pepper",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "onion 60 g",
+        "kind": "ingredient",
+        "wording": "onion",
+        "quantity": 60,
+        "unit": "g",
+        "foodId": "food_core_onion",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "olive oil 7 g",
+        "kind": "ingredient",
+        "wording": "olive oil",
+        "quantity": 7,
+        "unit": "g",
+        "foodId": "food_core_olive_oil",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "pico de gallo 50 g",
+        "kind": "ingredient",
+        "wording": "pico de gallo",
+        "quantity": 50,
+        "unit": "g",
+        "foodId": "food_core_salsa",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "avocado 51 g",
+        "kind": "ingredient",
+        "wording": "avocado",
+        "quantity": 51,
+        "unit": "g",
+        "foodId": "food_core_avocado",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "cheddar 10 g",
+        "kind": "ingredient",
+        "wording": "cheddar",
+        "quantity": 10,
+        "unit": "g",
+        "foodId": "food_core_cheddar",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "greek yogurt nonfat 30 g",
+        "kind": "ingredient",
+        "wording": "greek yogurt nonfat",
+        "quantity": 30,
+        "unit": "g",
+        "foodId": "food_core_fage_0_greek_yogurt",
+        "resolvedVia": "CTC_FOOD"
+      }
+    ]
+  },
+  "D18": {
+    "id": "meal_library_D18",
+    "name": "Teriyaki Salmon & Broccoli Rice Bowl",
+    "ingredientLines": [
+      {
+        "line": "salmon 124 g",
+        "kind": "ingredient",
+        "wording": "salmon",
+        "quantity": 124,
+        "unit": "g",
+        "foodId": "food_core_salmon_raw",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "jasmine rice dry 58 g",
+        "kind": "ingredient",
+        "wording": "jasmine rice dry",
+        "quantity": 58,
+        "unit": "g",
+        "foodId": "food_core_jasmine_rice_dry",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "broccoli 150 g",
+        "kind": "ingredient",
+        "wording": "broccoli",
+        "quantity": 150,
+        "unit": "g",
+        "foodId": "food_core_broccoli_raw",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "soy sauce low sodium 25 g",
+        "kind": "ingredient",
+        "wording": "soy sauce low sodium",
+        "quantity": 25,
+        "unit": "g",
+        "foodId": "food_core_soy_sauce",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "honey 16 g",
+        "kind": "ingredient",
+        "wording": "honey",
+        "quantity": 16,
+        "unit": "g",
+        "foodId": "food_core_honey",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "ginger 6 g",
+        "kind": "ingredient",
+        "wording": "ginger",
+        "quantity": 6,
+        "unit": "g",
+        "foodId": "food_core_ginger",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "garlic 6 g",
+        "kind": "ingredient",
+        "wording": "garlic",
+        "quantity": 6,
+        "unit": "g",
+        "foodId": "food_core_garlic",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "cornstarch 5 g",
+        "kind": "ingredient",
+        "wording": "cornstarch",
+        "quantity": 5,
+        "unit": "g",
+        "foodId": "food_core_cornstarch",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "sesame oil 4 g",
+        "kind": "ingredient",
+        "wording": "sesame oil",
+        "quantity": 4,
+        "unit": "g",
+        "foodId": "food_core_sesame_oil",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "sesame seeds 4 g",
+        "kind": "ingredient",
+        "wording": "sesame seeds",
+        "quantity": 4,
+        "unit": "g",
+        "foodId": "food_core_sesame_seeds",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "scallions 10 g",
+        "kind": "ingredient",
+        "wording": "scallions",
+        "quantity": 10,
+        "unit": "g",
+        "foodId": "food_core_scallions",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "edamame frozen 70 g",
+        "kind": "ingredient",
+        "wording": "edamame frozen",
+        "quantity": 70,
+        "unit": "g",
+        "foodId": "food_core_edamame_shelled",
+        "resolvedVia": "CTC_FOOD"
+      }
+    ]
+  },
+  "D19": {
+    "id": "meal_library_D19",
+    "name": "Chicken Parmesan with Spaghetti",
+    "ingredientLines": [
+      {
+        "line": "chicken breast 70 g",
+        "kind": "ingredient",
+        "wording": "chicken breast",
+        "quantity": 70,
+        "unit": "g",
+        "foodId": "food_core_chicken_breast_raw",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "panko 16 g",
+        "kind": "ingredient",
+        "wording": "panko",
+        "quantity": 16,
+        "unit": "g",
+        "foodId": "food_core_panko_breadcrumbs",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "egg 15 g",
+        "kind": "ingredient",
+        "wording": "egg",
+        "quantity": 15,
+        "unit": "g",
+        "foodId": "food_core_egg_whole",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "spaghetti dry 72 g",
+        "kind": "ingredient",
+        "wording": "spaghetti dry",
+        "quantity": 72,
+        "unit": "g",
+        "foodId": "food_core_pasta_dry",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "marinara 130 g",
+        "kind": "ingredient",
+        "wording": "marinara",
+        "quantity": 130,
+        "unit": "g",
+        "foodId": "food_core_marinara_sauce",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "mozzarella 20 g",
+        "kind": "ingredient",
+        "wording": "mozzarella",
+        "quantity": 20,
+        "unit": "g",
+        "foodId": "food_core_mozzarella_part_skim",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "parmesan 8 g",
+        "kind": "ingredient",
+        "wording": "parmesan",
+        "quantity": 8,
+        "unit": "g",
+        "foodId": "food_core_parmesan",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "olive oil 8 g",
+        "kind": "ingredient",
+        "wording": "olive oil",
+        "quantity": 8,
+        "unit": "g",
+        "foodId": "food_core_olive_oil",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "broccoli 150 g",
+        "kind": "ingredient",
+        "wording": "broccoli",
+        "quantity": 150,
+        "unit": "g",
+        "foodId": "food_core_broccoli_raw",
+        "resolvedVia": "CTC_FOOD"
+      }
+    ]
+  },
+  "D20": {
+    "id": "meal_library_D20",
+    "name": "Blackstone Chicken Quesadillas + Mexican Rice",
+    "ingredientLines": [
+      {
+        "line": "chicken breast 75 g",
+        "kind": "ingredient",
+        "wording": "chicken breast",
+        "quantity": 75,
+        "unit": "g",
+        "foodId": "food_core_chicken_breast_raw",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "flour tortillas 90 g",
+        "kind": "ingredient",
+        "wording": "flour tortillas",
+        "quantity": 90,
+        "unit": "g",
+        "foodId": "food_core_tortilla_large_flour",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "cheddar 20 g",
+        "kind": "ingredient",
+        "wording": "cheddar",
+        "quantity": 20,
+        "unit": "g",
+        "foodId": "food_core_cheddar",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "white rice dry 28 g",
+        "kind": "ingredient",
+        "wording": "white rice dry",
+        "quantity": 28,
+        "unit": "g",
+        "foodId": "food_core_white_rice_dry",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "crushed tomatoes 40 g",
+        "kind": "ingredient",
+        "wording": "crushed tomatoes",
+        "quantity": 40,
+        "unit": "g",
+        "foodId": "food_core_crushed_tomatoes",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "onion 30 g",
+        "kind": "ingredient",
+        "wording": "onion",
+        "quantity": 30,
+        "unit": "g",
+        "foodId": "food_core_onion",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "bell pepper 50 g",
+        "kind": "ingredient",
+        "wording": "bell pepper",
+        "quantity": 50,
+        "unit": "g",
+        "foodId": "food_core_bell_pepper",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "olive oil 4 g",
+        "kind": "ingredient",
+        "wording": "olive oil",
+        "quantity": 4,
+        "unit": "g",
+        "foodId": "food_core_olive_oil",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "greek yogurt nonfat 40 g",
+        "kind": "ingredient",
+        "wording": "greek yogurt nonfat",
+        "quantity": 40,
+        "unit": "g",
+        "foodId": "food_core_fage_0_greek_yogurt",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "pico de gallo 40 g",
+        "kind": "ingredient",
+        "wording": "pico de gallo",
+        "quantity": 40,
+        "unit": "g",
+        "foodId": "food_core_salsa",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "black beans canned 50 g",
+        "kind": "ingredient",
+        "wording": "black beans canned",
+        "quantity": 50,
+        "unit": "g",
+        "foodId": "food_core_black_beans_canned_drained",
+        "resolvedVia": "CTC_FOOD"
+      }
+    ]
+  },
+  "D21": {
+    "id": "meal_library_D21",
+    "name": "Shrimp Scampi with Linguine",
+    "ingredientLines": [
+      {
+        "line": "shrimp 100 g",
+        "kind": "ingredient",
+        "wording": "shrimp",
+        "quantity": 100,
+        "unit": "g",
+        "foodId": "food_core_shrimp_raw",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "linguine dry 92 g",
+        "kind": "ingredient",
+        "wording": "linguine dry",
+        "quantity": 92,
+        "unit": "g",
+        "foodId": "food_core_pasta_dry",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "butter 8 g",
+        "kind": "ingredient",
+        "wording": "butter",
+        "quantity": 8,
+        "unit": "g",
+        "foodId": "food_core_butter",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "olive oil 11 g",
+        "kind": "ingredient",
+        "wording": "olive oil",
+        "quantity": 11,
+        "unit": "g",
+        "foodId": "food_core_olive_oil",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "garlic 10 g",
+        "kind": "ingredient",
+        "wording": "garlic",
+        "quantity": 10,
+        "unit": "g",
+        "foodId": "food_core_garlic",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "white wine 30 g",
+        "kind": "ingredient",
+        "wording": "white wine",
+        "quantity": 30,
+        "unit": "g",
+        "foodId": "food_core_white_wine",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "lemon juice 15 g",
+        "kind": "ingredient",
+        "wording": "lemon juice",
+        "quantity": 15,
+        "unit": "g",
+        "foodId": "food_core_lemon_juice",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "parmesan 10 g",
+        "kind": "ingredient",
+        "wording": "parmesan",
+        "quantity": 10,
+        "unit": "g",
+        "foodId": "food_core_parmesan",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "cherry tomatoes 80 g",
+        "kind": "ingredient",
+        "wording": "cherry tomatoes",
+        "quantity": 80,
+        "unit": "g",
+        "foodId": "food_core_tomato",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "spinach 40 g",
+        "kind": "ingredient",
+        "wording": "spinach",
+        "quantity": 40,
+        "unit": "g",
+        "foodId": "food_core_spinach",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "broccolini 150 g",
+        "kind": "ingredient",
+        "wording": "broccolini",
+        "quantity": 150,
+        "unit": "g",
+        "foodId": "food_core_broccolini",
+        "resolvedVia": "CTC_FOOD"
+      }
+    ]
+  },
+  "D22": {
+    "id": "meal_library_D22",
+    "name": "Turkey Sloppy Joes with Oven Fries",
+    "ingredientLines": [
+      {
+        "line": "ground turkey 93/7 124 g",
+        "kind": "ingredient",
+        "wording": "ground turkey 93/7",
+        "quantity": 124,
+        "unit": "g",
+        "foodId": "food_core_ground_turkey_93_7",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "burger bun 60 g",
+        "kind": "ingredient",
+        "wording": "burger bun",
+        "quantity": 60,
+        "unit": "g",
+        "foodId": "food_core_burger_bun",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "ketchup 30 g",
+        "kind": "ingredient",
+        "wording": "ketchup",
+        "quantity": 30,
+        "unit": "g",
+        "foodId": "food_core_ketchup",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "tomato paste 15 g",
+        "kind": "ingredient",
+        "wording": "tomato paste",
+        "quantity": 15,
+        "unit": "g",
+        "foodId": "food_core_tomato_paste",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "brown sugar 6 g",
+        "kind": "ingredient",
+        "wording": "brown sugar",
+        "quantity": 6,
+        "unit": "g",
+        "foodId": "food_core_brown_sugar",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "onion 40 g",
+        "kind": "ingredient",
+        "wording": "onion",
+        "quantity": 40,
+        "unit": "g",
+        "foodId": "food_core_onion",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "bell pepper 40 g",
+        "kind": "ingredient",
+        "wording": "bell pepper",
+        "quantity": 40,
+        "unit": "g",
+        "foodId": "food_core_bell_pepper",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "potato 175 g",
+        "kind": "ingredient",
+        "wording": "potato",
+        "quantity": 175,
+        "unit": "g",
+        "foodId": "food_core_potato_raw",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "olive oil 7 g",
+        "kind": "ingredient",
+        "wording": "olive oil",
+        "quantity": 7,
+        "unit": "g",
+        "foodId": "food_core_olive_oil",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "cheddar 12 g",
+        "kind": "ingredient",
+        "wording": "cheddar",
+        "quantity": 12,
+        "unit": "g",
+        "foodId": "food_core_cheddar",
+        "resolvedVia": "CTC_FOOD"
+      }
+    ]
+  },
+  "D23": {
+    "id": "meal_library_D23",
+    "name": "Beef & Broccoli Stir Fry with Rice",
+    "ingredientLines": [
+      {
+        "line": "sirloin steak 107 g",
+        "kind": "ingredient",
+        "wording": "sirloin steak",
+        "quantity": 107,
+        "unit": "g",
+        "foodId": "food_core_sirloin_steak_raw",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "jasmine rice dry 54 g",
+        "kind": "ingredient",
+        "wording": "jasmine rice dry",
+        "quantity": 54,
+        "unit": "g",
+        "foodId": "food_core_jasmine_rice_dry",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "broccoli 180 g",
+        "kind": "ingredient",
+        "wording": "broccoli",
+        "quantity": 180,
+        "unit": "g",
+        "foodId": "food_core_broccoli_raw",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "soy sauce low sodium 25 g",
+        "kind": "ingredient",
+        "wording": "soy sauce low sodium",
+        "quantity": 25,
+        "unit": "g",
+        "foodId": "food_core_soy_sauce",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "oyster sauce 20 g",
+        "kind": "ingredient",
+        "wording": "oyster sauce",
+        "quantity": 20,
+        "unit": "g",
+        "foodId": "food_core_oyster_sauce",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "honey 10 g",
+        "kind": "ingredient",
+        "wording": "honey",
+        "quantity": 10,
+        "unit": "g",
+        "foodId": "food_core_honey",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "cornstarch 6 g",
+        "kind": "ingredient",
+        "wording": "cornstarch",
+        "quantity": 6,
+        "unit": "g",
+        "foodId": "food_core_cornstarch",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "sesame oil 9 g",
+        "kind": "ingredient",
+        "wording": "sesame oil",
+        "quantity": 9,
+        "unit": "g",
+        "foodId": "food_core_sesame_oil",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "cashews 12 g",
+        "kind": "ingredient",
+        "wording": "cashews",
+        "quantity": 12,
+        "unit": "g",
+        "foodId": "food_core_cashews",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "garlic 8 g",
+        "kind": "ingredient",
+        "wording": "garlic",
+        "quantity": 8,
+        "unit": "g",
+        "foodId": "food_core_garlic",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "ginger 6 g",
+        "kind": "ingredient",
+        "wording": "ginger",
+        "quantity": 6,
+        "unit": "g",
+        "foodId": "food_core_ginger",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "scallions 15 g",
+        "kind": "ingredient",
+        "wording": "scallions",
+        "quantity": 15,
+        "unit": "g",
+        "foodId": "food_core_scallions",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "sugar snap peas 80 g",
+        "kind": "ingredient",
+        "wording": "sugar snap peas",
+        "quantity": 80,
+        "unit": "g",
+        "foodId": "food_core_sugar_snap_peas",
+        "resolvedVia": "CTC_FOOD"
+      }
+    ]
+  },
+  "D24": {
+    "id": "meal_library_D24",
+    "name": "Garlic Butter Steak Bites & Crispy Potatoes",
+    "ingredientLines": [
+      {
+        "line": "sirloin steak 108 g",
+        "kind": "ingredient",
+        "wording": "sirloin steak",
+        "quantity": 108,
+        "unit": "g",
+        "foodId": "food_core_sirloin_steak_raw",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "potato 375 g",
+        "kind": "ingredient",
+        "wording": "potato",
+        "quantity": 375,
+        "unit": "g",
+        "foodId": "food_core_potato_raw",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "butter 8 g",
+        "kind": "ingredient",
+        "wording": "butter",
+        "quantity": 8,
+        "unit": "g",
+        "foodId": "food_core_butter",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "olive oil 6 g",
+        "kind": "ingredient",
+        "wording": "olive oil",
+        "quantity": 6,
+        "unit": "g",
+        "foodId": "food_core_olive_oil",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "garlic 12 g",
+        "kind": "ingredient",
+        "wording": "garlic",
+        "quantity": 12,
+        "unit": "g",
+        "foodId": "food_core_garlic",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "parmesan 10 g",
+        "kind": "ingredient",
+        "wording": "parmesan",
+        "quantity": 10,
+        "unit": "g",
+        "foodId": "food_core_parmesan",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "green beans 130 g",
+        "kind": "ingredient",
+        "wording": "green beans",
+        "quantity": 130,
+        "unit": "g",
+        "foodId": "food_core_green_beans",
+        "resolvedVia": "CTC_FOOD"
+      }
+    ]
+  },
+  "D25": {
+    "id": "meal_library_D25",
+    "name": "Blackstone Philly Cheesesteak + Oven Fries",
+    "ingredientLines": [
+      {
+        "line": "sirloin steak 96 g",
+        "kind": "ingredient",
+        "wording": "sirloin steak",
+        "quantity": 96,
+        "unit": "g",
+        "foodId": "food_core_sirloin_steak_raw",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "hoagie roll 100 g",
+        "kind": "ingredient",
+        "wording": "hoagie roll",
+        "quantity": 100,
+        "unit": "g",
+        "foodId": "food_core_hoagie_roll",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "provolone 18 g",
+        "kind": "ingredient",
+        "wording": "provolone",
+        "quantity": 18,
+        "unit": "g",
+        "foodId": "food_core_provolone",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "green bell pepper 80 g",
+        "kind": "ingredient",
+        "wording": "green bell pepper",
+        "quantity": 80,
+        "unit": "g",
+        "foodId": "food_core_bell_pepper",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "onion 80 g",
+        "kind": "ingredient",
+        "wording": "onion",
+        "quantity": 80,
+        "unit": "g",
+        "foodId": "food_core_onion",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "olive oil 10 g",
+        "kind": "ingredient",
+        "wording": "olive oil",
+        "quantity": 10,
+        "unit": "g",
+        "foodId": "food_core_olive_oil",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "potato 90 g",
+        "kind": "ingredient",
+        "wording": "potato",
+        "quantity": 90,
+        "unit": "g",
+        "foodId": "food_core_potato_raw",
+        "resolvedVia": "CTC_FOOD"
+      }
+    ]
+  },
+  "D26": {
+    "id": "meal_library_D26",
+    "name": "French Onion Smothered Chicken + Garlic Mash",
+    "ingredientLines": [
+      {
+        "line": "chicken breast 89 g",
+        "kind": "ingredient",
+        "wording": "chicken breast",
+        "quantity": 89,
+        "unit": "g",
+        "foodId": "food_core_chicken_breast_raw",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "potato 275 g",
+        "kind": "ingredient",
+        "wording": "potato",
+        "quantity": 275,
+        "unit": "g",
+        "foodId": "food_core_potato_raw",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "onion 150 g",
+        "kind": "ingredient",
+        "wording": "onion",
+        "quantity": 150,
+        "unit": "g",
+        "foodId": "food_core_onion",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "gruyere 15 g",
+        "kind": "ingredient",
+        "wording": "gruyere",
+        "quantity": 15,
+        "unit": "g",
+        "foodId": "food_core_gruyere",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "butter 12 g",
+        "kind": "ingredient",
+        "wording": "butter",
+        "quantity": 12,
+        "unit": "g",
+        "foodId": "food_core_butter",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "olive oil 4 g",
+        "kind": "ingredient",
+        "wording": "olive oil",
+        "quantity": 4,
+        "unit": "g",
+        "foodId": "food_core_olive_oil",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "all-purpose flour 4 g",
+        "kind": "ingredient",
+        "wording": "all-purpose flour",
+        "quantity": 4,
+        "unit": "g",
+        "foodId": "food_core_all_purpose_flour",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "chicken stock 100 g",
+        "kind": "ingredient",
+        "wording": "chicken stock",
+        "quantity": 100,
+        "unit": "g",
+        "foodId": "food_core_chicken_stock",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "milk 2% 50 g",
+        "kind": "ingredient",
+        "wording": "milk 2%",
+        "quantity": 50,
+        "unit": "g",
+        "foodId": "food_core_milk_2",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "garlic 6 g",
+        "kind": "ingredient",
+        "wording": "garlic",
+        "quantity": 6,
+        "unit": "g",
+        "foodId": "food_core_garlic",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "green beans 150 g",
+        "kind": "ingredient",
+        "wording": "green beans",
+        "quantity": 150,
+        "unit": "g",
+        "foodId": "food_core_green_beans",
+        "resolvedVia": "CTC_FOOD"
+      }
+    ]
+  },
+  "L22": {
+    "id": "meal_library_L22",
+    "name": "Chicken Caesar Pasta Salad",
+    "ingredientLines": [
+      {
+        "line": "chicken breast 88 g",
+        "kind": "ingredient",
+        "wording": "chicken breast",
+        "quantity": 88,
+        "unit": "g",
+        "foodId": "food_core_chicken_breast_raw",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "pasta dry 68 g",
+        "kind": "ingredient",
+        "wording": "pasta dry",
+        "quantity": 68,
+        "unit": "g",
+        "foodId": "food_core_pasta_dry",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "greek yogurt nonfat 60 g",
+        "kind": "ingredient",
+        "wording": "greek yogurt nonfat",
+        "quantity": 60,
+        "unit": "g",
+        "foodId": "food_core_fage_0_greek_yogurt",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "parmesan 16 g",
+        "kind": "ingredient",
+        "wording": "parmesan",
+        "quantity": 16,
+        "unit": "g",
+        "foodId": "food_core_parmesan",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "dijon mustard 8 g",
+        "kind": "ingredient",
+        "wording": "dijon mustard",
+        "quantity": 8,
+        "unit": "g",
+        "foodId": "food_core_dijon_mustard",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "lemon juice 12 g",
+        "kind": "ingredient",
+        "wording": "lemon juice",
+        "quantity": 12,
+        "unit": "g",
+        "foodId": "food_core_lemon_juice",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "olive oil 7 g",
+        "kind": "ingredient",
+        "wording": "olive oil",
+        "quantity": 7,
+        "unit": "g",
+        "foodId": "food_core_olive_oil",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "kale 45 g",
+        "kind": "ingredient",
+        "wording": "kale",
+        "quantity": 45,
+        "unit": "g",
+        "foodId": "food_core_kale",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "romaine 35 g",
+        "kind": "ingredient",
+        "wording": "romaine",
+        "quantity": 35,
+        "unit": "g",
+        "foodId": "food_core_romaine",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "cherry tomatoes 70 g",
+        "kind": "ingredient",
+        "wording": "cherry tomatoes",
+        "quantity": 70,
+        "unit": "g",
+        "foodId": "food_core_tomato",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "croutons 14 g",
+        "kind": "ingredient",
+        "wording": "croutons",
+        "quantity": 14,
+        "unit": "g",
+        "foodId": "food_core_croutons",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "chickpeas canned 60 g",
+        "kind": "ingredient",
+        "wording": "chickpeas canned",
+        "quantity": 60,
+        "unit": "g",
+        "foodId": "food_core_chickpeas_canned_drained",
+        "resolvedVia": "CTC_FOOD"
+      }
+    ]
+  },
+  "D27": {
+    "id": "meal_library_D27",
+    "name": "Chicken Gnocchi Soup",
+    "ingredientLines": [
+      {
+        "line": "chicken breast 60 g",
+        "kind": "ingredient",
+        "wording": "chicken breast",
+        "quantity": 60,
+        "unit": "g",
+        "foodId": "food_core_chicken_breast_raw",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "potato gnocchi 125 g",
+        "kind": "ingredient",
+        "wording": "potato gnocchi",
+        "quantity": 125,
+        "unit": "g",
+        "foodId": "food_core_potato_gnocchi",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "sourdough 30 g",
+        "kind": "ingredient",
+        "wording": "sourdough",
+        "quantity": 30,
+        "unit": "g",
+        "foodId": "food_core_sourdough",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "milk 2% 90 g",
+        "kind": "ingredient",
+        "wording": "milk 2%",
+        "quantity": 90,
+        "unit": "g",
+        "foodId": "food_core_milk_2",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "light cream cheese 22 g",
+        "kind": "ingredient",
+        "wording": "light cream cheese",
+        "quantity": 22,
+        "unit": "g",
+        "foodId": "food_core_light_cream_cheese",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "parmesan 8 g",
+        "kind": "ingredient",
+        "wording": "parmesan",
+        "quantity": 8,
+        "unit": "g",
+        "foodId": "food_core_parmesan",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "chicken stock 240 g",
+        "kind": "ingredient",
+        "wording": "chicken stock",
+        "quantity": 240,
+        "unit": "g",
+        "foodId": "food_core_chicken_stock",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "all-purpose flour 7 g",
+        "kind": "ingredient",
+        "wording": "all-purpose flour",
+        "quantity": 7,
+        "unit": "g",
+        "foodId": "food_core_all_purpose_flour",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "carrot 50 g",
+        "kind": "ingredient",
+        "wording": "carrot",
+        "quantity": 50,
+        "unit": "g",
+        "foodId": "food_core_carrot",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "celery 30 g",
+        "kind": "ingredient",
+        "wording": "celery",
+        "quantity": 30,
+        "unit": "g",
+        "foodId": "food_core_celery",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "onion 40 g",
+        "kind": "ingredient",
+        "wording": "onion",
+        "quantity": 40,
+        "unit": "g",
+        "foodId": "food_core_onion",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "spinach 40 g",
+        "kind": "ingredient",
+        "wording": "spinach",
+        "quantity": 40,
+        "unit": "g",
+        "foodId": "food_core_spinach",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "olive oil 6 g",
+        "kind": "ingredient",
+        "wording": "olive oil",
+        "quantity": 6,
+        "unit": "g",
+        "foodId": "food_core_olive_oil",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "butter 4 g",
+        "kind": "ingredient",
+        "wording": "butter",
+        "quantity": 4,
+        "unit": "g",
+        "foodId": "food_core_butter",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "kale 60 g",
+        "kind": "ingredient",
+        "wording": "kale",
+        "quantity": 60,
+        "unit": "g",
+        "foodId": "food_core_kale",
+        "resolvedVia": "CTC_FOOD"
+      }
+    ]
+  },
+  "D28": {
+    "id": "meal_library_D28",
+    "name": "Honey-Garlic Chicken & Peanut Noodles",
+    "ingredientLines": [
+      {
+        "line": "chicken breast 95 g",
+        "kind": "ingredient",
+        "wording": "chicken breast",
+        "quantity": 95,
+        "unit": "g",
+        "foodId": "food_core_chicken_breast_raw",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "rice noodles dry 58 g",
+        "kind": "ingredient",
+        "wording": "rice noodles dry",
+        "quantity": 58,
+        "unit": "g",
+        "foodId": "food_core_rice_noodles_dry",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "peanut butter 20 g",
+        "kind": "ingredient",
+        "wording": "peanut butter",
+        "quantity": 20,
+        "unit": "g",
+        "foodId": "food_core_peanut_butter",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "soy sauce low sodium 22 g",
+        "kind": "ingredient",
+        "wording": "soy sauce low sodium",
+        "quantity": 22,
+        "unit": "g",
+        "foodId": "food_core_soy_sauce",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "honey 12 g",
+        "kind": "ingredient",
+        "wording": "honey",
+        "quantity": 12,
+        "unit": "g",
+        "foodId": "food_core_honey",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "rice vinegar 8 g",
+        "kind": "ingredient",
+        "wording": "rice vinegar",
+        "quantity": 8,
+        "unit": "g",
+        "foodId": "food_core_rice_vinegar",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "sesame oil 4 g",
+        "kind": "ingredient",
+        "wording": "sesame oil",
+        "quantity": 4,
+        "unit": "g",
+        "foodId": "food_core_sesame_oil",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "ginger 6 g",
+        "kind": "ingredient",
+        "wording": "ginger",
+        "quantity": 6,
+        "unit": "g",
+        "foodId": "food_core_ginger",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "garlic 8 g",
+        "kind": "ingredient",
+        "wording": "garlic",
+        "quantity": 8,
+        "unit": "g",
+        "foodId": "food_core_garlic",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "sriracha 8 g",
+        "kind": "ingredient",
+        "wording": "sriracha",
+        "quantity": 8,
+        "unit": "g",
+        "foodId": "food_core_sriracha",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "broccoli 120 g",
+        "kind": "ingredient",
+        "wording": "broccoli",
+        "quantity": 120,
+        "unit": "g",
+        "foodId": "food_core_broccoli_raw",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "carrot 50 g",
+        "kind": "ingredient",
+        "wording": "carrot",
+        "quantity": 50,
+        "unit": "g",
+        "foodId": "food_core_carrot",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "scallions 15 g",
+        "kind": "ingredient",
+        "wording": "scallions",
+        "quantity": 15,
+        "unit": "g",
+        "foodId": "food_core_scallions",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "peanuts 6 g",
+        "kind": "ingredient",
+        "wording": "peanuts",
+        "quantity": 6,
+        "unit": "g",
+        "foodId": "food_core_peanuts",
+        "resolvedVia": "CTC_FOOD"
+      }
+    ]
+  },
+  "D29": {
+    "id": "meal_library_D29",
+    "name": "Mexican Street Corn Chicken & Rice",
+    "ingredientLines": [
+      {
+        "line": "chicken breast 100 g",
+        "kind": "ingredient",
+        "wording": "chicken breast",
+        "quantity": 100,
+        "unit": "g",
+        "foodId": "food_core_chicken_breast_raw",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "white rice dry 64 g",
+        "kind": "ingredient",
+        "wording": "white rice dry",
+        "quantity": 64,
+        "unit": "g",
+        "foodId": "food_core_white_rice_dry",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "corn frozen 90 g",
+        "kind": "ingredient",
+        "wording": "corn frozen",
+        "quantity": 90,
+        "unit": "g",
+        "foodId": "food_core_corn",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "cotija 16 g",
+        "kind": "ingredient",
+        "wording": "cotija",
+        "quantity": 16,
+        "unit": "g",
+        "foodId": "food_core_cotija",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "greek yogurt nonfat 40 g",
+        "kind": "ingredient",
+        "wording": "greek yogurt nonfat",
+        "quantity": 40,
+        "unit": "g",
+        "foodId": "food_core_fage_0_greek_yogurt",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "mayonnaise 8 g",
+        "kind": "ingredient",
+        "wording": "mayonnaise",
+        "quantity": 8,
+        "unit": "g",
+        "foodId": "food_core_mayonnaise",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "lime juice 10 g",
+        "kind": "ingredient",
+        "wording": "lime juice",
+        "quantity": 10,
+        "unit": "g",
+        "foodId": "food_core_lime_juice",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "bell pepper 60 g",
+        "kind": "ingredient",
+        "wording": "bell pepper",
+        "quantity": 60,
+        "unit": "g",
+        "foodId": "food_core_bell_pepper",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "onion 35 g",
+        "kind": "ingredient",
+        "wording": "onion",
+        "quantity": 35,
+        "unit": "g",
+        "foodId": "food_core_onion",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "olive oil 9 g",
+        "kind": "ingredient",
+        "wording": "olive oil",
+        "quantity": 9,
+        "unit": "g",
+        "foodId": "food_core_olive_oil",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "black beans canned 55 g",
+        "kind": "ingredient",
+        "wording": "black beans canned",
+        "quantity": 55,
+        "unit": "g",
+        "foodId": "food_core_black_beans_canned_drained",
+        "resolvedVia": "CTC_FOOD"
+      }
+    ]
+  },
+  "L24": {
+    "id": "meal_library_L24",
+    "name": "Street Corn Chicken Bowl",
+    "ingredientLines": [
+      {
+        "line": "chicken breast 110 g",
+        "kind": "ingredient",
+        "wording": "chicken breast",
+        "quantity": 110,
+        "unit": "g",
+        "foodId": "food_core_chicken_breast_raw",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "white rice dry 46 g",
+        "kind": "ingredient",
+        "wording": "white rice dry",
+        "quantity": 46,
+        "unit": "g",
+        "foodId": "food_core_white_rice_dry",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "corn frozen 80 g",
+        "kind": "ingredient",
+        "wording": "corn frozen",
+        "quantity": 80,
+        "unit": "g",
+        "foodId": "food_core_corn",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "cotija 12 g",
+        "kind": "ingredient",
+        "wording": "cotija",
+        "quantity": 12,
+        "unit": "g",
+        "foodId": "food_core_cotija",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "greek yogurt nonfat 45 g",
+        "kind": "ingredient",
+        "wording": "greek yogurt nonfat",
+        "quantity": 45,
+        "unit": "g",
+        "foodId": "food_core_fage_0_greek_yogurt",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "mayonnaise 4 g",
+        "kind": "ingredient",
+        "wording": "mayonnaise",
+        "quantity": 4,
+        "unit": "g",
+        "foodId": "food_core_mayonnaise",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "lime juice 10 g",
+        "kind": "ingredient",
+        "wording": "lime juice",
+        "quantity": 10,
+        "unit": "g",
+        "foodId": "food_core_lime_juice",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "bell pepper 60 g",
+        "kind": "ingredient",
+        "wording": "bell pepper",
+        "quantity": 60,
+        "unit": "g",
+        "foodId": "food_core_bell_pepper",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "onion 30 g",
+        "kind": "ingredient",
+        "wording": "onion",
+        "quantity": 30,
+        "unit": "g",
+        "foodId": "food_core_onion",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "olive oil 5 g",
+        "kind": "ingredient",
+        "wording": "olive oil",
+        "quantity": 5,
+        "unit": "g",
+        "foodId": "food_core_olive_oil",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "black beans canned 40 g",
+        "kind": "ingredient",
+        "wording": "black beans canned",
+        "quantity": 40,
+        "unit": "g",
+        "foodId": "food_core_black_beans_canned_drained",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "avocado 25 g",
+        "kind": "ingredient",
+        "wording": "avocado",
+        "quantity": 25,
+        "unit": "g",
+        "foodId": "food_core_avocado",
+        "resolvedVia": "CTC_FOOD"
+      }
+    ]
+  },
+  "L25": {
+    "id": "meal_library_L25",
+    "name": "Sweet Chilli Chicken Crispy Rice Salad",
+    "ingredientLines": [
+      {
+        "line": "chicken breast 125 g",
+        "kind": "ingredient",
+        "wording": "chicken breast",
+        "quantity": 125,
+        "unit": "g",
+        "foodId": "food_core_chicken_breast_raw",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "white rice dry 40 g",
+        "kind": "ingredient",
+        "wording": "white rice dry",
+        "quantity": 40,
+        "unit": "g",
+        "foodId": "food_core_white_rice_dry",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "sweet chilli sauce 25 g",
+        "kind": "ingredient",
+        "wording": "sweet chilli sauce",
+        "quantity": 25,
+        "unit": "g",
+        "foodId": "food_core_sweet_chilli_sauce",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "soy sauce low sodium 10 g",
+        "kind": "ingredient",
+        "wording": "soy sauce low sodium",
+        "quantity": 10,
+        "unit": "g",
+        "foodId": "food_core_soy_sauce",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "rice vinegar 8 g",
+        "kind": "ingredient",
+        "wording": "rice vinegar",
+        "quantity": 8,
+        "unit": "g",
+        "foodId": "food_core_rice_vinegar",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "sesame oil 5 g",
+        "kind": "ingredient",
+        "wording": "sesame oil",
+        "quantity": 5,
+        "unit": "g",
+        "foodId": "food_core_sesame_oil",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "cabbage slaw mix 80 g",
+        "kind": "ingredient",
+        "wording": "cabbage slaw mix",
+        "quantity": 80,
+        "unit": "g",
+        "foodId": "food_core_cabbage_slaw_mix",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "carrot 50 g",
+        "kind": "ingredient",
+        "wording": "carrot",
+        "quantity": 50,
+        "unit": "g",
+        "foodId": "food_core_carrot",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "cucumber 60 g",
+        "kind": "ingredient",
+        "wording": "cucumber",
+        "quantity": 60,
+        "unit": "g",
+        "foodId": "food_core_cucumber",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "shelled edamame frozen 60 g",
+        "kind": "ingredient",
+        "wording": "shelled edamame frozen",
+        "quantity": 60,
+        "unit": "g",
+        "foodId": "food_core_edamame_shelled",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "peanuts 10 g",
+        "kind": "ingredient",
+        "wording": "peanuts",
+        "quantity": 10,
+        "unit": "g",
+        "foodId": "food_core_peanuts",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "scallions 12 g",
+        "kind": "ingredient",
+        "wording": "scallions",
+        "quantity": 12,
+        "unit": "g",
+        "foodId": "food_core_scallions",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "mayonnaise 5 g",
+        "kind": "ingredient",
+        "wording": "mayonnaise",
+        "quantity": 5,
+        "unit": "g",
+        "foodId": "food_core_mayonnaise",
+        "resolvedVia": "CTC_FOOD"
+      }
+    ]
+  },
+  "L26": {
+    "id": "meal_library_L26",
+    "name": "Southwest Chicken Salad + Sourdough",
+    "ingredientLines": [
+      {
+        "line": "chicken breast 78 g",
+        "kind": "ingredient",
+        "wording": "chicken breast",
+        "quantity": 78,
+        "unit": "g",
+        "foodId": "food_core_chicken_breast_raw",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "black beans canned 90 g",
+        "kind": "ingredient",
+        "wording": "black beans canned",
+        "quantity": 90,
+        "unit": "g",
+        "foodId": "food_core_black_beans_canned_drained",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "corn frozen 70 g",
+        "kind": "ingredient",
+        "wording": "corn frozen",
+        "quantity": 70,
+        "unit": "g",
+        "foodId": "food_core_corn",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "cherry tomatoes 80 g",
+        "kind": "ingredient",
+        "wording": "cherry tomatoes",
+        "quantity": 80,
+        "unit": "g",
+        "foodId": "food_core_tomato",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "bell pepper 60 g",
+        "kind": "ingredient",
+        "wording": "bell pepper",
+        "quantity": 60,
+        "unit": "g",
+        "foodId": "food_core_bell_pepper",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "red onion 25 g",
+        "kind": "ingredient",
+        "wording": "red onion",
+        "quantity": 25,
+        "unit": "g",
+        "foodId": "food_core_onion",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "greek yogurt nonfat 60 g",
+        "kind": "ingredient",
+        "wording": "greek yogurt nonfat",
+        "quantity": 60,
+        "unit": "g",
+        "foodId": "food_core_fage_0_greek_yogurt",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "mayonnaise 8 g",
+        "kind": "ingredient",
+        "wording": "mayonnaise",
+        "quantity": 8,
+        "unit": "g",
+        "foodId": "food_core_mayonnaise",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "lime juice 12 g",
+        "kind": "ingredient",
+        "wording": "lime juice",
+        "quantity": 12,
+        "unit": "g",
+        "foodId": "food_core_lime_juice",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "olive oil 4 g",
+        "kind": "ingredient",
+        "wording": "olive oil",
+        "quantity": 4,
+        "unit": "g",
+        "foodId": "food_core_olive_oil",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "cheddar 12 g",
+        "kind": "ingredient",
+        "wording": "cheddar",
+        "quantity": 12,
+        "unit": "g",
+        "foodId": "food_core_cheddar",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "sourdough 80 g",
+        "kind": "ingredient",
+        "wording": "sourdough",
+        "quantity": 80,
+        "unit": "g",
+        "foodId": "food_core_sourdough",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "cilantro",
+        "kind": "garnish",
+        "foodId": "food_core_cilantro",
+        "resolvedVia": "CTC_FOOD"
+      }
+    ]
+  },
+  "L27": {
+    "id": "meal_library_L27",
+    "name": "Crockpot Chicken Enchilada Bowl",
+    "ingredientLines": [
+      {
+        "line": "chicken breast 100 g",
+        "kind": "ingredient",
+        "wording": "chicken breast",
+        "quantity": 100,
+        "unit": "g",
+        "foodId": "food_core_chicken_breast_raw",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "enchilada sauce 90 g",
+        "kind": "ingredient",
+        "wording": "enchilada sauce",
+        "quantity": 90,
+        "unit": "g",
+        "foodId": "food_core_enchilada_sauce",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "black beans canned 80 g",
+        "kind": "ingredient",
+        "wording": "black beans canned",
+        "quantity": 80,
+        "unit": "g",
+        "foodId": "food_core_black_beans_canned_drained",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "corn frozen 60 g",
+        "kind": "ingredient",
+        "wording": "corn frozen",
+        "quantity": 60,
+        "unit": "g",
+        "foodId": "food_core_corn",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "onion 30 g",
+        "kind": "ingredient",
+        "wording": "onion",
+        "quantity": 30,
+        "unit": "g",
+        "foodId": "food_core_onion",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "white rice dry 52 g",
+        "kind": "ingredient",
+        "wording": "white rice dry",
+        "quantity": 52,
+        "unit": "g",
+        "foodId": "food_core_white_rice_dry",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "cheddar 20 g",
+        "kind": "ingredient",
+        "wording": "cheddar",
+        "quantity": 20,
+        "unit": "g",
+        "foodId": "food_core_cheddar",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "avocado 45 g",
+        "kind": "ingredient",
+        "wording": "avocado",
+        "quantity": 45,
+        "unit": "g",
+        "foodId": "food_core_avocado",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "greek yogurt nonfat 30 g",
+        "kind": "ingredient",
+        "wording": "greek yogurt nonfat",
+        "quantity": 30,
+        "unit": "g",
+        "foodId": "food_core_fage_0_greek_yogurt",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "pico de gallo 40 g",
+        "kind": "ingredient",
+        "wording": "pico de gallo",
+        "quantity": 40,
+        "unit": "g",
+        "foodId": "food_core_salsa",
+        "resolvedVia": "CTC_FOOD"
+      }
+    ]
+  },
+  "D30": {
+    "id": "meal_library_D30",
+    "name": "Shrimp Guacamole Tostadas",
+    "ingredientLines": [
+      {
+        "line": "shrimp 150 g",
+        "kind": "ingredient",
+        "wording": "shrimp",
+        "quantity": 150,
+        "unit": "g",
+        "foodId": "food_core_shrimp_raw",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "corn tortillas 104 g",
+        "kind": "ingredient",
+        "wording": "corn tortillas",
+        "quantity": 104,
+        "unit": "g",
+        "foodId": "food_core_tortilla_corn",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "black beans canned 70 g",
+        "kind": "ingredient",
+        "wording": "black beans canned",
+        "quantity": 70,
+        "unit": "g",
+        "foodId": "food_core_black_beans_canned_drained",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "bell pepper 80 g",
+        "kind": "ingredient",
+        "wording": "bell pepper",
+        "quantity": 80,
+        "unit": "g",
+        "foodId": "food_core_bell_pepper",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "red onion 40 g",
+        "kind": "ingredient",
+        "wording": "red onion",
+        "quantity": 40,
+        "unit": "g",
+        "foodId": "food_core_onion",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "avocado 85 g",
+        "kind": "ingredient",
+        "wording": "avocado",
+        "quantity": 85,
+        "unit": "g",
+        "foodId": "food_core_avocado",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "olive oil 6 g",
+        "kind": "ingredient",
+        "wording": "olive oil",
+        "quantity": 6,
+        "unit": "g",
+        "foodId": "food_core_olive_oil",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "hot honey 12 g",
+        "kind": "ingredient",
+        "wording": "hot honey",
+        "quantity": 12,
+        "unit": "g",
+        "foodId": "food_core_hot_honey",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "lime juice 12 g",
+        "kind": "ingredient",
+        "wording": "lime juice",
+        "quantity": 12,
+        "unit": "g",
+        "foodId": "food_core_lime_juice",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "cherry tomatoes 60 g",
+        "kind": "ingredient",
+        "wording": "cherry tomatoes",
+        "quantity": 60,
+        "unit": "g",
+        "foodId": "food_core_tomato",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "cilantro",
+        "kind": "garnish",
+        "foodId": "food_core_cilantro",
+        "resolvedVia": "CTC_FOOD"
+      }
+    ]
+  },
+  "D31": {
+    "id": "meal_library_D31",
+    "name": "Loaded Broccoli-Cheddar Chicken Potato",
+    "ingredientLines": [
+      {
+        "line": "potato 400 g",
+        "kind": "ingredient",
+        "wording": "potato",
+        "quantity": 400,
+        "unit": "g",
+        "foodId": "food_core_potato_raw",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "broccoli 200 g",
+        "kind": "ingredient",
+        "wording": "broccoli",
+        "quantity": 200,
+        "unit": "g",
+        "foodId": "food_core_broccoli_raw",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "chicken breast 60 g",
+        "kind": "ingredient",
+        "wording": "chicken breast",
+        "quantity": 60,
+        "unit": "g",
+        "foodId": "food_core_chicken_breast_raw",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "cheddar 25 g",
+        "kind": "ingredient",
+        "wording": "cheddar",
+        "quantity": 25,
+        "unit": "g",
+        "foodId": "food_core_cheddar",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "greek yogurt nonfat 50 g",
+        "kind": "ingredient",
+        "wording": "greek yogurt nonfat",
+        "quantity": 50,
+        "unit": "g",
+        "foodId": "food_core_fage_0_greek_yogurt",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "milk 2% 40 g",
+        "kind": "ingredient",
+        "wording": "milk 2%",
+        "quantity": 40,
+        "unit": "g",
+        "foodId": "food_core_milk_2",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "light cream cheese 20 g",
+        "kind": "ingredient",
+        "wording": "light cream cheese",
+        "quantity": 20,
+        "unit": "g",
+        "foodId": "food_core_light_cream_cheese",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "olive oil 6 g",
+        "kind": "ingredient",
+        "wording": "olive oil",
+        "quantity": 6,
+        "unit": "g",
+        "foodId": "food_core_olive_oil",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "butter 5 g",
+        "kind": "ingredient",
+        "wording": "butter",
+        "quantity": 5,
+        "unit": "g",
+        "foodId": "food_core_butter",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "scallions 12 g",
+        "kind": "ingredient",
+        "wording": "scallions",
+        "quantity": 12,
+        "unit": "g",
+        "foodId": "food_core_scallions",
+        "resolvedVia": "CTC_FOOD"
+      },
+      {
+        "line": "garlic 5 g",
+        "kind": "ingredient",
+        "wording": "garlic",
+        "quantity": 5,
+        "unit": "g",
+        "foodId": "food_core_garlic",
+        "resolvedVia": "CTC_FOOD"
+      }
+    ]
+  }
+}

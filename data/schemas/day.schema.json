@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "macro-app/day.schema.json",
+  "title": "Day",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "date",
+    "dayType",
+    "targetSnapshot",
+    "mealInstances"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "date": {
+      "type": "string",
+      "format": "date"
+    },
+    "dayType": {
+      "enum": [
+        "lift",
+        "long_run",
+        "rest"
+      ]
+    },
+    "targetSnapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "protein",
+        "carbs",
+        "fat"
+      ],
+      "properties": {
+        "protein": {
+          "type": "number",
+          "minimum": 0
+        },
+        "carbs": {
+          "type": "number",
+          "minimum": 0
+        },
+        "fat": {
+          "type": "number",
+          "minimum": 0
+        }
+      }
+    },
+    "mealInstances": {
+      "type": "array",
+      "items": {
+        "$ref": "meal-instance.schema.json"
+      }
+    }
+  }
+}

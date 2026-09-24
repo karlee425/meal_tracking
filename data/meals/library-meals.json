@@ -1,0 +1,6136 @@
+[
+  {
+    "id": "meal_library_B1",
+    "name": "Big Oat Jar with chia",
+    "source": "library",
+    "mealType": "breakfast",
+    "ingredients": [
+      {
+        "foodId": "food_core_rolled_oats_dry",
+        "quantity": 70,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_cottage_cheese_2",
+        "quantity": 175,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_milk_2",
+        "quantity": 100,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_chia_seeds",
+        "quantity": 10,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_blueberries_frozen",
+        "quantity": 75,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_banana",
+        "quantity": 100,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_peanut_butter",
+        "quantity": 8,
+        "unit": "g"
+      }
+    ],
+    "favorite": false,
+    "metadata": {
+      "legacyId": "B1",
+      "lane": "jar",
+      "nativeDayType": "lift",
+      "weightDescription": "440 g jar + banana on the side",
+      "prepMinutes": 5,
+      "batchSize": 4,
+      "base": "70 g dry oats + 10 g chia + banana",
+      "steps": [
+        "Stir oats, cottage cheese, milk and chia together in a 32 oz jar.",
+        "Top with the blueberries and peanut butter. Do not stir them in.",
+        "Fridge at least 8 hours — chia is still gritty at four. Banana eaten on the side in the car."
+      ],
+      "storage": "Batch four at once, keeps 4 days. Day four is noticeably stiffer — loosen with a splash of milk.",
+      "notes": "Flax version: swap 10 g ground flax for the chia and drop peanut butter to 6 g. Use ground, never whole.",
+      "ingredientLabels": {
+        "food_core_rolled_oats_dry": "rolled oats",
+        "food_core_blueberries_frozen": "blueberries"
+      }
+    }
+  },
+  {
+    "id": "meal_library_B2",
+    "name": "Protein Pancakes",
+    "source": "library",
+    "mealType": "breakfast",
+    "ingredients": [
+      {
+        "foodId": "food_core_rolled_oats_dry",
+        "quantity": 55,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_cottage_cheese_2",
+        "quantity": 120,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_egg_whole",
+        "quantity": 50,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_protein_powder",
+        "quantity": 10,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_peanut_butter",
+        "quantity": 10,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_banana",
+        "quantity": 110,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_maple_syrup",
+        "quantity": 25,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_blueberries_frozen",
+        "quantity": 75,
+        "unit": "g"
+      }
+    ],
+    "favorite": false,
+    "metadata": {
+      "legacyId": "B2",
+      "lane": "griddle",
+      "nativeDayType": "lift",
+      "weightDescription": "~250 g plus toppings",
+      "prepMinutes": 15,
+      "batchSize": 1,
+      "base": "55 g dry oats + banana",
+      "steps": [
+        "Blend oats, cottage cheese, egg and protein powder smooth, 45 seconds.",
+        "Nonstick pan or griddle at medium, lightly greased. Quarter-cup pancakes, 2–3 min a side.",
+        "Top with peanut butter, sliced banana, blueberries and the syrup."
+      ],
+      "storage": "Batter keeps 3 days blended. Cooked pancakes freeze and go straight into a toaster.",
+      "notes": "Cook these Sunday and freeze them if they are for a Thursday or Friday — three days is the fridge limit.",
+      "ingredientLabels": {
+        "food_core_rolled_oats_dry": "rolled oats",
+        "food_core_egg_whole": "egg",
+        "food_core_blueberries_frozen": "blueberries"
+      }
+    }
+  },
+  {
+    "id": "meal_library_B3",
+    "name": "Greek Yogurt Bowl",
+    "source": "library",
+    "mealType": "breakfast",
+    "ingredients": [
+      {
+        "foodId": "food_core_fage_0_greek_yogurt",
+        "quantity": 200,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_three_wishes_cereal",
+        "quantity": 25,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_one_degree_brown_rice_crisps",
+        "quantity": 25,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_blueberries_frozen",
+        "quantity": 100,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_banana",
+        "quantity": 120,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_peanut_butter",
+        "quantity": 27,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_honey",
+        "quantity": 15,
+        "unit": "g"
+      }
+    ],
+    "favorite": false,
+    "metadata": {
+      "legacyId": "B3",
+      "lane": "no cook",
+      "nativeDayType": "lift",
+      "weightDescription": "~560 g",
+      "prepMinutes": 3,
+      "batchSize": 1,
+      "base": "25 g Three Wishes + 25 g rice crisps + banana",
+      "steps": [
+        "Yogurt into the bowl, cereal and fruit over.",
+        "Peanut butter and honey last."
+      ],
+      "storage": "Assemble fresh — cereal goes soft within the hour.",
+      "notes": "The 25 g of peanut butter and the full banana are what close this against slot. Weigh both; eyeballed, this bowl runs 7 g fat and 16 g carb short.",
+      "ingredientLabels": {
+        "food_core_fage_0_greek_yogurt": "greek yogurt nonfat",
+        "food_core_blueberries_frozen": "blueberries"
+      }
+    }
+  },
+  {
+    "id": "meal_library_B4",
+    "name": "Banana-PB Overnight Oats",
+    "source": "library",
+    "mealType": "breakfast",
+    "ingredients": [
+      {
+        "foodId": "food_core_rolled_oats_dry",
+        "quantity": 70,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_fage_0_greek_yogurt",
+        "quantity": 170,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_milk_2",
+        "quantity": 100,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_banana",
+        "quantity": 130,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_peanut_butter",
+        "quantity": 20,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_honey",
+        "quantity": 10,
+        "unit": "g"
+      }
+    ],
+    "favorite": false,
+    "metadata": {
+      "legacyId": "B4",
+      "lane": "jar",
+      "nativeDayType": "lift",
+      "weightDescription": "~470 g jar",
+      "prepMinutes": 5,
+      "batchSize": 3,
+      "base": "70 g dry oats + banana",
+      "steps": [
+        "Mash half the banana into the oats, yogurt and milk.",
+        "Slice the rest on top with the peanut butter and honey.",
+        "Fridge at least 4 hours."
+      ],
+      "storage": "Four days in the jar is the outer limit and it stiffens by then. Build it two nights ahead, not on Sunday.",
+      "notes": "Same jar format as B1, completely different texture — creamy rather than curdy. This is the cottage-cheese-fatigue option.",
+      "ingredientLabels": {
+        "food_core_rolled_oats_dry": "rolled oats",
+        "food_core_fage_0_greek_yogurt": "greek yogurt nonfat"
+      }
+    }
+  },
+  {
+    "id": "meal_library_B5",
+    "name": "Freezer Breakfast Burrito",
+    "source": "library",
+    "mealType": "breakfast",
+    "ingredients": [
+      {
+        "foodId": "food_core_tortilla_large_flour",
+        "quantity": 72,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_egg_whole",
+        "quantity": 75,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_potato_raw",
+        "quantity": 170,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_cheddar",
+        "quantity": 10,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_salsa",
+        "quantity": 40,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_fage_0_greek_yogurt",
+        "quantity": 150,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_banana",
+        "quantity": 110,
+        "unit": "g"
+      }
+    ],
+    "favorite": false,
+    "metadata": {
+      "legacyId": "B5",
+      "lane": "savoury · handheld",
+      "nativeDayType": "lift",
+      "weightDescription": "1 burrito + yogurt + banana",
+      "prepMinutes": 45,
+      "batchSize": 4,
+      "base": "72 g tortilla + 170 g raw potato",
+      "steps": [
+        "Microwave the diced potato 7 min until just tender, then griddle over medium-high 8–10 min to crisp, seasoning with cumin, garlic powder, paprika and salt as it goes.",
+        "Scramble the eggs soft and pull them 30 seconds early — they finish cooking on reheat.",
+        "Warm the tortillas 15 seconds so they roll without cracking. Fill with potato, egg, cheddar, salsa. Roll tight, seam-side down, wrap individually in foil then a freezer bag.",
+        "From frozen: unwrap the foil, 2 min in the microwave on a paper towel, or 8 min in the air fryer at 350 °F."
+      ],
+      "storage": "Freezer 2 months, fridge 4 days.",
+      "notes": "Yogurt and banana on the side are part of the serving, not extras — the burrito alone is well short of slot.",
+      "ingredientLabels": {
+        "food_core_tortilla_large_flour": "flour tortilla",
+        "food_core_egg_whole": "egg",
+        "food_core_potato_raw": "potato",
+        "food_core_fage_0_greek_yogurt": "greek yogurt nonfat"
+      }
+    }
+  },
+  {
+    "id": "meal_library_B6",
+    "name": "Blueberry Baked Oatmeal, 2 squares",
+    "source": "library",
+    "mealType": "breakfast",
+    "ingredients": [
+      {
+        "foodId": "food_core_rolled_oats_dry",
+        "quantity": 75,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_egg_whole",
+        "quantity": 25,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_milk_2",
+        "quantity": 75,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_fage_0_greek_yogurt",
+        "quantity": 110,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_banana",
+        "quantity": 65,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_blueberries_frozen",
+        "quantity": 75,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_peanut_butter",
+        "quantity": 15,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_honey",
+        "quantity": 15,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_protein_powder",
+        "quantity": 8,
+        "unit": "g"
+      }
+    ],
+    "favorite": false,
+    "metadata": {
+      "legacyId": "B6",
+      "lane": "grab and go",
+      "nativeDayType": "lift",
+      "weightDescription": "2 squares ~195 g + 60 g yogurt",
+      "prepMinutes": 45,
+      "batchSize": 8,
+      "base": "75 g dry oats per serving",
+      "steps": [
+        "Oven 350 °F. Whisk eggs, milk, yogurt, mashed banana, honey and melted peanut butter.",
+        "Stir in oats, protein powder, baking powder, cinnamon and a pinch of salt. Fold in the blueberries.",
+        "Into a greased 9×13, bake 35–40 min until the centre is set and the top springs back.",
+        "Cool completely before cutting — warm oatmeal crumbles. Cut into 8."
+      ],
+      "storage": "Fridge 5 days, freezer 3 months. 45 seconds from the fridge, 90 from frozen.",
+      "notes": "The most hands-off breakfast here — bake once and there are no morning decisions for most of a week. A serving is two squares plus 60 g of yogurt spooned over.",
+      "ingredientLabels": {
+        "food_core_rolled_oats_dry": "rolled oats",
+        "food_core_egg_whole": "egg",
+        "food_core_fage_0_greek_yogurt": "greek yogurt nonfat",
+        "food_core_blueberries_frozen": "blueberries"
+      }
+    }
+  },
+  {
+    "id": "meal_library_B7",
+    "name": "Cottage Cheese French Toast",
+    "source": "library",
+    "mealType": "breakfast",
+    "ingredients": [
+      {
+        "foodId": "food_core_sourdough",
+        "quantity": 100,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_egg_whole",
+        "quantity": 50,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_cottage_cheese_2",
+        "quantity": 140,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_milk_2",
+        "quantity": 50,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_maple_syrup",
+        "quantity": 20,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_blueberries_frozen",
+        "quantity": 100,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_peanut_butter",
+        "quantity": 12,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_banana",
+        "quantity": 40,
+        "unit": "g"
+      }
+    ],
+    "favorite": false,
+    "metadata": {
+      "legacyId": "B7",
+      "lane": "sat down",
+      "nativeDayType": "lift",
+      "weightDescription": "2 thick slices + fruit",
+      "prepMinutes": 15,
+      "batchSize": 1,
+      "base": "100 g sourdough",
+      "steps": [
+        "Blend the cottage cheese, egg and milk smooth, 30 seconds. Blending is what makes it a custard rather than scrambled egg on bread.",
+        "Soak each slice 20 seconds a side. Thick-cut sourdough holds; thin sandwich bread collapses.",
+        "Griddle or nonstick at medium, lightly greased, 3 min a side to deep golden.",
+        "Fruit, peanut butter and syrup over."
+      ],
+      "storage": "Best fresh. Cooked slices keep 2 days and re-crisp in a toaster oven.",
+      "notes": "The weekend one — this is breakfast sat down, not breakfast in the car.",
+      "ingredientLabels": {
+        "food_core_egg_whole": "egg",
+        "food_core_blueberries_frozen": "blueberries"
+      }
+    }
+  },
+  {
+    "id": "meal_library_B8",
+    "name": "Oats Overnight, cottage cheese base",
+    "source": "library",
+    "mealType": "breakfast",
+    "ingredients": [
+      {
+        "foodId": "food_core_oats_overnight_packet",
+        "quantity": 76,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_cottage_cheese_2",
+        "quantity": 120,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_rolled_oats_dry",
+        "quantity": 20,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_blueberries_frozen",
+        "quantity": 75,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_peanut_butter",
+        "quantity": 12,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_banana",
+        "quantity": 120,
+        "unit": "g"
+      }
+    ],
+    "favorite": false,
+    "metadata": {
+      "legacyId": "B8",
+      "lane": "packet",
+      "nativeDayType": "lift",
+      "weightDescription": "shaker + banana on the side",
+      "prepMinutes": 2,
+      "batchSize": 1,
+      "base": "packet + 20 g dry oats + banana",
+      "steps": [
+        "Blend the cottage cheese with 120 ml water until completely smooth, 30–45 seconds. Skip this and you get curds suspended in oats.",
+        "Blended base into the shaker, then the packet, the extra oats and the peanut butter.",
+        "Frozen blueberries in last — they thaw overnight and release liquid, which loosens the thicker base back to spoonable.",
+        "Shake hard 20 seconds, fridge overnight. If it is still too thick, thin with water, not milk."
+      ],
+      "storage": "Overnight. Blend a week of cottage-cheese base at once — it holds 4 days.",
+      "notes": "Everything here except the pouch and the added oats gives 46 g of carbohydrate, so the pouch plus the oats have to supply about 53 g to reach slot. This build carries the pouch at 54.3 g carbohydrate per 100 g — read your own pouch’s panel and adjust: 10 g of dry oats adds 6.8 g of carbohydrate, so for every 7 g the pouch is short, add 10 g of oats. ⚠️ Protein is unresolved — this build costs the pouch at 26.3 g protein per 100 g, the value Close the Carbs ships; the custom food entered by hand says 10.7. Read the panel before trusting this row.",
+      "ingredientLabels": {
+        "food_core_rolled_oats_dry": "rolled oats",
+        "food_core_blueberries_frozen": "frozen blueberries"
+      }
+    }
+  },
+  {
+    "id": "meal_library_B9",
+    "name": "Saturday run window",
+    "source": "library",
+    "mealType": "breakfast",
+    "ingredients": [
+      {
+        "foodId": "food_core_rolled_oats_dry",
+        "quantity": 40,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_milk_2",
+        "quantity": 100,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_banana",
+        "quantity": 130,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_honey",
+        "quantity": 25,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_fage_0_greek_yogurt",
+        "quantity": 200,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_three_wishes_cereal",
+        "quantity": 13,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_one_degree_brown_rice_crisps",
+        "quantity": 12,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_blueberries_frozen",
+        "quantity": 75,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_peanut_butter",
+        "quantity": 19,
+        "unit": "g"
+      }
+    ],
+    "favorite": false,
+    "metadata": {
+      "legacyId": "B9",
+      "lane": "long run only",
+      "nativeDayType": "long_run",
+      "weightDescription": "three servings across the morning",
+      "prepMinutes": 10,
+      "batchSize": 1,
+      "base": "40 g dry oats pre · honey during · yogurt bowl post",
+      "steps": [
+        "60–75 min before the run: 40 g dry oats, 100 ml milk, 100 g banana, 5 g honey. Low fat, low fibre.",
+        "From about 45 minutes in: 15–20 g of carbohydrate an hour — 20 g honey and 30 g banana, or an equivalent gel.",
+        "Within 45 min of finishing: 200 g Greek yogurt, 13 g Three Wishes + 12 g rice crisps, 75 g blueberries, 15 g peanut butter."
+      ],
+      "storage": "Assemble the pre-run bowl the night before; the post-run bowl fresh.",
+      "notes": "117 g of carbohydrate does not go on one plate, and Saturday is the only morning breakfast is not your post-lift meal. Presenting this as a single serving is the failure mode.",
+      "ingredientLabels": {
+        "food_core_rolled_oats_dry": "rolled oats",
+        "food_core_fage_0_greek_yogurt": "greek yogurt nonfat",
+        "food_core_blueberries_frozen": "blueberries"
+      }
+    }
+  },
+  {
+    "id": "meal_library_L1",
+    "name": "Chipotle-Honey Chicken & Rice Bowl",
+    "source": "library",
+    "mealType": "lunch",
+    "ingredients": [
+      {
+        "foodId": "food_core_chicken_breast_raw",
+        "quantity": 133,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_white_rice_dry",
+        "quantity": 50,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_black_beans_canned_drained",
+        "quantity": 50,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_corn",
+        "quantity": 40,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_bell_pepper",
+        "quantity": 60,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_olive_oil",
+        "quantity": 4,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_honey",
+        "quantity": 8,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_chipotle_in_adobo",
+        "quantity": 5,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_lime_juice",
+        "quantity": 10,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_cheddar",
+        "quantity": 10,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_salsa",
+        "quantity": 50,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_avocado",
+        "quantity": 35,
+        "unit": "g"
+      }
+    ],
+    "favorite": false,
+    "metadata": {
+      "legacyId": "L1",
+      "lane": "Mexican",
+      "nativeDayType": "lift",
+      "weightDescription": "~470 g",
+      "prepMinutes": 35,
+      "batchSize": 3,
+      "base": "150 g cooked white rice",
+      "steps": [
+        "Oven 425 °F. Cube the chicken, toss with the oil, cumin, garlic powder, paprika and salt. Diced pepper on the same pan. Roast 18 min.",
+        "Rice 1:1.75 by volume — 18 min covered on low, then 10 min off the heat with the lid on.",
+        "Whisk the honey, chipotle and lime into a glaze, pour over the chicken, back in 5 min to 165 °F and caramelised at the edges.",
+        "Layer rice, beans, corn, pepper, chicken, cheddar. Pico in a separate cup."
+      ],
+      "storage": "Fridge 4 days. Avocado cut morning-of, never Sunday.",
+      "notes": "Low smell, good cold or hot.",
+      "ingredientLabels": {
+        "food_core_chicken_breast_raw": "chicken breast",
+        "food_core_white_rice_dry": "white rice dry",
+        "food_core_black_beans_canned_drained": "black beans canned",
+        "food_core_corn": "corn frozen",
+        "food_core_salsa": "pico de gallo"
+      }
+    }
+  },
+  {
+    "id": "meal_library_L2",
+    "name": "Greek Orzo Salad + Turkey Meatballs",
+    "source": "library",
+    "mealType": "lunch",
+    "ingredients": [
+      {
+        "foodId": "food_core_ground_turkey_93_7",
+        "quantity": 136,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_panko_breadcrumbs",
+        "quantity": 13,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_egg_whole",
+        "quantity": 20,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_orzo_dry",
+        "quantity": 65,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_cucumber",
+        "quantity": 100,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_tomato",
+        "quantity": 100,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_onion",
+        "quantity": 20,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_kalamata_olives",
+        "quantity": 8,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_feta",
+        "quantity": 15,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_olive_oil",
+        "quantity": 4,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_lemon_juice",
+        "quantity": 15,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_garlic",
+        "quantity": 5,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_chickpeas_canned_drained",
+        "quantity": 50,
+        "unit": "g"
+      }
+    ],
+    "favorite": false,
+    "metadata": {
+      "legacyId": "L2",
+      "lane": "Mediterranean",
+      "nativeDayType": "lift",
+      "weightDescription": "~580 g",
+      "prepMinutes": 30,
+      "batchSize": 3,
+      "base": "156 g cooked orzo",
+      "steps": [
+        "Oven 425 °F. Mix turkey, panko, egg, half the garlic, oregano, salt and pepper. Do not overwork. Roll 30 g meatballs.",
+        "Bake 16–18 min to 165 °F. Do not sear — baked meatballs hold their texture cold, seared ones go greasy in the fridge.",
+        "Orzo 8–9 min al dente in well-salted water. Drain, rinse briefly cold, spread on a tray to cool.",
+        "Whisk oil, lemon, remaining garlic and oregano. Taste it cold and push the salt and acid further than feels right — chilling flattens both.",
+        "Toss the cooled orzo with cucumber, tomato and onion. Meatballs, olives and feta on top.",
+        "Drain and rinse the chickpeas well and fold them in with the vegetables. They are the fibre in this bowl — orzo, cucumber and tomato carry almost none between them."
+      ],
+      "storage": "Fridge 4 days. Do not reheat — cucumber goes limp and orzo tightens. Meatballs freeze 2 months.",
+      "notes": "Zero office smell and the most fork-friendly item in the bank. Chickpeas added 19 Sep: 4.9 g of fibre to 8.7 for 50 g of beans, and it is the difference between this lunch holding to 3:30 and not.",
+      "ingredientLabels": {
+        "food_core_panko_breadcrumbs": "panko",
+        "food_core_egg_whole": "egg",
+        "food_core_orzo_dry": "orzo dry",
+        "food_core_tomato": "cherry tomatoes",
+        "food_core_onion": "red onion",
+        "food_core_chickpeas_canned_drained": "chickpeas canned"
+      }
+    }
+  },
+  {
+    "id": "meal_library_L3",
+    "name": "Chicken Burrito Bowl",
+    "source": "library",
+    "mealType": "lunch",
+    "ingredients": [
+      {
+        "foodId": "food_core_chicken_breast_raw",
+        "quantity": 123,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_white_rice_dry",
+        "quantity": 58,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_black_beans_canned_drained",
+        "quantity": 80,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_cheddar",
+        "quantity": 15,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_salsa",
+        "quantity": 60,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_avocado",
+        "quantity": 45,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_olive_oil",
+        "quantity": 4,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_lime_juice",
+        "quantity": 10,
+        "unit": "g"
+      }
+    ],
+    "favorite": false,
+    "metadata": {
+      "legacyId": "L3",
+      "lane": "Mexican",
+      "nativeDayType": "lift",
+      "weightDescription": "~490 g",
+      "prepMinutes": 35,
+      "batchSize": 5,
+      "base": "174 g cooked white rice",
+      "steps": [
+        "Warm the diced chicken through with cumin, chili powder, garlic powder and lime.",
+        "Warm the beans and drain them well so they don't water the container.",
+        "Layer rice, chicken, beans, cheese. Pico and avocado added morning-of."
+      ],
+      "storage": "Fridge 4 days, good cold or reheated.",
+      "notes": "The chicken went up with Revision 4 — 89 g cooked instead of 79. The rice did not move; carbohydrate is untouched by the redistribution.",
+      "ingredientLabels": {
+        "food_core_chicken_breast_raw": "chicken breast",
+        "food_core_white_rice_dry": "white rice dry",
+        "food_core_black_beans_canned_drained": "black beans canned",
+        "food_core_salsa": "pico de gallo"
+      }
+    }
+  },
+  {
+    "id": "meal_library_L4",
+    "name": "Mediterranean Chicken & Couscous",
+    "source": "library",
+    "mealType": "lunch",
+    "ingredients": [
+      {
+        "foodId": "food_core_chicken_breast_raw",
+        "quantity": 120,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_couscous_dry",
+        "quantity": 65,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_chickpeas_canned_drained",
+        "quantity": 50,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_cucumber",
+        "quantity": 80,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_tomato",
+        "quantity": 80,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_feta",
+        "quantity": 20,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_kalamata_olives",
+        "quantity": 12,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_olive_oil",
+        "quantity": 8,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_lemon_juice",
+        "quantity": 15,
+        "unit": "g"
+      }
+    ],
+    "favorite": false,
+    "metadata": {
+      "legacyId": "L4",
+      "lane": "Mediterranean",
+      "nativeDayType": "lift",
+      "weightDescription": "~510 g",
+      "prepMinutes": 30,
+      "batchSize": 5,
+      "base": "162 g cooked pearl couscous",
+      "steps": [
+        "Bake the chicken at 400 °F, 22–25 min to 165 °F. Rest, then slice.",
+        "Cook the couscous per package, rinse briefly and cool so it doesn't clump.",
+        "Whisk oil, lemon, zest and oregano. Toss with couscous, chickpeas, cucumber and tomato.",
+        "Chicken, feta and olives over."
+      ],
+      "storage": "Fridge 4–5 days. Best cold.",
+      "notes": "One of the three strongest zero-smell options, alongside L2 and L6.",
+      "ingredientLabels": {
+        "food_core_chicken_breast_raw": "chicken breast",
+        "food_core_couscous_dry": "pearl couscous dry",
+        "food_core_chickpeas_canned_drained": "chickpeas canned",
+        "food_core_tomato": "cherry tomatoes"
+      }
+    }
+  },
+  {
+    "id": "meal_library_L6",
+    "name": "Turkey Pesto Pasta Salad",
+    "source": "library",
+    "mealType": "lunch",
+    "ingredients": [
+      {
+        "foodId": "food_core_pasta_dry",
+        "quantity": 80,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_ground_turkey_93_7",
+        "quantity": 111,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_pesto",
+        "quantity": 18,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_fage_0_greek_yogurt",
+        "quantity": 40,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_tomato",
+        "quantity": 100,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_mozzarella_part_skim",
+        "quantity": 20,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_spinach",
+        "quantity": 20,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_lemon_juice",
+        "quantity": 10,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_chickpeas_canned_drained",
+        "quantity": 50,
+        "unit": "g"
+      }
+    ],
+    "favorite": false,
+    "metadata": {
+      "legacyId": "L6",
+      "lane": "Mediterranean",
+      "nativeDayType": "lift",
+      "weightDescription": "~530 g",
+      "prepMinutes": 25,
+      "batchSize": 5,
+      "base": "192 g cooked pasta",
+      "steps": [
+        "Brown the turkey, season well, cool.",
+        "Pasta al dente, drain, rinse cold.",
+        "Thin the pesto with the Greek yogurt and lemon — that is what lets 18 g dress a whole bowl instead of 40 g.",
+        "Toss everything together.",
+        "Chickpeas drained, rinsed and tossed through at the end. Pesto clings to them better than it does to the pasta."
+      ],
+      "storage": "Fridge 4 days. Cold only, zero smell.",
+      "notes": "Chickpeas added 19 Sep — this was the lowest-fibre lunch in the bank at 4.7 g, which is what refined pasta plus lean turkey gets you. Now 8.4.",
+      "ingredientLabels": {
+        "food_core_pasta_dry": "pasta dry",
+        "food_core_fage_0_greek_yogurt": "greek yogurt nonfat",
+        "food_core_tomato": "cherry tomatoes",
+        "food_core_mozzarella_part_skim": "mozzarella",
+        "food_core_chickpeas_canned_drained": "chickpeas canned"
+      }
+    }
+  },
+  {
+    "id": "meal_library_L7",
+    "name": "BBQ Chicken & Baked Potato Bowl",
+    "source": "library",
+    "mealType": "lunch",
+    "ingredients": [
+      {
+        "foodId": "food_core_chicken_breast_raw",
+        "quantity": 129,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_potato_raw",
+        "quantity": 260,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_bbq_sauce",
+        "quantity": 35,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_cheddar",
+        "quantity": 15,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_corn",
+        "quantity": 50,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_onion",
+        "quantity": 25,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_olive_oil",
+        "quantity": 9,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_fage_0_greek_yogurt",
+        "quantity": 30,
+        "unit": "g"
+      }
+    ],
+    "favorite": false,
+    "metadata": {
+      "legacyId": "L7",
+      "lane": "American",
+      "nativeDayType": "lift",
+      "weightDescription": "~450 g",
+      "prepMinutes": 45,
+      "batchSize": 5,
+      "base": "203 g roasted potato",
+      "steps": [
+        "Oven 425 °F. Cube the potato, toss with oil and salt, roast 28–30 min.",
+        "Chicken on the same pan for the last 18 min.",
+        "Shred the chicken and toss it with the BBQ sauce.",
+        "Build: potato, chicken, corn, onion, cheddar, yogurt on top in place of sour cream."
+      ],
+      "storage": "Fridge 4 days. Eat hot.",
+      "notes": "The one lunch that needs a microwave, and it carries a BBQ smell — save it for a day you are not in a small shared kitchen.",
+      "ingredientLabels": {
+        "food_core_chicken_breast_raw": "chicken breast",
+        "food_core_potato_raw": "potato",
+        "food_core_corn": "corn frozen",
+        "food_core_onion": "red onion",
+        "food_core_fage_0_greek_yogurt": "greek yogurt nonfat"
+      }
+    }
+  },
+  {
+    "id": "meal_library_L8",
+    "name": "Adult Lunchable",
+    "source": "library",
+    "mealType": "lunch",
+    "ingredients": [
+      {
+        "foodId": "food_core_deli_turkey_low_sodium",
+        "quantity": 134,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_cheddar",
+        "quantity": 25,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_whole_grain_crackers",
+        "quantity": 40,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_egg_whole",
+        "quantity": 50,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_grapes",
+        "quantity": 100,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_cucumber",
+        "quantity": 80,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_tomato",
+        "quantity": 80,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_pretzels",
+        "quantity": 20,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_baby_carrots",
+        "quantity": 80,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_sugar_snap_peas",
+        "quantity": 60,
+        "unit": "g"
+      }
+    ],
+    "favorite": false,
+    "metadata": {
+      "legacyId": "L8",
+      "lane": "bento · no cook",
+      "nativeDayType": "lift",
+      "weightDescription": "bento ~645 g",
+      "prepMinutes": 15,
+      "batchSize": 5,
+      "base": "40 g crackers + 20 g pretzels",
+      "steps": [
+        "Boil the eggs 12 min, straight into an ice bath, peel.",
+        "Portion into bento containers.",
+        "Crackers and pretzels in their own compartment so they stay crisp.",
+        "Carrots and snap peas raw in their own compartment. They are not garnish — they are 140 g of the box and most of its fibre."
+      ],
+      "storage": "Fridge 5 days — the longest keeper in the lunch set.",
+      "notes": "The original version of this was 33 g of carbohydrate under slot: it read as complete because it had five components, but four of them were protein, fat or vegetables. The crackers, weighed grapes and pretzels fixed the carbohydrate; the carrots and snap peas added 19 Sep fixed the fibre, 5.3 g to 9.1.",
+      "ingredientLabels": {
+        "food_core_deli_turkey_low_sodium": "deli turkey",
+        "food_core_egg_whole": "egg",
+        "food_core_tomato": "cherry tomatoes"
+      }
+    }
+  },
+  {
+    "id": "meal_library_L9",
+    "name": "Turkey & Provolone on Sourdough + Grapes",
+    "source": "library",
+    "mealType": "lunch",
+    "ingredients": [
+      {
+        "foodId": "food_core_deli_turkey_low_sodium",
+        "quantity": 150,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_sourdough",
+        "quantity": 100,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_provolone",
+        "quantity": 25,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_mayonnaise",
+        "quantity": 10,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_dijon_mustard",
+        "quantity": 8,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_romaine",
+        "quantity": 20,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_tomato",
+        "quantity": 40,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_cucumber",
+        "quantity": 60,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_grapes",
+        "quantity": 100,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_baby_carrots",
+        "quantity": 80,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_sugar_snap_peas",
+        "quantity": 60,
+        "unit": "g"
+      }
+    ],
+    "favorite": false,
+    "metadata": {
+      "legacyId": "L9",
+      "lane": "sandwich",
+      "nativeDayType": "lift",
+      "weightDescription": "sandwich + sides",
+      "prepMinutes": 10,
+      "batchSize": 5,
+      "base": "100 g sourdough",
+      "steps": [
+        "Mayo and Dijon edge to edge on both slices — fat is the moisture barrier.",
+        "Provolone, turkey, romaine.",
+        "Tomato in a separate cup, added at lunch. That is what makes a sandwich soggy, not the mustard.",
+        "Carrots and snap peas raw, bagged separately. With L21 retired this sandwich carries the bread lane on its own, so it needs to be the good one."
+      ],
+      "storage": "3 days assembled, 5 days as components.",
+      "notes": "This was the only lunch in the August audit that cleared its carbohydrate slot, and it cleared because it was the only one built on bread. Bread alone does not keep you full, though — 4.8 g of fibre was the lowest of any sandwich. Raw veg added 19 Sep takes it to 8.7.",
+      "ingredientLabels": {
+        "food_core_deli_turkey_low_sodium": "deli turkey",
+        "food_core_tomato": "cherry tomatoes"
+      }
+    }
+  },
+  {
+    "id": "meal_library_L10",
+    "name": "Bruschetta Chicken + Sourdough",
+    "source": "library",
+    "mealType": "lunch",
+    "ingredients": [
+      {
+        "foodId": "food_core_chicken_breast_raw",
+        "quantity": 116,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_sourdough",
+        "quantity": 110,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_tomato",
+        "quantity": 130,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_mozzarella_part_skim",
+        "quantity": 20,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_olive_oil",
+        "quantity": 8,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_balsamic_vinegar",
+        "quantity": 10,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_garlic",
+        "quantity": 5,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_basil",
+        "quantity": 5,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_grapes",
+        "quantity": 60,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_chickpeas_canned_drained",
+        "quantity": 40,
+        "unit": "g"
+      }
+    ],
+    "favorite": false,
+    "metadata": {
+      "legacyId": "L10",
+      "lane": "Mediterranean",
+      "nativeDayType": "lift",
+      "weightDescription": "~540 g",
+      "prepMinutes": 30,
+      "batchSize": 5,
+      "base": "110 g sourdough",
+      "steps": [
+        "Season and bake the chicken at 400 °F, 20–22 min to 165 °F.",
+        "Macerate the chopped tomato with garlic, basil, oil and balsamic for at least 20 minutes. This is the whole recipe.",
+        "Toast the sourdough fresh each morning — packing it pre-toasted does not work.",
+        "Chickpeas drained and marinated with the tomatoes — they take on the garlic and balsamic in the same 20 minutes."
+      ],
+      "storage": "Chicken and topping keep 4 days, separately. Toast day-of.",
+      "notes": "Was 9 g short of slot before the sourdough went to 110 g. Chickpeas added 19 Sep for fibre, 5.0 g to 8.0, marinated with the bruschetta rather than added as a side.",
+      "ingredientLabels": {
+        "food_core_chicken_breast_raw": "chicken breast",
+        "food_core_tomato": "cherry tomatoes",
+        "food_core_mozzarella_part_skim": "mozzarella",
+        "food_core_chickpeas_canned_drained": "chickpeas canned"
+      }
+    }
+  },
+  {
+    "id": "meal_library_L11",
+    "name": "No-Cook Mezze Box",
+    "source": "library",
+    "mealType": "lunch",
+    "ingredients": [
+      {
+        "foodId": "food_core_whole_wheat_pita",
+        "quantity": 75,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_hummus",
+        "quantity": 35,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_chickpeas_canned_drained",
+        "quantity": 50,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_feta",
+        "quantity": 25,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_cucumber",
+        "quantity": 100,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_tomato",
+        "quantity": 100,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_kalamata_olives",
+        "quantity": 12,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_deli_turkey_low_sodium",
+        "quantity": 144,
+        "unit": "g"
+      }
+    ],
+    "favorite": false,
+    "metadata": {
+      "legacyId": "L11",
+      "lane": "bento · no cook",
+      "nativeDayType": "lift",
+      "weightDescription": "bento ~510 g",
+      "prepMinutes": 15,
+      "batchSize": 5,
+      "base": "75 g whole-wheat pita",
+      "steps": [
+        "Everything into a bento.",
+        "Pita cut into wedges, hummus in its own cup."
+      ],
+      "storage": "Fridge 4 days.",
+      "notes": "The pita is the base. Treating hummus and chickpeas as the carbohydrate is what left the original 10 g short.",
+      "ingredientLabels": {
+        "food_core_chickpeas_canned_drained": "chickpeas canned",
+        "food_core_tomato": "cherry tomatoes",
+        "food_core_deli_turkey_low_sodium": "deli turkey"
+      }
+    }
+  },
+  {
+    "id": "meal_library_L12",
+    "name": "Steak & Potato Salad",
+    "source": "library",
+    "mealType": "lunch",
+    "ingredients": [
+      {
+        "foodId": "food_core_sirloin_steak_raw",
+        "quantity": 126,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_potato_raw",
+        "quantity": 340,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_olive_oil",
+        "quantity": 8,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_dijon_mustard",
+        "quantity": 12,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_fage_0_greek_yogurt",
+        "quantity": 40,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_parmesan",
+        "quantity": 10,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_onion",
+        "quantity": 25,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_tomato",
+        "quantity": 80,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_romaine",
+        "quantity": 40,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_lemon_juice",
+        "quantity": 10,
+        "unit": "g"
+      }
+    ],
+    "favorite": false,
+    "metadata": {
+      "legacyId": "L12",
+      "lane": "American",
+      "nativeDayType": "lift",
+      "weightDescription": "~600 g",
+      "prepMinutes": 35,
+      "batchSize": 5,
+      "base": "265 g boiled potato",
+      "steps": [
+        "Boil the potatoes whole in salted water 18–20 min, then quarter. Boiling them whole is what keeps them from going waterlogged.",
+        "Dress them while still warm — cold potatoes will not take dressing.",
+        "Sear the steak 3–4 min a side, rest 5 min, slice thin against the grain.",
+        "Fold everything together with the romaine last."
+      ],
+      "storage": "Fridge 4 days. Good cold — the steak stays tender because it is sliced thin into a dressed salad.",
+      "notes": "265 g of cooked potato is roughly double what a potato salad normally carries. That is the point.",
+      "ingredientLabels": {
+        "food_core_sirloin_steak_raw": "sirloin steak",
+        "food_core_potato_raw": "potato",
+        "food_core_fage_0_greek_yogurt": "greek yogurt nonfat",
+        "food_core_onion": "red onion",
+        "food_core_tomato": "cherry tomatoes"
+      }
+    }
+  },
+  {
+    "id": "meal_library_L13",
+    "name": "Chicken, Wild Rice & Roasted Squash",
+    "source": "library",
+    "mealType": "lunch",
+    "ingredients": [
+      {
+        "foodId": "food_core_chicken_breast_raw",
+        "quantity": 141,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_wild_rice_dry",
+        "quantity": 45,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_butternut_squash",
+        "quantity": 180,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_olive_oil",
+        "quantity": 9,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_dried_cranberries",
+        "quantity": 15,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_almonds",
+        "quantity": 8,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_spinach",
+        "quantity": 40,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_balsamic_vinegar",
+        "quantity": 10,
+        "unit": "g"
+      }
+    ],
+    "favorite": false,
+    "metadata": {
+      "legacyId": "L13",
+      "lane": "American",
+      "nativeDayType": "lift",
+      "weightDescription": "~450 g",
+      "prepMinutes": 45,
+      "batchSize": 5,
+      "base": "135 g cooked wild rice",
+      "steps": [
+        "Wild rice takes 45–50 minutes — start it first.",
+        "Squash in 2 cm cubes at 425 °F, 25 min. Chicken on the same pan the last 18.",
+        "Toss with spinach, cranberries, almonds and balsamic once everything has cooled."
+      ],
+      "storage": "Fridge 4 days. Good cold or reheated.",
+      "notes": "The cranberries carry 12 g of carbohydrate on their own, which is why the rice can stay at 45 g dry.",
+      "ingredientLabels": {
+        "food_core_chicken_breast_raw": "chicken breast",
+        "food_core_wild_rice_dry": "wild rice dry",
+        "food_core_almonds": "sliced almonds"
+      },
+      "retired": true
+    }
+  },
+  {
+    "id": "meal_library_L14",
+    "name": "Chicken, Sweet Potato & Black Bean Bowl",
+    "source": "library",
+    "mealType": "lunch",
+    "ingredients": [
+      {
+        "foodId": "food_core_chicken_breast_raw",
+        "quantity": 133,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_sweet_potato_raw",
+        "quantity": 250,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_black_beans_canned_drained",
+        "quantity": 70,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_olive_oil",
+        "quantity": 8,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_avocado",
+        "quantity": 35,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_salsa",
+        "quantity": 50,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_cheddar",
+        "quantity": 10,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_lime_juice",
+        "quantity": 10,
+        "unit": "g"
+      }
+    ],
+    "favorite": false,
+    "metadata": {
+      "legacyId": "L14",
+      "lane": "Mexican",
+      "nativeDayType": "lift",
+      "weightDescription": "~480 g",
+      "prepMinutes": 40,
+      "batchSize": 5,
+      "base": "188 g roasted sweet potato",
+      "steps": [
+        "Sweet potato in 2 cm cubes at 425 °F, 25 min.",
+        "Chicken alongside for the last 18 min, seasoned with cumin and chili powder.",
+        "Build with the beans, salsa, cheddar and lime."
+      ],
+      "storage": "Fridge 4 days, reheats well. Avocado day-of.",
+      "notes": "Was 15 g short of slot — the worst of the August six. 188 g of roasted sweet potato is what fixed it.",
+      "ingredientLabels": {
+        "food_core_chicken_breast_raw": "chicken breast",
+        "food_core_sweet_potato_raw": "sweet potato",
+        "food_core_black_beans_canned_drained": "black beans canned"
+      }
+    }
+  },
+  {
+    "id": "meal_library_L15",
+    "name": "Honey-Mustard Chicken & Farro Salad",
+    "source": "library",
+    "mealType": "lunch",
+    "ingredients": [
+      {
+        "foodId": "food_core_farro_dry",
+        "quantity": 55,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_chicken_breast_raw",
+        "quantity": 130,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_apple",
+        "quantity": 90,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_spinach",
+        "quantity": 40,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_onion",
+        "quantity": 20,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_feta",
+        "quantity": 18,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_almonds",
+        "quantity": 8,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_dijon_mustard",
+        "quantity": 12,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_honey",
+        "quantity": 14,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_olive_oil",
+        "quantity": 4,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_lemon_juice",
+        "quantity": 10,
+        "unit": "g"
+      }
+    ],
+    "favorite": false,
+    "metadata": {
+      "legacyId": "L15",
+      "lane": "Mediterranean",
+      "nativeDayType": "lift",
+      "weightDescription": "~440 g",
+      "prepMinutes": 35,
+      "batchSize": 5,
+      "base": "143 g cooked farro",
+      "steps": [
+        "Farro in salted boiling water 25–28 min to chewy. Drain and cool.",
+        "Season the chicken, bake at 400 °F 20–22 min to 165 °F, rest, dice.",
+        "Whisk Dijon, honey, oil and lemon. Toss everything."
+      ],
+      "storage": "Fridge 4 days, cold only, zero smell.",
+      "notes": "Farro is the one grain here that does not go stodgy — it holds its bite four days where rice and pasta don't. Put it on Thursday and Friday.",
+      "ingredientLabels": {
+        "food_core_farro_dry": "farro dry",
+        "food_core_chicken_breast_raw": "chicken breast",
+        "food_core_onion": "red onion",
+        "food_core_almonds": "sliced almonds"
+      }
+    }
+  },
+  {
+    "id": "meal_library_L16",
+    "name": "Chicken Tinga Rice Bowl",
+    "source": "library",
+    "mealType": "lunch",
+    "ingredients": [
+      {
+        "foodId": "food_core_chicken_breast_raw",
+        "quantity": 118,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_white_rice_dry",
+        "quantity": 58,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_crushed_tomatoes",
+        "quantity": 90,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_chipotle_in_adobo",
+        "quantity": 12,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_onion",
+        "quantity": 50,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_olive_oil",
+        "quantity": 7,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_black_beans_canned_drained",
+        "quantity": 50,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_cotija",
+        "quantity": 12,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_fage_0_greek_yogurt",
+        "quantity": 30,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_avocado",
+        "quantity": 35,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_lime_juice",
+        "quantity": 8,
+        "unit": "g"
+      }
+    ],
+    "favorite": false,
+    "metadata": {
+      "legacyId": "L16",
+      "lane": "Mexican",
+      "nativeDayType": "lift",
+      "weightDescription": "~500 g",
+      "prepMinutes": 35,
+      "batchSize": 5,
+      "base": "174 g cooked white rice",
+      "steps": [
+        "Poach or bake the chicken, then shred it. Shredding rather than dicing is what makes it tinga — it lets the sauce coat everything.",
+        "Soften the onion in the oil 6 min, add chipotle and crushed tomato, simmer 10 min, then blend smooth.",
+        "Return the shredded chicken to the sauce for 5 minutes.",
+        "Over rice with the beans, cotija and yogurt."
+      ],
+      "storage": "Fridge 4 days, reheats very well. Freezes 2 months.",
+      "notes": "Avocado day-of.",
+      "ingredientLabels": {
+        "food_core_chicken_breast_raw": "chicken breast",
+        "food_core_white_rice_dry": "white rice dry",
+        "food_core_black_beans_canned_drained": "black beans canned",
+        "food_core_fage_0_greek_yogurt": "greek yogurt nonfat"
+      },
+      "retired": true
+    }
+  },
+  {
+    "id": "meal_library_L17",
+    "name": "Turkey, Hummus & Roasted Veg Wrap",
+    "source": "library",
+    "mealType": "lunch",
+    "ingredients": [
+      {
+        "foodId": "food_core_tortilla_large_flour",
+        "quantity": 70,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_deli_turkey_low_sodium",
+        "quantity": 162,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_hummus",
+        "quantity": 40,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_roasted_red_pepper",
+        "quantity": 50,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_zucchini",
+        "quantity": 60,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_spinach",
+        "quantity": 25,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_feta",
+        "quantity": 18,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_grapes",
+        "quantity": 90,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_pretzels",
+        "quantity": 10,
+        "unit": "g"
+      }
+    ],
+    "favorite": false,
+    "metadata": {
+      "legacyId": "L17",
+      "lane": "Mediterranean",
+      "nativeDayType": "lift",
+      "weightDescription": "wrap + fruit",
+      "prepMinutes": 25,
+      "batchSize": 5,
+      "base": "70 g wrap + 10 g pretzels",
+      "steps": [
+        "Roast the zucchini at 425 °F for 15 min and cool it completely before it goes near the wrap.",
+        "Hummus spread edge to edge — that is the moisture barrier that stops a made-ahead wrap going limp.",
+        "Fill, roll tight, wrap in foil, cut in half at lunch."
+      ],
+      "storage": "3 days wrapped. Cold, zero smell.",
+      "notes": "",
+      "ingredientLabels": {
+        "food_core_tortilla_large_flour": "large tortilla wrap",
+        "food_core_deli_turkey_low_sodium": "deli turkey"
+      }
+    }
+  },
+  {
+    "id": "meal_library_L18",
+    "name": "Hot Honey Turkey & Sweet Potato Bowl",
+    "source": "library",
+    "mealType": "lunch",
+    "ingredients": [
+      {
+        "foodId": "food_core_ground_turkey_93_7",
+        "quantity": 115,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_sweet_potato_raw",
+        "quantity": 240,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_cottage_cheese_2",
+        "quantity": 110,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_avocado",
+        "quantity": 40,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_hot_honey",
+        "quantity": 14,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_olive_oil",
+        "quantity": 5,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_spinach",
+        "quantity": 30,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_lime_juice",
+        "quantity": 8,
+        "unit": "g"
+      }
+    ],
+    "favorite": false,
+    "metadata": {
+      "legacyId": "L18",
+      "lane": "bowl · hot honey",
+      "nativeDayType": "lift",
+      "weightDescription": "~445 g",
+      "prepMinutes": 35,
+      "batchSize": 5,
+      "base": "180 g roasted sweet potato",
+      "steps": [
+        "Oven 425 °F. Sweet potato in 2 cm cubes tossed with the olive oil, smoked paprika, cumin and salt. Spread across two pans rather than crowding one — crowded sweet potato steams and is mush by Wednesday. Roast 25 min, tossing once.",
+        "Brown the turkey over medium-high with garlic powder and cumin, 8 min, breaking it up fine. Season assertively: this eats cold or barely warm and cold flattens salt.",
+        "Cool both completely before boxing. Warm food in a sealed container makes condensation and condensation makes a soggy bowl.",
+        "Layer spinach, sweet potato, turkey. Lime over.",
+        "Morning-of: cottage cheese spooned on, avocado, and the hot honey drizzled last."
+      ],
+      "storage": "Fridge 4 days. Low smell, good cold or reheated.",
+      "notes": "Yours, built from the brief. The cottage cheese goes on cold and does the job sour cream would, at a much better protein-to-fat ratio — and it keeps the bowl from being dry on day three. The honey goes on in the morning; packed Sunday it soaks into the potato and disappears.",
+      "ingredientLabels": {
+        "food_core_sweet_potato_raw": "sweet potato"
+      },
+      "isNew": true
+    }
+  },
+  {
+    "id": "meal_library_L19",
+    "name": "Hot Honey Chicken & Cheddar Bento",
+    "source": "library",
+    "mealType": "lunch",
+    "ingredients": [
+      {
+        "foodId": "food_core_chicken_breast_raw",
+        "quantity": 131,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_olive_oil",
+        "quantity": 6,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_hot_honey",
+        "quantity": 18,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_cheddar",
+        "quantity": 20,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_sourdough",
+        "quantity": 65,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_apple",
+        "quantity": 70,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_grapes",
+        "quantity": 40,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_cucumber",
+        "quantity": 80,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_almonds",
+        "quantity": 8,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_baby_carrots",
+        "quantity": 80,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_sugar_snap_peas",
+        "quantity": 60,
+        "unit": "g"
+      }
+    ],
+    "favorite": false,
+    "metadata": {
+      "legacyId": "L19",
+      "lane": "bento",
+      "nativeDayType": "lift",
+      "weightDescription": "~580 g",
+      "prepMinutes": 30,
+      "batchSize": 5,
+      "base": "65 g sourdough",
+      "steps": [
+        "Oven 425 °F. Chicken in 2 cm cubes tossed with the oil, garlic powder, smoked paprika and salt. Single layer, 18 min to 165 °F. Cool completely.",
+        "Cut the sourdough into fingers, not slices — a slice gets crushed in a bento and a finger doesn't. Leave it untoasted; toasted bread goes leathery in a box.",
+        "Box the chicken, cheddar, sourdough, cucumber and almonds. Grapes in their own compartment.",
+        "Morning-of: slice the apple, and take the hot honey in a small cup to pour over the chicken at lunch.",
+        "Carrots and snap peas raw in their own compartment — they also give you something to eat the hot honey with once the chicken is gone."
+      ],
+      "storage": "Fridge 4 days. Zero smell, no reheating.",
+      "notes": "The lunchable idea with something actually cooked in it, so it doesn’t read as a snack plate at 1 pm. Glazing the chicken on Sunday means the honey soaks in and the chicken goes tacky — hence the cup. Raw veg added 19 Sep: 5.0 g of fibre to 8.9.",
+      "ingredientLabels": {
+        "food_core_chicken_breast_raw": "chicken breast"
+      },
+      "isNew": true
+    }
+  },
+  {
+    "id": "meal_library_L20",
+    "name": "Caprese Turkey Bento",
+    "source": "library",
+    "mealType": "lunch",
+    "ingredients": [
+      {
+        "foodId": "food_core_deli_turkey_low_sodium",
+        "quantity": 154,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_fresh_mozzarella",
+        "quantity": 45,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_tomato",
+        "quantity": 120,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_balsamic_glaze",
+        "quantity": 12,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_sourdough",
+        "quantity": 80,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_olive_oil",
+        "quantity": 5,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_grapes",
+        "quantity": 70,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_kalamata_olives",
+        "quantity": 12,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_basil",
+        "quantity": 4,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_baby_carrots",
+        "quantity": 80,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_sugar_snap_peas",
+        "quantity": 60,
+        "unit": "g"
+      }
+    ],
+    "favorite": false,
+    "metadata": {
+      "legacyId": "L20",
+      "lane": "bento · no cook",
+      "nativeDayType": "lift",
+      "weightDescription": "~610 g",
+      "prepMinutes": 10,
+      "batchSize": 5,
+      "base": "80 g sourdough",
+      "steps": [
+        "Halve the tomatoes, toss with the olive oil, flaky salt and pepper, and let them sit 10 minutes while you box everything else. That brief salting is the difference between caprese and cold tomato.",
+        "Roll the turkey into loose bundles rather than folding it flat — it eats with fingers that way.",
+        "Sourdough torn into pieces, mozzarella pearls drained well.",
+        "Balsamic glaze in its own small cup. Basil torn in the morning, never Sunday — it blackens.",
+        "Carrots and snap peas raw alongside. This box was 4.5 g of fibre before them — the lowest in the bank, because mozzarella, turkey and white bread carry none."
+      ],
+      "storage": "Fridge 4 days. Zero cooking, zero smell.",
+      "notes": "The fastest lunch in the bank and the one for a Sunday with no prep window. Dressed on Sunday, the mozzarella goes grey-brown by Wednesday and the bread goes purple. Raw veg added 19 Sep.",
+      "ingredientLabels": {
+        "food_core_deli_turkey_low_sodium": "deli turkey",
+        "food_core_tomato": "cherry tomatoes"
+      },
+      "isNew": true
+    }
+  },
+  {
+    "id": "meal_library_S1",
+    "name": "Yogurt, cereal, banana & PB",
+    "source": "library",
+    "mealType": "snack",
+    "ingredients": [
+      {
+        "foodId": "food_core_fage_0_greek_yogurt",
+        "quantity": 80,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_three_wishes_cereal",
+        "quantity": 13,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_one_degree_brown_rice_crisps",
+        "quantity": 12,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_banana",
+        "quantity": 45,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_peanut_butter",
+        "quantity": 12,
+        "unit": "g"
+      }
+    ],
+    "favorite": false,
+    "metadata": {
+      "legacyId": "S1",
+      "lane": "spoon · sweet",
+      "nativeDayType": "lift",
+      "weightDescription": "~160 g",
+      "prepMinutes": 3,
+      "batchSize": 1,
+      "base": "13 g Three Wishes + 12 g rice crisps + banana",
+      "steps": [
+        "Yogurt, cereal, sliced banana, peanut butter."
+      ],
+      "storage": "Assemble fresh.",
+      "notes": "Half the yogurt it used to carry. Doubles as Wednesday pre-run fuel — eat it 60–90 min before; if the run is inside 45 minutes drop the peanut butter to 6 g and add 20 g more banana.",
+      "ingredientLabels": {
+        "food_core_fage_0_greek_yogurt": "greek yogurt nonfat"
+      }
+    }
+  },
+  {
+    "id": "meal_library_S2",
+    "name": "Cottage cheese, pineapple & crackers",
+    "source": "library",
+    "mealType": "snack",
+    "ingredients": [
+      {
+        "foodId": "food_core_cottage_cheese_2",
+        "quantity": 110,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_pineapple",
+        "quantity": 110,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_whole_grain_crackers",
+        "quantity": 12,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_cashews",
+        "quantity": 10,
+        "unit": "g"
+      }
+    ],
+    "favorite": false,
+    "metadata": {
+      "legacyId": "S2",
+      "lane": "spoon · sweet",
+      "nativeDayType": "lift",
+      "weightDescription": "~230 g",
+      "prepMinutes": 3,
+      "batchSize": 1,
+      "base": "12 g crackers + pineapple",
+      "steps": [
+        "Cottage cheese in the tub, pineapple over.",
+        "Crackers and cashews in a separate bag so they stay crisp."
+      ],
+      "storage": "2 days assembled.",
+      "notes": ""
+    }
+  },
+  {
+    "id": "meal_library_S3",
+    "name": "Turkey, pretzels & grapes",
+    "source": "library",
+    "mealType": "snack",
+    "ingredients": [
+      {
+        "foodId": "food_core_deli_turkey_low_sodium",
+        "quantity": 60,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_pretzels",
+        "quantity": 22,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_grapes",
+        "quantity": 60,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_almonds",
+        "quantity": 11,
+        "unit": "g"
+      }
+    ],
+    "favorite": false,
+    "metadata": {
+      "legacyId": "S3",
+      "lane": "desk · savoury",
+      "nativeDayType": "lift",
+      "weightDescription": "~155 g",
+      "prepMinutes": 3,
+      "batchSize": 1,
+      "base": "22 g pretzels + grapes",
+      "steps": [
+        "Roll the turkey, bag the rest separately."
+      ],
+      "storage": "2 days.",
+      "notes": "No spoon, no smell, no cheese — useful on a day already heavy on dairy.",
+      "ingredientLabels": {
+        "food_core_deli_turkey_low_sodium": "deli turkey"
+      }
+    }
+  },
+  {
+    "id": "meal_library_S4",
+    "name": "Apple, peanut butter & a yogurt cup",
+    "source": "library",
+    "mealType": "snack",
+    "ingredients": [
+      {
+        "foodId": "food_core_apple",
+        "quantity": 140,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_peanut_butter",
+        "quantity": 14,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_fage_0_greek_yogurt",
+        "quantity": 110,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_honey",
+        "quantity": 6,
+        "unit": "g"
+      }
+    ],
+    "favorite": false,
+    "metadata": {
+      "legacyId": "S4",
+      "lane": "spoon · sweet",
+      "nativeDayType": "lift",
+      "weightDescription": "~270 g",
+      "prepMinutes": 2,
+      "batchSize": 1,
+      "base": "apple + 6 g honey",
+      "steps": [
+        "Honey stirred through the yogurt.",
+        "Apple sliced at your desk, peanut butter for dipping."
+      ],
+      "storage": "Slice the apple day-of.",
+      "notes": "The plainest thing in the bank and probably the one you will reach for most. This is what a snack is supposed to look like.",
+      "ingredientLabels": {
+        "food_core_fage_0_greek_yogurt": "greek yogurt nonfat"
+      }
+    }
+  },
+  {
+    "id": "meal_library_S6",
+    "name": "Desk-drawer kit",
+    "source": "library",
+    "mealType": "snack",
+    "ingredients": [
+      {
+        "foodId": "food_core_pretzels",
+        "quantity": 30,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_turkey_jerky",
+        "quantity": 30,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_almonds",
+        "quantity": 12,
+        "unit": "g"
+      }
+    ],
+    "favorite": false,
+    "metadata": {
+      "legacyId": "S6",
+      "lane": "desk · shelf-stable",
+      "nativeDayType": "lift",
+      "weightDescription": "three small bags",
+      "prepMinutes": 1,
+      "batchSize": 1,
+      "base": "30 g pretzels",
+      "steps": [
+        "Keep a bag of pretzels, a bag of jerky and a bag of almonds permanently in your desk. Restock monthly.",
+        "Weigh them into small bags on Sunday if you want it exact."
+      ],
+      "storage": "Shelf-stable. Nothing here needs a fridge or a shaker.",
+      "notes": "At 24 g of protein this kit needed a scoop of powder and a shaker bottle. At 15 it is three bags of food. That is the clearest single argument for the redistribution — the option that exists for the day you forgot to pack anything just got much easier to actually keep stocked. Weigh the pretzels: a poured handful is anywhere from 20 to 60 g, which is 30 g of carbohydrate."
+    }
+  },
+  {
+    "id": "meal_library_S10",
+    "name": "PB & honey on sourdough + yogurt",
+    "source": "library",
+    "mealType": "snack",
+    "ingredients": [
+      {
+        "foodId": "food_core_sourdough",
+        "quantity": 42,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_peanut_butter",
+        "quantity": 14,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_fage_0_greek_yogurt",
+        "quantity": 90,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_honey",
+        "quantity": 4,
+        "unit": "g"
+      }
+    ],
+    "favorite": false,
+    "metadata": {
+      "legacyId": "S10",
+      "lane": "desk · sweet",
+      "nativeDayType": "lift",
+      "weightDescription": "1 slice + cup",
+      "prepMinutes": 4,
+      "batchSize": 1,
+      "base": "42 g sourdough",
+      "steps": [
+        "Make the sandwich in the morning and wrap it.",
+        "Small cup of yogurt alongside — no shaker needed now."
+      ],
+      "storage": "Same day.",
+      "notes": "Used to need a scoop of protein powder to reach slot. It doesn't any more.",
+      "ingredientLabels": {
+        "food_core_fage_0_greek_yogurt": "greek yogurt nonfat"
+      }
+    }
+  },
+  {
+    "id": "meal_library_S11",
+    "name": "Hot honey cottage cheese & pretzels",
+    "source": "library",
+    "mealType": "snack",
+    "ingredients": [
+      {
+        "foodId": "food_core_cottage_cheese_2",
+        "quantity": 110,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_pretzels",
+        "quantity": 25,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_hot_honey",
+        "quantity": 6,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_almonds",
+        "quantity": 8,
+        "unit": "g"
+      }
+    ],
+    "favorite": false,
+    "metadata": {
+      "legacyId": "S11",
+      "lane": "spoon · sweet-savoury",
+      "nativeDayType": "lift",
+      "weightDescription": "~150 g",
+      "prepMinutes": 2,
+      "batchSize": 1,
+      "base": "25 g pretzels",
+      "steps": [
+        "Cottage cheese in the tub, hot honey over it, crack black pepper on top.",
+        "Pretzels and almonds in a separate bag — dip them rather than mixing them in, or they are soft by 3:30."
+      ],
+      "storage": "Tub the night before; dry things separate.",
+      "notes": "Eats like a treat. 110 g of cottage cheese is half a normal tub — it now reads as a dip rather than a meal."
+    }
+  },
+  {
+    "id": "meal_library_S12",
+    "name": "Popcorn, jerky & grapes",
+    "source": "library",
+    "mealType": "snack",
+    "ingredients": [
+      {
+        "foodId": "food_core_popcorn_popped",
+        "quantity": 20,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_turkey_jerky",
+        "quantity": 30,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_grapes",
+        "quantity": 40,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_almonds",
+        "quantity": 12,
+        "unit": "g"
+      }
+    ],
+    "favorite": false,
+    "metadata": {
+      "legacyId": "S12",
+      "lane": "desk · high volume",
+      "nativeDayType": "lift",
+      "weightDescription": "~105 g",
+      "prepMinutes": 2,
+      "batchSize": 1,
+      "base": "20 g popcorn",
+      "steps": [
+        "Air-pop the corn at home — 20 g of kernels is about three and a half cups popped.",
+        "Salt it, do not butter it; the fat slot is small."
+      ],
+      "storage": "Popcorn holds 2 days sealed.",
+      "notes": "By a distance the biggest-looking snack here, which matters on a day you are actually hungry rather than just due.",
+      "ingredientLabels": {
+        "food_core_popcorn_popped": "air-popped popcorn"
+      }
+    }
+  },
+  {
+    "id": "meal_library_S13",
+    "name": "Chocolate cottage cheese pudding",
+    "source": "library",
+    "mealType": "snack",
+    "ingredients": [
+      {
+        "foodId": "food_core_cottage_cheese_2",
+        "quantity": 110,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_cocoa_powder",
+        "quantity": 4,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_honey",
+        "quantity": 8,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_banana",
+        "quantity": 40,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_graham_crackers",
+        "quantity": 9,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_peanut_butter",
+        "quantity": 8,
+        "unit": "g"
+      }
+    ],
+    "favorite": false,
+    "metadata": {
+      "legacyId": "S13",
+      "lane": "spoon · dessert",
+      "nativeDayType": "lift",
+      "weightDescription": "~180 g",
+      "prepMinutes": 4,
+      "batchSize": 1,
+      "base": "9 g graham crackers + banana",
+      "steps": [
+        "Blend the cottage cheese, cocoa, honey and peanut butter completely smooth — 45 seconds, and smooth is the whole point; grainy cocoa cottage cheese is unpleasant.",
+        "Into a tub, banana sliced on top.",
+        "Graham crackers in a separate bag, crumbled over at 3:30."
+      ],
+      "storage": "Blends fine on Sunday and holds 4 days — it thickens slightly, which is an improvement.",
+      "notes": "The closest thing here to dessert."
+    }
+  },
+  {
+    "id": "meal_library_S14",
+    "name": "Chia pudding, granola & berries",
+    "source": "library",
+    "mealType": "snack",
+    "ingredients": [
+      {
+        "foodId": "food_core_fage_0_greek_yogurt",
+        "quantity": 110,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_milk_2",
+        "quantity": 50,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_chia_seeds",
+        "quantity": 7,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_granola",
+        "quantity": 24,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_strawberries",
+        "quantity": 80,
+        "unit": "g"
+      }
+    ],
+    "favorite": false,
+    "metadata": {
+      "legacyId": "S14",
+      "lane": "spoon · make ahead",
+      "nativeDayType": "lift",
+      "weightDescription": "~270 g",
+      "prepMinutes": 4,
+      "batchSize": 4,
+      "base": "24 g granola + strawberries",
+      "steps": [
+        "Stir the yogurt, milk and chia together. Fridge overnight — chia wants 8 hours, not 4.",
+        "Strawberries sliced in.",
+        "Granola in a separate bag, over the top at 3:30 or it dissolves."
+      ],
+      "storage": "Batch four at once, holds 4 days.",
+      "notes": "Make it Sunday alongside the lunches and the snack slot is decided for half the week.",
+      "ingredientLabels": {
+        "food_core_fage_0_greek_yogurt": "greek yogurt nonfat"
+      }
+    }
+  },
+  {
+    "id": "meal_library_S16",
+    "name": "Everything-bagel cottage cheese rice cakes",
+    "source": "library",
+    "mealType": "snack",
+    "ingredients": [
+      {
+        "foodId": "food_core_rice_cakes",
+        "quantity": 24,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_cottage_cheese_2",
+        "quantity": 110,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_tomato",
+        "quantity": 60,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_avocado",
+        "quantity": 32,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_everything_bagel_seasoning",
+        "quantity": 2,
+        "unit": "g"
+      }
+    ],
+    "favorite": false,
+    "metadata": {
+      "legacyId": "S16",
+      "lane": "desk · savoury",
+      "nativeDayType": "lift",
+      "weightDescription": "~225 g",
+      "prepMinutes": 3,
+      "batchSize": 1,
+      "base": "24 g rice cakes",
+      "steps": [
+        "Cottage cheese, halved tomatoes and seasoning in a tub; avocado added in the morning.",
+        "Rice cakes in a separate bag — top them at your desk, because spread ahead they are soft within the hour."
+      ],
+      "storage": "Tub holds 2 days; avocado the morning you eat it.",
+      "notes": "",
+      "ingredientLabels": {
+        "food_core_tomato": "cherry tomatoes"
+      }
+    }
+  },
+  {
+    "id": "meal_library_S17",
+    "name": "Mango, yogurt & cashews",
+    "source": "library",
+    "mealType": "snack",
+    "ingredients": [
+      {
+        "foodId": "food_core_fage_0_greek_yogurt",
+        "quantity": 130,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_dried_mango",
+        "quantity": 16,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_cashews",
+        "quantity": 15,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_pineapple",
+        "quantity": 60,
+        "unit": "g"
+      }
+    ],
+    "favorite": false,
+    "metadata": {
+      "legacyId": "S17",
+      "lane": "spoon · fruit-forward",
+      "nativeDayType": "lift",
+      "weightDescription": "~220 g",
+      "prepMinutes": 2,
+      "batchSize": 1,
+      "base": "16 g dried mango + pineapple",
+      "steps": [
+        "Yogurt in the tub with the fresh pineapple stirred through.",
+        "Mango and cashews in a separate bag — mango goes leathery-soft sitting in yogurt."
+      ],
+      "storage": "2 days.",
+      "notes": "Buy dried mango with no added sugar. The sweetened kind is nearly double the carbohydrate per gram and would put this well over slot. Weigh it — 16 g is a small amount.",
+      "ingredientLabels": {
+        "food_core_fage_0_greek_yogurt": "greek yogurt nonfat"
+      }
+    }
+  },
+  {
+    "id": "meal_library_S18",
+    "name": "Edamame & apple",
+    "source": "library",
+    "mealType": "snack",
+    "ingredients": [
+      {
+        "foodId": "food_core_edamame_shelled",
+        "quantity": 130,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_apple",
+        "quantity": 110,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_pretzels",
+        "quantity": 5,
+        "unit": "g"
+      }
+    ],
+    "favorite": false,
+    "metadata": {
+      "legacyId": "S18",
+      "lane": "desk · no dairy",
+      "nativeDayType": "lift",
+      "weightDescription": "~245 g",
+      "prepMinutes": 3,
+      "batchSize": 1,
+      "base": "apple + 5 g pretzels",
+      "steps": [
+        "Steam or microwave the edamame 3 min from frozen, cool completely, salt it well.",
+        "Bag it with the sliced apple."
+      ],
+      "storage": "3 days. Good cold, zero smell.",
+      "notes": "The only option with no dairy in it at all — the one for a heavy-yogurt day.",
+      "ingredientLabels": {
+        "food_core_edamame_shelled": "shelled edamame frozen"
+      }
+    }
+  },
+  {
+    "id": "meal_library_S19",
+    "name": "Berry smoothie in a thermos",
+    "source": "library",
+    "mealType": "snack",
+    "ingredients": [
+      {
+        "foodId": "food_core_fage_0_greek_yogurt",
+        "quantity": 90,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_frozen_mixed_berries",
+        "quantity": 122,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_milk_2",
+        "quantity": 80,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_almond_butter",
+        "quantity": 8,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_rolled_oats_dry",
+        "quantity": 10,
+        "unit": "g"
+      }
+    ],
+    "favorite": false,
+    "metadata": {
+      "legacyId": "S19",
+      "lane": "drinkable",
+      "nativeDayType": "lift",
+      "weightDescription": "~300 ml",
+      "prepMinutes": 3,
+      "batchSize": 1,
+      "base": "frozen berries + 10 g oats",
+      "steps": [
+        "Blend everything, 45 seconds. The oats are what give it body — without them it drinks thin and you are hungry at four.",
+        "Into an insulated bottle in the morning; it holds cold until mid-afternoon."
+      ],
+      "storage": "Blend the morning of. Overnight it separates and the oats swell.",
+      "notes": "A different format rather than a different flavour, and that matters on a day when chewing another packed thing is the problem.",
+      "ingredientLabels": {
+        "food_core_fage_0_greek_yogurt": "greek yogurt nonfat",
+        "food_core_rolled_oats_dry": "rolled oats"
+      }
+    }
+  },
+  {
+    "id": "meal_library_S20",
+    "name": "Stuffed dates & jerky",
+    "source": "library",
+    "mealType": "snack",
+    "ingredients": [
+      {
+        "foodId": "food_core_dates_medjool",
+        "quantity": 30,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_peanut_butter",
+        "quantity": 12,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_turkey_jerky",
+        "quantity": 33,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_almonds",
+        "quantity": 3,
+        "unit": "g"
+      }
+    ],
+    "favorite": false,
+    "metadata": {
+      "legacyId": "S20",
+      "lane": "desk · shelf-stable · treat",
+      "nativeDayType": "lift",
+      "weightDescription": "~80 g",
+      "prepMinutes": 2,
+      "batchSize": 1,
+      "base": "30 g medjool dates",
+      "steps": [
+        "Split the dates, remove the stones, fill with peanut butter, press an almond in. Flaky salt if you have it.",
+        "Jerky alongside."
+      ],
+      "storage": "Dates keep for weeks. Stuff a week’s worth at once and keep them in the drawer.",
+      "notes": "The second shelf-stable option, and it no longer needs a shaker either. 30 g is about one and a bit — weigh them, medjools vary enormously.",
+      "ingredientLabels": {
+        "food_core_dates_medjool": "medjool dates"
+      }
+    }
+  },
+  {
+    "id": "meal_library_S21",
+    "name": "Caprese plate",
+    "source": "library",
+    "mealType": "snack",
+    "ingredients": [
+      {
+        "foodId": "food_core_fresh_mozzarella",
+        "quantity": 40,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_tomato",
+        "quantity": 100,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_sourdough",
+        "quantity": 45,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_deli_turkey_low_sodium",
+        "quantity": 20,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_balsamic_glaze",
+        "quantity": 5,
+        "unit": "g"
+      }
+    ],
+    "favorite": false,
+    "metadata": {
+      "legacyId": "S21",
+      "lane": "desk · savoury",
+      "nativeDayType": "lift",
+      "weightDescription": "~210 g",
+      "prepMinutes": 3,
+      "batchSize": 1,
+      "base": "45 g sourdough",
+      "steps": [
+        "Halve the tomatoes and salt them lightly.",
+        "Sourdough torn into pieces, mozzarella pearls drained, turkey rolled.",
+        "Balsamic glaze in its own small cup — dressed ahead, the mozzarella goes grey."
+      ],
+      "storage": "2 days.",
+      "notes": "New at the smaller size. At 24 g of protein a caprese snack was impossible without a pile of cheese that blew the fat slot; at 15 it works.",
+      "ingredientLabels": {
+        "food_core_tomato": "cherry tomatoes",
+        "food_core_deli_turkey_low_sodium": "deli turkey"
+      },
+      "isNew": true
+    }
+  },
+  {
+    "id": "meal_library_S22",
+    "name": "Parmesan, turkey & pretzels",
+    "source": "library",
+    "mealType": "snack",
+    "ingredients": [
+      {
+        "foodId": "food_core_parmesan_snack_cheese",
+        "quantity": 21,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_deli_turkey_low_sodium",
+        "quantity": 30,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_pretzels",
+        "quantity": 22,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_grapes",
+        "quantity": 70,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_baby_carrots",
+        "quantity": 60,
+        "unit": "g"
+      }
+    ],
+    "favorite": false,
+    "metadata": {
+      "legacyId": "S22",
+      "lane": "desk · savoury",
+      "nativeDayType": "lift",
+      "weightDescription": "~200 g",
+      "prepMinutes": 5,
+      "batchSize": 1,
+      "base": "22 g pretzels + grapes",
+      "steps": [
+        "One BelGioioso Power-Full parmesan piece, the turkey rolled into loose bundles, everything else bagged separately.",
+        "Pretzels stay in their own bag until 3:30 or they soften against the grapes."
+      ],
+      "storage": "Assemble the night before; the cheese keeps its texture 2 days out of the fridge and a week in it.",
+      "notes": "The parmesan is a hard cheese, not a spoonable one — that is the whole point of it here. One 21 g piece carries 7 g of protein and 6 g of fat, so it does most of the work of a yogurt cup without being a yogurt cup, and the turkey closes the gap rather than a second piece of cheese doing it. Two pieces would put fat 4 g over slot. Carbohydrate runs 6 g above slot, which is the right direction.",
+      "ingredientLabels": {
+        "food_core_deli_turkey_low_sodium": "deli turkey"
+      },
+      "isNew": true
+    }
+  },
+  {
+    "id": "meal_library_S23",
+    "name": "Turkey stick, apple & crackers",
+    "source": "library",
+    "mealType": "snack",
+    "ingredients": [
+      {
+        "foodId": "food_core_turkey_snack_stick",
+        "quantity": 33,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_whole_grain_crackers",
+        "quantity": 25,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_apple",
+        "quantity": 120,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_almonds",
+        "quantity": 5,
+        "unit": "g"
+      }
+    ],
+    "favorite": false,
+    "metadata": {
+      "legacyId": "S23",
+      "lane": "desk · no dairy",
+      "nativeDayType": "lift",
+      "weightDescription": "~180 g",
+      "prepMinutes": 2,
+      "batchSize": 1,
+      "base": "25 g crackers + apple",
+      "steps": [
+        "One Chomps turkey stick, crackers and almonds in the drawer permanently; apple sliced at your desk.",
+        "Nothing here needs a fridge except the apple, and the apple does not really need one either."
+      ],
+      "storage": "Stick and crackers keep for months. Restock monthly alongside the desk-drawer kit.",
+      "notes": "No dairy at all and no spoon — the second option in the bank you can build entirely from a desk drawer, and unlike S6 it does not lean on jerky sugar to get there. A turkey stick is 12 g of protein for 3.5 g of fat, which is the leanest protein-per-gram of anything shelf-stable here. Weigh the crackers: a sleeve poured by hand is easily double 25 g.",
+      "isNew": true
+    }
+  },
+  {
+    "id": "meal_library_S24",
+    "name": "Protein bar & apple",
+    "source": "library",
+    "mealType": "snack",
+    "ingredients": [
+      {
+        "foodId": "food_core_protein_bar_high_fibre",
+        "quantity": 45,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_apple",
+        "quantity": 130,
+        "unit": "g"
+      }
+    ],
+    "favorite": false,
+    "metadata": {
+      "legacyId": "S24",
+      "lane": "travel · zero prep",
+      "nativeDayType": "lift",
+      "weightDescription": "bar + 1 apple ~175 g",
+      "prepMinutes": 0,
+      "batchSize": 1,
+      "base": "the bar + 130 g apple",
+      "steps": [
+        "Keep two in your bag. That is the recipe."
+      ],
+      "storage": "Months. This is the option for a day that goes sideways.",
+      "notes": "Honest assessment: this is the worst macro fit in the snack bank and it is here because a bar in your bag beats a skipped snack. An IQBAR runs 12 g of fat against an 8 g slot and only 13 g of carbohydrate against 30, so the apple is not a garnish — it is most of the carbohydrate. It still lands 2.6 g under on protein, which is left alone deliberately. The bigger flag is fibre: one bar carries 10 g, nearly all of it chicory-root type that ferments fast. Given slow transit that is a lot to arrive at once, so treat this as the travel option rather than the Tuesday one, and do not run it on a day with a bean-based lunch.",
+      "ingredientLabels": {
+        "food_core_protein_bar_high_fibre": "protein bar high fibre"
+      },
+      "isNew": true
+    }
+  },
+  {
+    "id": "meal_library_S25",
+    "name": "Peanut butter power balls",
+    "source": "library",
+    "mealType": "snack",
+    "ingredients": [
+      {
+        "foodId": "food_core_rolled_oats_dry",
+        "quantity": 32,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_peanut_butter",
+        "quantity": 10,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_honey",
+        "quantity": 10,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_protein_powder",
+        "quantity": 12,
+        "unit": "g"
+      }
+    ],
+    "favorite": false,
+    "metadata": {
+      "legacyId": "S25",
+      "lane": "make ahead · no spoon",
+      "nativeDayType": "lift",
+      "weightDescription": "3 balls ~65 g",
+      "prepMinutes": 15,
+      "batchSize": 6,
+      "base": "32 g dry oats + 10 g honey",
+      "steps": [
+        "Scale every line by the number of servings you are making — six servings is eighteen balls and about a week and a half.",
+        "Stir the oats and protein powder together dry first. Powder added to wet mix clumps and you get chalky pockets.",
+        "Warm the peanut butter and honey together 20 seconds in the microwave so they pour, then stir them through. The mix should hold when squeezed; if it crumbles add water a teaspoon at a time, never more oil.",
+        "Chill the mix 20 minutes before rolling — warm mix sticks to your hands and you lose a third of it.",
+        "Roll into 22 g balls, three to a serving. A scale is faster than eyeballing and the whole point is that a serving is a known quantity."
+      ],
+      "storage": "Fridge 2 weeks, freezer 3 months. They go rock-hard frozen — take a serving out the night before.",
+      "notes": "Exactly on slot at 15.3 / 8.0 / 33.1, which is the tightest fit of any snack here, and it is the only make-ahead option that is not a tub. The ratio matters: 10 g of peanut butter per serving looks mean, and it is what keeps fat at slot — the usual internet ratio is nearly double that and lands 12 g of fat, which is where a power ball quietly becomes a fat bomb. The honey does the binding that the extra peanut butter would have. Chocolate chips would add about 3 g of fat per serving; if you want them, that is the trade.",
+      "ingredientLabels": {
+        "food_core_rolled_oats_dry": "rolled oats"
+      },
+      "isNew": true
+    }
+  },
+  {
+    "id": "meal_library_D1",
+    "name": "Honey-Garlic Salmon, Jasmine Rice, Broccolini",
+    "source": "library",
+    "mealType": "dinner",
+    "ingredients": [
+      {
+        "foodId": "food_core_salmon_raw",
+        "quantity": 128,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_jasmine_rice_dry",
+        "quantity": 70,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_broccolini",
+        "quantity": 150,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_olive_oil",
+        "quantity": 5,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_honey",
+        "quantity": 15,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_soy_sauce",
+        "quantity": 15,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_garlic",
+        "quantity": 6,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_edamame_shelled",
+        "quantity": 70,
+        "unit": "g"
+      }
+    ],
+    "favorite": false,
+    "metadata": {
+      "legacyId": "D1",
+      "lane": "American",
+      "nativeDayType": "lift",
+      "weightDescription": "~525 g",
+      "prepMinutes": 30,
+      "batchSize": 2,
+      "base": "210 g cooked jasmine rice",
+      "steps": [
+        "Oven 425 °F. Rice on: 1:1.5 by volume, 15 min covered low plus 10 min rest.",
+        "Whisk the honey, soy and garlic into a glaze.",
+        "Broccolini tossed with oil, salt and pepper on a sheet pan. Push to one side, salmon on the other, brushed generously with the glaze.",
+        "Roast 12–14 min until the salmon flakes at the thickest point and the broccolini is charring at the tips. Lemon and the rest of the glaze at the end.",
+        "Edamame from frozen, steamed 3 min and salted, tipped into the bowl at the end. Broccolini alone left this at 4.9 g of fibre."
+      ],
+      "storage": "Fridge 3 days. Salmon is good cold over the rice the next day.",
+      "notes": "Full batch for two: 340 g salmon, 150 g dry rice, 350 g broccolini, 12 g oil, 30 g honey, 30 g soy, 12 g garlic.",
+      "ingredientLabels": {
+        "food_core_salmon_raw": "salmon",
+        "food_core_jasmine_rice_dry": "jasmine rice dry",
+        "food_core_soy_sauce": "soy sauce low sodium",
+        "food_core_edamame_shelled": "edamame frozen"
+      }
+    }
+  },
+  {
+    "id": "meal_library_D2",
+    "name": "Blackstone Smash Burgers + Griddled Wedges",
+    "source": "library",
+    "mealType": "dinner",
+    "ingredients": [
+      {
+        "foodId": "food_core_ground_beef_90_10",
+        "quantity": 119,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_burger_bun",
+        "quantity": 60,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_american_cheese",
+        "quantity": 15,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_potato_raw",
+        "quantity": 230,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_olive_oil",
+        "quantity": 5,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_ketchup",
+        "quantity": 15,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_onion",
+        "quantity": 30,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_romaine",
+        "quantity": 25,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_tomato",
+        "quantity": 40,
+        "unit": "g"
+      }
+    ],
+    "favorite": false,
+    "metadata": {
+      "legacyId": "D2",
+      "lane": "burgers",
+      "nativeDayType": "lift",
+      "weightDescription": "~500 g",
+      "prepMinutes": 40,
+      "batchSize": 2,
+      "base": "60 g bun + 179 g roasted wedges",
+      "steps": [
+        "Par-cook the wedges first — microwave the cut potatoes 6–7 min until just fork-tender, then toss with oil, paprika, garlic powder and salt. This is the whole trick.",
+        "Blackstone at medium-high. Wedges down cut-side first, 10–12 min turning twice, then move to a cool zone.",
+        "Divide the beef into 85 g balls — two thin patties per burger beats one thick one for crust. Griddle screaming hot, ball down, smash flat and hard for 10 seconds, salt.",
+        "90 seconds, then flip: the crust releases when it is ready, not before. Cheese on immediately, 60 seconds more.",
+        "Toast the cut buns in the beef fat, 45 seconds. Build."
+      ],
+      "storage": "Best fresh. Cooked patties keep 3 days — reheat in a dry pan, never the microwave. Wedges do not survive reheating.",
+      "notes": "Full batch for two: 340 g beef, 2 buns, 2 slices cheese, 550 g potatoes, 12 g oil, 30 g ketchup, 60 g onion, 60 g romaine, 90 g tomato.",
+      "ingredientLabels": {
+        "food_core_potato_raw": "potato",
+        "food_core_tomato": "cherry tomatoes"
+      }
+    }
+  },
+  {
+    "id": "meal_library_D3",
+    "name": "Pineapple Chicken Stir Fry + Jasmine Rice",
+    "source": "library",
+    "mealType": "dinner",
+    "ingredients": [
+      {
+        "foodId": "food_core_chicken_breast_raw",
+        "quantity": 118,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_jasmine_rice_dry",
+        "quantity": 45,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_pineapple",
+        "quantity": 90,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_bell_pepper",
+        "quantity": 80,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_sugar_snap_peas",
+        "quantity": 60,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_onion",
+        "quantity": 40,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_cashews",
+        "quantity": 22,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_soy_sauce",
+        "quantity": 20,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_honey",
+        "quantity": 10,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_sesame_oil",
+        "quantity": 9,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_cornstarch",
+        "quantity": 4,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_garlic",
+        "quantity": 6,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_ginger",
+        "quantity": 5,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_broccoli_raw",
+        "quantity": 100,
+        "unit": "g"
+      }
+    ],
+    "favorite": false,
+    "metadata": {
+      "legacyId": "D3",
+      "lane": "stir fry",
+      "nativeDayType": "lift",
+      "weightDescription": "~618 g",
+      "prepMinutes": 25,
+      "batchSize": 2,
+      "base": "135 g cooked jasmine rice",
+      "steps": [
+        "Rice on first: 15 min covered low plus 10 min rest.",
+        "Toss the sliced chicken with half the cornstarch — the velveting step, and it is why the chicken stays tender at high heat.",
+        "Whisk the sauce: soy, honey, rice vinegar, remaining cornstarch, 30 ml water.",
+        "Wok on high with half the sesame oil. Chicken in a single layer, do not stir for 90 seconds, then toss 2–3 min and remove.",
+        "Remaining oil, garlic and ginger 30 seconds, then pepper, snap peas and onion 3–4 min to crisp-tender. Pineapple 1 min. Chicken back, sauce in, toss 60–90 seconds to gloss. Cashews off the heat.",
+        "Broccoli in with the peppers and snap peas, 3–4 min to tender-crisp."
+      ],
+      "storage": "Fridge 3 days. Reheats well; the snap peas soften. Keep the cashews separate if you want them crisp.",
+      "notes": "The rice base is smaller here than in other dinners because the pineapple, honey and cashews already carry about 25 g of carbohydrate between them. The slot is still met — do not add rice back without re-checking.",
+      "ingredientLabels": {
+        "food_core_chicken_breast_raw": "chicken breast",
+        "food_core_jasmine_rice_dry": "jasmine rice dry",
+        "food_core_onion": "red onion",
+        "food_core_soy_sauce": "soy sauce low sodium",
+        "food_core_broccoli_raw": "broccoli"
+      }
+    }
+  },
+  {
+    "id": "meal_library_D4",
+    "name": "Chicken Souvlaki + Greek Lemon Potatoes",
+    "source": "library",
+    "mealType": "dinner",
+    "ingredients": [
+      {
+        "foodId": "food_core_chicken_breast_raw",
+        "quantity": 118,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_potato_raw",
+        "quantity": 400,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_olive_oil",
+        "quantity": 14,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_tzatziki",
+        "quantity": 60,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_cucumber",
+        "quantity": 60,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_tomato",
+        "quantity": 60,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_lemon_juice",
+        "quantity": 20,
+        "unit": "g"
+      }
+    ],
+    "favorite": false,
+    "metadata": {
+      "legacyId": "D4",
+      "lane": "Mediterranean",
+      "nativeDayType": "lift",
+      "weightDescription": "~580 g",
+      "prepMinutes": 45,
+      "batchSize": 2,
+      "base": "312 g Greek lemon potatoes",
+      "steps": [
+        "Marinate first: chicken with olive oil, lemon, garlic, oregano, salt and pepper. Leave 20 min while the potatoes start.",
+        "Oven 425 °F. Potato wedges tossed with oil, lemon, garlic and oregano into a baking dish. Pour stock around them, not over, and cover tightly with foil.",
+        "Roast covered 25 min. Uncover, toss, roast a further 15–18 min until the liquid has gone and the edges are browned and sticky. That two-stage method is what makes them Greek rather than just roasted.",
+        "Chicken on a second pan, 14–16 min to 165 °F, or on the Blackstone 3–4 min a side.",
+        "Build with cucumber, tomato and tzatziki spooned over."
+      ],
+      "storage": "Fridge 4 days — the best keeper of the Week 7 set. Potatoes re-crisp in the air fryer, 5 min at 400 °F. Tzatziki separately.",
+      "notes": "312 g of roasted potato on your plate is more starch than any other dinner in the library carries, and it is the cleanest way to hit a 78 g slot without rice.",
+      "ingredientLabels": {
+        "food_core_chicken_breast_raw": "chicken breast",
+        "food_core_potato_raw": "potato",
+        "food_core_tomato": "cherry tomatoes"
+      }
+    }
+  },
+  {
+    "id": "meal_library_D5",
+    "name": "Blackstone Breakfast-for-Dinner",
+    "source": "library",
+    "mealType": "dinner",
+    "ingredients": [
+      {
+        "foodId": "food_core_egg_whole",
+        "quantity": 100,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_egg_white",
+        "quantity": 42,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_turkey_bacon",
+        "quantity": 30,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_sourdough",
+        "quantity": 100,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_butter",
+        "quantity": 4,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_frozen_hash_browns",
+        "quantity": 150,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_spinach",
+        "quantity": 100,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_tomato",
+        "quantity": 120,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_black_beans_canned_drained",
+        "quantity": 45,
+        "unit": "g"
+      }
+    ],
+    "favorite": false,
+    "metadata": {
+      "legacyId": "D5",
+      "lane": "breakfast-for-dinner",
+      "nativeDayType": "lift",
+      "weightDescription": "~630 g",
+      "prepMinutes": 20,
+      "batchSize": 2,
+      "base": "100 g sourdough + 150 g hash browns",
+      "steps": [
+        "Blackstone to medium. Turkey bacon first, 4–5 min turning once. Set aside — it renders enough fat to cook the eggs in.",
+        "Hash browns into the rendered fat, spread thin, press down and leave 5 minutes undisturbed. Flip in sections, another 4–5 min. Not moving them is the entire technique.",
+        "Butter a clear zone and toast the sourdough, 90 seconds a side.",
+        "Eggs in the remaining space, 2–3 min.",
+        "Blacken the tomatoes cut-side down on the griddle 3 min, wilt the spinach beside them in the last minute, and warm the black beans through. This plate had 2.4 g of fibre without them — the lowest of any dinner here, because eggs, bacon, toast and hash browns carry none at all."
+      ],
+      "storage": "Eat fresh. Eggs and toast do not hold — this is the one dinner with no leftover plan, which is why it belongs on a Friday.",
+      "notes": "The library version of this was coded rest-day and landed 37 g short. Both the sourdough and the hash browns are weighed components here, not 'add hash browns for higher-carb days'.",
+      "ingredientLabels": {
+        "food_core_egg_whole": "egg",
+        "food_core_egg_white": "liquid egg white",
+        "food_core_tomato": "cherry tomatoes",
+        "food_core_black_beans_canned_drained": "black beans canned"
+      }
+    }
+  },
+  {
+    "id": "meal_library_D6",
+    "name": "Ground Turkey Taco Skillet + Rice",
+    "source": "library",
+    "mealType": "dinner",
+    "ingredients": [
+      {
+        "foodId": "food_core_ground_turkey_93_7",
+        "quantity": 109,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_white_rice_dry",
+        "quantity": 65,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_black_beans_canned_drained",
+        "quantity": 80,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_bell_pepper",
+        "quantity": 60,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_onion",
+        "quantity": 40,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_olive_oil",
+        "quantity": 4,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_salsa",
+        "quantity": 50,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_cheddar",
+        "quantity": 12,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_avocado",
+        "quantity": 45,
+        "unit": "g"
+      }
+    ],
+    "favorite": false,
+    "metadata": {
+      "legacyId": "D6",
+      "lane": "Mexican",
+      "nativeDayType": "lift",
+      "weightDescription": "~490 g",
+      "prepMinutes": 30,
+      "batchSize": 2,
+      "base": "195 g cooked white rice",
+      "steps": [
+        "Rice on: 18 min covered low plus 10 min rest.",
+        "Brown the turkey in the oil over medium-high with chili powder, cumin, garlic powder and salt, breaking it up, 8 min to no pink.",
+        "Pepper and onion in, 5 min until softened.",
+        "Beans and salsa, warm through 2 min. Serve over the rice with cheddar and avocado."
+      ],
+      "storage": "Fridge 4 days, reheats well. Avocado always cut day-of.",
+      "notes": "Reserve a portion before plating if you want it for a lunch — easier than trying to save it afterwards.",
+      "ingredientLabels": {
+        "food_core_white_rice_dry": "white rice dry",
+        "food_core_black_beans_canned_drained": "black beans canned"
+      }
+    }
+  },
+  {
+    "id": "meal_library_D7",
+    "name": "Garlic-Parm Chicken & Crispy Potatoes",
+    "source": "library",
+    "mealType": "dinner",
+    "ingredients": [
+      {
+        "foodId": "food_core_chicken_breast_raw",
+        "quantity": 97,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_potato_raw",
+        "quantity": 290,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_olive_oil",
+        "quantity": 9,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_milk_2",
+        "quantity": 40,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_light_cream_cheese",
+        "quantity": 25,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_parmesan",
+        "quantity": 12,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_mozzarella_part_skim",
+        "quantity": 15,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_garlic",
+        "quantity": 8,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_broccoli_raw",
+        "quantity": 100,
+        "unit": "g"
+      }
+    ],
+    "favorite": false,
+    "metadata": {
+      "legacyId": "D7",
+      "lane": "American",
+      "nativeDayType": "rest",
+      "weightDescription": "~478 g",
+      "prepMinutes": 35,
+      "batchSize": 2,
+      "base": "226 g roasted potato",
+      "steps": [
+        "Toss the chicken cubes with half the oil, garlic, onion powder, dried herbs, paprika, chili flakes and salt. Potato cubes with the other half and the same seasoning.",
+        "Air fry separately at 400 °F: potatoes 20–23 min, chicken 16–18 to 165 °F, shaking the baskets halfway. Oven alternative: both at 425 °F, potatoes 28 min, chicken 18.",
+        "Sauce: warm the milk, cream cheese and parmesan over low, stirring smooth, 3–4 min. Mozzarella off the heat. Do not boil it or it splits.",
+        "Toss the chicken and potatoes through the sauce. Parsley.",
+        "Broccoli tossed in with the potatoes for the last 15 min, then through the sauce with everything else."
+      ],
+      "storage": "Fridge 4 days. A splash of milk when reheating loosens the sauce.",
+      "notes": "Built at rest-day size — this is the Sunday dinner. On a lifting day it needs about 28 g more dry rice or another 126 g of raw potato.",
+      "ingredientLabels": {
+        "food_core_chicken_breast_raw": "chicken breast",
+        "food_core_potato_raw": "potato",
+        "food_core_mozzarella_part_skim": "mozzarella",
+        "food_core_broccoli_raw": "broccoli"
+      }
+    }
+  },
+  {
+    "id": "meal_library_D8",
+    "name": "Shrimp Fajita Bowls + Cilantro-Lime Rice",
+    "source": "library",
+    "mealType": "dinner",
+    "ingredients": [
+      {
+        "foodId": "food_core_shrimp_raw",
+        "quantity": 140,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_white_rice_dry",
+        "quantity": 75,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_bell_pepper",
+        "quantity": 90,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_onion",
+        "quantity": 50,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_olive_oil",
+        "quantity": 8,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_avocado",
+        "quantity": 45,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_salsa",
+        "quantity": 50,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_cheddar",
+        "quantity": 12,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_lime_juice",
+        "quantity": 10,
+        "unit": "g"
+      }
+    ],
+    "favorite": false,
+    "metadata": {
+      "legacyId": "D8",
+      "lane": "Mexican",
+      "nativeDayType": "lift",
+      "weightDescription": "~630 g",
+      "prepMinutes": 25,
+      "batchSize": 2,
+      "base": "225 g cooked white rice",
+      "steps": [
+        "Rice on: 18 min low plus 10 min rest. Fold lime juice and chopped cilantro through off the heat.",
+        "Cast iron or Blackstone on high. Peppers and onion in the oil, 5–6 min until they take colour and still have bite. Push aside.",
+        "Shrimp tossed in chili powder, cumin, smoked paprika and garlic powder, 2 min a side to pink and opaque. Stop there — shrimp is ninety seconds from perfect to rubber.",
+        "Build: rice, vegetables, shrimp, avocado, pico, cheddar."
+      ],
+      "storage": "Fridge 3 days. Reheat the shrimp gently or eat it cold over the rice.",
+      "notes": "The fastest dinner in the bank — this is the one for 6:40 pm with nothing started.",
+      "ingredientLabels": {
+        "food_core_shrimp_raw": "shrimp",
+        "food_core_white_rice_dry": "white rice dry",
+        "food_core_salsa": "pico de gallo"
+      }
+    }
+  },
+  {
+    "id": "meal_library_D9",
+    "name": "Ground Turkey Bolognese over Rigatoni",
+    "source": "library",
+    "mealType": "dinner",
+    "ingredients": [
+      {
+        "foodId": "food_core_ground_turkey_93_7",
+        "quantity": 100,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_pasta_dry",
+        "quantity": 70,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_crushed_tomatoes",
+        "quantity": 150,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_tomato_paste",
+        "quantity": 20,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_onion",
+        "quantity": 40,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_carrot",
+        "quantity": 40,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_celery",
+        "quantity": 30,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_olive_oil",
+        "quantity": 7,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_parmesan",
+        "quantity": 12,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_milk_2",
+        "quantity": 30,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_garlic",
+        "quantity": 6,
+        "unit": "g"
+      }
+    ],
+    "favorite": false,
+    "metadata": {
+      "legacyId": "D9",
+      "lane": "Italian",
+      "nativeDayType": "lift",
+      "weightDescription": "~560 g",
+      "prepMinutes": 40,
+      "batchSize": 2,
+      "base": "168 g cooked rigatoni",
+      "steps": [
+        "Dice the onion, carrot and celery fine — the finer the dice, the better the sauce. Sweat in the olive oil over medium, 8 min, until soft and sweet.",
+        "Garlic 30 seconds. Turkey in, broken up fine, 6–8 min to no pink.",
+        "Tomato paste in, 2 min. Cooking the paste out is what gives this depth without a long simmer. Then crushed tomatoes, oregano, bay leaf, salt.",
+        "Simmer 20 min uncovered, stirring occasionally. Milk stirred in for the last 5.",
+        "Pasta al dente, reserve 100 ml of the water, toss sauce and pasta together in the pan with a splash. Parmesan at the table."
+      ],
+      "storage": "The best keeper in the bank — sauce holds 5 days and freezes 3 months. Make a double batch of sauce and two dinners' work is behind you.",
+      "notes": "Use regular semolina pasta. High-protein pasta runs about 9 g less carbohydrate and 6 g more protein at the same dry weight — the wrong direction on both axes at once.",
+      "ingredientLabels": {
+        "food_core_pasta_dry": "rigatoni dry"
+      }
+    }
+  },
+  {
+    "id": "meal_library_D10",
+    "name": "Honey-Garlic Chicken Thighs + Sweet Potato",
+    "source": "library",
+    "mealType": "dinner",
+    "ingredients": [
+      {
+        "foodId": "food_core_chicken_thigh_raw",
+        "quantity": 155,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_sweet_potato_raw",
+        "quantity": 280,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_green_beans",
+        "quantity": 130,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_olive_oil",
+        "quantity": 9,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_honey",
+        "quantity": 15,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_soy_sauce",
+        "quantity": 12,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_garlic",
+        "quantity": 8,
+        "unit": "g"
+      }
+    ],
+    "favorite": false,
+    "metadata": {
+      "legacyId": "D10",
+      "lane": "American",
+      "nativeDayType": "lift",
+      "weightDescription": "~470 g",
+      "prepMinutes": 40,
+      "batchSize": 2,
+      "base": "210 g roasted sweet potato",
+      "steps": [
+        "Oven 425 °F. Sweet potato in 2 cm cubes tossed with oil and salt. Roast 22 min.",
+        "Whisk honey, soy, garlic, rice vinegar and red pepper flakes.",
+        "Green beans onto the pan, thighs alongside brushed with half the glaze. Roast 15–18 min to 175 °F — thighs want to go past 165, unlike breast; that is where they get tender.",
+        "Remaining glaze over at the table."
+      ],
+      "storage": "Fridge 4 days, reheats well.",
+      "notes": "The only place in the bank where the protein brings real fat with it, which is why the added oil is low.",
+      "ingredientLabels": {
+        "food_core_chicken_thigh_raw": "chicken thigh",
+        "food_core_sweet_potato_raw": "sweet potato",
+        "food_core_soy_sauce": "soy sauce low sodium"
+      }
+    }
+  },
+  {
+    "id": "meal_library_D11",
+    "name": "Blackstone Steak & Loaded Baked Potato",
+    "source": "library",
+    "mealType": "dinner",
+    "ingredients": [
+      {
+        "foodId": "food_core_sirloin_steak_raw",
+        "quantity": 85,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_potato_raw",
+        "quantity": 380,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_butter",
+        "quantity": 6,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_fage_0_greek_yogurt",
+        "quantity": 40,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_cheddar",
+        "quantity": 18,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_scallions",
+        "quantity": 10,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_olive_oil",
+        "quantity": 4,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_broccoli_raw",
+        "quantity": 120,
+        "unit": "g"
+      }
+    ],
+    "favorite": false,
+    "metadata": {
+      "legacyId": "D11",
+      "lane": "American",
+      "nativeDayType": "lift",
+      "weightDescription": "~570 g",
+      "prepMinutes": 40,
+      "batchSize": 2,
+      "base": "296 g baked potato",
+      "steps": [
+        "Microwave the potatoes 8–10 min, then finish in a 425 °F oven 15 min for a crisp skin. Straight oven-baking is 55 minutes; this gets the same result inside the weeknight window.",
+        "Broccoli tossed in oil, roasted alongside 15 min.",
+        "Blackstone screaming hot. Steak salted heavily, 3–4 min a side to medium. Rest 5 minutes — non-negotiable — then slice against the grain.",
+        "Split the potatoes, fork the insides up, butter, yogurt, cheddar, scallions, steak over the top."
+      ],
+      "storage": "Fridge 3 days. Reheat the steak in short bursts.",
+      "notes": "The steak is deliberately light. Protein is already covered by breakfast and lunch; the potato is doing the work here.",
+      "ingredientLabels": {
+        "food_core_sirloin_steak_raw": "sirloin steak",
+        "food_core_potato_raw": "potato",
+        "food_core_fage_0_greek_yogurt": "greek yogurt nonfat",
+        "food_core_broccoli_raw": "broccoli"
+      }
+    }
+  },
+  {
+    "id": "meal_library_D12",
+    "name": "Spicy Salmon Rice Bowls with Cucumber",
+    "source": "library",
+    "mealType": "dinner",
+    "ingredients": [
+      {
+        "foodId": "food_core_salmon_raw",
+        "quantity": 112,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_jasmine_rice_dry",
+        "quantity": 80,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_cucumber",
+        "quantity": 100,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_avocado",
+        "quantity": 25,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_edamame_shelled",
+        "quantity": 50,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_mayonnaise",
+        "quantity": 4,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_sriracha",
+        "quantity": 10,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_soy_sauce",
+        "quantity": 12,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_sesame_seeds",
+        "quantity": 3,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_scallions",
+        "quantity": 10,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_cabbage_slaw_mix",
+        "quantity": 100,
+        "unit": "g"
+      }
+    ],
+    "favorite": false,
+    "metadata": {
+      "legacyId": "D12",
+      "lane": "bowls",
+      "nativeDayType": "lift",
+      "weightDescription": "~620 g",
+      "prepMinutes": 25,
+      "batchSize": 2,
+      "base": "240 g cooked jasmine rice",
+      "steps": [
+        "Rice on. Season it with a splash of rice vinegar while warm.",
+        "Salmon skin-side down in a hot dry pan, 4 min, flip 2–3 min. Or roast at 425 °F for 12 min. Flake into large pieces.",
+        "Whisk the mayo, sriracha and soy into a thin sauce. This is a drizzle, not a dressing.",
+        "Build: rice, salmon, cucumber, edamame, avocado, sauce, sesame, scallion.",
+        "Shredded cabbage raw under the rice — it stays crisp under the sauce where the cucumber goes soft."
+      ],
+      "storage": "Fridge 2 days — the shortest here. Good cold the next day.",
+      "notes": "Salmon plus avocado plus mayo runs this to the top of the fat slot. The avocado is at 25 g rather than the usual 45 for exactly that reason — do not add more.",
+      "ingredientLabels": {
+        "food_core_salmon_raw": "salmon",
+        "food_core_jasmine_rice_dry": "jasmine rice dry",
+        "food_core_edamame_shelled": "edamame frozen",
+        "food_core_soy_sauce": "soy sauce low sodium"
+      }
+    }
+  },
+  {
+    "id": "meal_library_D13",
+    "name": "Turkey Smash Burger Tacos + Street-Corn Rice",
+    "source": "library",
+    "mealType": "dinner",
+    "ingredients": [
+      {
+        "foodId": "food_core_ground_turkey_93_7",
+        "quantity": 110,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_tortilla_corn",
+        "quantity": 78,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_american_cheese",
+        "quantity": 15,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_white_rice_dry",
+        "quantity": 33,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_corn",
+        "quantity": 60,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_cotija",
+        "quantity": 12,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_fage_0_greek_yogurt",
+        "quantity": 30,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_mayonnaise",
+        "quantity": 4,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_onion",
+        "quantity": 25,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_lime_juice",
+        "quantity": 8,
+        "unit": "g"
+      }
+    ],
+    "favorite": false,
+    "metadata": {
+      "legacyId": "D13",
+      "lane": "burgers × Mexican",
+      "nativeDayType": "lift",
+      "weightDescription": "3 tacos + rice",
+      "prepMinutes": 30,
+      "batchSize": 2,
+      "base": "78 g corn tortillas + 99 g cooked rice",
+      "steps": [
+        "Rice on. Fold through the corn, cotija, yogurt, a little mayo, chili powder and lime — this is elote in rice form and it is where a third of the carbohydrate lives.",
+        "Blackstone or a heavy pan on high. Press 40 g of turkey directly onto each tortilla in a thin layer, meat side down. 2 min until the edges brown and crisp.",
+        "Flip so the tortilla toasts, 1 min, cheese on, fold.",
+        "Diced onion, cilantro, lime."
+      ],
+      "storage": "Components hold 3 days; assemble fresh. The rice is a good bonus lunch base.",
+      "notes": "Burger night and taco night in one, on a lifting day.",
+      "ingredientLabels": {
+        "food_core_tortilla_corn": "corn tortillas",
+        "food_core_white_rice_dry": "white rice dry",
+        "food_core_corn": "corn frozen",
+        "food_core_fage_0_greek_yogurt": "greek yogurt nonfat"
+      }
+    }
+  },
+  {
+    "id": "meal_library_D14",
+    "name": "Pesto Chicken Pasta",
+    "source": "library",
+    "mealType": "dinner",
+    "ingredients": [
+      {
+        "foodId": "food_core_chicken_breast_raw",
+        "quantity": 80,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_pasta_dry",
+        "quantity": 92,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_pesto",
+        "quantity": 20,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_tomato",
+        "quantity": 110,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_parmesan",
+        "quantity": 12,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_fage_0_greek_yogurt",
+        "quantity": 30,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_olive_oil",
+        "quantity": 6,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_garlic",
+        "quantity": 6,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_broccoli_raw",
+        "quantity": 150,
+        "unit": "g"
+      }
+    ],
+    "favorite": false,
+    "metadata": {
+      "legacyId": "D14",
+      "lane": "Mediterranean",
+      "nativeDayType": "lift",
+      "weightDescription": "~582 g",
+      "prepMinutes": 30,
+      "batchSize": 2,
+      "base": "221 g cooked pasta",
+      "steps": [
+        "Sear the seasoned chicken 5–6 min a side to 165 °F, rest, slice.",
+        "Blister the tomatoes with garlic in the same pan, 3–4 min.",
+        "Toss the pasta with the pesto loosened by the Greek yogurt and a splash of pasta water.",
+        "Chicken and parmesan over.",
+        "Broccoli blanched 2 min in the pasta water before the pasta goes in — one pan, and it takes the pesto as well as the pasta does."
+      ],
+      "storage": "Fridge 3 days. Reheat with a splash of water.",
+      "notes": "Dead on slot — the tightest fit in the bank. The old version of this was the highest-fat dinner in the library and still 10 g short on carbohydrate, and it was being reached for whenever fat ran low. That was the wrong instinct: fat is not your gap.",
+      "ingredientLabels": {
+        "food_core_chicken_breast_raw": "chicken breast",
+        "food_core_pasta_dry": "pasta dry",
+        "food_core_tomato": "cherry tomatoes",
+        "food_core_fage_0_greek_yogurt": "greek yogurt nonfat",
+        "food_core_broccoli_raw": "broccoli"
+      }
+    }
+  },
+  {
+    "id": "meal_library_D15",
+    "name": "Ground Turkey Pasta Bake",
+    "source": "library",
+    "mealType": "dinner",
+    "ingredients": [
+      {
+        "foodId": "food_core_ground_turkey_93_7",
+        "quantity": 85,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_pasta_dry",
+        "quantity": 75,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_marinara_sauce",
+        "quantity": 130,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_cottage_cheese_2",
+        "quantity": 40,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_zucchini",
+        "quantity": 80,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_broccoli_raw",
+        "quantity": 80,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_mozzarella_part_skim",
+        "quantity": 20,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_olive_oil",
+        "quantity": 6,
+        "unit": "g"
+      }
+    ],
+    "favorite": false,
+    "metadata": {
+      "legacyId": "D15",
+      "lane": "Italian",
+      "nativeDayType": "lift",
+      "weightDescription": "~490 g",
+      "prepMinutes": 45,
+      "batchSize": 2,
+      "base": "180 g cooked pasta",
+      "steps": [
+        "Brown the turkey, set aside.",
+        "Zucchini and broccoli in the oil, 5–7 min tender-crisp.",
+        "Blend the marinara with the cottage cheese until smooth — that is the creaminess without cream.",
+        "Combine everything, top with mozzarella, bake at 350 °F for 15–20 min, then broil 3 min to brown."
+      ],
+      "storage": "Fridge 5 days, freezes 3 months in individual portions. Reheats better than anything else here.",
+      "notes": "Regular pasta, not Barilla Protein Plus. Switching to regular drops 5 g of protein and frees the room for 10 g more dry pasta — protein pasta is solving a problem you do not have.",
+      "ingredientLabels": {
+        "food_core_pasta_dry": "pasta dry",
+        "food_core_marinara_sauce": "marinara",
+        "food_core_broccoli_raw": "broccoli",
+        "food_core_mozzarella_part_skim": "mozzarella"
+      }
+    }
+  },
+  {
+    "id": "meal_library_D16",
+    "name": "Buffalo Chicken & Sweet Potato Bowl",
+    "source": "library",
+    "mealType": "dinner",
+    "ingredients": [
+      {
+        "foodId": "food_core_chicken_breast_raw",
+        "quantity": 110,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_sweet_potato_raw",
+        "quantity": 250,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_white_rice_dry",
+        "quantity": 28,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_buffalo_sauce",
+        "quantity": 30,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_fage_0_greek_yogurt",
+        "quantity": 45,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_blue_cheese",
+        "quantity": 18,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_olive_oil",
+        "quantity": 11,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_celery",
+        "quantity": 40,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_carrot",
+        "quantity": 40,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_scallions",
+        "quantity": 10,
+        "unit": "g"
+      }
+    ],
+    "favorite": false,
+    "metadata": {
+      "legacyId": "D16",
+      "lane": "American",
+      "nativeDayType": "lift",
+      "weightDescription": "~590 g",
+      "prepMinutes": 40,
+      "batchSize": 2,
+      "base": "188 g sweet potato + 84 g cooked rice",
+      "steps": [
+        "Sweet potato in 2 cm cubes at 425 °F, 25 min.",
+        "Rice on — a small pot; this is a supporting base, not the main one.",
+        "Chicken roasted or griddled to 165 °F, then shredded, not diced. Buffalo sauce clings to shredded chicken and slides off cubes. Toss it hot.",
+        "Thin the Greek yogurt with a splash of water and a little blue cheese into a ranch-style drizzle.",
+        "Build: sweet potato and rice, chicken, celery, carrot, drizzle, remaining blue cheese, scallion."
+      ],
+      "storage": "Fridge 4 days. Reheats well; keep the drizzle separate.",
+      "notes": "Two bases rather than one, because a single sweet potato big enough to carry 78 g would be about 390 g raw. The yogurt-and-blue-cheese drizzle instead of ranch is what leaves room for them.",
+      "ingredientLabels": {
+        "food_core_chicken_breast_raw": "chicken breast",
+        "food_core_sweet_potato_raw": "sweet potato",
+        "food_core_white_rice_dry": "white rice dry",
+        "food_core_fage_0_greek_yogurt": "greek yogurt nonfat"
+      }
+    }
+  },
+  {
+    "id": "meal_library_D17",
+    "name": "Sheet-Pan Chicken Fajitas + Tortillas & Rice",
+    "source": "library",
+    "mealType": "dinner",
+    "ingredients": [
+      {
+        "foodId": "food_core_chicken_breast_raw",
+        "quantity": 99,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_tortilla_corn",
+        "quantity": 52,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_white_rice_dry",
+        "quantity": 50,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_bell_pepper",
+        "quantity": 100,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_onion",
+        "quantity": 60,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_olive_oil",
+        "quantity": 7,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_salsa",
+        "quantity": 50,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_avocado",
+        "quantity": 51,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_cheddar",
+        "quantity": 10,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_fage_0_greek_yogurt",
+        "quantity": 30,
+        "unit": "g"
+      }
+    ],
+    "favorite": false,
+    "metadata": {
+      "legacyId": "D17",
+      "lane": "Mexican",
+      "nativeDayType": "lift",
+      "weightDescription": "~570 g",
+      "prepMinutes": 35,
+      "batchSize": 2,
+      "base": "2 corn tortillas + 150 g cooked rice",
+      "steps": [
+        "Oven 450 °F — hotter than usual, because fajita vegetables want char, not steam.",
+        "Peppers, onion and sliced chicken tossed in oil, chili powder, cumin, smoked paprika, garlic powder and oregano. Spread across two pans rather than crowding one. Roast 18–20 min, tossing once.",
+        "Rice on alongside.",
+        "Warm the tortillas directly over a gas flame or on the Blackstone, 20 seconds a side. Lime over everything at the end."
+      ],
+      "storage": "Filling holds 4 days. Assemble fresh.",
+      "notes": "",
+      "ingredientLabels": {
+        "food_core_chicken_breast_raw": "chicken breast",
+        "food_core_tortilla_corn": "corn tortillas",
+        "food_core_white_rice_dry": "white rice dry",
+        "food_core_salsa": "pico de gallo",
+        "food_core_fage_0_greek_yogurt": "greek yogurt nonfat"
+      }
+    }
+  },
+  {
+    "id": "meal_library_D18",
+    "name": "Teriyaki Salmon & Broccoli Rice Bowl",
+    "source": "library",
+    "mealType": "dinner",
+    "ingredients": [
+      {
+        "foodId": "food_core_salmon_raw",
+        "quantity": 124,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_jasmine_rice_dry",
+        "quantity": 58,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_broccoli_raw",
+        "quantity": 150,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_soy_sauce",
+        "quantity": 25,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_honey",
+        "quantity": 16,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_ginger",
+        "quantity": 6,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_garlic",
+        "quantity": 6,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_cornstarch",
+        "quantity": 5,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_sesame_oil",
+        "quantity": 4,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_sesame_seeds",
+        "quantity": 4,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_scallions",
+        "quantity": 10,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_edamame_shelled",
+        "quantity": 70,
+        "unit": "g"
+      }
+    ],
+    "favorite": false,
+    "metadata": {
+      "legacyId": "D18",
+      "lane": "stir fry",
+      "nativeDayType": "lift",
+      "weightDescription": "~560 g",
+      "prepMinutes": 25,
+      "batchSize": 2,
+      "base": "174 g cooked jasmine rice",
+      "steps": [
+        "Rice on. Broccoli roasted at 425 °F for 15 min, or steamed 5.",
+        "Reduce the teriyaki before it goes near the fish: soy, honey, ginger, garlic and the cornstarch slurry simmered 2–3 min until it coats a spoon. Glazing with unreduced sauce is why home teriyaki turns watery.",
+        "Salmon skin-side down in a hot pan 4 min, flip 2–3 min, brushing with the glaze in the last minute so the sugar does not burn.",
+        "Sesame seeds and scallion over.",
+        "Edamame steamed from frozen and tipped over at the end with the sesame seeds."
+      ],
+      "storage": "Fridge 3 days.",
+      "notes": "Different enough from D12 to run both in a month — that one is cold and spicy, this is hot and sweet.",
+      "ingredientLabels": {
+        "food_core_salmon_raw": "salmon",
+        "food_core_jasmine_rice_dry": "jasmine rice dry",
+        "food_core_broccoli_raw": "broccoli",
+        "food_core_soy_sauce": "soy sauce low sodium",
+        "food_core_edamame_shelled": "edamame frozen"
+      }
+    }
+  },
+  {
+    "id": "meal_library_D19",
+    "name": "Chicken Parmesan with Spaghetti",
+    "source": "library",
+    "mealType": "dinner",
+    "ingredients": [
+      {
+        "foodId": "food_core_chicken_breast_raw",
+        "quantity": 70,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_panko_breadcrumbs",
+        "quantity": 16,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_egg_whole",
+        "quantity": 15,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_pasta_dry",
+        "quantity": 72,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_marinara_sauce",
+        "quantity": 130,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_mozzarella_part_skim",
+        "quantity": 20,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_parmesan",
+        "quantity": 8,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_olive_oil",
+        "quantity": 8,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_broccoli_raw",
+        "quantity": 150,
+        "unit": "g"
+      }
+    ],
+    "favorite": false,
+    "metadata": {
+      "legacyId": "D19",
+      "lane": "Italian",
+      "nativeDayType": "lift",
+      "weightDescription": "~592 g",
+      "prepMinutes": 40,
+      "batchSize": 2,
+      "base": "173 g cooked spaghetti",
+      "steps": [
+        "Butterfly and pound the breasts to an even 1.5 cm. Even thickness matters more than thinness — the coating burns before a thick end cooks.",
+        "Flour, egg, panko. Shallow-fry in the oil 3 min a side until deep gold, then transfer to a baking dish.",
+        "Sauce and cheese on top, oven 400 °F, 10 min to melt. Do not sauce it before it goes in the pan — that is how the crust goes soft.",
+        "Spaghetti al dente, tossed with the remaining marinara.",
+        "Broccoli roasted alongside the cutlet for the last 12 min, or blanched in the pasta water. Chicken parm and spaghetti alone is 5.1 g of fibre."
+      ],
+      "storage": "Fridge 3 days. Reheat the cutlet in the oven, never the microwave.",
+      "notes": "Your cutlet is small — 50 g cooked. Chicken parm is normally 200 g of chicken under cheese, and even at a 37 P dinner slot that arithmetic does not work. The pasta is the meal here.",
+      "ingredientLabels": {
+        "food_core_chicken_breast_raw": "chicken breast",
+        "food_core_panko_breadcrumbs": "panko",
+        "food_core_egg_whole": "egg",
+        "food_core_pasta_dry": "spaghetti dry",
+        "food_core_marinara_sauce": "marinara",
+        "food_core_mozzarella_part_skim": "mozzarella",
+        "food_core_broccoli_raw": "broccoli"
+      }
+    }
+  },
+  {
+    "id": "meal_library_D20",
+    "name": "Blackstone Chicken Quesadillas + Mexican Rice",
+    "source": "library",
+    "mealType": "dinner",
+    "ingredients": [
+      {
+        "foodId": "food_core_chicken_breast_raw",
+        "quantity": 75,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_tortilla_large_flour",
+        "quantity": 90,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_cheddar",
+        "quantity": 20,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_white_rice_dry",
+        "quantity": 28,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_crushed_tomatoes",
+        "quantity": 40,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_onion",
+        "quantity": 30,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_bell_pepper",
+        "quantity": 50,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_olive_oil",
+        "quantity": 4,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_fage_0_greek_yogurt",
+        "quantity": 40,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_salsa",
+        "quantity": 40,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_black_beans_canned_drained",
+        "quantity": 50,
+        "unit": "g"
+      }
+    ],
+    "favorite": false,
+    "metadata": {
+      "legacyId": "D20",
+      "lane": "Mexican",
+      "nativeDayType": "lift",
+      "weightDescription": "~520 g",
+      "prepMinutes": 30,
+      "batchSize": 2,
+      "base": "90 g flour tortillas + 84 g cooked rice",
+      "steps": [
+        "Mexican rice: toast the dry rice in a little oil 2 min until it smells nutty, then add the crushed tomato, stock and cumin and cook covered 18 min. Toasting first is the whole difference.",
+        "Griddle the diced chicken with peppers and onion, 8 min.",
+        "Tortilla down on the Blackstone, cheese, filling, cheese, fold. Cheese on both sides of the filling — it is the glue. 2–3 min a side, pressed.",
+        "Black beans warmed and drained well, spread inside the quesadilla with the chicken. Wet beans make a soggy tortilla — drain them properly."
+      ],
+      "storage": "Fridge 3 days. Re-crisp in a dry pan.",
+      "notes": "",
+      "ingredientLabels": {
+        "food_core_chicken_breast_raw": "chicken breast",
+        "food_core_tortilla_large_flour": "flour tortillas",
+        "food_core_white_rice_dry": "white rice dry",
+        "food_core_fage_0_greek_yogurt": "greek yogurt nonfat",
+        "food_core_salsa": "pico de gallo",
+        "food_core_black_beans_canned_drained": "black beans canned"
+      }
+    }
+  },
+  {
+    "id": "meal_library_D21",
+    "name": "Shrimp Scampi with Linguine",
+    "source": "library",
+    "mealType": "dinner",
+    "ingredients": [
+      {
+        "foodId": "food_core_shrimp_raw",
+        "quantity": 100,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_pasta_dry",
+        "quantity": 92,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_butter",
+        "quantity": 8,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_olive_oil",
+        "quantity": 11,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_garlic",
+        "quantity": 10,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_white_wine",
+        "quantity": 30,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_lemon_juice",
+        "quantity": 15,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_parmesan",
+        "quantity": 10,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_tomato",
+        "quantity": 80,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_spinach",
+        "quantity": 40,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_broccolini",
+        "quantity": 150,
+        "unit": "g"
+      }
+    ],
+    "favorite": false,
+    "metadata": {
+      "legacyId": "D21",
+      "lane": "Mediterranean",
+      "nativeDayType": "lift",
+      "weightDescription": "~632 g",
+      "prepMinutes": 25,
+      "batchSize": 2,
+      "base": "221 g cooked linguine",
+      "steps": [
+        "Pasta into heavily salted water. Reserve 150 ml of the water before draining — the starch in it is what makes the sauce a sauce instead of oil.",
+        "Garlic gently in the oil and butter, 90 seconds, no colour. Burnt garlic ruins scampi.",
+        "Wine in, reduce by half, 2 min. Tomatoes, then shrimp, 2 min a side.",
+        "Pasta straight from the pot into the pan with a splash of the water, spinach folded through, lemon and parmesan off the heat.",
+        "Broccolini blanched 2 min in the pasta water, then into the pan with the shrimp for the last minute."
+      ],
+      "storage": "Fridge 2 days, and it is noticeably better fresh.",
+      "notes": "Cook this on a night you are both home.",
+      "ingredientLabels": {
+        "food_core_shrimp_raw": "shrimp",
+        "food_core_pasta_dry": "linguine dry",
+        "food_core_tomato": "cherry tomatoes"
+      }
+    }
+  },
+  {
+    "id": "meal_library_D22",
+    "name": "Turkey Sloppy Joes with Oven Fries",
+    "source": "library",
+    "mealType": "dinner",
+    "ingredients": [
+      {
+        "foodId": "food_core_ground_turkey_93_7",
+        "quantity": 124,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_burger_bun",
+        "quantity": 60,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_ketchup",
+        "quantity": 30,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_tomato_paste",
+        "quantity": 15,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_brown_sugar",
+        "quantity": 6,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_onion",
+        "quantity": 40,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_bell_pepper",
+        "quantity": 40,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_potato_raw",
+        "quantity": 175,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_olive_oil",
+        "quantity": 7,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_cheddar",
+        "quantity": 12,
+        "unit": "g"
+      }
+    ],
+    "favorite": false,
+    "metadata": {
+      "legacyId": "D22",
+      "lane": "burgers",
+      "nativeDayType": "lift",
+      "weightDescription": "~480 g",
+      "prepMinutes": 30,
+      "batchSize": 2,
+      "base": "60 g bun + 136 g oven fries",
+      "steps": [
+        "Fries first: cut, soak 10 min in cold water and dry thoroughly. Wet fries steam instead of crisping. Oil, salt, 425 °F for 25 min, flipping once.",
+        "Brown the turkey with the onion and pepper, 8 min. Tomato paste 2 min.",
+        "Ketchup, brown sugar, Worcestershire, mustard powder and 60 ml water. Simmer 10 min until it holds on a spoon.",
+        "Toast the buns cut-side down in a dry pan. Cheddar on the hot meat."
+      ],
+      "storage": "The meat holds 4 days and freezes 3 months. Fries do not keep.",
+      "notes": "",
+      "ingredientLabels": {
+        "food_core_potato_raw": "potato"
+      }
+    }
+  },
+  {
+    "id": "meal_library_D23",
+    "name": "Beef & Broccoli Stir Fry with Rice",
+    "source": "library",
+    "mealType": "dinner",
+    "ingredients": [
+      {
+        "foodId": "food_core_sirloin_steak_raw",
+        "quantity": 107,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_jasmine_rice_dry",
+        "quantity": 54,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_broccoli_raw",
+        "quantity": 180,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_soy_sauce",
+        "quantity": 25,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_oyster_sauce",
+        "quantity": 20,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_honey",
+        "quantity": 10,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_cornstarch",
+        "quantity": 6,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_sesame_oil",
+        "quantity": 9,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_cashews",
+        "quantity": 12,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_garlic",
+        "quantity": 8,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_ginger",
+        "quantity": 6,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_scallions",
+        "quantity": 15,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_sugar_snap_peas",
+        "quantity": 80,
+        "unit": "g"
+      }
+    ],
+    "favorite": false,
+    "metadata": {
+      "legacyId": "D23",
+      "lane": "stir fry",
+      "nativeDayType": "lift",
+      "weightDescription": "~592 g",
+      "prepMinutes": 30,
+      "batchSize": 2,
+      "base": "162 g cooked jasmine rice",
+      "steps": [
+        "Freeze the beef 15 minutes and slice it against the grain as thinly as you can — frozen, it cuts like paper. Toss with half the cornstarch.",
+        "Rice on. Broccoli blanched 2 min and shocked cold, so it finishes crisp in the wok rather than steaming.",
+        "Sauce: soy, oyster, honey, remaining cornstarch, 60 ml water.",
+        "Wok on high with half the sesame oil. Beef in one layer, 60 seconds untouched, toss 1 min, remove — it finishes in the sauce.",
+        "Garlic and ginger 30 seconds, broccoli 2 min, beef back, sauce in, toss 60–90 seconds to gloss. Cashews and scallion off the heat.",
+        "Snap peas into the wok with the broccoli — 60 seconds, they want to stay loud."
+      ],
+      "storage": "Fridge 3 days.",
+      "notes": "On a long-run Saturday, take the sesame oil to 15 g rather than 9 — that extra 6 g is what brings the day's fat to target.",
+      "ingredientLabels": {
+        "food_core_sirloin_steak_raw": "sirloin steak",
+        "food_core_jasmine_rice_dry": "jasmine rice dry",
+        "food_core_broccoli_raw": "broccoli",
+        "food_core_soy_sauce": "soy sauce low sodium"
+      }
+    }
+  },
+  {
+    "id": "meal_library_D24",
+    "name": "Garlic Butter Steak Bites & Crispy Potatoes",
+    "source": "library",
+    "mealType": "dinner",
+    "ingredients": [
+      {
+        "foodId": "food_core_sirloin_steak_raw",
+        "quantity": 108,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_potato_raw",
+        "quantity": 375,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_butter",
+        "quantity": 8,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_olive_oil",
+        "quantity": 6,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_garlic",
+        "quantity": 12,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_parmesan",
+        "quantity": 10,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_green_beans",
+        "quantity": 130,
+        "unit": "g"
+      }
+    ],
+    "favorite": false,
+    "metadata": {
+      "legacyId": "D24",
+      "lane": "American",
+      "nativeDayType": "lift",
+      "weightDescription": "~570 g",
+      "prepMinutes": 40,
+      "batchSize": 2,
+      "base": "292 g roasted potato",
+      "steps": [
+        "Potatoes: par-boil 8 min, drain, and shake them hard in the dry pan to rough up the edges. Those torn edges are what go crisp. Oil, 425 °F for 25 min or air fryer 20 min.",
+        "Green beans in for the last 12 min.",
+        "Steak bites: pan or Blackstone screaming hot, cubes dried on paper towel, in one layer, 90 seconds without moving, then toss 60–90 seconds.",
+        "Butter, garlic and parsley in at the very end, off the heat — 30 seconds, no more. Parmesan over the potatoes."
+      ],
+      "storage": "Fridge 3 days. Potatoes re-crisp in the air fryer.",
+      "notes": "",
+      "ingredientLabels": {
+        "food_core_sirloin_steak_raw": "sirloin steak",
+        "food_core_potato_raw": "potato"
+      }
+    }
+  },
+  {
+    "id": "meal_library_D25",
+    "name": "Blackstone Philly Cheesesteak + Oven Fries",
+    "source": "library",
+    "mealType": "dinner",
+    "ingredients": [
+      {
+        "foodId": "food_core_sirloin_steak_raw",
+        "quantity": 96,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_hoagie_roll",
+        "quantity": 100,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_provolone",
+        "quantity": 18,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_bell_pepper",
+        "quantity": 80,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_onion",
+        "quantity": 80,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_olive_oil",
+        "quantity": 10,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_potato_raw",
+        "quantity": 90,
+        "unit": "g"
+      }
+    ],
+    "favorite": false,
+    "metadata": {
+      "legacyId": "D25",
+      "lane": "American",
+      "nativeDayType": "lift",
+      "weightDescription": "~440 g",
+      "prepMinutes": 35,
+      "batchSize": 2,
+      "base": "100 g hoagie roll + 70 g oven fries",
+      "steps": [
+        "Fries first: cut, soak 10 min in cold water, dry thoroughly. Oil, salt, 425 °F for 25 min, flipping once.",
+        "Freeze the steak 15 minutes and slice it as thinly as you can against the grain — that is the whole difference between a cheesesteak and a beef sandwich.",
+        "Blackstone to medium-high. Peppers and onions in the oil, 6–7 min until soft and browning. Push aside.",
+        "Steak onto the bare griddle, 90 seconds without touching it, then chop and toss with the vegetables, 2 min more. Provolone laid over the pile, lid or a splash of water for 60 seconds to melt.",
+        "Split and toast the rolls cut-side down in the griddle fat, 45 seconds. Scoop the pile straight in."
+      ],
+      "storage": "Eat fresh. The steak-and-pepper mix holds 2 days; fries do not keep.",
+      "notes": "Untested — cooked once and not yet judged. The roll carries 52 g of carbohydrate on its own, which is why the fries alongside stay small. 90 g of raw potato is a small handful and that is correct.",
+      "ingredientLabels": {
+        "food_core_sirloin_steak_raw": "sirloin steak",
+        "food_core_bell_pepper": "green bell pepper",
+        "food_core_potato_raw": "potato"
+      }
+    }
+  },
+  {
+    "id": "meal_library_D26",
+    "name": "French Onion Smothered Chicken + Garlic Mash",
+    "source": "library",
+    "mealType": "dinner",
+    "ingredients": [
+      {
+        "foodId": "food_core_chicken_breast_raw",
+        "quantity": 89,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_potato_raw",
+        "quantity": 275,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_onion",
+        "quantity": 150,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_gruyere",
+        "quantity": 15,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_butter",
+        "quantity": 12,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_olive_oil",
+        "quantity": 4,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_all_purpose_flour",
+        "quantity": 4,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_chicken_stock",
+        "quantity": 100,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_milk_2",
+        "quantity": 50,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_garlic",
+        "quantity": 6,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_green_beans",
+        "quantity": 150,
+        "unit": "g"
+      }
+    ],
+    "favorite": false,
+    "metadata": {
+      "legacyId": "D26",
+      "lane": "American",
+      "nativeDayType": "lift",
+      "weightDescription": "~590 g",
+      "prepMinutes": 40,
+      "batchSize": 2,
+      "base": "250 g garlic mashed potato",
+      "steps": [
+        "Onions first — they are the recipe and they cannot be rushed under about 25 minutes. Slice thin, into a wide pan with the olive oil and half the butter over medium-low. Stir every few minutes: translucent at 10, gold at 18, deep brown and jammy at 25–30. If they are browning at 8 minutes the heat is too high and you are frying, not caramelising.",
+        "Potatoes peeled, cut into even 4 cm chunks, into cold salted water, brought to a boil, 18–20 min to falling apart. Starting them cold is what stops the outsides going gluey before the middles cook.",
+        "Butterfly the chicken into even cutlets, season, sear in a separate pan 4–5 min a side to 165 °F. Set aside to rest.",
+        "Flour stirred into the onions, 1 min, then stock and Worcestershire. Simmer 5 min to a gravy. Chicken back in, cheese over, lid on 3 min to melt.",
+        "Mash: drain the potatoes and let them steam dry in the pan for 2 minutes before anything goes in — this is what keeps mash from being watery. Warm milk, remaining butter, grated raw garlic, salt. Green beans steamed or roasted 12 min."
+      ],
+      "storage": "Fridge 4 days. Mash reheats with a splash of milk. Freezes poorly — eat it in the week.",
+      "notes": "Untested. The mash is the point: 275 g of raw potato carries 48 g of carbohydrate in a form you will actually finish, where the same carbohydrate as roasted wedges is a much bigger-looking plate. You had no mashed-potato dish in the library at all, which is an odd gap for someone whose only structural shortfall is starch.",
+      "ingredientLabels": {
+        "food_core_chicken_breast_raw": "chicken breast",
+        "food_core_potato_raw": "potato"
+      }
+    }
+  },
+  {
+    "id": "meal_library_L22",
+    "name": "Chicken Caesar Pasta Salad",
+    "source": "library",
+    "mealType": "lunch",
+    "ingredients": [
+      {
+        "foodId": "food_core_chicken_breast_raw",
+        "quantity": 88,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_pasta_dry",
+        "quantity": 68,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_fage_0_greek_yogurt",
+        "quantity": 60,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_parmesan",
+        "quantity": 16,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_dijon_mustard",
+        "quantity": 8,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_lemon_juice",
+        "quantity": 12,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_olive_oil",
+        "quantity": 7,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_kale",
+        "quantity": 45,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_romaine",
+        "quantity": 35,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_tomato",
+        "quantity": 70,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_croutons",
+        "quantity": 14,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_chickpeas_canned_drained",
+        "quantity": 60,
+        "unit": "g"
+      }
+    ],
+    "favorite": false,
+    "metadata": {
+      "legacyId": "L22",
+      "lane": "American · from Instagram",
+      "nativeDayType": "lift",
+      "weightDescription": "~560 g",
+      "prepMinutes": 30,
+      "batchSize": 5,
+      "base": "163 g cooked pasta",
+      "steps": [
+        "Season and roast the chicken at 400 °F, 20–22 min to 165 °F. Rest, then slice thin.",
+        "Pasta al dente — short shapes only, no long strands. Drain, rinse cold, spread to cool.",
+        "Caesar dressing: blend the Greek yogurt, parmesan, Dijon, lemon, olive oil, a grated garlic clove and plenty of black pepper. Anchovy paste if you have it. Thin with water to pourable.",
+        "Massage the chopped kale with a little dressing and leave it 10 minutes — that takes the squeak out of raw kale and is why this holds four days where a romaine-only caesar does not.",
+        "Toss pasta, kale, tomatoes and chicken. Romaine and croutons in a separate cup, added at lunch.",
+        "Air-fry the drained chickpeas with a teaspoon of cornstarch, smoked paprika, onion and garlic powder, 400 °F for 12–15 min until they rattle. Cornstarch is what makes them crunch rather than wrinkle. Keep them with the croutons, not in the dressed salad."
+      ],
+      "storage": "Fridge 4 days. Cold only. Croutons and romaine stay out until you eat it.",
+      "notes": "From your saved collection, rebuilt. The reason it earns its place is Friday: a chicken caesar at the pizza restaurant lands about 18 g of carbohydrate against a 78 g slot, and you keep ordering it. This is the same flavour carrying 82 g. The air-fried chickpeas are in the original post and were the thing I left out first time round — they take it from 6.2 g of fibre to 10.7, the highest of any pasta lunch here. Use regular semolina pasta, not protein noodles: protein pasta trades away the carbohydrate you are short of.",
+      "ingredientLabels": {
+        "food_core_chicken_breast_raw": "chicken breast",
+        "food_core_pasta_dry": "pasta dry",
+        "food_core_fage_0_greek_yogurt": "greek yogurt nonfat",
+        "food_core_tomato": "cherry tomatoes",
+        "food_core_chickpeas_canned_drained": "chickpeas canned"
+      },
+      "isNew": true
+    }
+  },
+  {
+    "id": "meal_library_D27",
+    "name": "Chicken Gnocchi Soup",
+    "source": "library",
+    "mealType": "dinner",
+    "ingredients": [
+      {
+        "foodId": "food_core_chicken_breast_raw",
+        "quantity": 60,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_potato_gnocchi",
+        "quantity": 125,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_sourdough",
+        "quantity": 30,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_milk_2",
+        "quantity": 90,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_light_cream_cheese",
+        "quantity": 22,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_parmesan",
+        "quantity": 8,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_chicken_stock",
+        "quantity": 240,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_all_purpose_flour",
+        "quantity": 7,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_carrot",
+        "quantity": 50,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_celery",
+        "quantity": 30,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_onion",
+        "quantity": 40,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_spinach",
+        "quantity": 40,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_olive_oil",
+        "quantity": 6,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_butter",
+        "quantity": 4,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_kale",
+        "quantity": 60,
+        "unit": "g"
+      }
+    ],
+    "favorite": false,
+    "metadata": {
+      "legacyId": "D27",
+      "lane": "American · from Instagram",
+      "nativeDayType": "lift",
+      "weightDescription": "~695 g bowl + bread",
+      "prepMinutes": 35,
+      "batchSize": 2,
+      "base": "125 g gnocchi + 30 g sourdough",
+      "steps": [
+        "Dice the carrot, celery and onion fine. Sweat in the olive oil and butter over medium, 7–8 min, until soft and sweet.",
+        "Flour in, 1 min. Stock a splash at a time, whisking, then the rest. Simmer 5 min to thicken.",
+        "Diced chicken in, 6–7 min to cooked through. Milk and cream cheese off the boil — do not let it boil once the dairy is in or it splits.",
+        "Gnocchi straight in from the packet, 3–4 min until they float. They thicken the soup as they cook; that is the trick, and it is why no extra starch is needed.",
+        "Spinach folded through for the last minute. Parmesan at the table, sourdough for dipping.",
+        "Kale, stems out and chopped fine, in with the spinach for the last two minutes. This is the Olive Garden version anyway."
+      ],
+      "storage": "Fridge 4 days. It thickens hard in the fridge — loosen with milk or stock, never water.",
+      "notes": "From your saved collection. You had no soup anywhere in the bank, and this is the highest-carbohydrate comfort dinner available for how little it feels like eating a carbohydrate. The chicken is deliberately small at 60 g raw: gnocchi and dairy already carry 25 g of protein before any meat goes in, which is not obvious and is why most versions of this land well over slot.",
+      "ingredientLabels": {
+        "food_core_chicken_breast_raw": "chicken breast"
+      },
+      "isNew": true
+    }
+  },
+  {
+    "id": "meal_library_D28",
+    "name": "Honey-Garlic Chicken & Peanut Noodles",
+    "source": "library",
+    "mealType": "dinner",
+    "ingredients": [
+      {
+        "foodId": "food_core_chicken_breast_raw",
+        "quantity": 95,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_rice_noodles_dry",
+        "quantity": 58,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_peanut_butter",
+        "quantity": 20,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_soy_sauce",
+        "quantity": 22,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_honey",
+        "quantity": 12,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_rice_vinegar",
+        "quantity": 8,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_sesame_oil",
+        "quantity": 4,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_ginger",
+        "quantity": 6,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_garlic",
+        "quantity": 8,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_sriracha",
+        "quantity": 8,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_broccoli_raw",
+        "quantity": 120,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_carrot",
+        "quantity": 50,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_scallions",
+        "quantity": 15,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_peanuts",
+        "quantity": 6,
+        "unit": "g"
+      }
+    ],
+    "favorite": false,
+    "metadata": {
+      "legacyId": "D28",
+      "lane": "stir fry · from Instagram",
+      "nativeDayType": "lift",
+      "weightDescription": "~510 g",
+      "prepMinutes": 30,
+      "batchSize": 2,
+      "base": "151 g cooked rice noodles",
+      "steps": [
+        "Noodles per packet — usually a soak rather than a boil. Drain, rinse cold, toss with a few drops of the sesame oil so they do not weld together.",
+        "Whisk the peanut butter, soy, honey, rice vinegar, ginger, garlic and sriracha with 60 ml hot water into a pourable sauce. It looks split at first and comes together as you whisk.",
+        "Broccoli and carrot into a hot wok with the rest of the sesame oil, 3–4 min to tender-crisp.",
+        "Sliced chicken in one layer, 90 seconds untouched, then toss 2–3 min to cooked through.",
+        "Noodles and sauce in, toss 60 seconds to coat. Scallions and crushed peanuts off the heat."
+      ],
+      "storage": "Fridge 3 days. Good cold. Long strands are fine here because you eat it at a table — do not pack it for the office.",
+      "notes": "From your saved collection. Fills the stir-fry lane with a sauce the bank did not have: your other stir fries are soy-and-honey or oyster-based, and peanut is a genuinely different night. The retired noodle bowl failed as a cold desk lunch, not as food — this is the same base used the way it actually works.",
+      "ingredientLabels": {
+        "food_core_chicken_breast_raw": "chicken breast",
+        "food_core_rice_noodles_dry": "rice noodles dry",
+        "food_core_soy_sauce": "soy sauce low sodium",
+        "food_core_broccoli_raw": "broccoli"
+      },
+      "isNew": true
+    }
+  },
+  {
+    "id": "meal_library_D29",
+    "name": "Mexican Street Corn Chicken & Rice",
+    "source": "library",
+    "mealType": "dinner",
+    "ingredients": [
+      {
+        "foodId": "food_core_chicken_breast_raw",
+        "quantity": 100,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_white_rice_dry",
+        "quantity": 64,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_corn",
+        "quantity": 90,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_cotija",
+        "quantity": 16,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_fage_0_greek_yogurt",
+        "quantity": 40,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_mayonnaise",
+        "quantity": 8,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_lime_juice",
+        "quantity": 10,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_bell_pepper",
+        "quantity": 60,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_onion",
+        "quantity": 35,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_olive_oil",
+        "quantity": 9,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_black_beans_canned_drained",
+        "quantity": 55,
+        "unit": "g"
+      }
+    ],
+    "favorite": false,
+    "metadata": {
+      "legacyId": "D29",
+      "lane": "Mexican · from Instagram",
+      "nativeDayType": "lift",
+      "weightDescription": "~555 g",
+      "prepMinutes": 30,
+      "batchSize": 2,
+      "base": "192 g cooked white rice",
+      "steps": [
+        "Rice on: 18 min covered low plus 10 min rest.",
+        "Char the corn hard in a dry pan or on the Blackstone, 5–6 min without stirring much. Blackened spots are the entire point — pale corn tastes of nothing here.",
+        "Chicken cubed, tossed with chili powder, cumin, smoked paprika and garlic powder, griddled 8–9 min with the pepper and onion.",
+        "Elote sauce: Greek yogurt, mayo, lime, a little cotija and chili powder, thinned with a splash of water.",
+        "Build: rice, chicken and vegetables, charred corn, sauce over, remaining cotija and more lime. Cilantro if you have it.",
+        "Black beans warmed through and folded in with the corn."
+      ],
+      "storage": "Fridge 4 days, reheats well. Keep the sauce separate.",
+      "notes": "From your saved collection. The street-corn flavour is already proven for you in D13, where it lives in the rice — here it is the dish. Yogurt carries most of the sauce rather than mayo, which is what leaves room for the rice to be a real 64 g dry.",
+      "ingredientLabels": {
+        "food_core_chicken_breast_raw": "chicken breast",
+        "food_core_white_rice_dry": "white rice dry",
+        "food_core_corn": "corn frozen",
+        "food_core_fage_0_greek_yogurt": "greek yogurt nonfat",
+        "food_core_black_beans_canned_drained": "black beans canned"
+      },
+      "isNew": true
+    }
+  },
+  {
+    "id": "meal_library_L24",
+    "name": "Street Corn Chicken Bowl",
+    "source": "library",
+    "mealType": "lunch",
+    "ingredients": [
+      {
+        "foodId": "food_core_chicken_breast_raw",
+        "quantity": 110,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_white_rice_dry",
+        "quantity": 46,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_corn",
+        "quantity": 80,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_cotija",
+        "quantity": 12,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_fage_0_greek_yogurt",
+        "quantity": 45,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_mayonnaise",
+        "quantity": 4,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_lime_juice",
+        "quantity": 10,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_bell_pepper",
+        "quantity": 60,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_onion",
+        "quantity": 30,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_olive_oil",
+        "quantity": 5,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_black_beans_canned_drained",
+        "quantity": 40,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_avocado",
+        "quantity": 25,
+        "unit": "g"
+      }
+    ],
+    "favorite": false,
+    "metadata": {
+      "legacyId": "L24",
+      "lane": "Mexican · from Instagram",
+      "nativeDayType": "lift",
+      "weightDescription": "~480 g",
+      "prepMinutes": 30,
+      "batchSize": 5,
+      "base": "138 g cooked white rice",
+      "steps": [
+        "Rice on: 18 min covered low plus 10 min rest.",
+        "Char the corn hard in a dry pan, 5–6 min without stirring much. The blackened spots are the point.",
+        "Chicken cubed with chili powder, cumin, smoked paprika and garlic powder, griddled 8–9 min with the pepper and onion.",
+        "Elote sauce: Greek yogurt, mayo, lime, a little cotija, chili powder, thinned with water. Pack it in its own cup.",
+        "Layer rice, beans, chicken and vegetables, charred corn on top. Avocado and sauce added morning-of."
+      ],
+      "storage": "Fridge 4 days, good cold or reheated, low smell. Avocado day-of, sauce separate.",
+      "notes": "From your saved collection, where it is literally photographed in meal-prep containers. This is the lunch plating of D29 — same cook, two slots — so a single batch of street corn chicken covers a dinner for two and three packed lunches. Black beans are in the lunch and not the dinner because the lunch has room for them and they are the cheapest fibre in the dish.",
+      "ingredientLabels": {
+        "food_core_chicken_breast_raw": "chicken breast",
+        "food_core_white_rice_dry": "white rice dry",
+        "food_core_corn": "corn frozen",
+        "food_core_fage_0_greek_yogurt": "greek yogurt nonfat",
+        "food_core_black_beans_canned_drained": "black beans canned"
+      },
+      "isNew": true
+    }
+  },
+  {
+    "id": "meal_library_L25",
+    "name": "Sweet Chilli Chicken Crispy Rice Salad",
+    "source": "library",
+    "mealType": "lunch",
+    "ingredients": [
+      {
+        "foodId": "food_core_chicken_breast_raw",
+        "quantity": 125,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_white_rice_dry",
+        "quantity": 40,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_sweet_chilli_sauce",
+        "quantity": 25,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_soy_sauce",
+        "quantity": 10,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_rice_vinegar",
+        "quantity": 8,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_sesame_oil",
+        "quantity": 5,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_cabbage_slaw_mix",
+        "quantity": 80,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_carrot",
+        "quantity": 50,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_cucumber",
+        "quantity": 60,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_edamame_shelled",
+        "quantity": 60,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_peanuts",
+        "quantity": 10,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_scallions",
+        "quantity": 12,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_mayonnaise",
+        "quantity": 5,
+        "unit": "g"
+      }
+    ],
+    "favorite": false,
+    "metadata": {
+      "legacyId": "L25",
+      "lane": "bowl · from Instagram",
+      "nativeDayType": "lift",
+      "weightDescription": "~490 g",
+      "prepMinutes": 35,
+      "batchSize": 5,
+      "base": "120 g crisped white rice",
+      "steps": [
+        "Cook the rice, spread it on a tray and cool it completely — warm rice will not crisp.",
+        "Crisp it: a thin layer in a hot pan with a little of the sesame oil, pressed down and left 4–5 min before stirring, or 12 min in the air fryer at 400 °F shaking twice. You want crunchy edges, not uniform toast.",
+        "Chicken griddled and sliced, tossed hot with half the sweet chilli so it glazes.",
+        "Dressing: the rest of the sweet chilli, soy, rice vinegar, mayo and remaining sesame oil.",
+        "Pack the rice separately from everything else and combine at your desk. That is the whole difference between this working and not."
+      ],
+      "storage": "Fridge 4 days, cold only. **Rice in its own container** — dressed rice goes soft overnight and the crunch is the recipe.",
+      "notes": "From your saved collection, and the riskiest thing in the bank. It is cold and Asian-leaning, which is exactly the profile L5 failed on. The differences are real — crispy rice is chunky and holds dressing where noodles shed it, and the sweet chilli is loud enough to survive chilling — but the failure mode is the same shape, so cook it once before you batch five. Use **regular sweet chilli sauce, not sugar-free**: the regular carries about 24 g more carbohydrate per 40 g serving, and that is the entire point of it being here.",
+      "ingredientLabels": {
+        "food_core_chicken_breast_raw": "chicken breast",
+        "food_core_white_rice_dry": "white rice dry",
+        "food_core_soy_sauce": "soy sauce low sodium",
+        "food_core_edamame_shelled": "shelled edamame frozen"
+      },
+      "isNew": true
+    }
+  },
+  {
+    "id": "meal_library_L26",
+    "name": "Southwest Chicken Salad + Sourdough",
+    "source": "library",
+    "mealType": "lunch",
+    "ingredients": [
+      {
+        "foodId": "food_core_chicken_breast_raw",
+        "quantity": 78,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_black_beans_canned_drained",
+        "quantity": 90,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_corn",
+        "quantity": 70,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_tomato",
+        "quantity": 80,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_bell_pepper",
+        "quantity": 60,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_onion",
+        "quantity": 25,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_fage_0_greek_yogurt",
+        "quantity": 60,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_mayonnaise",
+        "quantity": 8,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_lime_juice",
+        "quantity": 12,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_olive_oil",
+        "quantity": 4,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_cheddar",
+        "quantity": 12,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_sourdough",
+        "quantity": 80,
+        "unit": "g"
+      }
+    ],
+    "favorite": false,
+    "metadata": {
+      "legacyId": "L26",
+      "lane": "Mexican · from Instagram",
+      "nativeDayType": "lift",
+      "weightDescription": "~555 g",
+      "prepMinutes": 25,
+      "batchSize": 5,
+      "base": "80 g sourdough + 90 g black beans",
+      "steps": [
+        "Poach or roast the chicken, cool it completely, then shred rather than dice. Shredded holds dressing; cubes shed it.",
+        "Char the corn in a dry pan 5–6 min without stirring much, then cool. Raw-from-frozen corn tastes of nothing here.",
+        "Drain and rinse the beans properly and let them dry a few minutes — wet beans water the whole salad by Wednesday.",
+        "Dressing: Greek yogurt, mayo, lime, a grated garlic clove, cumin, chili powder, salt and plenty of pepper. Taste it cold and push the salt and lime further than feels right.",
+        "Fold everything together with the cheddar and cilantro. Sourdough packed whole — build it into a sandwich in the morning or eat the salad with the bread torn alongside."
+      ],
+      "storage": "Fridge 4 days. Zero smell, no reheating. Gets better on day two as the beans take the dressing.",
+      "notes": "From your saved collection, added 19 September to replace L23. Same cold chicken-salad format, built to keep you full: 12.8 g of fibre against L23's 4.2, because the volume comes from beans, corn and peppers rather than from bread alone. 78 g of raw chicken looks small — the beans, yogurt, cheddar and sourdough bring 26 g of protein before any chicken goes in, which is exactly why most versions of this land over on protein and under on starch.",
+      "ingredientLabels": {
+        "food_core_chicken_breast_raw": "chicken breast",
+        "food_core_black_beans_canned_drained": "black beans canned",
+        "food_core_corn": "corn frozen",
+        "food_core_tomato": "cherry tomatoes",
+        "food_core_onion": "red onion",
+        "food_core_fage_0_greek_yogurt": "greek yogurt nonfat"
+      },
+      "garnishes": [
+        {
+          "text": "cilantro",
+          "foodId": "food_core_cilantro",
+          "note": "No quantity in source; not included in macro calculation."
+        }
+      ],
+      "isNew": true
+    }
+  },
+  {
+    "id": "meal_library_L27",
+    "name": "Crockpot Chicken Enchilada Bowl",
+    "source": "library",
+    "mealType": "lunch",
+    "ingredients": [
+      {
+        "foodId": "food_core_chicken_breast_raw",
+        "quantity": 100,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_enchilada_sauce",
+        "quantity": 90,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_black_beans_canned_drained",
+        "quantity": 80,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_corn",
+        "quantity": 60,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_onion",
+        "quantity": 30,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_white_rice_dry",
+        "quantity": 52,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_cheddar",
+        "quantity": 20,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_avocado",
+        "quantity": 45,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_fage_0_greek_yogurt",
+        "quantity": 30,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_salsa",
+        "quantity": 40,
+        "unit": "g"
+      }
+    ],
+    "favorite": false,
+    "metadata": {
+      "legacyId": "L27",
+      "lane": "Mexican · from Instagram",
+      "nativeDayType": "lift",
+      "weightDescription": "~590 g",
+      "prepMinutes": 15,
+      "batchSize": 6,
+      "base": "156 g cooked white rice + 80 g black beans",
+      "steps": [
+        "Everything except the rice, cheese, avocado, yogurt and pico into the crockpot: chicken, enchilada sauce, beans, corn, diced onion, taco seasoning. Fifteen minutes of actual work.",
+        "Low 5–6 hours or high 3–4, until the chicken shreds under a fork. Shred it in the pot and stir it back through so everything takes the sauce.",
+        "Rice on when you are ready to eat — 18 min covered low plus 10 min rest. Keep it separate from the filling if you are boxing it for the week; rice left in sauce overnight goes to paste.",
+        "Build: rice, filling, cheddar. Yogurt, avocado and pico added the morning you eat it."
+      ],
+      "storage": "Fridge 4 days, freezes 3 months. Reheats better than anything else in the lunch set.",
+      "notes": "From your saved collection, added 19 September. Two things the bank did not have: a crockpot recipe, and a hot lunch that batches six rather than five. 12.6 g of fibre, 590 g on the plate, and the beans and corn are doing that work rather than a bigger pile of rice. Avocado and yogurt go on day-of or they brown and weep.",
+      "ingredientLabels": {
+        "food_core_chicken_breast_raw": "chicken breast",
+        "food_core_black_beans_canned_drained": "black beans canned",
+        "food_core_corn": "corn frozen",
+        "food_core_white_rice_dry": "white rice dry",
+        "food_core_fage_0_greek_yogurt": "greek yogurt nonfat",
+        "food_core_salsa": "pico de gallo"
+      },
+      "isNew": true
+    }
+  },
+  {
+    "id": "meal_library_D30",
+    "name": "Shrimp Guacamole Tostadas",
+    "source": "library",
+    "mealType": "dinner",
+    "ingredients": [
+      {
+        "foodId": "food_core_shrimp_raw",
+        "quantity": 150,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_tortilla_corn",
+        "quantity": 104,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_black_beans_canned_drained",
+        "quantity": 70,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_bell_pepper",
+        "quantity": 80,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_onion",
+        "quantity": 40,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_avocado",
+        "quantity": 85,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_olive_oil",
+        "quantity": 6,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_hot_honey",
+        "quantity": 12,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_lime_juice",
+        "quantity": 12,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_tomato",
+        "quantity": 60,
+        "unit": "g"
+      }
+    ],
+    "favorite": false,
+    "metadata": {
+      "legacyId": "D30",
+      "lane": "Mexican · from Instagram",
+      "nativeDayType": "lift",
+      "weightDescription": "4 tostadas ~520 g",
+      "prepMinutes": 30,
+      "batchSize": 2,
+      "base": "104 g corn tortillas + 70 g black beans",
+      "steps": [
+        "Oven 400 °F. Lay the tortillas straight on the rack or a sheet pan, spray or brush lightly with oil, and bake 6–8 min until they stop flexing. That is the whole tostada — there is no frying.",
+        "Same sheet pan: peppers and onion tossed in the oil with chili powder, cumin, garlic powder, paprika and salt. Roast 12 min.",
+        "Shrimp seasoned the same way, added to the pan for the last 6–7 min, until just pink and opaque. Shrimp is ninety seconds from perfect to rubber — pull it the moment it turns.",
+        "Warm the black beans and mash them roughly with a little of their liquid and lime. This is the layer that holds everything on the tostada.",
+        "Guacamole: avocado, lime, salt, a little diced onion.",
+        "Build: beans, shrimp and vegetables, guacamole, tomatoes, cilantro. Hot honey drizzled over at the table."
+      ],
+      "storage": "Eat fresh — a built tostada is soggy in ten minutes. The shrimp and vegetable mix holds 2 days and the shells keep a week in a tin.",
+      "notes": "From your saved collection, added 19 September. One sheet pan, 30 minutes, and the highest-fibre format available in the Mexican lane: corn tortillas carry 6.9 g per 100 g against 3.0 for flour, and the mashed beans add more. Hot honey on shrimp is the creator's idea and it is a good one. The bank had no tostada and no crisp-shell dinner at all.",
+      "ingredientLabels": {
+        "food_core_shrimp_raw": "shrimp",
+        "food_core_tortilla_corn": "corn tortillas",
+        "food_core_black_beans_canned_drained": "black beans canned",
+        "food_core_onion": "red onion",
+        "food_core_tomato": "cherry tomatoes"
+      },
+      "garnishes": [
+        {
+          "text": "cilantro",
+          "foodId": "food_core_cilantro",
+          "note": "No quantity in source; not included in macro calculation."
+        }
+      ],
+      "isNew": true
+    }
+  },
+  {
+    "id": "meal_library_D31",
+    "name": "Loaded Broccoli-Cheddar Chicken Potato",
+    "source": "library",
+    "mealType": "dinner",
+    "ingredients": [
+      {
+        "foodId": "food_core_potato_raw",
+        "quantity": 400,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_broccoli_raw",
+        "quantity": 200,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_chicken_breast_raw",
+        "quantity": 60,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_cheddar",
+        "quantity": 25,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_fage_0_greek_yogurt",
+        "quantity": 50,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_milk_2",
+        "quantity": 40,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_light_cream_cheese",
+        "quantity": 20,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_olive_oil",
+        "quantity": 6,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_butter",
+        "quantity": 5,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_scallions",
+        "quantity": 12,
+        "unit": "g"
+      },
+      {
+        "foodId": "food_core_garlic",
+        "quantity": 5,
+        "unit": "g"
+      }
+    ],
+    "favorite": false,
+    "metadata": {
+      "legacyId": "D31",
+      "lane": "American · from Instagram",
+      "nativeDayType": "lift",
+      "weightDescription": "~640 g",
+      "prepMinutes": 45,
+      "batchSize": 2,
+      "base": "400 g baked potato",
+      "steps": [
+        "Microwave the potatoes 9–10 min, then finish in a 425 °F oven 15 min for a skin that crackles. Straight oven-baking is nearly an hour; this gets the same result inside a weeknight.",
+        "Broccoli in florets tossed with the oil and salt, roasted alongside 15 min. Roast it rather than steam it — steamed broccoli waters the potato.",
+        "Chicken seasoned and roasted or griddled to 165 °F, then shredded small.",
+        "Sauce: warm the milk, cream cheese and grated garlic over low, stirring smooth, 3–4 min, then the cheddar off the heat. Do not boil it once the cheese is in or it splits.",
+        "Split the potatoes, fork the insides up hard — that is what lets the sauce get in — butter, then chicken, broccoli, sauce, yogurt and scallions."
+      ],
+      "storage": "Fridge 3 days. Reheat the potato in the oven, not the microwave, or the skin goes leathery.",
+      "notes": "From your saved collection, added 19 September, and a rejection reversed: on 12 September this was passed over as duplicating D11 and D24 on base. On the fullness question it is not a duplicate at all — 400 g of potato and 200 g of broccoli is the biggest plate and the most fibre of any dinner here. The chicken is deliberately small at 60 g raw, because potato, cheddar, yogurt and broccoli carry about 25 g of protein before any meat goes in.",
+      "ingredientLabels": {
+        "food_core_potato_raw": "potato",
+        "food_core_broccoli_raw": "broccoli",
+        "food_core_chicken_breast_raw": "chicken breast",
+        "food_core_fage_0_greek_yogurt": "greek yogurt nonfat"
+      },
+      "isNew": true
+    }
+  }
+]

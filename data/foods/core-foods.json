@@ -1,0 +1,5711 @@
+[
+  {
+    "id": "food_core_fage_0_greek_yogurt",
+    "name": "Fage 0% Greek yogurt",
+    "source": "core",
+    "category": "dairy",
+    "brand": "Fage",
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 10.3,
+      "carbs": 3.6,
+      "fat": 0
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "sweet"
+    ],
+    "aliases": [
+      "fage 0% greek yogurt",
+      "greek yogurt nonfat"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "swapFoodId": "food_core_fage_5_greek_yogurt",
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_fage_2_greek_yogurt",
+    "name": "Fage 2% Greek yogurt",
+    "source": "core",
+    "category": "dairy",
+    "brand": "Fage",
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 9.8,
+      "carbs": 3.7,
+      "fat": 2.7
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "sweet"
+    ],
+    "aliases": [
+      "fage 2% greek yogurt"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_fage_5_greek_yogurt",
+    "name": "Fage 5% Greek yogurt",
+    "source": "core",
+    "category": "dairy",
+    "brand": "Fage",
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 9,
+      "carbs": 3.8,
+      "fat": 5
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "sweet"
+    ],
+    "aliases": [
+      "fage 5% greek yogurt"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_cottage_cheese_2",
+    "name": "Cottage cheese 2%",
+    "source": "core",
+    "category": "dairy",
+    "brand": null,
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 11,
+      "carbs": 4.3,
+      "fat": 2.3
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "sweet",
+      "savory"
+    ],
+    "aliases": [
+      "cottage cheese 2%"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "swapFoodId": "food_core_cottage_cheese_4",
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_cottage_cheese_4",
+    "name": "Cottage cheese 4%",
+    "source": "core",
+    "category": "dairy",
+    "brand": null,
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 11.5,
+      "carbs": 3.4,
+      "fat": 4.3
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "sweet",
+      "savory"
+    ],
+    "aliases": [
+      "cottage cheese 4%"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_skim_milk",
+    "name": "Skim milk",
+    "source": "core",
+    "category": "dairy",
+    "brand": null,
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 3.4,
+      "carbs": 5,
+      "fat": 0.2
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "sweet"
+    ],
+    "aliases": [
+      "skim milk"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "swapFoodId": "food_core_whole_milk",
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_whole_milk",
+    "name": "Whole milk",
+    "source": "core",
+    "category": "dairy",
+    "brand": null,
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 3.2,
+      "carbs": 4.8,
+      "fat": 3.3
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "sweet"
+    ],
+    "aliases": [
+      "whole milk"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_chocolate_milk",
+    "name": "Chocolate milk",
+    "source": "core",
+    "category": "dairy",
+    "brand": null,
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 3.2,
+      "carbs": 10.4,
+      "fat": 3
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "sweet"
+    ],
+    "aliases": [
+      "chocolate milk"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "macroRole": "carb",
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_kefir_plain",
+    "name": "Kefir, plain",
+    "source": "core",
+    "category": "dairy",
+    "brand": null,
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 3.3,
+      "carbs": 4.7,
+      "fat": 1
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "sweet"
+    ],
+    "aliases": [
+      "kefir, plain"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_ricotta_part_skim",
+    "name": "Ricotta, part-skim",
+    "source": "core",
+    "category": "dairy",
+    "brand": null,
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 11.4,
+      "carbs": 5.1,
+      "fat": 8
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "sweet",
+      "med"
+    ],
+    "aliases": [
+      "ricotta, part-skim"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_rolled_oats_dry",
+    "name": "Rolled oats, dry",
+    "source": "core",
+    "category": "grain",
+    "brand": null,
+    "state": "dry",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 13.2,
+      "carbs": 67.7,
+      "fat": 6.5
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "sweet"
+    ],
+    "aliases": [
+      "rolled oats, dry",
+      "rolled oats"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "yieldFactor": 2.4,
+      "macroRole": "carb"
+    }
+  },
+  {
+    "id": "food_core_steel_cut_oats_dry",
+    "name": "Steel-cut oats, dry",
+    "source": "core",
+    "category": "grain",
+    "brand": null,
+    "state": "dry",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 13.5,
+      "carbs": 68,
+      "fat": 6.5
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "sweet"
+    ],
+    "aliases": [
+      "steel-cut oats, dry"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "yieldFactor": 3,
+      "macroRole": "carb"
+    }
+  },
+  {
+    "id": "food_core_granola",
+    "name": "Granola",
+    "source": "core",
+    "category": "cereal",
+    "brand": null,
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 9.2,
+      "carbs": 65.1,
+      "fat": 16.7
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "sweet"
+    ],
+    "aliases": [
+      "granola"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "macroRole": "carb",
+      "branded": true,
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_three_wishes_cereal",
+    "name": "Three Wishes cereal",
+    "source": "core",
+    "category": "cereal",
+    "brand": "Three Wishes",
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 23,
+      "carbs": 54,
+      "fat": 13
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "sweet"
+    ],
+    "aliases": [
+      "three wishes cereal"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "macroRole": "carb",
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_one_degree_brown_rice_crisps",
+    "name": "One Degree brown rice crisps",
+    "source": "core",
+    "category": "cereal",
+    "brand": "One Degree",
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 7,
+      "carbs": 89,
+      "fat": 2.5
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "sweet"
+    ],
+    "aliases": [
+      "one degree brown rice crisps"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "macroRole": "carb",
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_rice_cakes",
+    "name": "Rice cakes",
+    "source": "core",
+    "category": "cracker",
+    "brand": null,
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 7.9,
+      "carbs": 81.5,
+      "fat": 2.8
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "sweet",
+      "savory"
+    ],
+    "aliases": [
+      "rice cakes"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "macroRole": "carb",
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_honey",
+    "name": "Honey",
+    "source": "core",
+    "category": "syrup",
+    "brand": null,
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 0.3,
+      "carbs": 82.4,
+      "fat": 0
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "sweet"
+    ],
+    "aliases": [
+      "honey"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "macroRole": "carb",
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_hot_honey",
+    "name": "Hot honey",
+    "source": "core",
+    "category": "syrup",
+    "brand": null,
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 0.3,
+      "carbs": 78,
+      "fat": 0
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "sweet",
+      "amer"
+    ],
+    "aliases": [
+      "hot honey"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "macroRole": "carb",
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_maple_syrup",
+    "name": "Maple syrup",
+    "source": "core",
+    "category": "syrup",
+    "brand": null,
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 0,
+      "carbs": 67,
+      "fat": 0
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "sweet"
+    ],
+    "aliases": [
+      "maple syrup"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "macroRole": "carb",
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_chia_seeds",
+    "name": "Chia seeds",
+    "source": "core",
+    "category": "nut",
+    "brand": null,
+    "state": "raw",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 16.5,
+      "carbs": 42.1,
+      "fat": 30.7
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "sweet"
+    ],
+    "aliases": [
+      "chia seeds"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "macroRole": "fat",
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_banana",
+    "name": "Banana",
+    "source": "core",
+    "category": "fruit",
+    "brand": null,
+    "state": "raw",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 1.1,
+      "carbs": 22.8,
+      "fat": 0.3
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "sweet"
+    ],
+    "aliases": [
+      "banana"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "portionStep": 60,
+      "macroRole": "carb",
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_blueberries_frozen",
+    "name": "Blueberries, frozen",
+    "source": "core",
+    "category": "fruit",
+    "brand": null,
+    "state": "frozen",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 0.7,
+      "carbs": 14.5,
+      "fat": 0.3
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "sweet"
+    ],
+    "aliases": [
+      "blueberries, frozen",
+      "blueberries",
+      "frozen blueberries"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "macroRole": "carb"
+    }
+  },
+  {
+    "id": "food_core_strawberries",
+    "name": "Strawberries",
+    "source": "core",
+    "category": "fruit",
+    "brand": null,
+    "state": "raw",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 0.7,
+      "carbs": 7.7,
+      "fat": 0.3
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "sweet"
+    ],
+    "aliases": [
+      "strawberries"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_raspberries",
+    "name": "Raspberries",
+    "source": "core",
+    "category": "fruit",
+    "brand": null,
+    "state": "raw",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 1.2,
+      "carbs": 11.9,
+      "fat": 0.7
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "sweet"
+    ],
+    "aliases": [
+      "raspberries"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_grapes",
+    "name": "Grapes",
+    "source": "core",
+    "category": "fruit",
+    "brand": null,
+    "state": "raw",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 0.7,
+      "carbs": 18.1,
+      "fat": 0.2
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "sweet"
+    ],
+    "aliases": [
+      "grapes"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "macroRole": "carb",
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_apple",
+    "name": "Apple",
+    "source": "core",
+    "category": "fruit",
+    "brand": null,
+    "state": "raw",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 0.3,
+      "carbs": 13.8,
+      "fat": 0.2
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "sweet"
+    ],
+    "aliases": [
+      "apple"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "macroRole": "carb",
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_mango",
+    "name": "Mango",
+    "source": "core",
+    "category": "fruit",
+    "brand": null,
+    "state": "raw",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 0.8,
+      "carbs": 15,
+      "fat": 0.4
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "sweet"
+    ],
+    "aliases": [
+      "mango"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "macroRole": "carb",
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_pineapple",
+    "name": "Pineapple",
+    "source": "core",
+    "category": "fruit",
+    "brand": null,
+    "state": "raw",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 0.5,
+      "carbs": 13.1,
+      "fat": 0.1
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "sweet"
+    ],
+    "aliases": [
+      "pineapple"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "macroRole": "carb",
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_orange",
+    "name": "Orange",
+    "source": "core",
+    "category": "fruit",
+    "brand": null,
+    "state": "raw",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 0.9,
+      "carbs": 11.8,
+      "fat": 0.1
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "sweet"
+    ],
+    "aliases": [
+      "orange"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_applesauce_unsweetened",
+    "name": "Applesauce, unsweetened",
+    "source": "core",
+    "category": "fruit",
+    "brand": null,
+    "state": "raw",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 0.2,
+      "carbs": 11.3,
+      "fat": 0.1
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "sweet"
+    ],
+    "aliases": [
+      "applesauce, unsweetened"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "macroRole": "carb",
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_dates_medjool",
+    "name": "Dates, Medjool",
+    "source": "core",
+    "category": "driedfruit",
+    "brand": null,
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 1.8,
+      "carbs": 75,
+      "fat": 0.2
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "sweet"
+    ],
+    "aliases": [
+      "dates, medjool",
+      "medjool dates"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "macroRole": "carb",
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_raisins",
+    "name": "Raisins",
+    "source": "core",
+    "category": "driedfruit",
+    "brand": null,
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 3.1,
+      "carbs": 79.2,
+      "fat": 0.5
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "sweet"
+    ],
+    "aliases": [
+      "raisins"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "macroRole": "carb",
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_white_rice_dry",
+    "name": "White rice, dry",
+    "source": "core",
+    "category": "grain",
+    "brand": null,
+    "state": "dry",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 6.5,
+      "carbs": 79,
+      "fat": 0.6
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory"
+    ],
+    "aliases": [
+      "white rice, dry",
+      "white rice dry"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "yieldFactor": 2.9,
+      "yieldKey": "rice",
+      "macroRole": "carb"
+    }
+  },
+  {
+    "id": "food_core_jasmine_rice_dry",
+    "name": "Jasmine rice, dry",
+    "source": "core",
+    "category": "grain",
+    "brand": null,
+    "state": "dry",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 6.7,
+      "carbs": 79.3,
+      "fat": 0.7
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory",
+      "asian"
+    ],
+    "aliases": [
+      "jasmine rice, dry",
+      "jasmine rice dry"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "yieldFactor": 2.9,
+      "yieldKey": "rice",
+      "macroRole": "carb"
+    }
+  },
+  {
+    "id": "food_core_brown_rice_dry",
+    "name": "Brown rice, dry",
+    "source": "core",
+    "category": "grain",
+    "brand": null,
+    "state": "dry",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 7.5,
+      "carbs": 76,
+      "fat": 2.7
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory"
+    ],
+    "aliases": [
+      "brown rice, dry"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "yieldFactor": 2.7,
+      "macroRole": "carb"
+    }
+  },
+  {
+    "id": "food_core_quinoa_dry",
+    "name": "Quinoa, dry",
+    "source": "core",
+    "category": "grain",
+    "brand": null,
+    "state": "dry",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 14.1,
+      "carbs": 64.2,
+      "fat": 6.1
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory",
+      "med"
+    ],
+    "aliases": [
+      "quinoa, dry"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "yieldFactor": 2.9,
+      "macroRole": "carb"
+    }
+  },
+  {
+    "id": "food_core_couscous_dry",
+    "name": "Couscous, dry",
+    "source": "core",
+    "category": "grain",
+    "brand": null,
+    "state": "dry",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 12.8,
+      "carbs": 77.4,
+      "fat": 0.6
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory",
+      "med"
+    ],
+    "aliases": [
+      "couscous, dry",
+      "pearl couscous dry"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "yieldFactor": 2.8,
+      "macroRole": "carb"
+    }
+  },
+  {
+    "id": "food_core_farro_dry",
+    "name": "Farro, dry",
+    "source": "core",
+    "category": "grain",
+    "brand": null,
+    "state": "dry",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 13.5,
+      "carbs": 72,
+      "fat": 2
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory",
+      "med"
+    ],
+    "aliases": [
+      "farro, dry",
+      "farro dry"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "yieldFactor": 2.7,
+      "macroRole": "carb"
+    }
+  },
+  {
+    "id": "food_core_orzo_dry",
+    "name": "Orzo, dry",
+    "source": "core",
+    "category": "grain",
+    "brand": null,
+    "state": "dry",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 12.5,
+      "carbs": 74,
+      "fat": 1.5
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory",
+      "med"
+    ],
+    "aliases": [
+      "orzo, dry",
+      "orzo dry"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "yieldFactor": 2.3,
+      "macroRole": "carb"
+    }
+  },
+  {
+    "id": "food_core_pasta_dry",
+    "name": "Pasta, dry",
+    "source": "core",
+    "category": "grain",
+    "brand": null,
+    "state": "dry",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 13,
+      "carbs": 74.7,
+      "fat": 1.5
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory"
+    ],
+    "aliases": [
+      "pasta, dry",
+      "linguine dry",
+      "pasta dry",
+      "rigatoni dry",
+      "spaghetti dry"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "yieldFactor": 2.3,
+      "macroRole": "carb"
+    }
+  },
+  {
+    "id": "food_core_rice_noodles_dry",
+    "name": "Rice noodles, dry",
+    "source": "core",
+    "category": "grain",
+    "brand": null,
+    "state": "dry",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 5.9,
+      "carbs": 80.2,
+      "fat": 0.6
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory",
+      "asian"
+    ],
+    "aliases": [
+      "rice noodles, dry",
+      "rice noodles dry"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "yieldFactor": 2.6,
+      "macroRole": "carb"
+    }
+  },
+  {
+    "id": "food_core_sourdough",
+    "name": "Sourdough",
+    "source": "core",
+    "category": "bread",
+    "brand": null,
+    "state": "baked",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 9,
+      "carbs": 50,
+      "fat": 1.8
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "sweet",
+      "savory"
+    ],
+    "aliases": [
+      "sourdough"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "macroRole": "carb",
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_whole_wheat_bread",
+    "name": "Whole wheat bread",
+    "source": "core",
+    "category": "bread",
+    "brand": null,
+    "state": "baked",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 12.5,
+      "carbs": 43,
+      "fat": 3.5
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "sweet",
+      "savory"
+    ],
+    "aliases": [
+      "whole wheat bread"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "macroRole": "carb",
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_bagel_plain",
+    "name": "Bagel, plain",
+    "source": "core",
+    "category": "bread",
+    "brand": null,
+    "state": "baked",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 10.5,
+      "carbs": 53,
+      "fat": 1.7
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "sweet",
+      "savory"
+    ],
+    "aliases": [
+      "bagel, plain"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "macroRole": "carb",
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_english_muffin",
+    "name": "English muffin",
+    "source": "core",
+    "category": "bread",
+    "brand": null,
+    "state": "baked",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 9,
+      "carbs": 46,
+      "fat": 1.8
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "sweet",
+      "savory"
+    ],
+    "aliases": [
+      "english muffin"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "macroRole": "carb",
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_tortilla_large_flour",
+    "name": "Tortilla, large flour",
+    "source": "core",
+    "category": "tortilla",
+    "brand": null,
+    "state": "baked",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 8,
+      "carbs": 50,
+      "fat": 8
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory",
+      "mex"
+    ],
+    "aliases": [
+      "tortilla, large flour",
+      "flour tortilla",
+      "flour tortillas",
+      "large tortilla wrap"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "macroRole": "carb",
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_tortilla_corn",
+    "name": "Tortilla, corn",
+    "source": "core",
+    "category": "tortilla",
+    "brand": null,
+    "state": "baked",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 5.7,
+      "carbs": 44.6,
+      "fat": 1.8
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory",
+      "mex"
+    ],
+    "aliases": [
+      "tortilla, corn",
+      "corn tortillas"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "portionStep": 25,
+      "macroRole": "carb",
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_pita_white",
+    "name": "Pita, white",
+    "source": "core",
+    "category": "bread",
+    "brand": null,
+    "state": "baked",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 9.1,
+      "carbs": 55.7,
+      "fat": 1.2
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory",
+      "med"
+    ],
+    "aliases": [
+      "pita, white"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "macroRole": "carb",
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_naan",
+    "name": "Naan",
+    "source": "core",
+    "category": "bread",
+    "brand": null,
+    "state": "baked",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 8.7,
+      "carbs": 48,
+      "fat": 5.7
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory",
+      "med"
+    ],
+    "aliases": [
+      "naan"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "macroRole": "carb",
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_tortilla_chips",
+    "name": "Tortilla chips",
+    "source": "core",
+    "category": "cracker",
+    "brand": null,
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 6.7,
+      "carbs": 64,
+      "fat": 24
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory",
+      "mex"
+    ],
+    "aliases": [
+      "tortilla chips"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "macroRole": "carb",
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_pretzels",
+    "name": "Pretzels",
+    "source": "core",
+    "category": "cracker",
+    "brand": null,
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 10,
+      "carbs": 78,
+      "fat": 3
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory",
+      "sweet"
+    ],
+    "aliases": [
+      "pretzels"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "macroRole": "carb",
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_popcorn_popped",
+    "name": "Popcorn, popped",
+    "source": "core",
+    "category": "cracker",
+    "brand": null,
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 12,
+      "carbs": 74,
+      "fat": 4.5
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory",
+      "sweet"
+    ],
+    "aliases": [
+      "popcorn, popped",
+      "air-popped popcorn"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "macroRole": "carb"
+    }
+  },
+  {
+    "id": "food_core_potato_raw",
+    "name": "Potato, raw",
+    "source": "core",
+    "category": "starchveg",
+    "brand": null,
+    "state": "raw",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 2,
+      "carbs": 17.5,
+      "fat": 0.1
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory"
+    ],
+    "aliases": [
+      "potato, raw",
+      "potato"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "yieldFactor": 0.78,
+      "yieldKey": "potato",
+      "macroRole": "carb"
+    }
+  },
+  {
+    "id": "food_core_sweet_potato_raw",
+    "name": "Sweet potato, raw",
+    "source": "core",
+    "category": "starchveg",
+    "brand": null,
+    "state": "raw",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 1.6,
+      "carbs": 20.1,
+      "fat": 0.1
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory"
+    ],
+    "aliases": [
+      "sweet potato, raw",
+      "sweet potato"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "yieldFactor": 0.78,
+      "macroRole": "carb"
+    }
+  },
+  {
+    "id": "food_core_corn",
+    "name": "Corn",
+    "source": "core",
+    "category": "veg",
+    "brand": null,
+    "state": "frozen",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 3.3,
+      "carbs": 19,
+      "fat": 1.2
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory",
+      "mex"
+    ],
+    "aliases": [
+      "corn",
+      "corn frozen"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "macroRole": "carb",
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_peas_frozen",
+    "name": "Peas, frozen",
+    "source": "core",
+    "category": "veg",
+    "brand": null,
+    "state": "frozen",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 5.2,
+      "carbs": 14.5,
+      "fat": 0.4
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory"
+    ],
+    "aliases": [
+      "peas, frozen"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true
+    }
+  },
+  {
+    "id": "food_core_chicken_breast_raw",
+    "name": "Chicken breast, raw",
+    "source": "core",
+    "category": "meat",
+    "brand": null,
+    "state": "raw",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 22.5,
+      "carbs": 0,
+      "fat": 2.6
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory"
+    ],
+    "aliases": [
+      "chicken breast, raw",
+      "chicken breast"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "yieldFactor": 0.72,
+      "yieldKey": "chicken"
+    }
+  },
+  {
+    "id": "food_core_chicken_thigh_raw",
+    "name": "Chicken thigh, raw",
+    "source": "core",
+    "category": "meat",
+    "brand": null,
+    "state": "raw",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 18.6,
+      "carbs": 0,
+      "fat": 8
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory"
+    ],
+    "aliases": [
+      "chicken thigh, raw",
+      "chicken thigh"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "yieldFactor": 0.75
+    }
+  },
+  {
+    "id": "food_core_rotisserie_chicken_meat",
+    "name": "Rotisserie chicken meat",
+    "source": "core",
+    "category": "meat",
+    "brand": null,
+    "state": "cooked",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 25,
+      "carbs": 0,
+      "fat": 8
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory"
+    ],
+    "aliases": [
+      "rotisserie chicken meat"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_ground_turkey_93_7",
+    "name": "Ground turkey 93/7",
+    "source": "core",
+    "category": "meat",
+    "brand": null,
+    "state": "raw",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 19.7,
+      "carbs": 0,
+      "fat": 8
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory"
+    ],
+    "aliases": [
+      "ground turkey 93/7"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "yieldFactor": 0.69,
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_ground_beef_93_7",
+    "name": "Ground beef 93/7",
+    "source": "core",
+    "category": "meat",
+    "brand": null,
+    "state": "raw",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 21.4,
+      "carbs": 0,
+      "fat": 7
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory"
+    ],
+    "aliases": [
+      "ground beef 93/7"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "yieldFactor": 0.77,
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_sirloin_steak_raw",
+    "name": "Sirloin steak, raw",
+    "source": "core",
+    "category": "meat",
+    "brand": null,
+    "state": "raw",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 21,
+      "carbs": 0,
+      "fat": 6
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory"
+    ],
+    "aliases": [
+      "sirloin steak, raw",
+      "sirloin steak"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "yieldFactor": 0.75
+    }
+  },
+  {
+    "id": "food_core_pork_tenderloin_raw",
+    "name": "Pork tenderloin, raw",
+    "source": "core",
+    "category": "meat",
+    "brand": null,
+    "state": "raw",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 20.9,
+      "carbs": 0,
+      "fat": 3.4
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory"
+    ],
+    "aliases": [
+      "pork tenderloin, raw"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "yieldFactor": 0.8
+    }
+  },
+  {
+    "id": "food_core_salmon_raw",
+    "name": "Salmon, raw",
+    "source": "core",
+    "category": "meat",
+    "brand": null,
+    "state": "raw",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 20.4,
+      "carbs": 0,
+      "fat": 13.4
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory"
+    ],
+    "aliases": [
+      "salmon, raw",
+      "salmon"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "yieldFactor": 0.79,
+      "yieldKey": "salmon"
+    }
+  },
+  {
+    "id": "food_core_shrimp_raw",
+    "name": "Shrimp, raw",
+    "source": "core",
+    "category": "meat",
+    "brand": null,
+    "state": "raw",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 20.1,
+      "carbs": 0,
+      "fat": 0.5
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory",
+      "asian"
+    ],
+    "aliases": [
+      "shrimp, raw",
+      "shrimp"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "yieldFactor": 0.72
+    }
+  },
+  {
+    "id": "food_core_tuna_steak_raw",
+    "name": "Tuna steak, raw",
+    "source": "core",
+    "category": "meat",
+    "brand": null,
+    "state": "raw",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 24.4,
+      "carbs": 0,
+      "fat": 0.5
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory"
+    ],
+    "aliases": [
+      "tuna steak, raw"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true
+    }
+  },
+  {
+    "id": "food_core_tuna_canned_in_water",
+    "name": "Tuna, canned in water",
+    "source": "core",
+    "category": "meat",
+    "brand": null,
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 25.5,
+      "carbs": 0,
+      "fat": 0.8
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory"
+    ],
+    "aliases": [
+      "tuna, canned in water"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true
+    }
+  },
+  {
+    "id": "food_core_deli_turkey_low_sodium",
+    "name": "Deli turkey, low sodium",
+    "source": "core",
+    "category": "meat",
+    "brand": null,
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 17,
+      "carbs": 2,
+      "fat": 2
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory"
+    ],
+    "aliases": [
+      "deli turkey, low sodium",
+      "deli turkey"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_beef_jerky",
+    "name": "Beef jerky",
+    "source": "core",
+    "category": "cracker",
+    "brand": null,
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 33,
+      "carbs": 11,
+      "fat": 7
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory"
+    ],
+    "aliases": [
+      "beef jerky"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_bacon_raw",
+    "name": "Bacon, raw",
+    "source": "core",
+    "category": "meat",
+    "brand": null,
+    "state": "raw",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 12.6,
+      "carbs": 0.7,
+      "fat": 45
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory"
+    ],
+    "aliases": [
+      "bacon, raw"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "yieldFactor": 0.42,
+      "macroRole": "fat"
+    }
+  },
+  {
+    "id": "food_core_turkey_bacon",
+    "name": "Turkey bacon",
+    "source": "core",
+    "category": "meat",
+    "brand": null,
+    "state": "raw",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 20,
+      "carbs": 2.5,
+      "fat": 22
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory"
+    ],
+    "aliases": [
+      "turkey bacon"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "macroRole": "fat",
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_egg_whole",
+    "name": "Egg, whole",
+    "source": "core",
+    "category": "egg",
+    "brand": null,
+    "state": "raw",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 12.6,
+      "carbs": 0.7,
+      "fat": 9.5
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "sweet",
+      "savory"
+    ],
+    "aliases": [
+      "egg, whole",
+      "egg"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_egg_white",
+    "name": "Egg white",
+    "source": "core",
+    "category": "egg",
+    "brand": null,
+    "state": "raw",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 10.9,
+      "carbs": 0.7,
+      "fat": 0.2
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory"
+    ],
+    "aliases": [
+      "egg white",
+      "liquid egg white"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_tofu_extra_firm",
+    "name": "Tofu, extra firm",
+    "source": "core",
+    "category": "meat",
+    "brand": null,
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 17.3,
+      "carbs": 2.7,
+      "fat": 10
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory",
+      "asian"
+    ],
+    "aliases": [
+      "tofu, extra firm"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_edamame_shelled",
+    "name": "Edamame, shelled",
+    "source": "core",
+    "category": "legume",
+    "brand": null,
+    "state": "frozen",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 11.9,
+      "carbs": 8.9,
+      "fat": 5.2
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory",
+      "asian"
+    ],
+    "aliases": [
+      "edamame, shelled",
+      "edamame frozen",
+      "shelled edamame frozen"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_black_beans_canned_drained",
+    "name": "Black beans, canned drained",
+    "source": "core",
+    "category": "legume",
+    "brand": null,
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 6,
+      "carbs": 16.6,
+      "fat": 0.3
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory",
+      "mex"
+    ],
+    "aliases": [
+      "black beans, canned drained",
+      "black beans canned"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "macroRole": "carb"
+    }
+  },
+  {
+    "id": "food_core_pinto_beans_canned_drained",
+    "name": "Pinto beans, canned drained",
+    "source": "core",
+    "category": "legume",
+    "brand": null,
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 5.9,
+      "carbs": 16.4,
+      "fat": 0.5
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory",
+      "mex"
+    ],
+    "aliases": [
+      "pinto beans, canned drained"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "macroRole": "carb"
+    }
+  },
+  {
+    "id": "food_core_refried_beans",
+    "name": "Refried beans",
+    "source": "core",
+    "category": "legume",
+    "brand": null,
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 5,
+      "carbs": 13,
+      "fat": 2
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory",
+      "mex"
+    ],
+    "aliases": [
+      "refried beans"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "macroRole": "carb",
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_chickpeas_canned_drained",
+    "name": "Chickpeas, canned drained",
+    "source": "core",
+    "category": "legume",
+    "brand": null,
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 7,
+      "carbs": 17.8,
+      "fat": 2.6
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory",
+      "med"
+    ],
+    "aliases": [
+      "chickpeas, canned drained",
+      "chickpeas canned"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "macroRole": "carb"
+    }
+  },
+  {
+    "id": "food_core_peanut_butter",
+    "name": "Peanut butter",
+    "source": "core",
+    "category": "nutbutter",
+    "brand": null,
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 25.1,
+      "carbs": 20,
+      "fat": 50.8
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "sweet"
+    ],
+    "aliases": [
+      "peanut butter"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "macroRole": "fat",
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_almond_butter",
+    "name": "Almond butter",
+    "source": "core",
+    "category": "nutbutter",
+    "brand": null,
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 21,
+      "carbs": 18.8,
+      "fat": 55.5
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "sweet"
+    ],
+    "aliases": [
+      "almond butter"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "macroRole": "fat",
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_almonds",
+    "name": "Almonds",
+    "source": "core",
+    "category": "nut",
+    "brand": null,
+    "state": "raw",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 21.2,
+      "carbs": 21.6,
+      "fat": 49.9
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "sweet",
+      "savory"
+    ],
+    "aliases": [
+      "almonds",
+      "sliced almonds"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "macroRole": "fat",
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_walnuts",
+    "name": "Walnuts",
+    "source": "core",
+    "category": "nut",
+    "brand": null,
+    "state": "raw",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 15.2,
+      "carbs": 13.7,
+      "fat": 65.2
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "sweet"
+    ],
+    "aliases": [
+      "walnuts"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "macroRole": "fat",
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_cashews",
+    "name": "Cashews",
+    "source": "core",
+    "category": "nut",
+    "brand": null,
+    "state": "raw",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 18.2,
+      "carbs": 30.2,
+      "fat": 43.9
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "sweet"
+    ],
+    "aliases": [
+      "cashews"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "macroRole": "fat",
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_avocado",
+    "name": "Avocado",
+    "source": "core",
+    "category": "veg",
+    "brand": null,
+    "state": "raw",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 2,
+      "carbs": 8.5,
+      "fat": 14.7
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory",
+      "mex"
+    ],
+    "aliases": [
+      "avocado"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "macroRole": "fat",
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_olive_oil",
+    "name": "Olive oil",
+    "source": "core",
+    "category": "oil",
+    "brand": null,
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 0,
+      "carbs": 0,
+      "fat": 100
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory",
+      "med"
+    ],
+    "aliases": [
+      "olive oil"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "macroRole": "fat",
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_butter",
+    "name": "Butter",
+    "source": "core",
+    "category": "oil",
+    "brand": null,
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 0.9,
+      "carbs": 0.1,
+      "fat": 81.1
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "sweet",
+      "savory"
+    ],
+    "aliases": [
+      "butter"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "macroRole": "fat",
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_feta",
+    "name": "Feta",
+    "source": "core",
+    "category": "cheese",
+    "brand": null,
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 14.2,
+      "carbs": 4.1,
+      "fat": 21.3
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory",
+      "med"
+    ],
+    "aliases": [
+      "feta"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "macroRole": "fat",
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_cheddar",
+    "name": "Cheddar",
+    "source": "core",
+    "category": "cheese",
+    "brand": null,
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 23,
+      "carbs": 3.1,
+      "fat": 33.1
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory"
+    ],
+    "aliases": [
+      "cheddar"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "macroRole": "fat",
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_mozzarella_part_skim",
+    "name": "Mozzarella, part-skim",
+    "source": "core",
+    "category": "cheese",
+    "brand": null,
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 24.3,
+      "carbs": 2.8,
+      "fat": 15.9
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory",
+      "med"
+    ],
+    "aliases": [
+      "mozzarella, part-skim",
+      "mozzarella"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_parmesan",
+    "name": "Parmesan",
+    "source": "core",
+    "category": "cheese",
+    "brand": null,
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 35.8,
+      "carbs": 3.2,
+      "fat": 25.8
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory",
+      "med"
+    ],
+    "aliases": [
+      "parmesan"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "macroRole": "fat",
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_cream_cheese",
+    "name": "Cream cheese",
+    "source": "core",
+    "category": "cheese",
+    "brand": null,
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 6.2,
+      "carbs": 5.5,
+      "fat": 34.2
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "sweet",
+      "savory"
+    ],
+    "aliases": [
+      "cream cheese"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "macroRole": "fat",
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_sour_cream",
+    "name": "Sour cream",
+    "source": "core",
+    "category": "sauce",
+    "brand": null,
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 2.4,
+      "carbs": 4.6,
+      "fat": 19.4
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory",
+      "mex"
+    ],
+    "aliases": [
+      "sour cream"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "macroRole": "fat",
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_guacamole",
+    "name": "Guacamole",
+    "source": "core",
+    "category": "sauce",
+    "brand": null,
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 2,
+      "carbs": 8.5,
+      "fat": 14
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory",
+      "mex"
+    ],
+    "aliases": [
+      "guacamole"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "macroRole": "fat",
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_salsa",
+    "name": "Salsa",
+    "source": "core",
+    "category": "sauce",
+    "brand": null,
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 1.5,
+      "carbs": 7,
+      "fat": 0.2
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory",
+      "mex"
+    ],
+    "aliases": [
+      "salsa",
+      "pico de gallo"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_hummus",
+    "name": "Hummus",
+    "source": "core",
+    "category": "sauce",
+    "brand": null,
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 7.9,
+      "carbs": 14.3,
+      "fat": 17.1
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory",
+      "med"
+    ],
+    "aliases": [
+      "hummus"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "macroRole": "fat",
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_marinara_sauce",
+    "name": "Marinara sauce",
+    "source": "core",
+    "category": "sauce",
+    "brand": null,
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 1.6,
+      "carbs": 8.5,
+      "fat": 2
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory",
+      "med"
+    ],
+    "aliases": [
+      "marinara sauce",
+      "marinara"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_soy_sauce",
+    "name": "Soy sauce",
+    "source": "core",
+    "category": "sauce",
+    "brand": null,
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 8.1,
+      "carbs": 4.9,
+      "fat": 0
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory",
+      "asian"
+    ],
+    "aliases": [
+      "soy sauce",
+      "soy sauce low sodium"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_broccoli_raw",
+    "name": "Broccoli, raw",
+    "source": "core",
+    "category": "veg",
+    "brand": null,
+    "state": "raw",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 2.8,
+      "carbs": 6.6,
+      "fat": 0.4
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory"
+    ],
+    "aliases": [
+      "broccoli, raw",
+      "broccoli"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "yieldFactor": 0.9
+    }
+  },
+  {
+    "id": "food_core_bell_pepper",
+    "name": "Bell pepper",
+    "source": "core",
+    "category": "veg",
+    "brand": null,
+    "state": "raw",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 1,
+      "carbs": 6,
+      "fat": 0.3
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory",
+      "mex"
+    ],
+    "aliases": [
+      "bell pepper",
+      "green bell pepper"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_zucchini",
+    "name": "Zucchini",
+    "source": "core",
+    "category": "veg",
+    "brand": null,
+    "state": "raw",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 1.2,
+      "carbs": 3.1,
+      "fat": 0.3
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory",
+      "med"
+    ],
+    "aliases": [
+      "zucchini"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_spinach",
+    "name": "Spinach",
+    "source": "core",
+    "category": "veg",
+    "brand": null,
+    "state": "raw",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 2.9,
+      "carbs": 3.6,
+      "fat": 0.4
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory"
+    ],
+    "aliases": [
+      "spinach"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_onion",
+    "name": "Onion",
+    "source": "core",
+    "category": "veg",
+    "brand": null,
+    "state": "raw",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 1.1,
+      "carbs": 9.3,
+      "fat": 0.1
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory"
+    ],
+    "aliases": [
+      "onion",
+      "red onion"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_mushrooms",
+    "name": "Mushrooms",
+    "source": "core",
+    "category": "veg",
+    "brand": null,
+    "state": "raw",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 3.1,
+      "carbs": 3.3,
+      "fat": 0.3
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory"
+    ],
+    "aliases": [
+      "mushrooms"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_asparagus",
+    "name": "Asparagus",
+    "source": "core",
+    "category": "veg",
+    "brand": null,
+    "state": "raw",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 2.2,
+      "carbs": 3.9,
+      "fat": 0.1
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory"
+    ],
+    "aliases": [
+      "asparagus"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_green_beans",
+    "name": "Green beans",
+    "source": "core",
+    "category": "veg",
+    "brand": null,
+    "state": "raw",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 1.8,
+      "carbs": 7,
+      "fat": 0.2
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory"
+    ],
+    "aliases": [
+      "green beans"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_tomato",
+    "name": "Tomato",
+    "source": "core",
+    "category": "veg",
+    "brand": null,
+    "state": "raw",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 0.9,
+      "carbs": 3.9,
+      "fat": 0.2
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory",
+      "med"
+    ],
+    "aliases": [
+      "tomato",
+      "cherry tomatoes"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_cucumber",
+    "name": "Cucumber",
+    "source": "core",
+    "category": "veg",
+    "brand": null,
+    "state": "raw",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 0.7,
+      "carbs": 3.6,
+      "fat": 0.1
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory",
+      "med"
+    ],
+    "aliases": [
+      "cucumber"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_romaine",
+    "name": "Romaine",
+    "source": "core",
+    "category": "veg",
+    "brand": null,
+    "state": "raw",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 1.2,
+      "carbs": 3.3,
+      "fat": 0.3
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory"
+    ],
+    "aliases": [
+      "romaine"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_cabbage_slaw_mix",
+    "name": "Cabbage slaw mix",
+    "source": "core",
+    "category": "veg",
+    "brand": null,
+    "state": "raw",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 1.3,
+      "carbs": 5.8,
+      "fat": 0.1
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory",
+      "mex"
+    ],
+    "aliases": [
+      "cabbage slaw mix"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_panko_breadcrumbs",
+    "name": "Panko/breadcrumbs",
+    "source": "core",
+    "category": "cracker",
+    "brand": null,
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 12,
+      "carbs": 72,
+      "fat": 2
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory"
+    ],
+    "aliases": [
+      "panko/breadcrumbs",
+      "panko"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "macroRole": "carb",
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_milk_2",
+    "name": "Milk 2%",
+    "source": "core",
+    "category": "dairy",
+    "brand": null,
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 3.3,
+      "carbs": 4.8,
+      "fat": 2
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "sweet"
+    ],
+    "aliases": [
+      "milk 2%"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_whole_grain_crackers",
+    "name": "Whole-grain crackers",
+    "source": "core",
+    "category": "cracker",
+    "brand": null,
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 10.4,
+      "carbs": 66,
+      "fat": 11.1
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory",
+      "sweet"
+    ],
+    "aliases": [
+      "whole-grain crackers"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "macroRole": "carb",
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_whole_wheat_pita",
+    "name": "Whole-wheat pita",
+    "source": "core",
+    "category": "bread",
+    "brand": null,
+    "state": "baked",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 9.8,
+      "carbs": 55,
+      "fat": 1.7
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory",
+      "med"
+    ],
+    "aliases": [
+      "whole-wheat pita"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "macroRole": "carb",
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_kalamata_olives",
+    "name": "Kalamata olives",
+    "source": "core",
+    "category": "sauce",
+    "brand": null,
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 1,
+      "carbs": 6.3,
+      "fat": 15.3
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory",
+      "med"
+    ],
+    "aliases": [
+      "kalamata olives"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "macroRole": "fat",
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_mayonnaise",
+    "name": "Mayonnaise",
+    "source": "core",
+    "category": "oil",
+    "brand": null,
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 1,
+      "carbs": 0.6,
+      "fat": 75
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory"
+    ],
+    "aliases": [
+      "mayonnaise"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "macroRole": "fat",
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_dijon_mustard",
+    "name": "Dijon mustard",
+    "source": "core",
+    "category": "sauce",
+    "brand": null,
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 4.4,
+      "carbs": 5.3,
+      "fat": 3.6
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory"
+    ],
+    "aliases": [
+      "dijon mustard"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_lemon_juice",
+    "name": "Lemon juice",
+    "source": "core",
+    "category": "sauce",
+    "brand": null,
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 0.4,
+      "carbs": 6.9,
+      "fat": 0.2
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory",
+      "med"
+    ],
+    "aliases": [
+      "lemon juice"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_lime_juice",
+    "name": "Lime juice",
+    "source": "core",
+    "category": "sauce",
+    "brand": null,
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 0.4,
+      "carbs": 8.4,
+      "fat": 0.2
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory",
+      "mex"
+    ],
+    "aliases": [
+      "lime juice"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_garlic",
+    "name": "Garlic",
+    "source": "core",
+    "category": "veg",
+    "brand": null,
+    "state": "raw",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 6.4,
+      "carbs": 33.1,
+      "fat": 0.5
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory"
+    ],
+    "aliases": [
+      "garlic"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_ginger",
+    "name": "Ginger",
+    "source": "core",
+    "category": "veg",
+    "brand": null,
+    "state": "raw",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 1.8,
+      "carbs": 17.8,
+      "fat": 0.8
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory",
+      "asian"
+    ],
+    "aliases": [
+      "ginger"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_basil",
+    "name": "Basil",
+    "source": "core",
+    "category": "veg",
+    "brand": null,
+    "state": "raw",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 3.2,
+      "carbs": 2.7,
+      "fat": 0.6
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory",
+      "med"
+    ],
+    "aliases": [
+      "basil"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_scallions",
+    "name": "Scallions",
+    "source": "core",
+    "category": "veg",
+    "brand": null,
+    "state": "raw",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 1.8,
+      "carbs": 7.3,
+      "fat": 0.2
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory",
+      "asian"
+    ],
+    "aliases": [
+      "scallions"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_celery",
+    "name": "Celery",
+    "source": "core",
+    "category": "veg",
+    "brand": null,
+    "state": "raw",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 0.7,
+      "carbs": 3,
+      "fat": 0.2
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory"
+    ],
+    "aliases": [
+      "celery"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_carrot",
+    "name": "Carrot",
+    "source": "core",
+    "category": "veg",
+    "brand": null,
+    "state": "raw",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 0.9,
+      "carbs": 9.6,
+      "fat": 0.2
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory"
+    ],
+    "aliases": [
+      "carrot"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_baby_carrots",
+    "name": "Baby carrots",
+    "source": "core",
+    "category": "veg",
+    "brand": null,
+    "state": "raw",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 0.6,
+      "carbs": 8.2,
+      "fat": 0.1
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory"
+    ],
+    "aliases": [
+      "baby carrots"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_everything_bagel_seasoning",
+    "name": "Everything bagel seasoning",
+    "source": "core",
+    "category": "nut",
+    "brand": null,
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 15,
+      "carbs": 25,
+      "fat": 25
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory"
+    ],
+    "aliases": [
+      "everything bagel seasoning"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_white_wine",
+    "name": "White wine",
+    "source": "core",
+    "category": "sauce",
+    "brand": null,
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 0.1,
+      "carbs": 2.6,
+      "fat": 0
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory"
+    ],
+    "aliases": [
+      "white wine"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_chicken_stock",
+    "name": "Chicken stock",
+    "source": "core",
+    "category": "sauce",
+    "brand": null,
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 1,
+      "carbs": 0.9,
+      "fat": 0.4
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory"
+    ],
+    "aliases": [
+      "chicken stock"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_crushed_tomatoes",
+    "name": "Crushed tomatoes",
+    "source": "core",
+    "category": "sauce",
+    "brand": null,
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 1.6,
+      "carbs": 7.3,
+      "fat": 0.3
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory",
+      "med"
+    ],
+    "aliases": [
+      "crushed tomatoes"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_tomato_paste",
+    "name": "Tomato paste",
+    "source": "core",
+    "category": "sauce",
+    "brand": null,
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 4.3,
+      "carbs": 18.9,
+      "fat": 0.5
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory",
+      "med"
+    ],
+    "aliases": [
+      "tomato paste"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_pesto",
+    "name": "Pesto",
+    "source": "core",
+    "category": "sauce",
+    "brand": null,
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 4,
+      "carbs": 6,
+      "fat": 44
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory",
+      "med"
+    ],
+    "aliases": [
+      "pesto"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "macroRole": "fat",
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_tzatziki",
+    "name": "Tzatziki",
+    "source": "core",
+    "category": "sauce",
+    "brand": null,
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 3,
+      "carbs": 4,
+      "fat": 6
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory",
+      "med"
+    ],
+    "aliases": [
+      "tzatziki"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_bbq_sauce",
+    "name": "BBQ sauce",
+    "source": "core",
+    "category": "sauce",
+    "brand": null,
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 0.8,
+      "carbs": 40.8,
+      "fat": 0.4
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory",
+      "amer"
+    ],
+    "aliases": [
+      "bbq sauce"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "macroRole": "carb",
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_ketchup",
+    "name": "Ketchup",
+    "source": "core",
+    "category": "sauce",
+    "brand": null,
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 1,
+      "carbs": 25.8,
+      "fat": 0.1
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory",
+      "amer"
+    ],
+    "aliases": [
+      "ketchup"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_buffalo_sauce",
+    "name": "Buffalo sauce",
+    "source": "core",
+    "category": "sauce",
+    "brand": null,
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 0.5,
+      "carbs": 2,
+      "fat": 1.5
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory",
+      "amer"
+    ],
+    "aliases": [
+      "buffalo sauce"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_oyster_sauce",
+    "name": "Oyster sauce",
+    "source": "core",
+    "category": "sauce",
+    "brand": null,
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 2,
+      "carbs": 22,
+      "fat": 0.3
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory",
+      "asian"
+    ],
+    "aliases": [
+      "oyster sauce"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_sriracha",
+    "name": "Sriracha",
+    "source": "core",
+    "category": "sauce",
+    "brand": null,
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 1.9,
+      "carbs": 19.2,
+      "fat": 0.9
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory",
+      "asian"
+    ],
+    "aliases": [
+      "sriracha"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_balsamic_vinegar",
+    "name": "Balsamic vinegar",
+    "source": "core",
+    "category": "sauce",
+    "brand": null,
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 0.5,
+      "carbs": 17,
+      "fat": 0
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory",
+      "med"
+    ],
+    "aliases": [
+      "balsamic vinegar"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_balsamic_glaze",
+    "name": "Balsamic glaze",
+    "source": "core",
+    "category": "sauce",
+    "brand": null,
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 0.6,
+      "carbs": 46,
+      "fat": 0
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory",
+      "med"
+    ],
+    "aliases": [
+      "balsamic glaze"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_brown_sugar",
+    "name": "Brown sugar",
+    "source": "core",
+    "category": "syrup",
+    "brand": null,
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 0,
+      "carbs": 98.1,
+      "fat": 0
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "sweet"
+    ],
+    "aliases": [
+      "brown sugar"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "macroRole": "carb",
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_cornstarch",
+    "name": "Cornstarch",
+    "source": "core",
+    "category": "syrup",
+    "brand": null,
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 0.3,
+      "carbs": 91.3,
+      "fat": 0.1
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory",
+      "asian"
+    ],
+    "aliases": [
+      "cornstarch"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_all_purpose_flour",
+    "name": "All-purpose flour",
+    "source": "core",
+    "category": "grain",
+    "brand": null,
+    "state": "dry",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 10.3,
+      "carbs": 76.3,
+      "fat": 1
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "sweet",
+      "savory"
+    ],
+    "aliases": [
+      "all-purpose flour"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "macroRole": "carb",
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_cocoa_powder",
+    "name": "Cocoa powder",
+    "source": "core",
+    "category": "nut",
+    "brand": null,
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 19.6,
+      "carbs": 57.9,
+      "fat": 13.7
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "sweet"
+    ],
+    "aliases": [
+      "cocoa powder"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_sesame_oil",
+    "name": "Sesame oil",
+    "source": "core",
+    "category": "oil",
+    "brand": null,
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 0,
+      "carbs": 0,
+      "fat": 100
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory",
+      "asian"
+    ],
+    "aliases": [
+      "sesame oil"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "macroRole": "fat",
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_sesame_seeds",
+    "name": "Sesame seeds",
+    "source": "core",
+    "category": "nut",
+    "brand": null,
+    "state": "raw",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 17.7,
+      "carbs": 23.4,
+      "fat": 49.7
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory",
+      "asian"
+    ],
+    "aliases": [
+      "sesame seeds"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "macroRole": "fat",
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_protein_powder",
+    "name": "Protein powder",
+    "source": "core",
+    "category": "nut",
+    "brand": null,
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 71.4,
+      "carbs": 9.7,
+      "fat": 6.6
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "sweet"
+    ],
+    "aliases": [
+      "protein powder"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "branded": true,
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_protein_cereal",
+    "name": "Protein cereal",
+    "source": "core",
+    "category": "cereal",
+    "brand": null,
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 22.7,
+      "carbs": 61.7,
+      "fat": 6.6
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "sweet"
+    ],
+    "aliases": [
+      "protein cereal"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "macroRole": "carb",
+      "branded": true,
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_oats_overnight_packet",
+    "name": "Oats overnight packet",
+    "source": "core",
+    "category": "cereal",
+    "brand": "Oats Overnight",
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 26.3,
+      "carbs": 54.3,
+      "fat": 6.3
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "sweet"
+    ],
+    "aliases": [
+      "oats overnight packet"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "macroRole": "carb",
+      "branded": true,
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_graham_crackers",
+    "name": "Graham crackers",
+    "source": "core",
+    "category": "cracker",
+    "brand": null,
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 6,
+      "carbs": 80.5,
+      "fat": 8.2
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "sweet"
+    ],
+    "aliases": [
+      "graham crackers"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "macroRole": "carb",
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_turkey_jerky",
+    "name": "Turkey jerky",
+    "source": "core",
+    "category": "cracker",
+    "brand": null,
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 32.8,
+      "carbs": 15.5,
+      "fat": 3
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory"
+    ],
+    "aliases": [
+      "turkey jerky"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_dried_mango",
+    "name": "Dried mango",
+    "source": "core",
+    "category": "driedfruit",
+    "brand": null,
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 2,
+      "carbs": 78.6,
+      "fat": 1
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "sweet"
+    ],
+    "aliases": [
+      "dried mango"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "macroRole": "carb",
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_dried_cranberries",
+    "name": "Dried cranberries",
+    "source": "core",
+    "category": "driedfruit",
+    "brand": null,
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 0.1,
+      "carbs": 82.8,
+      "fat": 1.4
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "sweet"
+    ],
+    "aliases": [
+      "dried cranberries"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "macroRole": "carb",
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_frozen_mixed_berries",
+    "name": "Frozen mixed berries",
+    "source": "core",
+    "category": "fruit",
+    "brand": null,
+    "state": "frozen",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 0.8,
+      "carbs": 12,
+      "fat": 0.4
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "sweet"
+    ],
+    "aliases": [
+      "frozen mixed berries"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true
+    }
+  },
+  {
+    "id": "food_core_cotija",
+    "name": "Cotija",
+    "source": "core",
+    "category": "cheese",
+    "brand": null,
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 22,
+      "carbs": 4,
+      "fat": 26
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory",
+      "mex"
+    ],
+    "aliases": [
+      "cotija"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "macroRole": "fat",
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_provolone",
+    "name": "Provolone",
+    "source": "core",
+    "category": "cheese",
+    "brand": null,
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 25.6,
+      "carbs": 2.1,
+      "fat": 26.6
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory"
+    ],
+    "aliases": [
+      "provolone"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "macroRole": "fat",
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_gruyere",
+    "name": "Gruyere",
+    "source": "core",
+    "category": "cheese",
+    "brand": null,
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 30,
+      "carbs": 0.4,
+      "fat": 32.3
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory"
+    ],
+    "aliases": [
+      "gruyere"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "macroRole": "fat",
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_blue_cheese",
+    "name": "Blue cheese",
+    "source": "core",
+    "category": "cheese",
+    "brand": null,
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 21.4,
+      "carbs": 2.3,
+      "fat": 28.7
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory"
+    ],
+    "aliases": [
+      "blue cheese"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "macroRole": "fat",
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_american_cheese",
+    "name": "American cheese",
+    "source": "core",
+    "category": "cheese",
+    "brand": null,
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 18,
+      "carbs": 7,
+      "fat": 26
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory",
+      "amer"
+    ],
+    "aliases": [
+      "american cheese"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "macroRole": "fat",
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_light_cream_cheese",
+    "name": "Light cream cheese",
+    "source": "core",
+    "category": "cheese",
+    "brand": null,
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 8,
+      "carbs": 8,
+      "fat": 15
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory",
+      "sweet"
+    ],
+    "aliases": [
+      "light cream cheese"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "macroRole": "fat",
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_fresh_mozzarella",
+    "name": "Fresh mozzarella",
+    "source": "core",
+    "category": "cheese",
+    "brand": null,
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 18,
+      "carbs": 2.5,
+      "fat": 17
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory",
+      "med"
+    ],
+    "aliases": [
+      "fresh mozzarella"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "macroRole": "fat",
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_burger_bun",
+    "name": "Burger bun",
+    "source": "core",
+    "category": "bread",
+    "brand": null,
+    "state": "baked",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 9,
+      "carbs": 47,
+      "fat": 4
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory",
+      "amer"
+    ],
+    "aliases": [
+      "burger bun"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "macroRole": "carb",
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_hoagie_roll",
+    "name": "Hoagie roll",
+    "source": "core",
+    "category": "bread",
+    "brand": null,
+    "state": "baked",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 9.5,
+      "carbs": 51,
+      "fat": 3.5
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory",
+      "amer"
+    ],
+    "aliases": [
+      "hoagie roll"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "macroRole": "carb",
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_frozen_hash_browns",
+    "name": "Frozen hash browns",
+    "source": "core",
+    "category": "starchveg",
+    "brand": null,
+    "state": "frozen",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 2.5,
+      "carbs": 18,
+      "fat": 4.5
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory",
+      "amer"
+    ],
+    "aliases": [
+      "frozen hash browns"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "macroRole": "carb"
+    }
+  },
+  {
+    "id": "food_core_butternut_squash",
+    "name": "Butternut squash",
+    "source": "core",
+    "category": "starchveg",
+    "brand": null,
+    "state": "raw",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 1,
+      "carbs": 11.7,
+      "fat": 0.1
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory"
+    ],
+    "aliases": [
+      "butternut squash"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "macroRole": "carb",
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_broccolini",
+    "name": "Broccolini",
+    "source": "core",
+    "category": "veg",
+    "brand": null,
+    "state": "raw",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 2.8,
+      "carbs": 6.6,
+      "fat": 0.4
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory"
+    ],
+    "aliases": [
+      "broccolini"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "yieldFactor": 0.9,
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_sugar_snap_peas",
+    "name": "Sugar snap peas",
+    "source": "core",
+    "category": "veg",
+    "brand": null,
+    "state": "raw",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 2.8,
+      "carbs": 7.6,
+      "fat": 0.1
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory",
+      "asian"
+    ],
+    "aliases": [
+      "sugar snap peas"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_wild_rice_dry",
+    "name": "Wild rice, dry",
+    "source": "core",
+    "category": "grain",
+    "brand": null,
+    "state": "dry",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 14.7,
+      "carbs": 74.9,
+      "fat": 1.1
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory"
+    ],
+    "aliases": [
+      "wild rice, dry",
+      "wild rice dry"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "yieldFactor": 3,
+      "macroRole": "carb"
+    }
+  },
+  {
+    "id": "food_core_ground_beef_90_10",
+    "name": "Ground beef 90/10",
+    "source": "core",
+    "category": "meat",
+    "brand": null,
+    "state": "raw",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 20,
+      "carbs": 0,
+      "fat": 10
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory"
+    ],
+    "aliases": [
+      "ground beef 90/10"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "yieldFactor": 0.75,
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_roasted_red_pepper",
+    "name": "Roasted red pepper",
+    "source": "core",
+    "category": "veg",
+    "brand": null,
+    "state": "roasted",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 1,
+      "carbs": 5,
+      "fat": 0.2
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory",
+      "med"
+    ],
+    "aliases": [
+      "roasted red pepper"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true
+    }
+  },
+  {
+    "id": "food_core_chipotle_in_adobo",
+    "name": "Chipotle in adobo",
+    "source": "core",
+    "category": "sauce",
+    "brand": null,
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 2,
+      "carbs": 15,
+      "fat": 1.5
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory",
+      "mex"
+    ],
+    "aliases": [
+      "chipotle in adobo"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_potato_gnocchi",
+    "name": "Potato gnocchi",
+    "source": "core",
+    "category": "grain",
+    "brand": null,
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 6,
+      "carbs": 33,
+      "fat": 1
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory",
+      "med"
+    ],
+    "aliases": [
+      "potato gnocchi"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "macroRole": "carb",
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_croutons",
+    "name": "Croutons",
+    "source": "core",
+    "category": "cracker",
+    "brand": null,
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 9,
+      "carbs": 65,
+      "fat": 15
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory"
+    ],
+    "aliases": [
+      "croutons"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "macroRole": "carb",
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_kale",
+    "name": "Kale",
+    "source": "core",
+    "category": "veg",
+    "brand": null,
+    "state": "raw",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 4.3,
+      "carbs": 8.8,
+      "fat": 0.9
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory"
+    ],
+    "aliases": [
+      "kale"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_peanuts",
+    "name": "Peanuts",
+    "source": "core",
+    "category": "nut",
+    "brand": null,
+    "state": "raw",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 25.8,
+      "carbs": 16.1,
+      "fat": 49.2
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory",
+      "sweet",
+      "asian"
+    ],
+    "aliases": [
+      "peanuts"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "macroRole": "fat",
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_rice_vinegar",
+    "name": "Rice vinegar",
+    "source": "core",
+    "category": "sauce",
+    "brand": null,
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 0,
+      "carbs": 0.5,
+      "fat": 0
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory",
+      "asian"
+    ],
+    "aliases": [
+      "rice vinegar"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_sweet_chilli_sauce",
+    "name": "Sweet chilli sauce",
+    "source": "core",
+    "category": "sauce",
+    "brand": null,
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 1,
+      "carbs": 72,
+      "fat": 0.3
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory",
+      "asian"
+    ],
+    "aliases": [
+      "sweet chilli sauce"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "macroRole": "carb",
+      "legacySwap": "Sweet chilli sauce",
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_enchilada_sauce",
+    "name": "Enchilada sauce",
+    "source": "core",
+    "category": "sauce",
+    "brand": null,
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 1,
+      "carbs": 8,
+      "fat": 2
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory",
+      "mexican"
+    ],
+    "aliases": [
+      "enchilada sauce"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "swapFoodId": "food_core_salsa",
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_cilantro",
+    "name": "Cilantro",
+    "source": "core",
+    "category": "vegetable",
+    "brand": null,
+    "state": "raw",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 2.1,
+      "carbs": 3.7,
+      "fat": 0.5
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory"
+    ],
+    "aliases": [
+      "cilantro"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "legacySwap": "Parsley",
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_parmesan_snack_cheese",
+    "name": "Parmesan snack cheese",
+    "source": "core",
+    "category": "cheese",
+    "brand": null,
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 33.3,
+      "carbs": 4.8,
+      "fat": 28.6
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory"
+    ],
+    "aliases": [
+      "parmesan snack cheese"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "macroRole": "fat",
+      "branded": true,
+      "swapFoodId": "food_core_parmesan",
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_turkey_snack_stick",
+    "name": "Turkey snack stick",
+    "source": "core",
+    "category": "meat",
+    "brand": null,
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 36.8,
+      "carbs": 0,
+      "fat": 10.7
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "savory"
+    ],
+    "aliases": [
+      "turkey snack stick"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "branded": true,
+      "swapFoodId": "food_core_turkey_jerky",
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_core_protein_bar_high_fibre",
+    "name": "Protein bar, high fibre",
+    "source": "core",
+    "category": "cracker",
+    "brand": null,
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 26.7,
+      "carbs": 28.9,
+      "fat": 26.7
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "sweet"
+    ],
+    "aliases": [
+      "protein bar, high fibre",
+      "protein bar high fibre"
+    ],
+    "metadata": {
+      "editable": false,
+      "active": true,
+      "macroRole": "fat",
+      "branded": true,
+      "stateInferred": true
+    }
+  }
+]

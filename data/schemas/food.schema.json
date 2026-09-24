@@ -1,0 +1,161 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "macro-app/food.schema.json",
+  "title": "Food",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "name",
+    "source",
+    "category",
+    "state",
+    "nutrition",
+    "measurement",
+    "metadata"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source": {
+      "enum": [
+        "core",
+        "custom",
+        "external"
+      ]
+    },
+    "category": {
+      "type": "string",
+      "minLength": 1
+    },
+    "brand": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "state": {
+      "enum": [
+        "raw",
+        "dry",
+        "cooked",
+        "roasted",
+        "boiled",
+        "baked",
+        "prepared",
+        "frozen",
+        "other"
+      ]
+    },
+    "nutrition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "basis",
+        "protein",
+        "carbs",
+        "fat"
+      ],
+      "properties": {
+        "basis": {
+          "const": "100g"
+        },
+        "protein": {
+          "type": "number",
+          "minimum": 0
+        },
+        "carbs": {
+          "type": "number",
+          "minimum": 0
+        },
+        "fat": {
+          "type": "number",
+          "minimum": 0
+        }
+      }
+    },
+    "measurement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "canonicalUnit",
+        "servingSize",
+        "servingUnit"
+      ],
+      "properties": {
+        "canonicalUnit": {
+          "const": "g"
+        },
+        "servingSize": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "servingUnit": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "aliases": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "required": [
+        "editable",
+        "active"
+      ],
+      "properties": {
+        "editable": {
+          "type": "boolean"
+        },
+        "active": {
+          "type": "boolean"
+        },
+        "yieldFactor": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "yieldKey": {
+          "type": "string"
+        },
+        "portionStep": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "macroRole": {
+          "enum": [
+            "protein",
+            "carb",
+            "fat"
+          ]
+        },
+        "branded": {
+          "type": "boolean"
+        },
+        "swapFoodId": {
+          "type": "string"
+        },
+        "legacyLookedUp": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": true
+    }
+  }
+}

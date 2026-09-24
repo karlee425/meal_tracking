@@ -1,0 +1,14 @@
+{
+  "favoriteFoods": [],
+  "favoriteMeals": [],
+  "dislikedFoods": [],
+  "mealPreferences": {
+    "preferredMealSize": "moderate",
+    "preferQuickMeals": false
+  },
+  "coachingPreferences": {
+    "recommendSavedMealsFirst": true,
+    "considerVariety": true
+  },
+  "appPreferences": {}
+}

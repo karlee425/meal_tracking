@@ -1,0 +1,66 @@
+[
+  {
+    "id": "food_custom_oats_overnight",
+    "name": "Oats overnight",
+    "source": "custom",
+    "category": "grain",
+    "brand": "Oats Overnight",
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 10.7,
+      "carbs": 66.3,
+      "fat": 6.9
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "sweet"
+    ],
+    "aliases": [
+      "oats overnight"
+    ],
+    "metadata": {
+      "editable": true,
+      "active": true,
+      "macroRole": "carb",
+      "legacyLookedUp": true,
+      "stateInferred": true
+    }
+  },
+  {
+    "id": "food_custom_oats_overnight_brand",
+    "name": "Oats Overnight Brand",
+    "source": "custom",
+    "category": "cereal",
+    "brand": "Oats Overnight",
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 10,
+      "carbs": 66,
+      "fat": 5
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "sweet"
+    ],
+    "aliases": [
+      "oats overnight brand"
+    ],
+    "metadata": {
+      "editable": true,
+      "active": true,
+      "macroRole": "carb",
+      "legacyLookedUp": true,
+      "stateInferred": true
+    }
+  }
+]

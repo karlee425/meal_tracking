@@ -1,0 +1,99 @@
+{
+  "version": "2026-09-24",
+  "description": "Approved Prompt 1 migration decisions. migrate.js reads this file; changing a decision means editing it here, re-running the migration and reviewing the report.",
+  "approvedDecisions": [
+    "1. Preserve all 84 Library Meals from meal-options.json.",
+    "2. Keep L13 and L16 with metadata.retired: true.",
+    "3. Do not silently substitute or merge Foods.",
+    "4. The two 0 g cilantro lines are garnishes/notes, not structured macro ingredients.",
+    "5. Inferred Food states are acceptable when flagged with metadata.stateInferred: true.",
+    "6. No nutrition conversions based on inferred raw/cooked/prepared state.",
+    "7. Preserve and report the yield conflicts; do not resolve them during migration.",
+    "8. Preserve and report the Oats Overnight discrepancy; do not merge or substitute those Foods.",
+    "9. Broken swap references are not invented or silently repaired.",
+    "10. Legacy source files stay in their original locations during migration.",
+    "11. Historical Close the Carbs hosted logs are not imported.",
+    "12. Nutrition-data audit issues are not resolved during this migration.",
+    "13. The '150/293/343' Lift gate in migration-spec.md is a typo; Lift is 150P / 293C / 70F.",
+    "14. data/targets.json holds daily targets only. perSlot, nightSnack and carbShiftByDayType are not authoritative V2 targets.",
+    "15. Meal Instance logging slots are breakfast, lunch, snack_afternoon, dinner, snack_night. Library Meals keep mealType 'snack'."
+  ],
+  "approvedTargets": {
+    "lift": { "protein": 150, "carbs": 293, "fat": 70 },
+    "long_run": { "protein": 150, "carbs": 343, "fat": 70 },
+    "rest": { "protein": 150, "carbs": 218, "fat": 70 }
+  },
+  "retiredLibraryMeals": ["L13", "L16"],
+  "garnishLines": [
+    { "mealId": "L26", "text": "cilantro", "foodName": "Cilantro" },
+    { "mealId": "D30", "text": "cilantro", "foodName": "Cilantro" }
+  ],
+  "brandByFoodName": {
+    "Fage 0% Greek yogurt": "Fage",
+    "Fage 2% Greek yogurt": "Fage",
+    "Fage 5% Greek yogurt": "Fage",
+    "Three Wishes cereal": "Three Wishes",
+    "One Degree brown rice crisps": "One Degree",
+    "Oats overnight packet": "Oats Overnight",
+    "Oats overnight": "Oats Overnight",
+    "Oats Overnight Brand": "Oats Overnight"
+  },
+  "foodState": {
+    "explicitNamePatterns": [
+      { "pattern": "\\braw\\b", "state": "raw" },
+      { "pattern": "\\bdry\\b", "state": "dry" },
+      { "pattern": "\\bfrozen\\b", "state": "frozen" },
+      { "pattern": "\\bcanned\\b", "state": "prepared" },
+      { "pattern": "\\bpopped\\b", "state": "prepared" },
+      { "pattern": "\\broasted\\b", "state": "roasted" }
+    ],
+    "inferredByName": {
+      "Rotisserie chicken meat": { "state": "cooked", "basis": "rotisserie chicken is sold cooked" },
+      "Potato gnocchi": { "state": "prepared", "basis": "shelf-stable prepared gnocchi" },
+      "All-purpose flour": { "state": "dry", "basis": "dry milled grain" },
+      "Tofu, extra firm": { "state": "prepared", "basis": "packaged tofu" },
+      "Deli turkey, low sodium": { "state": "prepared", "basis": "deli meat is sold cooked" },
+      "Turkey snack stick": { "state": "prepared", "basis": "shelf-stable meat snack" },
+      "Everything bagel seasoning": { "state": "prepared", "basis": "seasoning blend" },
+      "Cocoa powder": { "state": "prepared", "basis": "processed powder" },
+      "Protein powder": { "state": "prepared", "basis": "processed powder" },
+      "Corn": { "state": "frozen", "basis": "every bank line using it reads 'corn frozen'", "review": true },
+      "Edamame, shelled": { "state": "frozen", "basis": "every bank line using it reads '... edamame frozen'", "review": true },
+      "Turkey bacon": { "state": "raw", "basis": "yields.json lists a cooking factor for it, so values are as-packaged/uncooked; turkey bacon is often sold pre-cooked", "review": true },
+      "Oats overnight": { "state": "prepared", "basis": "same packaged product as 'Oats overnight packet'" },
+      "Oats Overnight Brand": { "state": "prepared", "basis": "same packaged product as 'Oats overnight packet'" }
+    },
+    "inferredByCategory": {
+      "dairy": "prepared",
+      "cheese": "prepared",
+      "sauce": "prepared",
+      "oil": "prepared",
+      "nutbutter": "prepared",
+      "syrup": "prepared",
+      "cereal": "prepared",
+      "cracker": "prepared",
+      "driedfruit": "prepared",
+      "legume": "prepared",
+      "bread": "baked",
+      "tortilla": "baked",
+      "grain": "dry",
+      "fruit": "raw",
+      "veg": "raw",
+      "vegetable": "raw",
+      "starchveg": "raw",
+      "meat": "raw",
+      "egg": "raw",
+      "nut": "raw"
+    },
+    "reviewCategories": {
+      "nut": "raw vs roasted is not stated in the source"
+    }
+  },
+  "knownAuditIssuesCarriedForward": [
+    "Cooked rice yield: foods.json x2.9 vs yields.json / Meal Bank x3.0 (open measurement item).",
+    "Oats Overnight: core 'Oats overnight packet' vs the two hand-entered custom Foods disagree on protein (see sourceDataConflicts.oatsOvernight).",
+    "Chicken, salmon and potato yields are unmeasured reference values.",
+    "Potato yield 0.78 is a roasting yield; boiled potato is closer to 1.0.",
+    "Branded items at implied or published-panel values (granola, protein powder, crackers, jerky, and the 19 Sep snack additions) are unverified against packs bought."
+  ]
+}
