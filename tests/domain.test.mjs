@@ -4,7 +4,7 @@
 import test from 'node:test';
 import fs from 'node:fs';
 import assert from 'node:assert/strict';
-import { makeApp, readJSON, readText, cleanup, expectedTotals, close } from './helpers.mjs';
+import { makeApp, tempRepo, readJSON, readText, cleanup, expectedTotals, close } from './helpers.mjs';
 import { DomainError } from '../src/domain/index.js';
 
 const DATE = '2026-09-24';
@@ -12,8 +12,8 @@ const byId = (list) => Object.fromEntries(list.map((x) => [x.id, x]));
 
 function withApp(fn) {
   return () => {
-    const ctx = makeApp();
-    try { return fn(ctx); } finally { cleanup(ctx.dir); }
+    const dir = tempRepo();
+    try { return fn(makeApp(dir)); } finally { cleanup(dir); } // cleaned up even if setup fails
   };
 }
 

@@ -17,6 +17,19 @@ const app = createDataLayer({ adapter: createFileAdapter(repoRoot) });
 
 Tests: `node --test 'tests/*.test.mjs'` (Node 22+, built-in test runner).
 
+## Runtime boundary (Prompt 3)
+
+This directory is the only V2 runtime. `runtime-boundary.json` (repo root) puts every file in
+exactly one class: runtime, canonical data, migration, legacy reference, specification or tests.
+`tests/runtime-boundary.test.mjs` enforces the boundary:
+
+- every file must be classified. A new UI directory must be added to the `runtime` class, and is then scanned.
+- runtime code and canonical data may not reference any legacy source or rule. The test reports `file:line identifier`.
+- the runtime reads and writes only `data/` and `user-data/`, checked by recording every file access during a full scenario.
+- legacy reference files must stay byte-for-byte as uploaded.
+
+The retired pages and why they were not rewired are in `LEGACY-RUNTIME.md`.
+
 ## Ownership
 
 | Thing | Owner | File |

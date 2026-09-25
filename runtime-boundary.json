@@ -1,0 +1,79 @@
+{
+  "description": "Every file in the repository belongs to exactly one class. Only the 'runtime' class is the V2 application runtime; it may use nothing but the V2 domain layer and the canonical data. tests/runtime-boundary.test.mjs fails if a file is unclassified, if a runtime or canonical-data file references a legacy source or rule, or if a legacy reference file changes. A future UI directory must be added to 'runtime' before it is committed. Paths are exact, 'dir/**' (everything under dir) or a single-segment '*' glob; the legacy settings export is matched by a glob so this file does not itself contain its name (Prompt 1 check G12 scans JSON files for it).",
+  "classes": {
+    "runtime": {
+      "description": "V2 application runtime: the domain layer and its adapters. Future UI code goes here too.",
+      "paths": [
+        "src/**"
+      ]
+    },
+    "canonicalData": {
+      "description": "Canonical V2 data read by the runtime through src/node/file-adapter.js (or an equivalent adapter).",
+      "paths": [
+        "data/**",
+        "user-data/**"
+      ]
+    },
+    "migration": {
+      "description": "Prompt 1 migration tooling, its inputs/outputs and documentation. May read legacy sources; never read by the runtime.",
+      "paths": [
+        "migration/**",
+        "migration-spec.md"
+      ]
+    },
+    "legacyReference": {
+      "description": "Retired pre-V2 app, data and tools, kept byte-for-byte for rollback/reference and as migration inputs. Not part of the V2 runtime. See LEGACY-RUNTIME.md.",
+      "paths": [
+        "README.md",
+        "close-the-carbs.html",
+        "meal-bank.html",
+        "recost.js",
+        "gen-bank-docs.js",
+        "live-settings-*.json",
+        "foods.json",
+        "meal-options.json",
+        "targets.json",
+        "yields.json",
+        "portion-bounds.json",
+        "fibre.json",
+        "ingredient-name-map.json",
+        "ingredients-flat.json"
+      ]
+    },
+    "specification": {
+      "description": "Specifications and architecture documentation.",
+      "paths": [
+        "schema.md",
+        "prompts/**",
+        "LEGACY-RUNTIME.md",
+        "runtime-boundary.json"
+      ]
+    },
+    "tests": {
+      "description": "Automated tests. May name legacy identifiers only to search for them.",
+      "paths": [
+        "tests/**"
+      ]
+    }
+  },
+  "legacyReferenceBaseline": {
+    "description": "Legacy reference files must stay byte-for-byte as uploaded in commit 6d9e5bb. These are their git blob IDs (sha1 of 'blob <size>\\0<content>'), recomputed by the test without needing git.",
+    "commit": "6d9e5bb51c9f06f56778c6316ca0ef932acc8d83",
+    "gitBlobs": [
+      "027f0fad10cf6bc94a552116ee99055412f01c38",
+      "0ba6544cf7d2b5526724e8cfc4217c804cd7f2e0",
+      "0c21e8ec6060bbbb9bd11c6fc76f957db5ab0967",
+      "0e9e9de2ea8a98f57b61f843f15248f5b8b75389",
+      "5143e15ae474d1c5f87c185add2f4259321b6b4c",
+      "5b6f1918efd6c72c532ceb9914287ce97f2f9f1c",
+      "8701a934c67fd97f489fbc7371af6d2181c01ed0",
+      "9aa84e04a2c29f1dcdf2cff00f9791ba62bdc125",
+      "9f34974caca6780e252efd864d560564f6894a1e",
+      "c7fe64138ecb8c9b54f04da553af2696df82454a",
+      "d9eb910e8a676a3935b1bd27f2edc87b73682b36",
+      "f150b610559141280925ee2f462b0950baee2bed",
+      "fa91db56cb2731df02d8e09cc170d074bf7e4463",
+      "fb84b12674396ec51b73a72bd8ea7a36f980dca6"
+    ]
+  }
+}

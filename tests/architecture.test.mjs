@@ -9,7 +9,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import { createRequire } from 'node:module';
-import { ROOT, makeApp, cleanup } from './helpers.mjs';
+import { ROOT, makeApp, tempRepo, cleanup, macroArithmeticOffenders } from './helpers.mjs';
 import * as runtimeMacros from '../src/domain/macros.js';
 
 const require = createRequire(import.meta.url);
@@ -29,22 +29,7 @@ const srcFiles = () => walk(path.join(ROOT, 'src'), (p) => p.endsWith('.js'));
 
 test('N — one canonical P/C/F calculator', () => {
   const calculator = path.join(ROOT, 'src/domain/macros.js');
-  const macroWord = '(protein|carbs|fat)';
-  const patterns = [
-    [/\/\s*100\b/, 'per-100 g division'],
-    [new RegExp(`\\b${macroWord}\\b\\s*[-+*/]=?(?![/*])`), 'arithmetic after a macro field'],
-    [new RegExp(`(?<![/*])[-+*/]=?\\s*[\\w$.]*\\b${macroWord}\\b`), 'arithmetic before a macro field'],
-    [/\[\s*m\s*\]\s*[-+*/]=?/, 'arithmetic on [m]'],
-    [/[-+*/]=?\s*[\w$.]+\[\s*m\s*\]/, 'arithmetic on [m]']
-  ];
-  const offenders = [];
-  for (const f of srcFiles()) {
-    if (f === calculator) continue;
-    const code = stripComments(fs.readFileSync(f, 'utf8'));
-    code.split('\n').forEach((line, i) => {
-      for (const [re, why] of patterns) if (re.test(line)) offenders.push(`${rel(f)}:${i + 1} ${why}: ${line.trim()}`);
-    });
-  }
+  const offenders = macroArithmeticOffenders(srcFiles().map(rel));
   assert.deepEqual(offenders, [], 'P/C/F arithmetic outside src/domain/macros.js');
 
   // The calculator itself has the formula exactly once.
@@ -67,8 +52,9 @@ test('N — one canonical P/C/F calculator', () => {
   }
 
   // Same numbers from both entry points.
-  const { app, dir } = makeApp();
+  const dir = tempRepo(); // cleaned up in finally even if setup fails
   try {
+    const { app } = makeApp(dir);
     const meal = app.getMeal('meal_library_B1');
     const viaMigration = mig.calculateMealMacros(meal, (id) => app.getFood(id));
     assert.deepEqual(viaMigration.totals, app.calculateMealMacros(meal).totals);
@@ -88,8 +74,9 @@ test('O — no forbidden nutrition fields in runtime code, canonical data or run
   const hits = files.filter((f) => forbidden.test(fs.readFileSync(f, 'utf8'))).map(rel);
   assert.deepEqual(hits, []);
 
-  const { app, dir } = makeApp();
+  const dir = tempRepo(); // cleaned up in finally even if setup fails
   try {
+    const { app } = makeApp(dir);
     app.createMealInstance({ date: '2026-09-24', mealSlot: 'lunch', mealId: 'meal_library_L26', dayType: 'lift' });
     const outputs = [
       app.getDaySummary('2026-09-24'),
