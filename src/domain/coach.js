@@ -5,14 +5,20 @@
  * meals/days), so there is no second copy of any rule.
  *
  * Suggestion order (getMacroCoachSuggestions), approved for V2:
- *   1. favorite  — favourite Saved Meals
- *   2. recent    — recently logged Meals (Saved or Library), newest first
- *   3. saved     — the user's other Saved Meals
- *   4. library   — Library starter Meals (app content, not personal)
- * plus, separately, top-up Foods: favourite and recently logged Foods, and — only while
- * personal history is thin — Foods the Library Meals use most (again, not personal).
+ *   1. favoriteSaved — Saved Meals the user has favourited
+ *   2. recent        — recently logged Meals (Saved or Library), newest first
+ *   3. saved         — the user's other Saved Meals
+ *   4. library       — Library starter Meals, in the Library's own order (not personal)
+ *   5. topUpFoods    — separately: favourite and recently logged Foods, and — only while
+ *                      personal history is thin — Foods the Library Meals use most
  * Within a tier, order is by recency, update time or file order, then name: never by
  * how well a meal fits the remaining macros.
+ *
+ * Favourite semantics: tier 1 is Saved Meals only. preferences.favoriteMeals can also
+ * hold a Library Meal ID (setFavoriteMeal accepts any Meal — a bookmark), but that never
+ * moves the meal into tier 1 or reorders tier 4; it is reported only as item.isFavorite.
+ * A Library Meal reaches a personal tier only by being logged (tier 2) or saved as a copy
+ * (which is a new Saved Meal with its own ID and no favourite until the user sets one).
  */
 
 import { DomainError, clone, assertDate, assertMealSlot, assertDayType } from './util.js';
@@ -99,7 +105,7 @@ export function createCoachApi(ctx, { foods, meals, days, targets, preferences }
    * {
    *   date, dayType, mealSlot, targetSource, target, logged, remaining, reached, overBy,
    *   insufficientHistory, personalMealCount,
-   *   tiers: [{ tier: 'favorite' | 'recent' | 'saved' | 'library', personalized, total,
+   *   tiers: [{ tier: 'favoriteSaved' | 'recent' | 'saved' | 'library', personalized, total,
    *             items: [{ mealId, name, source, mealType, isFavorite, totals,
    *                       after: { logged, remaining, reached, overBy } }] }],
    *   topUpFoods: { personalized: [{ food, reasons }], starter: [{ food, reasons, usedInLibraryMeals }] },
@@ -163,9 +169,9 @@ export function createCoachApi(ctx, { foods, meals, days, targets, preferences }
 
     const saved = meals.getSavedMeals();
 
-    // 1. Favourite Saved Meals: most recently logged first, then name.
-    const t1 = saved.filter((m) => favorite.has(m.id) && usable(m)).sort(newestLoggedFirst);
-    const tierFavorite = tier('favorite', true, t1);
+    // 1. Favourited Saved Meals only (source 'saved'): most recently logged first, then name.
+    const t1 = saved.filter((m) => m.source === 'saved' && favorite.has(m.id) && usable(m)).sort(newestLoggedFirst);
+    const tierFavorite = tier('favoriteSaved', true, t1);
 
     // 2. Recently logged Meals (Saved or Library), newest first.
     const t2 = [];
@@ -180,11 +186,11 @@ export function createCoachApi(ctx, { foods, meals, days, targets, preferences }
     const t3 = saved.filter((m) => usable(m)).sort((a, b) => (updated(a) < updated(b) ? 1 : updated(a) > updated(b) ? -1 : byName(a, b)));
     const tierSaved = tier('saved', true, t3);
 
-    // 4. Library starter Meals: favourites first, then the Library's own order.
-    const library = meals.getLibraryMeals()
+    // 4. Library starter Meals in the Library's own order. A favourited Library Meal is not
+    //    moved up: favouriting only affects Saved Meals (tier 1).
+    const t4 = meals.getLibraryMeals()
       .filter((m) => !m.ingredients.some((i) => disliked.has(i.foodId)))
       .filter((m) => usable(m));
-    const t4 = [...library.filter((m) => favorite.has(m.id)), ...library.filter((m) => !favorite.has(m.id))];
     const tierLibrary = tier('library', false, t4);
 
     const personalMealCount = tierFavorite.total + tierRecent.total + tierSaved.total;

@@ -18,6 +18,7 @@ import { createFileAdapter } from '../src/node/file-adapter.js';
 import { createBrowserAdapter, STORE_RECORD_FORMAT } from '../src/browser/browser-adapter.js';
 import { createMemorySnapshotStore } from '../src/browser/memory-snapshot-store.js';
 import { DEFAULT_DB_NAME } from '../src/browser/indexeddb-snapshot-store.js';
+import { APP_DATA, openBrowserDataLayer } from '../src/browser/app-data.js';
 
 const TODAY = '2026-09-24';
 const PAST = '2026-09-10';
@@ -171,9 +172,9 @@ test('D — Coach suggestions follow the approved order, deterministically', () 
   const r = app.getMacroCoachSuggestions({ date: TODAY, mealSlot: 'dinner' });
   const ids = (tier) => r.tiers.find((t) => t.tier === tier).items.map((i) => i.mealId);
 
-  assert.deepEqual(r.tiers.map((t) => t.tier), ['favorite', 'recent', 'saved', 'library']);
+  assert.deepEqual(r.tiers.map((t) => t.tier), ['favoriteSaved', 'recent', 'saved', 'library']);
   assert.deepEqual(r.tiers.map((t) => t.personalized), [true, true, true, false]);
-  assert.deepEqual(ids('favorite'), [s1.id, s2.id], 'favourite Saved Meals, most recently logged first');
+  assert.deepEqual(ids('favoriteSaved'), [s1.id, s2.id], 'favourite Saved Meals, most recently logged first');
   assert.deepEqual(ids('recent'), [s3.id, 'meal_library_B1'], 'recently logged, newest first, favourites not repeated');
   assert.deepEqual(ids('saved'), [s4.id], 'other Saved Meals');
   assert.ok(!ids('library').includes('meal_library_B1'), 'a meal appears once, in its first tier');
@@ -206,6 +207,44 @@ test('D — Coach suggestions follow the approved order, deterministically', () 
   assert.deepEqual(d.tiers[0].items.map((i) => i.mealId), [s1.id, s2.id]);
   for (const item of d.tiers[3].items) assert.ok(!app.getMeal(item.mealId).ingredients.some((i) => i.foodId === 'food_core_banana'));
   throwsCode(() => app.getMacroCoachSuggestions({ date: TODAY, mealSlot: 'dinner', limitPerTier: 0 }), 'INVALID_ARGUMENT');
+});
+
+test('D2 — favourites are Saved Meals only; a favourited Library Meal stays in the Library tier', () => {
+  const app = makeLayer();
+  const libFav = 'meal_library_D1';                          // favourited, never logged
+  const libOrder = app.getLibraryMeals().map((m) => m.id);
+  assert.ok(libOrder.indexOf(libFav) > 0, 'fixture: not already first in the Library');
+  const savedFav = app.createSavedMeal({ name: 'My favourite', mealType: 'dinner', ingredients: [{ foodId: 'food_core_banana', quantity: 100 }] });
+  const savedOther = app.createSavedMeal({ name: 'My other', mealType: 'lunch', ingredients: [{ foodId: 'food_core_banana', quantity: 50 }] });
+  const copy = app.createSavedMeal({ fromMealId: 'meal_library_B1' }); // a saved copy of a Library Meal
+  app.setFavoriteMeal(libFav, true);                          // Library favouriting is still allowed…
+  app.setFavoriteMeal('meal_library_B1', true);
+  app.setFavoriteMeal(savedFav.id, true);
+  assert.deepEqual(app.getPreferences().favoriteMeals, [libFav, 'meal_library_B1', savedFav.id]);
+
+  const r = app.getMacroCoachSuggestions({ date: TODAY, mealSlot: 'dinner', dayType: 'lift' });
+  const tier = (name) => r.tiers.find((t) => t.tier === name);
+  const ids = (name) => tier(name).items.map((i) => i.mealId);
+
+  // …but it never makes a Library Meal part of the favourites group.
+  assert.deepEqual(ids('favoriteSaved'), [savedFav.id], 'tier 1 = favourited Saved Meals only');
+  for (const item of tier('favoriteSaved').items) assert.equal(item.source, 'saved');
+  assert.deepEqual(ids('recent'), [], 'nothing logged yet');
+  assert.deepEqual(new Set(ids('saved')), new Set([savedOther.id, copy.id]), 'the copy is an ordinary Saved Meal: favouriting its Library source does not carry over');
+  assert.deepEqual(ids('library'), libOrder, 'favourited Library Meals keep their Library position (no boost)');
+  const libItem = tier('library').items.find((i) => i.mealId === libFav);
+  assert.equal(libItem.isFavorite, true, 'the favourite state is still visible on the item');
+  assert.equal(tier('library').personalized, false);
+
+  // A favourited Library Meal reaches a personal tier only by being logged — as "recent".
+  app.createMealInstance({ date: TODAY, mealSlot: 'dinner', mealId: libFav, dayType: 'lift' });
+  const r2 = app.getMacroCoachSuggestions({ date: TODAY, mealSlot: 'snack_night' });
+  const ids2 = (name) => r2.tiers.find((t) => t.tier === name).items.map((i) => i.mealId);
+  assert.deepEqual(ids2('favoriteSaved'), [savedFav.id]);
+  assert.deepEqual(ids2('recent'), [libFav]);
+  assert.ok(!ids2('library').includes(libFav), 'shown once, in its first tier');
+  assert.deepEqual(r2.tiers.map((t) => t.tier), ['favoriteSaved', 'recent', 'saved', 'library'], 'order is fixed');
+  assert.ok(Array.isArray(r2.topUpFoods.personalized), 'top-up Foods are separate from the meal tiers');
 });
 
 test('E — a new user gets honest, non-personal starters', () => {
@@ -746,4 +785,74 @@ test('V — forbidden nutrition concepts stay blocked', () => {
     app.getPersistenceStatus()
   ];
   assert.ok(!FORBIDDEN_NUTRITION.test(JSON.stringify(outputs)));
+});
+
+/* ================================================================== */
+/* W  Browser app-data loading contract                                */
+/* ================================================================== */
+
+test('W1 — APP_DATA is the canonical files, loaded by static JSON import', () => {
+  // Same data the Node file adapter reads: nothing missing, nothing extra.
+  assert.deepEqual(Object.keys(APP_DATA.schemas).sort(), fs.readdirSync(path.join(ROOT, 'data/schemas')).filter((f) => f.endsWith('.schema.json')).sort(), 'every schema file is imported');
+  assert.deepEqual(APP_DATA.schemas, SEED.schemas);
+  assert.deepEqual(APP_DATA.coreFoods, SEED.coreFoods);
+  assert.deepEqual(APP_DATA.libraryMeals, SEED.libraryMeals);
+  assert.deepEqual(Object.keys(APP_DATA.seed).sort(), [...USER_COLLECTIONS].sort(), 'seed = exactly the user collections');
+  for (const c of USER_COLLECTIONS) assert.deepEqual(APP_DATA.seed[c], SEED[c], `seed.${c}`);
+  const src = fs.readFileSync(path.join(ROOT, 'src/browser/app-data.js'), 'utf8');
+  assert.ok(!/\bfetch\s*\(|\bimport\s*\(/.test(src), 'no fetch, no dynamic import');
+  assert.equal((src.match(/^import \w+ from '[^']+\.json' with \{ type: 'json' \};$/gm) || []).length, 13, 'six schemas, Core Foods, Library Meals, five seed files');
+});
+
+test('W2 — first run starts from the seed and stores only user data', async () => {
+  const snapshotStore = createMemorySnapshotStore();
+  const { app, adapter } = await openBrowserDataLayer({ snapshotStore, today: () => TODAY });
+  assert.equal(snapshotStore.peek(), null, 'nothing is written just by opening');
+  assert.deepEqual(userState(app), APP_DATA.seed, 'user data = seed');
+  assert.equal(app.getFood(APP_DATA.coreFoods[0].id).id, APP_DATA.coreFoods[0].id);
+  assert.equal(app.getLibraryMeals({ includeRetired: true }).length, APP_DATA.libraryMeals.length);
+  assert.equal(adapter.status().state, 'saved');
+
+  app.createDay(TODAY, 'lift');
+  await app.flushPersistence();
+  const record = snapshotStore.peek();
+  assert.deepEqual(Object.keys(record.data).sort(), [...USER_COLLECTIONS].sort(), 'Core Foods, Library Meals and schemas are never stored');
+  assert.deepEqual(record.data.customFoods, APP_DATA.seed.customFoods, 'first save carries the seed forward');
+});
+
+test('W3 — once data is stored it wins over the seed; app data still comes from the app', async () => {
+  const snapshotStore = createMemorySnapshotStore();
+  const first = await openBrowserDataLayer({ snapshotStore, today: () => TODAY });
+  const logged = first.app.createMealInstance({ date: TODAY, mealSlot: 'breakfast', mealId: 'meal_library_B1', dayType: 'lift' });
+  first.app.updateCurrentTargets('rest', { carbs: 230 });
+  await first.app.flushPersistence();
+
+  // A later app version: a different seed, and changed Core Food values.
+  const next = JSON.parse(JSON.stringify(APP_DATA));
+  next.seed.targets.rest.carbs = 999;
+  next.seed.customFoods = [];
+  next.coreFoods.find((f) => f.id === 'food_core_rolled_oats_dry').nutrition.carbs = 70;
+  const { app } = await openBrowserDataLayer({ snapshotStore, appData: next, today: () => TODAY });
+  assert.equal(app.getCurrentTargets('rest').carbs, 230, 'stored targets, not the seed');
+  assert.deepEqual(userState(app).customFoods, APP_DATA.seed.customFoods, 'stored Custom Foods, not the new seed');
+  assert.deepEqual(app.getDay(TODAY).mealInstances[0], logged, 'history is the stored snapshot');
+  assert.notDeepEqual(app.calculateMealMacros('meal_library_B1').totals, logged.totals, 'Meals recalculate from the new app data');
+});
+
+test('W4 — stored data that fails validation is refused, kept, and readable', async () => {
+  const snapshotStore = createMemorySnapshotStore();
+  const ok = await openBrowserDataLayer({ snapshotStore, today: () => TODAY });
+  ok.app.createDay(TODAY, 'lift');
+  await ok.app.flushPersistence();
+  const bad = snapshotStore.peek();
+  bad.data.days[0].dayType = 'long';
+  const broken = createMemorySnapshotStore(bad);
+  let error = null;
+  try { await openBrowserDataLayer({ snapshotStore: broken }); } catch (e) { error = e; }
+  assert.equal(error && error.code, 'DATA_INVALID');
+  assert.deepEqual(await error.readStoredRecord(), bad, 'the raw record is available for download');
+  assert.deepEqual(broken.peek(), bad, 'nothing overwritten');
+  const foreign = createMemorySnapshotStore({ format: 'something-else', version: 1, revision: 1, data: {} });
+  await assert.rejects(openBrowserDataLayer({ snapshotStore: foreign }), /refusing to start/);
+  assert.equal(foreign.peek().format, 'something-else');
 });

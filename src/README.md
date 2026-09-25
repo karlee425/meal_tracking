@@ -18,16 +18,30 @@ const app = createDataLayer({ adapter: createFileAdapter(repoRoot) });
 In a browser (the V2 runtime target), the same data layer runs on the browser adapter:
 
 ```js
-import { createDataLayer } from './src/domain/index.js';
-import { createBrowserAdapter, requestPersistentStorage } from './src/browser/browser-adapter.js';
-import { createIndexedDbSnapshotStore } from './src/browser/indexeddb-snapshot-store.js';
-
-// appData = { schemas, coreFoods, libraryMeals, seed: { targets, customFoods, savedMeals, days, preferences } }
-// (the app's shipped data/ files, and user-data/ as the first-run contents)
-const adapter = await createBrowserAdapter({ appData, snapshotStore: createIndexedDbSnapshotStore() });
-const app = createDataLayer({ adapter });      // loaded before start; every call stays synchronous
-await requestPersistentStorage();               // optional: ask the browser not to evict
+import { openBrowserDataLayer } from '../src/browser/app-data.js';
+import { requestPersistentStorage } from '../src/browser/browser-adapter.js';
+const { app } = await openBrowserDataLayer();   // IndexedDB "meal-tracking-v2"; every call stays synchronous
+await requestPersistentStorage();                // optional: ask the browser not to evict
 ```
+
+**Browser data-loading contract**
+
+- *Source:* `src/browser/app-data.js` imports the canonical files statically as JSON modules
+  (`import … with { type: 'json' }`): the six schemas, `data/foods/core-foods.json`,
+  `data/meals/library-meals.json`, and the first-run seed (`data/targets.json`, `user-data/*.json`).
+  No fetch, no dynamic import, no build step. Serve the repository root as the web root (so
+  `src/` and `data/` resolve at their on-disk relative paths), with `.json` as `application/json`.
+- *Immutable app data:* schemas, Core Foods and Library Meals come from the app on every load and
+  are never stored in the browser.
+- *Persisted user data:* targets, Custom Foods, Saved Meals, Days (with Meal Instances) and
+  preferences — one IndexedDB record, written after each change.
+- *First run:* nothing stored → user data starts from the seed; nothing is written until the first
+  change, which stores the full record.
+- *Later runs:* the stored record is used and the seed is ignored; it is validated against the
+  current schemas before the app starts. If it fails, `DATA_INVALID` is thrown with
+  `error.readStoredRecord()` for a raw download, and nothing is overwritten.
+- *Tests:* `tests/pre-ui.test.mjs` W1–W4 run this path in Node (which loads the same JSON modules)
+  with `memory-snapshot-store.js` standing in for IndexedDB.
 
 Code outside `src/domain/` imports the domain only through `src/domain/index.js`.
 
@@ -77,7 +91,7 @@ descriptive only: no raw↔cooked conversion and no yield factors at runtime.
 | `days.js` | `getDay`, `listDays`, `createDay`, `updateDayType`, `previewDayTypeChange`, `applyCurrentTargetsToToday`, `getToday`, `setDayLoggingComplete`, `deleteDay`, `createMealInstance`, `logFood`, `updateMealInstance`, `deleteMealInstance`, `getDaySummary`, and the previews `previewMealInstance`, `previewLogFood`, `previewMealInstanceUpdate` |
 | `targets.js` | `getCurrentTargets`, `getAllCurrentTargets`, `createTargetSnapshot`, `updateCurrentTargets` |
 | `progress.js` | `getProgress({ period: 7 \| 14 \| 30, endDate })` or `({ startDate, endDate })` |
-| `coach.js` | `getMacroCoachContext({ date, mealSlot, dayType? })`, `getMacroCoachSuggestions({ date, mealSlot, dayType?, limitPerTier? })` — deterministic, no scoring, no AI |
+| `coach.js` | `getMacroCoachContext({ date, mealSlot, dayType? })`, `getMacroCoachSuggestions({ date, mealSlot, dayType?, limitPerTier? })` — tiers `favoriteSaved` → `recent` → `saved` → `library`, plus `topUpFoods`; favourites are Saved Meals only (a favourited Library Meal stays in the Library tier, in Library order); deterministic, no scoring, no AI |
 | `preferences.js` | `getPreferences`, `updatePreferences`, `setFavoriteFood`, `setDislikedFood`, `setFavoriteMeal` |
 | `backup.js` | `exportUserData`, `validateBackup`, `restoreUserData` |
 | `store.js` | state + persistence; validates every write (schemas, invariants, finite numbers) before one atomic `saveMany`; `getPersistenceStatus`, `onPersistenceChange`, `flushPersistence` |
@@ -85,7 +99,7 @@ descriptive only: no raw↔cooked conversion and no yield factors at runtime.
 | `schema-validator.js` | the JSON Schema subset validator (shared with `migration/validate.js`); rejects NaN / ±Infinity |
 | `foods.js` (also) | `validateCustomFood` — the same checks as create/update, as a dry run with field-level errors |
 
-Adapters: `src/node/file-adapter.js` (Node, dev/tests), `src/domain/memory-adapter.js` (tests), `src/browser/browser-adapter.js` + `indexeddb-snapshot-store.js` (browser; `memory-snapshot-store.js` for tests).
+Adapters: `src/node/file-adapter.js` (Node, dev/tests), `src/domain/memory-adapter.js` (tests), `src/browser/browser-adapter.js` + `indexeddb-snapshot-store.js` (browser; `memory-snapshot-store.js` for tests), opened in a browser through `src/browser/app-data.js`.
 
 Expected failures throw a `DomainError` with a stable `code` (e.g. `FOOD_NOT_FOUND`,
 `MEAL_NEEDS_REPLACEMENT`, `DAY_TYPE_REQUIRED`, `NOTHING_LOGGED`, `PERSIST_FAILED`,
