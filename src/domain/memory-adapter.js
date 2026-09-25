@@ -14,6 +14,11 @@ export function createMemoryAdapter(initial) {
   return {
     load: () => clone(data),
     save(collection, value) { data[collection] = clone(value); },
+    /** All-or-nothing: every collection is copied before any is assigned. */
+    saveMany(changes) {
+      const copies = clone(changes);
+      Object.assign(data, copies);
+    },
     snapshot: () => clone(data)
   };
 }

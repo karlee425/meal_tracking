@@ -15,7 +15,23 @@ import { createFileAdapter } from './src/node/file-adapter.js';
 const app = createDataLayer({ adapter: createFileAdapter(repoRoot) });
 ```
 
-Tests: `node --test 'tests/*.test.mjs'` (Node 22+, built-in test runner).
+In a browser (the V2 runtime target), the same data layer runs on the browser adapter:
+
+```js
+import { createDataLayer } from './src/domain/index.js';
+import { createBrowserAdapter, requestPersistentStorage } from './src/browser/browser-adapter.js';
+import { createIndexedDbSnapshotStore } from './src/browser/indexeddb-snapshot-store.js';
+
+// appData = { schemas, coreFoods, libraryMeals, seed: { targets, customFoods, savedMeals, days, preferences } }
+// (the app's shipped data/ files, and user-data/ as the first-run contents)
+const adapter = await createBrowserAdapter({ appData, snapshotStore: createIndexedDbSnapshotStore() });
+const app = createDataLayer({ adapter });      // loaded before start; every call stays synchronous
+await requestPersistentStorage();               // optional: ask the browser not to evict
+```
+
+Code outside `src/domain/` imports the domain only through `src/domain/index.js`.
+
+Tests: `node --test 'tests/*.test.mjs'` (Node 22+, built-in test runner). `tests/pre-ui.test.mjs` covers the pre-UI foundations (tests A–V).
 
 ## Runtime boundary (Prompt 3)
 
@@ -58,17 +74,23 @@ descriptive only: no raw↔cooked conversion and no yield factors at runtime.
 |---|---|
 | `foods.js` | `getFood`, `searchFoods` (names + aliases, ranked), `getRecentFoods`, `createCustomFood`, `updateCustomFood`, `deleteCustomFood` |
 | `meals.js` | `getLibraryMeals`, `getSavedMeals`, `getRecentMeals`, `getMeal`, `calculateMealMacros`, `createSavedMeal`, `updateSavedMeal`, `replaceSavedMealIngredient`, `duplicateSavedMeal`, `deleteSavedMeal` |
-| `days.js` | `getDay`, `listDays`, `createDay`, `updateDayType`, `deleteDay`, `createMealInstance`, `logFood`, `updateMealInstance`, `deleteMealInstance`, `getDaySummary` |
+| `days.js` | `getDay`, `listDays`, `createDay`, `updateDayType`, `previewDayTypeChange`, `applyCurrentTargetsToToday`, `getToday`, `setDayLoggingComplete`, `deleteDay`, `createMealInstance`, `logFood`, `updateMealInstance`, `deleteMealInstance`, `getDaySummary`, and the previews `previewMealInstance`, `previewLogFood`, `previewMealInstanceUpdate` |
 | `targets.js` | `getCurrentTargets`, `getAllCurrentTargets`, `createTargetSnapshot`, `updateCurrentTargets` |
 | `progress.js` | `getProgress({ period: 7 \| 14 \| 30, endDate })` or `({ startDate, endDate })` |
-| `coach.js` | `getMacroCoachContext({ date, mealSlot, dayType? })` — data only, no AI |
+| `coach.js` | `getMacroCoachContext({ date, mealSlot, dayType? })`, `getMacroCoachSuggestions({ date, mealSlot, dayType?, limitPerTier? })` — deterministic, no scoring, no AI |
 | `preferences.js` | `getPreferences`, `updatePreferences`, `setFavoriteFood`, `setDislikedFood`, `setFavoriteMeal` |
-| `store.js` | state + persistence; validates every write against `data/schemas/` before saving |
-| `macros.js` | the calculator |
-| `schema-validator.js` | the JSON Schema subset validator (shared with `migration/validate.js`) |
+| `backup.js` | `exportUserData`, `validateBackup`, `restoreUserData` |
+| `store.js` | state + persistence; validates every write (schemas, invariants, finite numbers) before one atomic `saveMany`; `getPersistenceStatus`, `onPersistenceChange`, `flushPersistence` |
+| `macros.js` | the calculator (also `targetStatus`, `checkNutritionValues`) |
+| `schema-validator.js` | the JSON Schema subset validator (shared with `migration/validate.js`); rejects NaN / ±Infinity |
+| `foods.js` (also) | `validateCustomFood` — the same checks as create/update, as a dry run with field-level errors |
+
+Adapters: `src/node/file-adapter.js` (Node, dev/tests), `src/domain/memory-adapter.js` (tests), `src/browser/browser-adapter.js` + `indexeddb-snapshot-store.js` (browser; `memory-snapshot-store.js` for tests).
 
 Expected failures throw a `DomainError` with a stable `code` (e.g. `FOOD_NOT_FOUND`,
-`MEAL_NEEDS_REPLACEMENT`, `DAY_TYPE_REQUIRED`). Reads never throw for data problems.
+`MEAL_NEEDS_REPLACEMENT`, `DAY_TYPE_REQUIRED`, `NOTHING_LOGGED`, `PERSIST_FAILED`,
+`BACKUP_UNREADABLE` / `BACKUP_INCOMPATIBLE` / `BACKUP_INVALID`). Validation errors carry
+field-level `details` where a field is identifiable. Reads never throw for data problems.
 
 ## Rules the layer enforces
 
@@ -84,5 +106,9 @@ Expected failures throw a `DomainError` with a stable `code` (e.g. `FOOD_NOT_FOU
 - **Day types:** `lift`, `long_run`, `rest` (the legacy `long` is rejected). Changing a Day's type re-takes its target snapshot from the current targets for the new type; logged food is untouched.
 - **Current targets changed:** only Days created afterwards use them.
 - **Days:** created when first needed (`createDay`, or `dayType` passed when logging to a date with no Day). Nothing invents history.
-- **Progress:** each date is `no_data`, `partial` (some of the five slots logged) or `complete` (all five). No-data days are never zero. Actual-intake averages use complete days only, with a separate labelled average over logged days. Per macro, a day is `hit` (logged ≥ target; targets are floors), `missed` (complete and short) or `undetermined` (partial and short).
+- **Day completeness:** explicit. `setDayLoggingComplete(date, true)` marks a Day done logging (needs ≥ 1 logged meal); slot coverage is information only and never decides it. No slot, including `snack_night`, is required.
+- **Day type corrections:** allowed on any Day; the replaced snapshot is kept in `priorTargetSnapshots` and restored if that type is chosen again; the same type is a no-op. Only `applyCurrentTargetsToToday()` re-takes a snapshot from current targets, and only for today.
+- **Numbers:** every stored number is finite; NaN / ±Infinity are refused before anything is written.
+- **Previews:** screens never compute P/C/F. `previewMealInstance` / `previewLogFood` / `previewMealInstanceUpdate` / `getDaySummary` (`remaining`, `reached`, `overBy`) / the `macros` export give every number a UI needs.
+- **Progress:** each date is `no_data`, `partial` (food logged, not marked done) or `complete` (marked done). No-data days are never zero. Actual-intake averages use complete days only, with a separate labelled average over logged days. Per macro, a day is `hit` (logged ≥ target; targets are floors), `missed` (complete and short) or `undetermined` (partial and short).
 - **Favourites:** live only in `preferences.json`. The optional Meal `favorite` field is not written, so there is one favourites store.

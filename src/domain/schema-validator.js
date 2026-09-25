@@ -13,10 +13,19 @@ const KNOWN_KEYWORDS = new Set([
   '$ref', 'format'
 ]);
 
+/*
+ * NaN, Infinity and -Infinity are typeof 'number' in JavaScript but are not JSON numbers:
+ * JSON.stringify writes them as null, so a record holding one would be persisted as null
+ * and fail validation on the next load. They get a type of their own, which no schema
+ * accepts, so they are rejected before anything is saved.
+ */
 function typeOf(v) {
   if (v === null) return 'null';
   if (Array.isArray(v)) return 'array';
-  if (typeof v === 'number') return Number.isInteger(v) ? 'integer' : 'number';
+  if (typeof v === 'number') {
+    if (!Number.isFinite(v)) return 'non-finite number';
+    return Number.isInteger(v) ? 'integer' : 'number';
+  }
   return typeof v;
 }
 function typeMatches(v, t) {
@@ -66,7 +75,7 @@ export function makeSchemaValidator(schemasByFile) {
       if (schema.format === 'date' && !/^\d{4}-\d{2}-\d{2}$/.test(value)) errors.push(`${where}: not a date`);
       if (schema.format === 'date-time' && !/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?(Z|[+-]\d{2}:\d{2})$/.test(value)) errors.push(`${where}: not a date-time`);
     }
-    if (typeof value === 'number') {
+    if (typeOf(value) === 'number' || typeOf(value) === 'integer') {
       if (schema.minimum !== undefined && value < schema.minimum) errors.push(`${where}: below minimum ${schema.minimum}`);
       if (schema.exclusiveMinimum !== undefined && !(value > schema.exclusiveMinimum)) errors.push(`${where}: must be > ${schema.exclusiveMinimum}`);
     }

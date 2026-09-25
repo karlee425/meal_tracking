@@ -79,6 +79,7 @@ try {
   const day = [{
     id: 'day_2026-09-25', date: '2026-09-25', dayType: 'lift',
     targetSnapshot: { protein: 150, carbs: 310, fat: 72 },
+    loggingComplete: false,
     mealInstances: [{
       id: 'mi_test', sourceMealId: null, mealName: 'Test', mealSlot: 'snack_afternoon',
       ingredients: [{ foodId: 'food_core_banana', foodName: 'Banana', quantity: 120, unit: 'g', protein: 1.3, carbs: 27.6, fat: 0.4 }],

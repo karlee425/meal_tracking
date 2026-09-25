@@ -9,7 +9,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import { createRequire } from 'node:module';
-import { ROOT, makeApp, tempRepo, cleanup, macroArithmeticOffenders } from './helpers.mjs';
+import { ROOT, makeApp, tempRepo, cleanup, macroArithmeticOffenders, isBinary, FORBIDDEN_NUTRITION } from './helpers.mjs';
 import * as runtimeMacros from '../src/domain/macros.js';
 
 const require = createRequire(import.meta.url);
@@ -25,7 +25,9 @@ function walk(dir, filter) {
 }
 const rel = (p) => path.relative(ROOT, p);
 const stripComments = (src) => src.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:\\])\/\/.*$/gm, '$1');
-const srcFiles = () => walk(path.join(ROOT, 'src'), (p) => p.endsWith('.js'));
+// Every file under src/ whatever its extension (a UI may add .jsx, .ts, .html, .css …),
+// except binary assets and .md documentation.
+const srcFiles = () => walk(path.join(ROOT, 'src'), (p) => !isBinary(p) && !p.endsWith('.md'));
 
 test('N — one canonical P/C/F calculator', () => {
   const calculator = path.join(ROOT, 'src/domain/macros.js');
@@ -64,7 +66,7 @@ test('N — one canonical P/C/F calculator', () => {
 });
 
 test('O — no forbidden nutrition fields in runtime code, canonical data or runtime output', () => {
-  const forbidden = new RegExp(['calor', 'kcal', 'energ' + 'y'].join('|'), 'i');
+  const forbidden = FORBIDDEN_NUTRITION; // the energy concept in any unit or wording
   const files = [
     ...srcFiles(),
     ...walk(path.join(ROOT, 'data'), (p) => p.endsWith('.json')),

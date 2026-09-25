@@ -5,8 +5,9 @@
  *
  * Every date in the period gets a status:
  *   no_data   no Day, or a Day with nothing logged — NOT zero intake; excluded from averages
- *   partial   food logged in some of the five slots
- *   complete  food logged in all five slots (breakfast, lunch, snack_afternoon, dinner, snack_night)
+ *   partial   food logged, but the Day is not marked done logging
+ *   complete  food logged and the user marked the Day done (Day.loggingComplete) —
+ *             never inferred from which slots hold food; no slot is required
  *
  * Targets are floors. Per macro a Day is:
  *   hit           logged ≥ target (a partial Day can already be a hit — logging more only adds)

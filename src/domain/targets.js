@@ -39,6 +39,11 @@ export function createTargetsApi(ctx) {
       assertDayType(dayType);
       if (!values || typeof values !== 'object') throw new DomainError('INVALID_TARGETS', 'values {protein, carbs, fat} are required');
       for (const k of Object.keys(values)) if (!MACROS.includes(k)) throw new DomainError('INVALID_TARGETS', `targets only have protein, carbs and fat; got "${k}"`);
+      const bad = Object.entries(values).filter(([, v]) => !(typeof v === 'number' && Number.isFinite(v) && v >= 0));
+      if (bad.length) {
+        throw new DomainError('INVALID_TARGETS', `targets must be finite numbers ≥ 0 (${bad.map(([k]) => k).join(', ')})`,
+          bad.map(([k]) => ({ field: k, code: 'TARGET_NOT_A_VALID_NUMBER', message: `${k} must be a finite number ≥ 0` })));
+      }
       const next = clone(store.get('targets'));
       next[dayType] = { ...next[dayType], ...pickMacros({ ...next[dayType], ...values }) };
       store.commit({ targets: next });

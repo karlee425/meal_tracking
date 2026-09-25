@@ -160,7 +160,7 @@ test('G — changing a Food changes Saved Meal and future calculations, not hist
   const before = app.createMealInstance({ date: DATE, mealSlot: 'snack_afternoon', mealId: saved.id, dayType: 'lift' });
   assert.equal(before.totals.carbs, 30);
 
-  app.updateCustomFood(bar.id, { nutrition: { carbs: 80 } });
+  app.updateCustomFood(bar.id, { nutrition: { carbs: 80, fat: 5 } }); // stays ≤ 100 g of macros per 100 g
   assert.equal(app.calculateMealMacros(saved.id).totals.carbs, 40, 'Saved Meal recalculates');
   const after = app.createMealInstance({ date: DATE, mealSlot: 'snack_night', mealId: saved.id });
   assert.equal(after.totals.carbs, 40, 'future logs use the new value');
@@ -288,8 +288,11 @@ test('K — a partial Day is not zero intake', withApp(({ app }) => {
   assert.equal(app.getDaySummary('2026-09-01').status, 'no_data');
   assert.equal(app.getDay('2026-09-01'), null, 'no Day invented');
 
-  // Fill every slot → complete; a short complete Day is a miss.
+  // Filling every slot does not make a Day complete — only the user's explicit
+  // "done logging" does (pre-UI decision Q1). Then a short complete Day is a miss.
   for (const slot of ['breakfast', 'snack_afternoon', 'dinner', 'snack_night']) app.logFood({ date: DATE, mealSlot: slot, foodId: 'food_core_banana', quantity: 50 });
+  assert.equal(app.getProgress({ period: 7, endDate: DATE }).daily.at(-1).status, 'partial', 'all five slots, not marked done: still partial');
+  app.setDayLoggingComplete(DATE, true);
   const p2 = app.getProgress({ period: 7, endDate: DATE });
   assert.equal(p2.daily.at(-1).status, 'complete');
   assert.equal(p2.daily.at(-1).hit.carbs, 'missed');

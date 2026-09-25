@@ -27,7 +27,18 @@ export function uniqueId(base, taken) {
   return `${base}_${n}`;
 }
 
-export const clone = (v) => (v === undefined ? undefined : JSON.parse(JSON.stringify(v)));
+/**
+ * Deep copy through JSON. A NaN / Infinity / -Infinity anywhere is refused rather than
+ * silently turned into null (which is what JSON would do), so no input can smuggle a
+ * non-finite number past validation by being copied first.
+ */
+function finiteOnly(key, value) {
+  if (typeof value === 'number' && !Number.isFinite(value)) {
+    throw new DomainError('VALIDATION_FAILED', `${value} is not a finite number${key ? ` (at "${key}")` : ''}`);
+  }
+  return value;
+}
+export const clone = (v) => (v === undefined ? undefined : JSON.parse(JSON.stringify(v, finiteOnly)));
 
 export function assertDate(date) {
   if (typeof date !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(date)) throw new DomainError('INVALID_DATE', `date must be YYYY-MM-DD, got ${JSON.stringify(date)}`);
@@ -51,6 +62,16 @@ export function assertMealType(mealType) {
   if (!MEAL_TYPES.includes(mealType)) {
     throw new DomainError('INVALID_MEAL_TYPE', `mealType must be one of ${MEAL_TYPES.join(', ')}, got ${JSON.stringify(mealType)}`);
   }
+}
+
+/**
+ * The calendar date of a moment in the device's own time zone, as YYYY-MM-DD.
+ * Built from local date components on purpose: toISOString() is a UTC conversion and
+ * rolls "today" forward in the evening west of Greenwich.
+ */
+export function localDate(d) {
+  const pad = (n) => String(n).padStart(2, '0');
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
 }
 
 /** YYYY-MM-DD ± n days (UTC calendar arithmetic, no time zones involved). */

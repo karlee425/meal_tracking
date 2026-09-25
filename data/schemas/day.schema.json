@@ -9,6 +9,7 @@
     "date",
     "dayType",
     "targetSnapshot",
+    "loggingComplete",
     "mealInstances"
   ],
   "properties": {
@@ -27,6 +28,35 @@
       ]
     },
     "targetSnapshot": {
+      "$ref": "#/$defs/macros"
+    },
+    "priorTargetSnapshots": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "lift": {
+          "$ref": "#/$defs/macros"
+        },
+        "long_run": {
+          "$ref": "#/$defs/macros"
+        },
+        "rest": {
+          "$ref": "#/$defs/macros"
+        }
+      }
+    },
+    "loggingComplete": {
+      "type": "boolean"
+    },
+    "mealInstances": {
+      "type": "array",
+      "items": {
+        "$ref": "meal-instance.schema.json"
+      }
+    }
+  },
+  "$defs": {
+    "macros": {
       "type": "object",
       "additionalProperties": false,
       "required": [
@@ -47,12 +77,6 @@
           "type": "number",
           "minimum": 0
         }
-      }
-    },
-    "mealInstances": {
-      "type": "array",
-      "items": {
-        "$ref": "meal-instance.schema.json"
       }
     }
   }

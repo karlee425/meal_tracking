@@ -12,14 +12,15 @@ import path from 'node:path';
 import {
   ROOT, makeApp, tempRepo, cleanup, readText, listRepoFiles, loadBoundary, classesOf, filesInClass,
   scanLegacy, LEGACY_CODE_PATTERNS, LEGACY_DATA_PATTERNS, macroArithmeticOffenders, FORBIDDEN_NUTRITION,
-  gitBlobId, stripComments
+  gitBlobId, stripComments, isCode, isBinary, domainImportOffenders
 } from './helpers.mjs';
 import { DomainError } from '../src/domain/index.js';
 
 const DATE = '2026-09-24';
 const boundary = loadBoundary();
-const RUNTIME_SCANNED = /\.(m?js|cjs|html|json)$/; // runtime code and config; .md docs are not runtime
-const runtimeFiles = () => filesInClass('runtime', boundary).filter((f) => RUNTIME_SCANNED.test(f));
+// Every runtime file is scanned, whatever its extension (a UI may add .jsx, .ts, .css, .svg …);
+// only binary assets and .md documentation are skipped.
+const runtimeFiles = () => filesInClass('runtime', boundary).filter((f) => !isBinary(f) && !f.endsWith('.md'));
 const throwsCode = (fn, code) => assert.throws(fn, (e) => e instanceof DomainError && e.code === code, `expected DomainError ${code}`);
 
 function withApp(fn) {
@@ -116,12 +117,16 @@ test('17 — the runtime reads and writes only the canonical V2 stores', () => {
   assert.ok(!touched.some((p) => legacy.has(p)), 'no legacy file read');
   assert.ok(!touched.some((p) => p.startsWith('data/reference/')), 'yield/portion reference data is not read at runtime');
 
-  // Only the file adapter touches the filesystem; no network, no dynamic imports, no AI.
-  for (const f of runtimeFiles().filter((x) => /\.m?js$/.test(x))) {
+  // Only the file adapter touches the filesystem and only the IndexedDB snapshot store
+  // touches browser storage; no network, no dynamic imports, no AI.
+  for (const f of runtimeFiles().filter(isCode)) {
     const code = stripComments(fs.readFileSync(path.join(ROOT, f), 'utf8'));
     if (f !== 'src/node/file-adapter.js') assert.ok(!/\bfs\b|node:fs|readFileSync|writeFileSync/.test(code), `${f} must not use the filesystem directly`);
+    if (f !== 'src/browser/indexeddb-snapshot-store.js') assert.ok(!/\bindexedDB\b|\blocalStorage\b|\bsessionStorage\b|document\.cookie|\bcaches\s*\./.test(code), `${f} must not use browser storage directly`);
     assert.ok(!/\bfetch\s*\(|XMLHttpRequest|\bimport\s*\(/.test(code), `${f} must not fetch or import dynamically`);
   }
+  // Outside src/domain/, the domain is reached only through its public entry point.
+  assert.deepEqual(domainImportOffenders(runtimeFiles()), []);
 });
 
 /* ------------------------------------------------------------------ */
@@ -256,7 +261,7 @@ test('Favourites live only in preferences; the runtime never reads or writes a M
   assert.equal(savedFile(), before, 'Saved Meals file untouched by favouriting');
   assert.equal(readText(dir, 'data/meals/library-meals.json'), libraryBefore, 'Library file untouched');
   assert.equal(app.getMeal(saved.id).favorite, undefined, 'no favorite field written on Saved Meals');
-  for (const f of runtimeFiles().filter((x) => /\.m?js$/.test(x))) {
+  for (const f of runtimeFiles().filter(isCode)) {
     // property access (meal.favorite / meal['favorite']) or an object key (favorite: …)
     assert.ok(!/\.favorite\b|\[\s*['"]favorite['"]\s*\]|\bfavorite\s*:/.test(stripComments(fs.readFileSync(path.join(ROOT, f), 'utf8'))), `${f} does not use Meal.favorite`);
   }

@@ -146,6 +146,59 @@ export function pickMacros(x) {
   return { protein: x.protein, carbs: x.carbs, fat: x.fat };
 }
 
+/**
+ * Where logged stands against a target, per macro. Targets are floors.
+ *   remaining  target − logged (negative once past the target)
+ *   reached    logged ≥ target
+ *   overBy     how far past the target, ≥ 0 (0 while still short)
+ * Screens use this instead of negating or comparing remaining themselves.
+ */
+export function targetStatus(target, logged) {
+  const remaining = subtractMacros(target, logged);
+  const reached = meetsTarget(logged, target);
+  const overBy = {};
+  for (const m of MACROS) overBy[m] = remaining[m] < 0 ? -remaining[m] : 0;
+  return { remaining, reached, overBy };
+}
+
+/** Grams of protein + carbs + fat per 100 g may exceed 100 by at most this much (label rounding). */
+export const NUTRITION_SUM_TOLERANCE_G = 1;
+
+/**
+ * Check per-100 g nutrition values as a user would enter them for a Food.
+ * Never throws. Returns [{ field, code, message }] (empty when valid):
+ *   NUTRITION_REQUIRED      a macro is missing
+ *   NUTRITION_NOT_A_NUMBER  not a number, or NaN / Infinity / -Infinity
+ *   NUTRITION_NEGATIVE      below 0
+ *   NUTRITION_IMPOSSIBLE    protein + carbs + fat is more than 100 g per 100 g (+ tolerance)
+ * Only protein, carbs and fat exist; any other key is reported as NUTRITION_UNKNOWN_FIELD.
+ */
+export function checkNutritionValues(nutrition) {
+  if (!nutrition || typeof nutrition !== 'object' || Array.isArray(nutrition)) {
+    return [{ field: 'nutrition', code: 'NUTRITION_REQUIRED', message: 'nutrition { protein, carbs, fat } per 100 g is required' }];
+  }
+  const problems = [];
+  for (const k of Object.keys(nutrition)) {
+    if (k !== 'basis' && !MACROS.includes(k)) problems.push({ field: `nutrition.${k}`, code: 'NUTRITION_UNKNOWN_FIELD', message: `nutrition only has protein, carbs and fat; got "${k}"` });
+  }
+  let allNumbers = true;
+  for (const m of MACROS) {
+    const v = nutrition[m];
+    const field = `nutrition.${m}`;
+    if (v === undefined || v === null || v === '') { problems.push({ field, code: 'NUTRITION_REQUIRED', message: `${m} is required` }); allNumbers = false; }
+    else if (typeof v !== 'number' || !Number.isFinite(v)) { problems.push({ field, code: 'NUTRITION_NOT_A_NUMBER', message: `${m} must be a finite number` }); allNumbers = false; }
+    else if (v < 0) problems.push({ field, code: 'NUTRITION_NEGATIVE', message: `${m} cannot be negative` });
+  }
+  if (allNumbers) {
+    const total = sumMacros([pickMacros(nutrition)]);
+    const grams = total.protein + total.carbs + total.fat;
+    if (grams > 100 + NUTRITION_SUM_TOLERANCE_G) {
+      problems.push({ field: 'nutrition', code: 'NUTRITION_IMPOSSIBLE', message: `protein + carbs + fat is ${Math.round(grams * 10) / 10} g per 100 g; it cannot be more than 100 g` });
+    }
+  }
+  return problems;
+}
+
 /** Display rounding only. Never store rounded values as authoritative. */
 export function roundMacros(x, decimals = 1) {
   const f = 10 ** decimals;

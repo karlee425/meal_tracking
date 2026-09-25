@@ -9,7 +9,7 @@
 
 import { DomainError, clone, slug, uniqueId } from './util.js';
 import { FOOD_STATES } from './constants.js';
-import { MACROS } from './macros.js';
+import { MACROS, checkNutritionValues } from './macros.js';
 
 const norm = (s) => String(s).toLowerCase().normalize('NFKD').replace(/[̀-ͯ]/g, '')
   .replace(/[^a-z0-9%]+/g, ' ').trim();
@@ -27,12 +27,33 @@ export function createFoodsApi(ctx) {
     return ids;
   }
 
-  function checkNutrition(nutrition) {
-    if (!nutrition || typeof nutrition !== 'object') throw new DomainError('INVALID_FOOD', 'nutrition {protein, carbs, fat} is required');
-    for (const k of Object.keys(nutrition)) {
-      if (k !== 'basis' && !MACROS.includes(k)) throw new DomainError('INVALID_FOOD', `nutrition only has protein, carbs and fat; got "${k}"`);
+  /**
+   * Every problem with a Custom Food as it would be stored. Never throws.
+   * errors:   [{ field, code, message }]  — any error blocks the write
+   * warnings: [{ code, message, foodIds }] — informational only (e.g. a Food with the same name exists)
+   */
+  function customFoodProblems(candidate, selfId = null) {
+    const errors = [];
+    const warnings = [];
+    const name = typeof candidate.name === 'string' ? candidate.name.trim() : '';
+    if (!name) errors.push({ field: 'name', code: 'NAME_REQUIRED', message: 'name is required' });
+    else if (!slug(name)) errors.push({ field: 'name', code: 'NAME_REQUIRED', message: 'name must contain a letter or digit' });
+    if (typeof candidate.category !== 'string' || !candidate.category.trim()) errors.push({ field: 'category', code: 'CATEGORY_REQUIRED', message: 'category is required' });
+    if (!FOOD_STATES.includes(candidate.state)) errors.push({ field: 'state', code: 'STATE_INVALID', message: `state must be one of ${FOOD_STATES.join(', ')}` });
+    if (candidate.nutrition && candidate.nutrition.basis !== undefined && candidate.nutrition.basis !== '100g') {
+      errors.push({ field: 'nutrition.basis', code: 'NUTRITION_BASIS', message: 'nutrition basis must be "100g"' });
     }
-    if (nutrition.basis !== undefined && nutrition.basis !== '100g') throw new DomainError('INVALID_FOOD', 'nutrition basis must be "100g"');
+    errors.push(...checkNutritionValues(candidate.nutrition));
+    if (name) {
+      const key = norm(name);
+      const same = [...store.get('coreFoods'), ...store.get('customFoods')].filter((f) => f.id !== selfId && norm(f.name) === key).map((f) => f.id);
+      if (same.length) warnings.push({ code: 'DUPLICATE_NAME', message: `a Food named "${name}" already exists`, foodIds: same });
+    }
+    return { errors, warnings };
+  }
+
+  function throwIfInvalid({ errors }) {
+    if (errors.length) throw new DomainError('INVALID_FOOD', errors.map((e) => e.message).join('; '), errors);
   }
 
   function customFoodOrThrow(id) {
@@ -43,6 +64,21 @@ export function createFoodsApi(ctx) {
   }
 
   const api = {
+    /**
+     * Check Custom Food input without saving anything — the same rules createCustomFood and
+     * updateCustomFood enforce. For an edit, pass { id } and the patch; it is checked as merged.
+     * Returns { valid, errors: [{ field, code, message }], warnings: [{ code, message, foodIds }] }.
+     */
+    validateCustomFood(input = {}, { id } = {}) {
+      let candidate = input;
+      if (id !== undefined) {
+        const current = customFoodOrThrow(id);
+        candidate = { ...clone(current), ...clone(input), nutrition: { ...current.nutrition, ...(input.nutrition || {}) } };
+      }
+      const { errors, warnings } = customFoodProblems(candidate || {}, id === undefined ? null : id);
+      return { valid: errors.length === 0, errors, warnings };
+    },
+
     /** A Food by ID (core or custom), or null. Returns a copy. */
     getFood(id) {
       const f = ctx.lookupFood(id);
@@ -103,20 +139,17 @@ export function createFoodsApi(ctx) {
      * never silently start pointing at a new Food.
      */
     createCustomFood(input = {}) {
-      const { name, category, state, nutrition, brand = null, tags = [], aliases, measurement, metadata = {} } = input;
-      if (!name || typeof name !== 'string') throw new DomainError('INVALID_FOOD', 'name is required');
-      if (!category) throw new DomainError('INVALID_FOOD', 'category is required');
-      if (!FOOD_STATES.includes(state)) throw new DomainError('INVALID_FOOD', `state must be one of ${FOOD_STATES.join(', ')}`);
-      checkNutrition(nutrition);
+      const { category, state, nutrition, brand = null, tags = [], aliases, measurement, metadata = {} } = input;
+      throwIfInvalid(customFoodProblems(input));
+      const name = input.name.trim();
       const base = `food_custom_${slug(name)}`;
-      if (base === 'food_custom_') throw new DomainError('INVALID_FOOD', 'name must contain a letter or digit');
       const id = uniqueId(base, referencedFoodIds());
       const now = ctx.now();
       const food = {
         id,
         name,
         source: 'custom',
-        category,
+        category: category.trim(),
         brand,
         state,
         nutrition: { basis: '100g', protein: nutrition.protein, carbs: nutrition.carbs, fat: nutrition.fat },
@@ -137,13 +170,15 @@ export function createFoodsApi(ctx) {
       const current = customFoodOrThrow(id);
       if ('id' in patch && patch.id !== id) throw new DomainError('IMMUTABLE_ID', 'Food IDs never change');
       if ('source' in patch && patch.source !== 'custom') throw new DomainError('INVALID_FOOD', 'source cannot change');
-      if (patch.state !== undefined && !FOOD_STATES.includes(patch.state)) throw new DomainError('INVALID_FOOD', `state must be one of ${FOOD_STATES.join(', ')}`);
       const next = clone(current);
       for (const k of ['name', 'category', 'brand', 'state', 'tags', 'aliases', 'measurement']) if (k in patch) next[k] = clone(patch[k]);
       if (patch.nutrition) {
-        checkNutrition(patch.nutrition);
+        for (const k of Object.keys(patch.nutrition)) if (k !== 'basis' && !MACROS.includes(k)) next.nutrition[k] = patch.nutrition[k]; // reported below
         for (const m of MACROS) if (m in patch.nutrition) next.nutrition[m] = patch.nutrition[m];
       }
+      throwIfInvalid(customFoodProblems(next, id));
+      next.name = next.name.trim();
+      next.category = next.category.trim();
       if (patch.metadata) next.metadata = { ...next.metadata, ...clone(patch.metadata), editable: true };
       next.metadata.updatedAt = ctx.now();
       store.commit({ customFoods: store.get('customFoods').map((f) => (f.id === id ? next : f)) });

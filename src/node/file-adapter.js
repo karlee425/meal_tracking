@@ -28,7 +28,7 @@ const SCHEMA_DIR = 'data/schemas';
 export function createFileAdapter(root) {
   const abs = (p) => path.join(root, p);
   const readJSON = (p) => JSON.parse(fs.readFileSync(abs(p), 'utf8'));
-  return {
+  const adapter = {
     load() {
       const schemas = {};
       for (const f of fs.readdirSync(abs(SCHEMA_DIR)).filter((x) => x.endsWith('.schema.json')).sort()) {
@@ -39,11 +39,33 @@ export function createFileAdapter(root) {
       return out;
     },
     save(collection, data) {
-      if (!WRITABLE.has(collection)) throw new Error(`file adapter: ${collection} is read-only`);
-      const target = abs(FILES[collection]);
-      const tmp = `${target}.tmp-${process.pid}`;
-      fs.writeFileSync(tmp, JSON.stringify(data, null, 2) + '\n');
-      fs.renameSync(tmp, target);
+      adapter.saveMany({ [collection]: data });
+    },
+
+    /**
+     * Write several collections together. Every file is first written in full to a temp
+     * file next to its target; only when all of them are written are they renamed into
+     * place. If any temp write fails, the temps are removed and no canonical file changes.
+     * (Renames on one filesystem do not fail in practice; this adapter is for development
+     * and tests — the browser adapter writes one snapshot record per commit.)
+     */
+    saveMany(changes) {
+      const entries = Object.entries(changes);
+      for (const [c] of entries) if (!WRITABLE.has(c)) throw new Error(`file adapter: ${c} is read-only`);
+      const written = [];
+      try {
+        for (const [c, data] of entries) {
+          const target = abs(FILES[c]);
+          const tmp = `${target}.tmp-${process.pid}`;
+          fs.writeFileSync(tmp, JSON.stringify(data, null, 2) + '\n');
+          written.push([tmp, target]);
+        }
+      } catch (e) {
+        for (const [tmp] of written) fs.rmSync(tmp, { force: true });
+        throw e;
+      }
+      for (const [tmp, target] of written) fs.renameSync(tmp, target);
     }
   };
+  return adapter;
 }

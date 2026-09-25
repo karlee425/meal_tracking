@@ -2,7 +2,7 @@
   "description": "Every file in the repository belongs to exactly one class. Only the 'runtime' class is the V2 application runtime; it may use nothing but the V2 domain layer and the canonical data. tests/runtime-boundary.test.mjs fails if a file is unclassified, if a runtime or canonical-data file references a legacy source or rule, or if a legacy reference file changes. A future UI directory must be added to 'runtime' before it is committed. Paths are exact, 'dir/**' (everything under dir) or a single-segment '*' glob; the legacy settings export is matched by a glob so this file does not itself contain its name (Prompt 1 check G12 scans JSON files for it).",
   "classes": {
     "runtime": {
-      "description": "V2 application runtime: the domain layer and its adapters. Future UI code goes here too.",
+      "description": "V2 application runtime: the domain layer and its adapters (Node file, memory, browser/IndexedDB). Future UI code goes here too.",
       "paths": [
         "src/**"
       ]

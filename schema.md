@@ -147,11 +147,22 @@ There is no fixed per-slot macro allocation. Remaining macros are calculated for
     "carbs": 293,
     "fat": 70
   },
+  "loggingComplete": false,
   "mealInstances": []
 }
 ```
 
 `targetSnapshot` is copied when a Day is created. It is authoritative for that date.
+
+`loggingComplete` (required, boolean) is the user's explicit "done logging" for that date. A new Day is `false`. It is the only thing that makes a Day `complete` for Progress: which meal slots hold food never decides it, and no slot (including `snack_night`) is required. It can only be `true` while the Day has at least one Meal Instance; deleting the last one sets it back to `false`.
+
+`priorTargetSnapshots` (optional) keeps, per day type, the snapshot a Day had before its type was changed, so a correction never silently loses target context and switching back restores it:
+
+```json
+"priorTargetSnapshots": { "lift": { "protein": 150, "carbs": 293, "fat": 70 } }
+```
+
+It never holds the Day's current type. It is not a general version history: one snapshot per day type, the most recent.
 
 ### Targets
 
@@ -214,6 +225,8 @@ It is calculated from:
 - target snapshots
 
 Missing meal slots are not interpreted as zero intake.
+
+Each date is `no_data` (nothing logged — never zero), `partial` (food logged, not marked done) or `complete` (food logged and `loggingComplete: true`). Complete-day averages and "missed" use complete Days only.
 
 ## Macro calculation
 
@@ -292,12 +305,50 @@ A modified Meal Instance can:
 
 A Day is created on first interaction with that date.
 
-Day type can change later. Changing it:
+Day type can change later, on today or on a past Day. Changing it:
 - changes target context
 - does not change logged food
 - does not rewrite historical Meal Instances
+- keeps the replaced snapshot in `priorTargetSnapshots`; choosing a type the Day has held before restores that type's snapshot, otherwise the new type's current targets are used
+- is a no-op when the type is unchanged (it never silently refreshes the snapshot)
+
+Current target changes never alter an existing Day. The one explicit exception is `applyCurrentTargetsToToday()`: on request, today's snapshot is re-taken from the current targets for its type (food, day type and current targets unchanged; no other Day touched). "Today" is the device's local calendar date.
 
 Deleting a Day's logged data removes its Meal Instances and target snapshot for that date only.
+
+## Persistence
+
+The domain talks to storage only through an adapter (`src/domain/store.js` documents the interface). The file adapter (Node), memory adapter and browser adapter (`src/browser/`) are interchangeable; the data layer's API is identical for all of them.
+
+- Every commit is validated in full (schemas, cross-record invariants, finite numbers) and written with one `saveMany` call; nothing in memory changes unless the adapter accepts the write.
+- The browser adapter stores the five user-owned collections — `targets`, `customFoods`, `savedMeals`, `days` (with their Meal Instances) and `preferences` — as one IndexedDB record in its own database (`meal-tracking-v2`), written in one transaction per commit. Core Foods, Library Meals and schemas are app data and are never stored. It does not read or write the retired pages' storage.
+- Status (`saved` · `saving` · `error` · `conflict`, last saved time) is exposed as `getPersistenceStatus()` / `onPersistenceChange()` for every adapter.
+
+### Assumptions that keep future multi-device sync possible
+
+Nothing here builds sync; these are the properties a later sync layer can rely on.
+
+1. Every stored record has a stable ID that never changes: Foods (`food_…`), Meals (`meal_saved_<uuid>`), Meal Instances (`mi_<uuid>`), Days (`day_<date>`, one per date).
+2. The stored snapshot carries a monotonically increasing `revision`; a write based on a stale revision is refused (`conflict`), never merged or overwritten. A sync layer can use the same compare-and-swap.
+3. Meal Instances carry `loggedAt`; Custom Foods and Saved Meals carry `metadata.updatedAt`.
+4. Known limits a sync design must address: deletions are not tombstoned (a deleted record simply disappears); Custom Food IDs derive from the name (`food_custom_<slug>`), so two devices creating the same name offline would pick the same ID; a Day's scalar fields (`dayType`, `targetSnapshot`, `loggingComplete`) have no per-field timestamps.
+
+## Backup and restore
+
+`exportUserData()` returns the user's data as a versioned document; `validateBackup(doc)` checks one without restoring; `restoreUserData(doc)` replaces all user data.
+
+```json
+{
+  "format": "macro-tracker-v2-backup",
+  "formatVersion": 1,
+  "exportedAt": "2026-09-25T20:00:00.000Z",
+  "data": { "targets": {}, "customFoods": [], "savedMeals": [], "days": [], "preferences": {} }
+}
+```
+
+Only user-owned persisted data is included; nothing derived (meal totals, remaining, Progress) is exported as a competing source of truth. Meal Instance snapshots are the historical record itself and are included as stored.
+
+Restore order: parse → format and version check (a newer `formatVersion` is refused) → every record validated against the schemas, cross-record invariants and finite-number rule → references checked (Saved Meal ingredients must resolve to a Food unless recorded as unresolved; favourites and dislikes must resolve; Meal Instances may name deleted Foods and Meals) → one atomic write of all five collections. Any failure leaves current data untouched.
 
 ## Search and units
 
@@ -330,4 +381,5 @@ Do not add:
 
 ## Change log
 
+- 2026-09-25 (pre-UI foundations): Day gained required `loggingComplete` (explicit day completeness; slot coverage no longer decides `complete`) and optional `priorTargetSnapshots` (day-type corrections keep and restore target context). All stored numbers must be finite (NaN / ±Infinity rejected before persistence). Added the Persistence and Backup sections. No existing data needed migrating: `user-data/daily-logs.json` was empty.
 - 2026-09-24 (Prompt 1 migration): Meal Instance `mealSlot` changed from `breakfast | lunch | snack | dinner | other` to the agreed logging slots `breakfast | lunch | snack_afternoon | dinner | snack_night` (also in `data/schemas/meal-instance.schema.json`). Meal `mealType` is unchanged. Documented the migration metadata fields on Food and Library Meal.
