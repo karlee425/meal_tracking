@@ -30,6 +30,8 @@
  * memory-snapshot-store.js. Nothing here reads or writes the retired pages' storage.
  */
 
+import { DomainError } from '../domain/index.js';
+
 export const STORE_RECORD_FORMAT = 'macro-tracker-v2-store';
 export const STORE_RECORD_VERSION = 1;
 export const USER_COLLECTION_NAMES = Object.freeze(['targets', 'customFoods', 'savedMeals', 'days', 'preferences']);
@@ -50,7 +52,12 @@ export async function createBrowserAdapter({ appData, snapshotStore, now = () =>
     throw new Error('createBrowserAdapter: snapshotStore { read, write } is required');
   }
 
-  const stored = await snapshotStore.read();
+  let stored;
+  try {
+    stored = await snapshotStore.read();
+  } catch (e) {
+    throw e instanceof DomainError ? e : new DomainError('STORAGE_UNAVAILABLE', `browser storage could not be read: ${e && e.message}`);
+  }
   let revision = 0;
   let user;
   if (stored === null || stored === undefined) {
@@ -60,8 +67,10 @@ export async function createBrowserAdapter({ appData, snapshotStore, now = () =>
       user[c] = copy(appData.seed[c]);
     }
   } else {
-    if (stored.format !== STORE_RECORD_FORMAT || stored.version !== STORE_RECORD_VERSION) {
-      throw new Error(`stored data is not a ${STORE_RECORD_FORMAT} v${STORE_RECORD_VERSION} record; refusing to start rather than overwrite it`);
+    if (stored.format !== STORE_RECORD_FORMAT || stored.version !== STORE_RECORD_VERSION || !stored.data || typeof stored.data !== 'object') {
+      const e = new DomainError('STORED_DATA_UNRECOGNIZED', `stored data is not a ${STORE_RECORD_FORMAT} v${STORE_RECORD_VERSION} record; refusing to start rather than overwrite it`);
+      e.readStoredRecord = () => snapshotStore.read();
+      throw e;
     }
     revision = stored.revision;
     user = copy(stored.data);
@@ -143,6 +152,29 @@ export async function createBrowserAdapter({ appData, snapshotStore, now = () =>
     readStoredRecord: () => snapshotStore.read()
   };
   return adapter;
+}
+
+/**
+ * Replace the stored user data with `data` (the five user collections) as a new record,
+ * whatever is stored now — including a record that failed to load. Only for an explicit
+ * user choice (recoverStoredData); nothing calls it automatically. Throws DomainError
+ * STORAGE_CONFLICT if storage changed underneath, STORAGE_UNAVAILABLE if it can't be written.
+ */
+export async function replaceStoredUserData({ snapshotStore, data, now = () => new Date().toISOString() }) {
+  let current;
+  try { current = await snapshotStore.read(); } catch (e) {
+    throw e instanceof DomainError ? e : new DomainError('STORAGE_UNAVAILABLE', `browser storage could not be read: ${e && e.message}`);
+  }
+  const expectedRevision = current ? current.revision : 0;
+  const revision = current && Number.isInteger(current.revision) ? current.revision + 1 : 1;
+  const record = { format: STORE_RECORD_FORMAT, version: STORE_RECORD_VERSION, revision, savedAt: now(), data: copy(data) };
+  try {
+    await snapshotStore.write(record, { expectedRevision });
+  } catch (e) {
+    if (e && e.code === 'CONFLICT') throw new DomainError('STORAGE_CONFLICT', 'stored data changed while it was being replaced; nothing was written');
+    throw e instanceof DomainError ? e : new DomainError('STORAGE_UNAVAILABLE', `browser storage could not be written: ${e && e.message}`);
+  }
+  return { revision };
 }
 
 /**

@@ -6,7 +6,7 @@
  *
  * Suggestion order (getMacroCoachSuggestions), approved for V2:
  *   1. favoriteSaved — Saved Meals the user has favourited
- *   2. recent        — recently logged Meals (Saved or Library), newest first
+ *   2. recent        — recently logged Saved Meals, newest first
  *   3. saved         — the user's other Saved Meals
  *   4. library       — Library starter Meals, in the Library's own order (not personal)
  *   5. topUpFoods    — separately: favourite and recently logged Foods, and — only while
@@ -17,8 +17,10 @@
  * Favourite semantics: tier 1 is Saved Meals only. preferences.favoriteMeals can also
  * hold a Library Meal ID (setFavoriteMeal accepts any Meal — a bookmark), but that never
  * moves the meal into tier 1 or reorders tier 4; it is reported only as item.isFavorite.
- * A Library Meal reaches a personal tier only by being logged (tier 2) or saved as a copy
- * (which is a new Saved Meal with its own ID and no favourite until the user sets one).
+ * Library Meals never enter a personal tier (1–3), even once logged: they stay Library
+ * starters in tier 4. A Library Meal becomes personal only by being saved as a copy (a new
+ * Saved Meal with its own ID and no favourite until the user sets one). Retired Library
+ * Meals never appear in any tier.
  */
 
 import { DomainError, clone, assertDate, assertMealSlot, assertDayType } from './util.js';
@@ -173,11 +175,12 @@ export function createCoachApi(ctx, { foods, meals, days, targets, preferences }
     const t1 = saved.filter((m) => m.source === 'saved' && favorite.has(m.id) && usable(m)).sort(newestLoggedFirst);
     const tierFavorite = tier('favoriteSaved', true, t1);
 
-    // 2. Recently logged Meals (Saved or Library), newest first.
+    // 2. Recently logged Saved Meals, newest first.
+    const savedById = new Map(saved.map((m) => [m.id, m]));
     const t2 = [];
     for (const id of lastLogged.keys()) {
-      const m = ctx.findMeal(id);
-      if (m && usable(m)) { t2.push(clone(m)); used.add(m.id); }
+      const m = savedById.get(id);
+      if (m && usable(m)) { t2.push(m); used.add(m.id); }
     }
     const tierRecent = tier('recent', true, t2);
 

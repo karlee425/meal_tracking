@@ -86,8 +86,10 @@ export const stripComments = (src) => src.replace(/\/\*[\s\S]*?\*\//g, '').repla
 const SCRIPT_EXT = /\.(m?js|cjs|jsx|ts|tsx|mts|cts)$/;
 /** Markup files: only <script> blocks and {expression} / {{ expression }} bindings are code. */
 const MARKUP_EXT = /\.(html?|vue|svelte)$/;
+/** Stylesheets: only calc() expressions can compute anything. */
+const STYLE_EXT = /\.css$/;
 /** Files that can contain executable logic (scanned for arithmetic and legacy identifiers). */
-export const isCode = (f) => SCRIPT_EXT.test(f) || MARKUP_EXT.test(f);
+export const isCode = (f) => SCRIPT_EXT.test(f) || MARKUP_EXT.test(f) || STYLE_EXT.test(f);
 /** Binary assets are the only runtime files not scanned for forbidden terms. */
 export const isBinary = (f) => /\.(png|jpe?g|gif|webp|avif|ico|bmp|woff2?|ttf|otf|eot|pdf|mp3|mp4|webm|wasm|zip|gz)$/i.test(f);
 
@@ -205,8 +207,31 @@ export const MACRO_ARITHMETIC_PATTERNS = [
   [/(?<![/*])[-+*/]\s*[\w$.]*\bnutrition\b\s*(?:\.\s*[\w$]+|\[[^\]]*\])/, 'arithmetic on Food nutrition']
 ];
 
+/**
+ * Stylesheets: selectors, class names and property names may say protein/carbs/fat freely;
+ * what is forbidden is a calc() that does arithmetic with a macro-named value
+ * (e.g. calc(var(--carbs) / var(--carbs-target) * 100%)). Bars use the domain's
+ * targetStatus().progress instead, passed in as a neutral value (e.g. --fill).
+ */
+function cssArithmetic(src) {
+  const code = src.replace(/\/\*[\s\S]*?\*\//g, (c) => c.replace(/[^\n]/g, '')).replace(/"(?:\\.|[^"\\\n])*"|'(?:\\.|[^'\\\n])*'/g, '""');
+  const hits = [];
+  const re = /calc\(/g;
+  let m;
+  while ((m = re.exec(code))) {
+    let depth = 1;
+    let i = m.index + 5;
+    while (i < code.length && depth > 0) { if (code[i] === '(') depth++; else if (code[i] === ')') depth--; i++; }
+    const expr = code.slice(m.index, i);
+    const line = code.slice(0, m.index).split('\n').length;
+    if (/--[\w-]*\b(protein|carbs|fat)\b/i.test(expr) || /\/\s*100\b/.test(expr)) hits.push(`${line} arithmetic on a macro value in CSS: ${expr}`);
+  }
+  return hits;
+}
+
 /** P/C/F arithmetic in one source text. Returns ["line why: code", …]. */
 export function macroArithmeticInSource(src, file) {
+  if (STYLE_EXT.test(file)) return cssArithmetic(src);
   const hits = [];
   executableCode(src, file).split('\n').forEach((line, i) => {
     for (const [re, why] of MACRO_ARITHMETIC_PATTERNS) if (re.test(line)) hits.push(`${i + 1} ${why}: ${line.trim()}`);

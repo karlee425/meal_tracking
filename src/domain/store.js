@@ -22,6 +22,7 @@
  *   status()                -> { state: 'saved' | 'saving' | 'error' | 'conflict', lastSavedAt, error }
  *   subscribe(listener)     -> unsubscribe; listener(status) on every status change
  *   flush()                 -> Promise, resolved once every accepted write is durable
+ *   retry()                 -> Promise<status>, try a failed background write again
  *
  * A commit is all-or-nothing: every change is validated first, then written in one
  * saveMany call; in-memory state changes only after the adapter accepted the write.
@@ -166,6 +167,10 @@ export function createStore(adapter) {
     },
     flush() {
       return typeof adapter.flush === 'function' ? adapter.flush() : Promise.resolve();
+    },
+    /** Try a failed background save again; resolves with the resulting status. */
+    retry() {
+      return typeof adapter.retry === 'function' ? adapter.retry() : Promise.resolve(this.status());
     }
   };
 }

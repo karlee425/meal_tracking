@@ -261,7 +261,7 @@ test('Favourites live only in preferences; the runtime never reads or writes a M
   assert.equal(savedFile(), before, 'Saved Meals file untouched by favouriting');
   assert.equal(readText(dir, 'data/meals/library-meals.json'), libraryBefore, 'Library file untouched');
   assert.equal(app.getMeal(saved.id).favorite, undefined, 'no favorite field written on Saved Meals');
-  for (const f of runtimeFiles().filter(isCode)) {
+  for (const f of runtimeFiles().filter((x) => isCode(x) && !x.endsWith('.css'))) { // a CSS .favorite class is styling, not a Meal field
     // property access (meal.favorite / meal['favorite']) or an object key (favorite: …)
     assert.ok(!/\.favorite\b|\[\s*['"]favorite['"]\s*\]|\bfavorite\s*:/.test(stripComments(fs.readFileSync(path.join(ROOT, f), 'utf8'))), `${f} does not use Meal.favorite`);
   }

@@ -40,12 +40,14 @@ await requestPersistentStorage();                // optional: ask the browser no
 - *Later runs:* the stored record is used and the seed is ignored; it is validated against the
   current schemas before the app starts. If it fails, `DATA_INVALID` is thrown with
   `error.readStoredRecord()` for a raw download, and nothing is overwritten.
-- *Tests:* `tests/pre-ui.test.mjs` W1–W4 run this path in Node (which loads the same JSON modules)
+- *Recovery:* only on explicit request, `recoverStoredData({ backup })` (validated in full first) or
+  `recoverStoredData({ startFresh: true })` (shipped seed) replaces an unreadable stored record.
+- *Tests:* `tests/pre-ui.test.mjs` W1–W4 and `tests/foundations.test.mjs` run this path in Node (which loads the same JSON modules)
   with `memory-snapshot-store.js` standing in for IndexedDB.
 
 Code outside `src/domain/` imports the domain only through `src/domain/index.js`.
 
-Tests: `node --test 'tests/*.test.mjs'` (Node 22+, built-in test runner). `tests/pre-ui.test.mjs` covers the pre-UI foundations (tests A–V).
+Tests: `node --test 'tests/*.test.mjs'` (Node 22+, built-in test runner). `tests/pre-ui.test.mjs` and `tests/foundations.test.mjs` cover the pre-UI foundations. The UI contract is `V2_UI_CONTRACT.md` (repo root).
 
 ## Runtime boundary (Prompt 3)
 
@@ -86,16 +88,16 @@ descriptive only: no raw↔cooked conversion and no yield factors at runtime.
 
 | Module | Operations |
 |---|---|
-| `foods.js` | `getFood`, `searchFoods` (names + aliases, ranked), `getRecentFoods`, `createCustomFood`, `updateCustomFood`, `deleteCustomFood` |
-| `meals.js` | `getLibraryMeals`, `getSavedMeals`, `getRecentMeals`, `getMeal`, `calculateMealMacros`, `createSavedMeal`, `updateSavedMeal`, `replaceSavedMealIngredient`, `duplicateSavedMeal`, `deleteSavedMeal` |
+| `foods.js` | `getFood`, `searchFoods` (names + aliases, ranked), `getRecentFoods`, `getCustomFoods`, `getFoodUsage`, `createCustomFood`, `updateCustomFood`, `deleteCustomFood` |
+| `meals.js` | `getLibraryMeals`, `getSavedMeals`, `searchMeals` (same ranking as `searchFoods`; retired Library Meals excluded), `getRecentMeals`, `getMeal`, `calculateMealMacros`, `createSavedMeal`, `updateSavedMeal`, `replaceSavedMealIngredient`, `duplicateSavedMeal`, `deleteSavedMeal` |
 | `days.js` | `getDay`, `listDays`, `createDay`, `updateDayType`, `previewDayTypeChange`, `applyCurrentTargetsToToday`, `getToday`, `setDayLoggingComplete`, `deleteDay`, `createMealInstance`, `logFood`, `updateMealInstance`, `deleteMealInstance`, `getDaySummary`, and the previews `previewMealInstance`, `previewLogFood`, `previewMealInstanceUpdate` |
 | `targets.js` | `getCurrentTargets`, `getAllCurrentTargets`, `createTargetSnapshot`, `updateCurrentTargets` |
 | `progress.js` | `getProgress({ period: 7 \| 14 \| 30, endDate })` or `({ startDate, endDate })` |
-| `coach.js` | `getMacroCoachContext({ date, mealSlot, dayType? })`, `getMacroCoachSuggestions({ date, mealSlot, dayType?, limitPerTier? })` — tiers `favoriteSaved` → `recent` → `saved` → `library`, plus `topUpFoods`; favourites are Saved Meals only (a favourited Library Meal stays in the Library tier, in Library order); deterministic, no scoring, no AI |
+| `coach.js` | `getMacroCoachContext({ date, mealSlot, dayType? })`, `getMacroCoachSuggestions({ date, mealSlot, dayType?, limitPerTier? })` — tiers `favoriteSaved` → `recent` → `saved` → `library`, plus `topUpFoods`; tiers 1–3 are Saved Meals only (a favourited or logged Library Meal stays in the Library tier, in Library order; retired ones never appear); deterministic, no scoring, no AI |
 | `preferences.js` | `getPreferences`, `updatePreferences`, `setFavoriteFood`, `setDislikedFood`, `setFavoriteMeal` |
 | `backup.js` | `exportUserData`, `validateBackup`, `restoreUserData` |
-| `store.js` | state + persistence; validates every write (schemas, invariants, finite numbers) before one atomic `saveMany`; `getPersistenceStatus`, `onPersistenceChange`, `flushPersistence` |
-| `macros.js` | the calculator (also `targetStatus`, `checkNutritionValues`) |
+| `store.js` | state + persistence; validates every write (schemas, invariants, finite numbers) before one atomic `saveMany`; `getPersistenceStatus`, `onPersistenceChange`, `flushPersistence`, `retryPersistence` |
+| `macros.js` | the calculator (also `targetStatus` → `remaining`, `reached`, `overBy`, `progress`; `checkNutritionValues`) |
 | `schema-validator.js` | the JSON Schema subset validator (shared with `migration/validate.js`); rejects NaN / ±Infinity |
 | `foods.js` (also) | `validateCustomFood` — the same checks as create/update, as a dry run with field-level errors |
 
@@ -103,7 +105,8 @@ Adapters: `src/node/file-adapter.js` (Node, dev/tests), `src/domain/memory-adapt
 
 Expected failures throw a `DomainError` with a stable `code` (e.g. `FOOD_NOT_FOUND`,
 `MEAL_NEEDS_REPLACEMENT`, `DAY_TYPE_REQUIRED`, `NOTHING_LOGGED`, `PERSIST_FAILED`,
-`BACKUP_UNREADABLE` / `BACKUP_INCOMPATIBLE` / `BACKUP_INVALID`). Validation errors carry
+`BACKUP_UNREADABLE` / `BACKUP_INCOMPATIBLE` / `BACKUP_INVALID`; at browser start-up `STORAGE_UNAVAILABLE`,
+`STORED_DATA_UNRECOGNIZED`, `DATA_INVALID`). Validation errors carry
 field-level `details` where a field is identifiable. Reads never throw for data problems.
 
 ## Rules the layer enforces

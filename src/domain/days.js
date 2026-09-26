@@ -397,7 +397,7 @@ export function createDaysApi(ctx, { meals, targets }) {
     getDaySummary(date) {
       assertDate(date);
       const day = findDay(date);
-      if (!day) return { date, exists: false, dayType: null, status: 'no_data', loggingComplete: false, target: null, logged: null, remaining: null, reached: null, overBy: null, loggedSlots: [], unloggedSlots: MEAL_SLOTS.slice(), instanceCount: 0 };
+      if (!day) return { date, exists: false, dayType: null, status: 'no_data', loggingComplete: false, target: null, logged: null, remaining: null, reached: null, overBy: null, progress: null, loggedSlots: [], unloggedSlots: MEAL_SLOTS.slice(), instanceCount: 0 };
       return summarize(day);
     },
 
@@ -425,6 +425,7 @@ export function createDaysApi(ctx, { meals, targets }) {
       remaining: st.remaining,
       reached: st.reached,
       overBy: st.overBy,
+      progress: st.progress,
       loggedSlots,
       unloggedSlots: MEAL_SLOTS.filter((s) => !loggedSlots.includes(s)),
       instanceCount: day.mealInstances.length

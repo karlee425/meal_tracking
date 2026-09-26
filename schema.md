@@ -323,6 +323,7 @@ The domain talks to storage only through an adapter (`src/domain/store.js` docum
 - Every commit is validated in full (schemas, cross-record invariants, finite numbers) and written with one `saveMany` call; nothing in memory changes unless the adapter accepts the write.
 - The browser adapter stores the five user-owned collections — `targets`, `customFoods`, `savedMeals`, `days` (with their Meal Instances) and `preferences` — as one IndexedDB record in its own database (`meal-tracking-v2`), written in one transaction per commit. Core Foods, Library Meals and schemas are app data and are never stored. It does not read or write the retired pages' storage.
 - Status (`saved` · `saving` · `error` · `conflict`, last saved time) is exposed as `getPersistenceStatus()` / `onPersistenceChange()` for every adapter.
+- Start-up failures have stable codes: `STORAGE_UNAVAILABLE`, `STORED_DATA_UNRECOGNIZED`, `DATA_INVALID`. Stored data is never discarded automatically; `recoverStoredData` replaces it only on an explicit choice (a fully validated backup, or the shipped seed).
 - In the browser, canonical data arrives through static JSON-module imports in `src/browser/app-data.js` (no fetch, no build step). The first-run seed is `data/targets.json` + `user-data/*.json`; once a record is stored, it is the user's data and the seed is ignored. See `src/README.md` for the full loading contract.
 
 ### Assumptions that keep future multi-device sync possible
@@ -382,5 +383,6 @@ Do not add:
 
 ## Change log
 
+- 2026-09-26 (finalized foundations): no schema change. Added `searchMeals`, `getCustomFoods`, `getFoodUsage`, `retryPersistence`, `recoverStoredData`, stable start-up storage codes, and `progress` in target status. The Coach `recent` tier is Saved Meals only. `V2_UI_CONTRACT.md` is the UI contract.
 - 2026-09-25 (pre-UI foundations): Day gained required `loggingComplete` (explicit day completeness; slot coverage no longer decides `complete`) and optional `priorTargetSnapshots` (day-type corrections keep and restore target context). All stored numbers must be finite (NaN / ±Infinity rejected before persistence). Added the Persistence and Backup sections. No existing data needed migrating: `user-data/daily-logs.json` was empty.
 - 2026-09-24 (Prompt 1 migration): Meal Instance `mealSlot` changed from `breakfast | lunch | snack | dinner | other` to the agreed logging slots `breakfast | lunch | snack_afternoon | dinner | snack_night` (also in `data/schemas/meal-instance.schema.json`). Meal `mealType` is unchanged. Documented the migration metadata fields on Food and Library Meal.

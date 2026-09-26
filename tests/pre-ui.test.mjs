@@ -175,15 +175,15 @@ test('D — Coach suggestions follow the approved order, deterministically', () 
   assert.deepEqual(r.tiers.map((t) => t.tier), ['favoriteSaved', 'recent', 'saved', 'library']);
   assert.deepEqual(r.tiers.map((t) => t.personalized), [true, true, true, false]);
   assert.deepEqual(ids('favoriteSaved'), [s1.id, s2.id], 'favourite Saved Meals, most recently logged first');
-  assert.deepEqual(ids('recent'), [s3.id, 'meal_library_B1'], 'recently logged, newest first, favourites not repeated');
+  assert.deepEqual(ids('recent'), [s3.id], 'recently logged Saved Meals, newest first, favourites not repeated');
   assert.deepEqual(ids('saved'), [s4.id], 'other Saved Meals');
-  assert.ok(!ids('library').includes('meal_library_B1'), 'a meal appears once, in its first tier');
+  assert.ok(ids('library').includes('meal_library_B1'), 'a logged Library Meal stays a Library starter (recent = Saved Meals only)');
   assert.ok(ids('library').length > 50, 'Library starters follow');
   assert.deepEqual(r.excluded.needsReplacement, [broken.id], 'meals that cannot be calculated are excluded and listed');
   const all = r.tiers.flatMap((t) => t.items.map((i) => i.mealId));
   assert.equal(new Set(all).size, all.length, 'no duplicates across tiers');
   assert.equal(r.insufficientHistory, false);
-  assert.equal(r.personalMealCount, 5);
+  assert.equal(r.personalMealCount, 4);
 
   // "After this" comes from the calculator and matches what logging would do.
   const first = r.tiers[0].items[0];
@@ -209,7 +209,7 @@ test('D — Coach suggestions follow the approved order, deterministically', () 
   throwsCode(() => app.getMacroCoachSuggestions({ date: TODAY, mealSlot: 'dinner', limitPerTier: 0 }), 'INVALID_ARGUMENT');
 });
 
-test('D2 — favourites are Saved Meals only; a favourited Library Meal stays in the Library tier', () => {
+test('D2 — personal tiers are Saved Meals only; a favourited or logged Library Meal stays in the Library tier', () => {
   const app = makeLayer();
   const libFav = 'meal_library_D1';                          // favourited, never logged
   const libOrder = app.getLibraryMeals().map((m) => m.id);
@@ -236,13 +236,13 @@ test('D2 — favourites are Saved Meals only; a favourited Library Meal stays in
   assert.equal(libItem.isFavorite, true, 'the favourite state is still visible on the item');
   assert.equal(tier('library').personalized, false);
 
-  // A favourited Library Meal reaches a personal tier only by being logged — as "recent".
+  // Logging a Library Meal does not make it personal: "recent" is Saved Meals only.
   app.createMealInstance({ date: TODAY, mealSlot: 'dinner', mealId: libFav, dayType: 'lift' });
   const r2 = app.getMacroCoachSuggestions({ date: TODAY, mealSlot: 'snack_night' });
   const ids2 = (name) => r2.tiers.find((t) => t.tier === name).items.map((i) => i.mealId);
   assert.deepEqual(ids2('favoriteSaved'), [savedFav.id]);
-  assert.deepEqual(ids2('recent'), [libFav]);
-  assert.ok(!ids2('library').includes(libFav), 'shown once, in its first tier');
+  assert.deepEqual(ids2('recent'), []);
+  assert.deepEqual(ids2('library'), libOrder, 'still a Library starter, in Library order');
   assert.deepEqual(r2.tiers.map((t) => t.tier), ['favoriteSaved', 'recent', 'saved', 'library'], 'order is fixed');
   assert.ok(Array.isArray(r2.topUpFoods.personalized), 'top-up Foods are separate from the meal tiers');
 });

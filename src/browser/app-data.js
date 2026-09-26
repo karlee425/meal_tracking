@@ -37,8 +37,8 @@ import seedSavedMeals from '../../user-data/saved-meals.json' with { type: 'json
 import seedDays from '../../user-data/daily-logs.json' with { type: 'json' };
 import seedPreferences from '../../user-data/preferences.json' with { type: 'json' };
 
-import { createDataLayer } from '../domain/index.js';
-import { createBrowserAdapter } from './browser-adapter.js';
+import { createDataLayer, createMemoryAdapter, DomainError } from '../domain/index.js';
+import { createBrowserAdapter, replaceStoredUserData } from './browser-adapter.js';
 import { createIndexedDbSnapshotStore } from './indexeddb-snapshot-store.js';
 
 /** The canonical data a browser app starts from. Treat as read-only; the adapter copies it. */
@@ -82,4 +82,32 @@ export async function openBrowserDataLayer({ snapshotStore, appData = APP_DATA, 
     if (e && e.code === 'DATA_INVALID') e.readStoredRecord = () => adapter.readStoredRecord();
     throw e;
   }
+}
+
+/**
+ * Explicit recovery when stored data can't be opened (DATA_INVALID or
+ * STORED_DATA_UNRECOGNIZED). Exactly one of:
+ *   backup       a backup document (object or JSON text): validated in full against the
+ *                shipped app data first — on any problem a DomainError (BACKUP_UNREADABLE |
+ *                BACKUP_INCOMPATIBLE | BACKUP_INVALID) is thrown and storage is untouched
+ *   startFresh   true: the shipped first-run seed
+ * Then the stored record is replaced (one write) and the app is opened normally.
+ * Never called automatically: stored data is only replaced on this explicit request.
+ * Returns { app, adapter } like openBrowserDataLayer.
+ */
+export async function recoverStoredData({ snapshotStore, appData = APP_DATA, backup, startFresh = false, clock, today, newId, now } = {}) {
+  if ((backup === undefined) === (startFresh !== true)) throw new DomainError('INVALID_ARGUMENT', 'pass exactly one of: backup, or startFresh: true');
+  const store = snapshotStore || createIndexedDbSnapshotStore();
+  let data;
+  if (backup !== undefined) {
+    // Validate against the shipped app data with a throwaway in-memory data layer.
+    const probe = createDataLayer({ adapter: createMemoryAdapter({ schemas: appData.schemas, coreFoods: appData.coreFoods, libraryMeals: appData.libraryMeals, ...appData.seed }) });
+    const result = probe.validateBackup(backup);
+    if (!result.valid) throw new DomainError(result.code, `backup not restored: ${result.errors.slice(0, 3).join('; ')}`, result.errors);
+    data = (typeof backup === 'string' ? JSON.parse(backup) : backup).data;
+  } else {
+    data = appData.seed;
+  }
+  await replaceStoredUserData({ snapshotStore: store, data, ...(now ? { now } : {}) });
+  return openBrowserDataLayer({ snapshotStore: store, appData, clock, today, newId, now });
 }

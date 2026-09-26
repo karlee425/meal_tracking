@@ -83,7 +83,8 @@ export function createDataLayer({ adapter, clock = () => new Date(), today, newI
   const persistence = {
     getPersistenceStatus: () => store.status(),
     onPersistenceChange: (listener) => store.subscribe(listener),
-    flushPersistence: () => store.flush()
+    flushPersistence: () => store.flush(),
+    retryPersistence: () => store.retry()
   };
 
   const publicOf = (api) => Object.fromEntries(Object.entries(api).filter(([k]) => !k.startsWith('_')));

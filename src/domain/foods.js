@@ -7,12 +7,11 @@
  * and similar Foods are never merged.
  */
 
-import { DomainError, clone, slug, uniqueId } from './util.js';
+import { DomainError, clone, slug, uniqueId, normText, textMatchScore } from './util.js';
 import { FOOD_STATES } from './constants.js';
 import { MACROS, checkNutritionValues } from './macros.js';
 
-const norm = (s) => String(s).toLowerCase().normalize('NFKD').replace(/[̀-ͯ]/g, '')
-  .replace(/[^a-z0-9%]+/g, ' ').trim();
+const norm = normText; // shared with searchMeals (util.js)
 
 export function createFoodsApi(ctx) {
   const { store } = ctx;
@@ -94,19 +93,13 @@ export function createFoodsApi(ctx) {
     searchFoods(query, { limit = 25, includeInactive = false } = {}) {
       const q = norm(query || '');
       if (!q) return [];
-      const words = q.split(' ');
       const results = [];
       for (const food of [...store.get('customFoods'), ...store.get('coreFoods')]) {
         if (!includeInactive && food.metadata && food.metadata.active === false) continue;
         let best = null;
         const candidates = [['name', food.name], ...(food.aliases || []).map((a) => ['alias', a])];
         for (const [kind, text] of candidates) {
-          const t = norm(text);
-          let score = 0;
-          if (t === q) score = 100;
-          else if (t.startsWith(q)) score = 80;
-          else if (words.every((w) => t.split(' ').some((tw) => tw.startsWith(w)))) score = 60;
-          else if (t.includes(q)) score = 40;
+          let score = textMatchScore(q, text);
           if (!score) continue;
           if (kind === 'alias') score -= 5; // prefer a name match over an alias match of equal strength
           if (!best || score > best.score) best = { matchedOn: kind, matchedText: text, score };
@@ -115,6 +108,24 @@ export function createFoodsApi(ctx) {
       }
       results.sort((a, b) => b.score - a.score || a.food.name.localeCompare(b.food.name) || a.food.id.localeCompare(b.food.id));
       return results.slice(0, limit).map((r) => ({ ...r, food: clone(r.food) }));
+    },
+
+    /** All Custom Foods (copies), sorted by name, then ID. */
+    getCustomFoods() {
+      return clone(store.get('customFoods')).sort((a, b) => a.name.localeCompare(b.name) || a.id.localeCompare(b.id));
+    },
+
+    /**
+     * Which Saved Meals use a Food — what deleting it would affect. Logged Meal Instances are
+     * deliberately not included: history is immutable and never depends on a Food existing.
+     * Returns { foodId, savedMealIds } (Saved Meals sorted by name, then ID).
+     */
+    getFoodUsage(foodId) {
+      const savedMealIds = store.get('savedMeals')
+        .filter((m) => m.ingredients.some((i) => i.foodId === foodId))
+        .sort((a, b) => a.name.localeCompare(b.name) || a.id.localeCompare(b.id))
+        .map((m) => m.id);
+      return { foodId, savedMealIds };
     },
 
     /** Foods from the most recent Meal Instances, newest first. Deleted Foods are skipped. */

@@ -44,6 +44,7 @@
       "description": "Specifications and architecture documentation.",
       "paths": [
         "schema.md",
+        "V2_UI_CONTRACT.md",
         "prompts/**",
         "LEGACY-RUNTIME.md",
         "runtime-boundary.json"

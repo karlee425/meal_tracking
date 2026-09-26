@@ -151,14 +151,20 @@ export function pickMacros(x) {
  *   remaining  target − logged (negative once past the target)
  *   reached    logged ≥ target
  *   overBy     how far past the target, ≥ 0 (0 while still short)
- * Screens use this instead of negating or comparing remaining themselves.
+ *   progress   logged ÷ target, capped at 1 (a target of 0 counts as reached: 1) —
+ *              for progress bars, so screens never divide macros themselves
+ * Screens use this instead of negating, comparing or dividing remaining themselves.
  */
 export function targetStatus(target, logged) {
   const remaining = subtractMacros(target, logged);
   const reached = meetsTarget(logged, target);
   const overBy = {};
-  for (const m of MACROS) overBy[m] = remaining[m] < 0 ? -remaining[m] : 0;
-  return { remaining, reached, overBy };
+  const progress = {};
+  for (const m of MACROS) {
+    overBy[m] = remaining[m] < 0 ? -remaining[m] : 0;
+    progress[m] = target[m] > 0 ? Math.min(logged[m] / target[m], 1) : 1;
+  }
+  return { remaining, reached, overBy, progress };
 }
 
 /** Grams of protein + carbs + fat per 100 g may exceed 100 by at most this much (label rounding). */

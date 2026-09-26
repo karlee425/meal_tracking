@@ -12,24 +12,29 @@
  * (tests/runtime-boundary.test.mjs).
  */
 
+import { DomainError } from '../domain/index.js';
+
 export const DEFAULT_DB_NAME = 'meal-tracking-v2';
 const STORE = 'snapshots';
 const KEY = 'user-data';
 
 const conflict = (message) => Object.assign(new Error(message), { code: 'CONFLICT' });
+/** Browser storage cannot be used at all (missing, disabled, private mode, blocked). */
+const unavailable = (why) => new DomainError('STORAGE_UNAVAILABLE', `browser storage is not available: ${why}`);
 
 export function createIndexedDbSnapshotStore({ dbName = DEFAULT_DB_NAME, indexedDB = globalThis.indexedDB } = {}) {
-  if (!indexedDB) throw new Error('IndexedDB is not available in this environment');
+  if (!indexedDB) throw unavailable('IndexedDB is missing in this environment');
   let dbPromise = null;
 
   function open() {
     if (!dbPromise) {
       dbPromise = new Promise((resolve, reject) => {
-        const req = indexedDB.open(dbName, 1);
+        let req;
+        try { req = indexedDB.open(dbName, 1); } catch (e) { reject(unavailable(e.message)); return; }
         req.onupgradeneeded = () => { if (!req.result.objectStoreNames.contains(STORE)) req.result.createObjectStore(STORE); };
         req.onsuccess = () => resolve(req.result);
-        req.onerror = () => reject(req.error);
-        req.onblocked = () => reject(new Error('the V2 database is blocked by another open version of the app'));
+        req.onerror = () => reject(unavailable(req.error ? req.error.message : 'the database could not be opened'));
+        req.onblocked = () => reject(unavailable('the database is blocked by another open version of the app'));
       });
     }
     return dbPromise;
@@ -44,7 +49,7 @@ export function createIndexedDbSnapshotStore({ dbName = DEFAULT_DB_NAME, indexed
         const tx = db.transaction(STORE, 'readonly');
         const req = tx.objectStore(STORE).get(KEY);
         req.onsuccess = () => resolve(req.result === undefined ? null : req.result);
-        req.onerror = () => reject(req.error);
+        req.onerror = () => reject(unavailable(req.error ? req.error.message : 'the stored data could not be read'));
       });
     },
 

@@ -15,7 +15,7 @@
  * "favorite" field is not written by this layer, so there is one favourites store.
  */
 
-import { DomainError, clone, assertMealType } from './util.js';
+import { DomainError, clone, assertMealType, normText, textMatchScore } from './util.js';
 import { calculateMealMacros as calculate } from './macros.js';
 
 const LIBRARY_ONLY_METADATA = ['legacyId', 'retired', 'isNew'];
@@ -102,6 +102,29 @@ export function createMealsApi(ctx) {
       const meal = typeof mealOrId === 'string' ? findMeal(mealOrId) : mealOrId;
       if (!meal) throw new DomainError('MEAL_NOT_FOUND', `no Meal ${mealOrId}`);
       return describe(meal);
+    },
+
+    /**
+     * Search Meal names, ranked exactly like searchFoods (exact > starts with > every word >
+     * substring; then name, then ID). Retired Library Meals are never returned.
+     *   source: 'saved' | 'library' (default: both)
+     * Returns [{ meal, matchedText, score }], best first. Ingredient labels are not searched.
+     */
+    searchMeals(query, { source, limit = 25 } = {}) {
+      if (source !== undefined && source !== 'saved' && source !== 'library') throw new DomainError('INVALID_ARGUMENT', 'source must be "saved" or "library"');
+      const q = normText(query || '');
+      if (!q) return [];
+      const pool = [
+        ...(source === 'library' ? [] : store.get('savedMeals')),
+        ...(source === 'saved' ? [] : store.get('libraryMeals').filter((m) => !(m.metadata && m.metadata.retired)))
+      ];
+      const results = [];
+      for (const meal of pool) {
+        const score = textMatchScore(q, meal.name);
+        if (score) results.push({ meal, matchedText: meal.name, score });
+      }
+      results.sort((a, b) => b.score - a.score || a.meal.name.localeCompare(b.meal.name) || a.meal.id.localeCompare(b.meal.id));
+      return results.slice(0, limit).map((r) => ({ ...r, meal: clone(r.meal) }));
     },
 
     /** Meals from the most recent Meal Instances that still exist, newest first. */

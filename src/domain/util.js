@@ -74,6 +74,28 @@ export function localDate(d) {
   return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
 }
 
+/**
+ * Search normalisation and ranking, shared by searchFoods and searchMeals so both rank the
+ * same way: lower-case, accents removed, punctuation → spaces.
+ */
+export const normText = (s) => String(s).toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g, '')
+  .replace(/[^a-z0-9%]+/g, ' ').trim();
+
+/**
+ * How well a normalised query matches a text: exact 100 > starts with 80 > every query word
+ * starts a word in the text 60 > substring 40 > no match 0.
+ */
+export function textMatchScore(q, text) {
+  const t = normText(text);
+  if (!q) return 0;
+  if (t === q) return 100;
+  if (t.startsWith(q)) return 80;
+  const words = q.split(' ');
+  if (words.every((w) => t.split(' ').some((tw) => tw.startsWith(w)))) return 60;
+  if (t.includes(q)) return 40;
+  return 0;
+}
+
 /** YYYY-MM-DD ± n days (UTC calendar arithmetic, no time zones involved). */
 export function addDays(date, n) {
   const d = new Date(`${date}T00:00:00Z`);
