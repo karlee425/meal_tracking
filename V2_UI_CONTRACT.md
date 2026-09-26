@@ -234,7 +234,7 @@ Slot coverage (`loggedSlots`) is shown as information ("3 of 5 slots"); it never
 
 #### 4.4.3 Effect on Progress [APPROVED A-21]
 
-Done days count as `complete`: included in complete-day averages; a macro below target on a Done day counts as "missed". Days with food but not Done are `partial`: included only in the "all logged days" average; below target there is "undetermined". No-data days are excluded.
+Done days count as `complete`: included in complete-day averages. Days with food but not Done are `partial`: included only in the "all logged days" average. No-data days are excluded. (The domain also classifies each macro as `hit` / `missed` / `undetermined`; those values feed Progress counts only and are never shown as labels or colours — see §9.4.)
 
 ### 4.5 Day type
 
@@ -610,6 +610,8 @@ Chat or free text; AI-generated meals; macro-fit scores or "best match" ordering
 
 ## 9. Progress
 
+Progress is **descriptive, not judgmental** [APPROVED A-22]: it reports what was logged against each day's own targets, and nothing else. Its headline wording is "Reached on {n} of {m} logged days" [I-56].
+
 ### 9.1 Data [APPROVED A-21]
 
 `getProgress({ period: 7 | 14 | 30, endDate: getToday() })` or `getProgress({ startDate, endDate })`. The result includes `basis`, `counts` (`complete`, `partial`, `noData`), `averages.completeDays` and `averages.loggedDays` (each with `days`, `actual`, `target`), `daysHit` per macro (`hit` / `missed` / `undetermined`), `daily[]` and `trend`.
@@ -638,7 +640,7 @@ Chat or free text; AI-generated meals; macro-fit scores or "best match" ordering
 
 ### 9.4 Never shown [APPROVED A-22]
 
-Energy figures, scores, grades, good/bad day labels, success/failure colours, streaks, body weight, body composition, performance, any other nutrient, per-slot breakdowns, and any average that counts a no-data day as zero.
+Energy figures, scores, grades, rankings, compliance or adherence scores, good/bad day labels, success/failure colours, "missed" / "failed" / "below target" labels or headlines (the domain's `missed` and `undetermined` values are never displayed as words), streaks, body weight, body composition, performance, any other nutrient, per-slot breakdowns, and any average that counts a no-data day as zero.
 
 ---
 
@@ -751,7 +753,7 @@ The UI explains what happened and what to do in plain language. Error codes, IDs
 | **Deleted Custom Food in history** | Logged meals show the snapshot name and values as recorded; no warning on history | APPROVED A-13 |
 | **Saved Meal changed after logging** | Logged meals keep their snapshot; the detail view's source link opens the current recipe | APPROVED A-13 |
 | **Saved Meal deleted after logging** | Logged meals unchanged; source line "From a meal that's since been deleted"; "Edit Saved Meal" hidden | APPROVED A-13 |
-| **Retired Library Meal in Recent/Favourites** | "Retired" marker; still viewable and loggable | IMPLEMENTATION NOTE I-24 |
+| **Retired Library Meal in Log's Recent list or Favourites** | "Retired" marker; still viewable and loggable there. Never in the Coach (A-20). | IMPLEMENTATION NOTE I-24 |
 | **Save failure** | Save-error banner (§4.8), change kept in the app; Try again (`retryPersistence()`); Download a backup | APPROVED A-24 · IMPLEMENTATION NOTE I-17 |
 | **Storage full** | Surfaces as a save failure; banner adds "Your device may be low on storage." | IMPLEMENTATION NOTE I-17 |
 | **Another tab saved more recently** | `conflict` dialog (§4.8): download this tab's data or reload; editing blocked until reload | APPROVED A-24 · IMPLEMENTATION NOTE I-17 |
