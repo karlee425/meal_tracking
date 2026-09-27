@@ -829,3 +829,63 @@ details.option-group > summary.group-title { cursor: pointer; min-height: 44px; 
 .picker-results { margin-top: var(--space-3); }
 .sheet .search-input { width: 100%; }
 .edit-source { margin: var(--space-4) 0 0; padding-top: var(--space-3); border-top: 1px solid var(--border); color: var(--text-muted); font-size: 0.9375rem; }
+
+/* ---------- Progress (§9): descriptive only; status by shape and label, never colour alone ---------- */
+
+.period-selector { margin-bottom: var(--space-2); }
+.progress-range { margin: var(--space-2) 0 0; font-weight: 600; overflow-wrap: anywhere; }
+.basis-line { margin: var(--space-1) 0 0; color: var(--text-muted); font-size: 0.9375rem; }
+.progress-section { margin-top: var(--space-5); }
+.progress-section .section-title { margin: 0 0 var(--space-2); }
+.section-note { margin: 0 0 var(--space-2); color: var(--text-muted); font-size: 0.9375rem; }
+.progress-empty .button { display: inline-flex; align-items: center; text-decoration: none; }
+
+.status-shape { display: inline-block; flex: none; width: 0.75em; height: 0.75em; margin-right: 0.3em; vertical-align: -0.05em; border-radius: 50%; box-sizing: border-box; }
+.status-shape[data-status="complete"] { background: var(--text); }
+.status-shape[data-status="partial"] { border: 2px solid var(--text); }
+.status-shape[data-status="no_data"] { height: 2px; border-radius: 1px; background: var(--text-muted); vertical-align: 0.2em; }
+.coverage-counts { margin: 0 0 var(--space-2); overflow-wrap: anywhere; }
+.coverage-strip { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(2.25rem, 1fr)); gap: var(--space-1); }
+.strip-day { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: var(--space-1) 0; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); font-size: 0.75rem; color: var(--text-muted); }
+.strip-day .status-shape { margin: 0; }
+
+.progress-macros { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 9rem), 1fr)); gap: var(--space-3); }
+.macro-average { padding: var(--space-3); background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); min-width: 0; }
+.macro-average p { margin: 0; overflow-wrap: anywhere; }
+.macro-average[data-macro="protein"], .reached-list [data-macro="protein"], .trend[data-macro="protein"] { --macro-color: #3f6e9e; }
+.macro-average[data-macro="carbs"], .reached-list [data-macro="carbs"], .trend[data-macro="carbs"] { --macro-color: #5b8a4a; }
+.macro-average[data-macro="fat"], .reached-list [data-macro="fat"], .trend[data-macro="fat"] { --macro-color: #9a7a2e; }
+@media (prefers-color-scheme: dark) {
+  .macro-average[data-macro="protein"], .reached-list [data-macro="protein"], .trend[data-macro="protein"] { --macro-color: #8db8e2; }
+  .macro-average[data-macro="carbs"], .reached-list [data-macro="carbs"], .trend[data-macro="carbs"] { --macro-color: #a6cf8f; }
+  .macro-average[data-macro="fat"], .reached-list [data-macro="fat"], .trend[data-macro="fat"] { --macro-color: #e3c06a; }
+}
+.average-primary { margin-top: var(--space-1) !important; display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 var(--space-2); }
+.average-number { font-size: 1.375rem; font-weight: 700; }
+.average-secondary { margin-top: var(--space-1) !important; font-size: 0.875rem; color: var(--text-muted); }
+.reached-list { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-2); }
+.reached-list li { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-1) var(--space-2); overflow-wrap: anywhere; }
+.reached-label { font-weight: 600; }
+
+.trend { margin: var(--space-3) 0 0; }
+.trend-chart { display: block; width: 100%; height: 10rem; padding: var(--space-2) var(--space-1); box-sizing: border-box; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: visible; }
+.trend-chart path { fill: none; vector-effect: non-scaling-stroke; stroke-linecap: round; stroke-linejoin: round; }
+.trend-actual { stroke: var(--macro-color); stroke-width: 2.5; }
+.trend-target { stroke: var(--text-muted); stroke-width: 1.5; stroke-dasharray: 5 4; }
+.trend-marker { stroke: var(--macro-color); stroke-width: 11; }
+.trend-marker-hole { stroke: var(--surface); stroke-width: 5; }
+.trend figcaption { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-1) var(--space-3); margin-top: var(--space-2); font-size: 0.8125rem; color: var(--text-muted); }
+.trend-legend { display: inline-flex; align-items: center; gap: var(--space-1); }
+.legend-line { display: inline-block; width: 1.25rem; height: 0; border-top: 3px solid var(--macro-color); }
+.legend-line.is-target { border-top: 2px dashed var(--text-muted); }
+.trend-dates { flex-basis: 100%; }
+
+.day-list { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-2); }
+.day-row { display: flex; flex-direction: column; gap: var(--space-1); min-height: 44px; padding: var(--space-2) var(--space-3); border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); color: var(--text); text-decoration: none; }
+.day-row:hover { border-color: var(--accent); }
+.day-row-head { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-1) var(--space-2); }
+.day-status-label { display: inline-flex; align-items: center; font-size: 0.875rem; color: var(--text-muted); }
+.nowrap { white-space: nowrap; }
+/* Progress segments wrap rather than overflow at large text sizes. */
+.progress-screen .segment { display: flex; flex-wrap: wrap; max-width: 100%; width: fit-content; }
+.progress-screen .segment-button { flex: 1 1 auto; }

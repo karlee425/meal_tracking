@@ -24,6 +24,10 @@ function fresh() {
       type: 'all', // meal-type filter chip: 'all' or a meal type (filter only, never a slot rule)
       favorites: false // the Favourites chip
     },
+    progress: {
+      period: null, // 7 | 14 | 30, remembered per session (§3.2)
+      macro: null // the trend's macro
+    },
     handoff: null, // { date, highlightId?, openInstanceId?, message? } for Today to pick up once
     mealsHandoff: null // { confirmation } for Meals to show once, after "Log this meal"
   };
