@@ -284,6 +284,7 @@ body {
 }
 .today-head .screen-title { margin: 0; flex-basis: 100%; }
 .today-date { margin: 0; color: var(--text-muted); }
+.today-head .day-menu { margin-left: auto; }
 
 .badge,
 .marker,
@@ -356,7 +357,8 @@ body {
 .macro-remaining { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 var(--space-2); margin-top: var(--space-1); }
 .macro-number { font-size: 1.625rem; font-weight: 700; line-height: 1.15; overflow-wrap: anywhere; }
 .macro-caption { color: var(--text-muted); font-size: 0.875rem; }
-.macro-caption.is-reached { color: var(--text); font-weight: 600; }
+.macro-number.is-reached { font-size: 1.125rem; }
+.macro-over { font-size: 0.875rem; color: var(--text-muted); font-weight: 600; }
 .macro-of { font-size: 0.8125rem; color: var(--text-muted); overflow-wrap: anywhere; }
 .macro-bar {
   display: block;
@@ -615,6 +617,33 @@ details.option-group > summary.group-title { cursor: pointer; min-height: 44px; 
 .ingredients th, .ingredients td { padding: var(--space-2); border-bottom: 1px solid var(--border); text-align: right; }
 .ingredients th[scope="row"], .ingredients thead th:first-child { text-align: left; font-weight: 500; overflow-wrap: anywhere; }
 .ingredients tfoot th, .ingredients tfoot td { font-weight: 700; }
+
+/* §4.1: on compact screens the action bar comes after the slot list and stays in reach just
+   above the tab bar; on wide screens it sits under the macro panel (its place in the DOM).
+   It only pins when the viewport has room (34em tracks the text size), so enlarged text or
+   zoom never leaves a bar covering a third of the screen; it then sits after the slots. */
+@media (max-width: 1023px) {
+  [data-today-body] { display: flex; flex-direction: column; }
+  [data-today-body] > .slots { margin-top: var(--space-5); }
+  [data-today-body] > .action-bar {
+    order: 1;
+    margin: var(--space-3) 0 0;
+  }
+}
+@media (max-width: 1023px) and (min-height: 34em) {
+  [data-today-body] > .action-bar {
+    position: sticky;
+    bottom: calc(var(--nav-height) + env(safe-area-inset-bottom));
+    z-index: 4;
+    margin: 0 calc(var(--space-4) * -1);
+    padding: var(--space-2) var(--space-4);
+    background: var(--bg);
+    border-top: 1px solid var(--border);
+  }
+  [data-today-body] > .slots { margin-bottom: var(--space-4); }
+  /* The toast moves under the header so it never covers the action bar. */
+  .today-message { top: calc(56px + var(--space-2) + env(safe-area-inset-top)); bottom: auto; }
+}
 
 @media (max-width: 420px) {
   .macros { gap: var(--space-2); }

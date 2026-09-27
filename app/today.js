@@ -55,6 +55,15 @@ export function formatDate(isoDate) {
   return new Intl.DateTimeFormat(undefined, { weekday: 'short', day: 'numeric', month: 'short' }).format(new Date(y, mo - 1, d));
 }
 
+// English weekday names, matching the app's English copy (§4.5.1 "What kind of day is Friday?").
+const WEEKDAYS = Object.freeze(['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']);
+
+/** The weekday a local ISO date falls on, e.g. "Friday". */
+export function weekdayName(isoDate) {
+  const [y, mo, d] = isoDate.split('-').map(Number);
+  return WEEKDAYS[new Date(y, mo - 1, d).getDay()];
+}
+
 function formatTime(isoDateTime) {
   return new Intl.DateTimeFormat(undefined, { hour: 'numeric', minute: '2-digit' }).format(new Date(isoDateTime));
 }
@@ -110,17 +119,25 @@ export function defaultSlot(day) {
 function renderMacroPanel(summary) {
   const target = whole(summary.target);
   const remaining = whole(summary.remaining);
+  const overBy = whole(summary.overBy);
   const logged = summary.logged ? whole(summary.logged) : null;
   const items = macros.MACROS.map((key) => {
+    // §4.2 / I-07: short of target → "{remaining} g left"; reached → "Target reached" with
+    // "+{overBy} g" as secondary text. Both values come from getDaySummary; neutral styling.
     const reached = summary.reached[key];
-    const caption = reached ? 'Target reached' : 'left';
+    const headline = reached
+      ? '<p class="macro-remaining"><span class="macro-number is-reached">Target reached</span></p>'
+      : `<p class="macro-remaining"><span class="macro-number">${grams(remaining[key])}</span> <span class="macro-caption">left</span></p>`;
     const ofLine = logged ? `${logged[key]} of ${target[key]} g logged` : 'Nothing logged yet';
-    const speech = `${MACRO_LABELS[key]}: ${String(remaining[key]).replace('-', 'minus ')} grams remaining${reached ? ', target reached' : ''}. ${logged ? `${logged[key]} of ${target[key]} grams logged` : 'Nothing logged yet'}.`;
+    const over = reached ? `<p class="macro-over" data-over-by>+${overBy[key]} g</p>` : '';
+    const standing = reached ? `target reached, ${overBy[key]} grams past` : `${remaining[key]} grams left of ${target[key]}`;
+    const speech = `${MACRO_LABELS[key]}: ${standing}. ${logged ? `${logged[key]} of ${target[key]} grams logged` : 'Nothing logged yet'}.`;
     return `<li class="macro" data-macro="${key}">
 <p class="visually-hidden">${escapeHtml(speech)}</p>
 <div aria-hidden="true">
 <p class="macro-name"><span class="macro-mark">${MACRO_LETTERS[key]}</span>${MACRO_LABELS[key]}</p>
-<p class="macro-remaining"><span class="macro-number">${grams(remaining[key])}</span> <span class="macro-caption${reached ? ' is-reached' : ''}">${caption}</span></p>
+${headline}
+${over}
 <p class="macro-of">${ofLine}</p>
 <span class="macro-bar"><span class="macro-fill" style="--fill: ${summary.progress[key]}"></span></span>
 </div>
@@ -134,10 +151,15 @@ ${items}
 </section>`;
 }
 
-function statusLine(summary) {
-  if (summary.status === 'complete') return 'Done logging';
+/**
+ * §4.1 / §4.4.1. Slot coverage is information only ("3 of 5 slots"): the day's state comes
+ * from summary.status alone, and completion only from Done Logging. The slot note on the
+ * same screen says no slot is required.
+ */
+export function statusLine(summary) {
+  if (summary.status === 'complete') return 'Done logging <span aria-hidden="true">✓</span>';
   if (summary.status === 'no_data') return 'Nothing logged yet';
-  return `${summary.instanceCount} ${summary.instanceCount === 1 ? 'meal' : 'meals'} logged · not marked done`;
+  return `${summary.instanceCount} ${summary.instanceCount === 1 ? 'meal' : 'meals'} logged · ${summary.loggedSlots.length} of ${constants.MEAL_SLOTS.length} slots`;
 }
 
 function renderActionBar(summary) {
@@ -192,7 +214,7 @@ function renderChooser(model) {
 <span class="day-type-targets">${macroLine(model.currentTargets[type])}</span>
 </button></li>`).join('\n');
   return `<section class="chooser" aria-labelledby="chooser-heading">
-<h2 id="chooser-heading" class="section-title">What kind of day is today?</h2>
+<h2 id="chooser-heading" class="section-title">What kind of day is ${weekdayName(model.date)}?</h2>
 <p class="chooser-note">Your targets for today come from the day type you choose.</p>
 <ul class="day-type-options">
 ${options}
@@ -208,6 +230,7 @@ export function renderToday(model) {
 <h1 id="screen-title" class="screen-title" tabindex="-1">Today</h1>
 <p class="today-date">${escapeHtml(formatDate(model.date))}${summary.status === 'complete' ? ' <span class="badge">Done</span>' : ''}</p>
 ${type ? `<button type="button" class="chip" data-action="day-type" aria-label="Day type: ${type}. Change day type">${type}</button>` : ''}
+${summary.exists ? '<button type="button" class="icon-button day-menu" data-action="day-menu" aria-haspopup="dialog" aria-label="More actions for this day"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></svg></button>' : ''}
 </div>`;
   if (!summary.exists) {
     return `${head}
@@ -216,7 +239,7 @@ ${renderSlots(model, { enabled: false })}`;
   }
   return `${head}
 ${renderMacroPanel(summary)}
-<p class="day-status">${statusLine(summary)}</p>
+<p class="day-status" data-day-status>${statusLine(summary)}</p>
 ${renderActionBar(summary)}
 ${renderSlots(model, { enabled: true })}`;
 }
@@ -275,7 +298,7 @@ ${errorSlot}
   const primary = current
     ? `<button type="button" class="button primary" data-action="change-day-type"${!selected || selected === current ? ' disabled' : ''}>${selected && selected !== current ? `Change to ${DAY_TYPE_LABELS[selected]}` : 'Change day type'}</button>`
     : '<button type="button" class="button primary" data-action="choose-day-type-confirm"' + (selected ? '' : ' disabled') + '>Set day type</button>';
-  return `${dialogHead(current ? 'Day type' : 'What kind of day is today?', current ? 'Changing it never changes your logged food.' : (continueTo ? 'Choose a day type first, then add your meal.' : ''))}
+  return `${dialogHead(current ? 'Day type' : `What kind of day is ${weekdayName(model.date)}?`, current ? 'Changing it never changes your logged food.' : (continueTo ? 'Choose a day type first, then add your meal.' : ''))}
 <fieldset class="day-type-choice"><legend class="visually-hidden">Day type</legend>
 ${options}
 </fieldset>
@@ -429,6 +452,26 @@ ${errorSlot}
 <div class="sheet-actions"><button type="button" class="button" data-action="close" data-autofocus>Cancel</button><button type="button" class="button danger" data-action="confirm-delete">Delete logged meal</button></div>`;
 }
 
+/** Day header overflow (§4.6): the day-level actions. */
+export function renderDayMenuDialog() {
+  return `${dialogHead('This day')}
+<div class="sheet-actions stacked">
+<button type="button" class="button danger" data-action="clear-day">Clear this day</button>
+<button type="button" class="button" data-action="close" data-autofocus>Cancel</button>
+</div>`;
+}
+
+/** Clear a Day (§4.6) → deleteDay(date). Destructive, so Cancel takes focus. */
+export function renderClearDayDialog({ date, instanceCount }) {
+  const what = instanceCount === 0 ? 'its day type'
+    : instanceCount === 1 ? 'its day type and its 1 logged meal'
+      : `its day type and all ${instanceCount} logged meals`;
+  return `${dialogHead(`Clear ${formatDate(date)}?`)}
+<p>This deletes ${what}. Other days aren't affected.</p>
+${errorSlot}
+<div class="sheet-actions"><button type="button" class="button" data-action="close" data-autofocus>Cancel</button><button type="button" class="button danger" data-action="confirm-clear-day">Clear day</button></div>`;
+}
+
 /** After changing grams of a meal from a Saved Meal (§4.3.4, A-14). */
 export function renderFollowUpDialog({ savedName, mode, newName }) {
   if (mode === 'name') {
@@ -568,6 +611,11 @@ export function createTodayActions(app) {
       const reopened = wasDone && !app.getDaySummary(date()).loggingComplete;
       return { reopened, message: reopened ? 'Deleted. The day is no longer marked done, because nothing is logged.' : 'Deleted.' };
     },
+    clearDay() {
+      const date0 = date();
+      app.deleteDay(date0);
+      return { message: `Cleared ${formatDate(date0)}. Other days weren't affected.` };
+    },
     setDone(done) {
       app.setDayLoggingComplete(date(), done);
       return { message: done ? 'Marked today as done. It now counts as a complete day in Progress.' : 'Reopened today.' };
@@ -671,6 +719,8 @@ export const todayScreen = {
         case 'move': dialog.innerHTML = renderMoveDialog(ui); break;
         case 'delete': dialog.innerHTML = renderDeleteDialog(ui); break;
         case 'followup': dialog.innerHTML = renderFollowUpDialog(ui); break;
+        case 'day-menu': dialog.innerHTML = renderDayMenuDialog(); break;
+        case 'clear-day': dialog.innerHTML = renderClearDayDialog(ui); break;
         case 'coach': dialog.innerHTML = renderCoachDialog(ui); break;
         default: break;
       }
@@ -860,6 +910,9 @@ export const todayScreen = {
           }
           case 'delete-instance': openDialog({ type: 'delete', instance: ui.instance, date: model.date }); break;
           case 'confirm-delete': afterChange(actions.deleteInstance(ui.instance.id)); break;
+          case 'day-menu': openDialog({ type: 'day-menu' }); break;
+          case 'clear-day': openDialog({ type: 'clear-day', date: model.date, instanceCount: model.summary.instanceCount }); break;
+          case 'confirm-clear-day': afterChange(actions.clearDay()); break;
           case 'done': afterChange(actions.setDone(true)); break;
           case 'reopen': afterChange(actions.setDone(false)); break;
           case 'followup-name': ui.mode = 'name'; drawDialog(); dialog.querySelector('[data-new-name]').focus(); break;

@@ -14,7 +14,7 @@ import { createFileAdapter } from '../src/node/file-adapter.js';
 import {
   todayModel, renderToday, createTodayActions, renderDayTypeDialog, renderCoachDialog, renderInstanceDialog,
   renderMealConfirmDialog, renderPickerDialog, pickerData, defaultSlot, parseGrams, grams, macroLine, afterLine,
-  coachVisibleCount, SLOT_LABELS, DAY_TYPE_LABELS
+  coachVisibleCount, SLOT_LABELS, DAY_TYPE_LABELS, statusLine, weekdayName, renderClearDayDialog
 } from '../app/today.js';
 
 const TODAY = '2026-09-27';
@@ -39,7 +39,8 @@ test('Today — first use: choose a day type (no default), five empty slots, no 
   const { app } = setup();
   const html = renderToday(todayModel(app));
   assert.match(html, /<h1 id="screen-title"[^>]*>Today<\/h1>/);
-  assert.match(html, /What kind of day is today\?/);
+  assert.match(html, /What kind of day is Sunday\?/, 'the chooser names the weekday (§4.5.1); 2026-09-27 is a Sunday');
+  assert.match(renderDayTypeDialog({ model: todayModel(app), selected: null }), /What kind of day is Sunday\?/, 'the chooser sheet too');
   const current = app.getAllCurrentTargets();
   for (const type of ['lift', 'long_run', 'rest']) {
     assert.match(html, new RegExp(`data-type="${type}"`));
@@ -72,21 +73,46 @@ test('Today — day type, targets, logged and remaining all come from the domain
   }
   const order = [...html.matchAll(/<li class="macro" data-macro="([a-z]+)"/g)].map((m) => m[1]);
   assert.deepEqual(order, ['protein', 'carbs', 'fat']);
-  assert.match(html, /1 meal logged · not marked done/);
+  assert.match(html, /1 meal logged · 1 of 5 slots/);
 });
 
-test('Today — negative remaining stays negative and neutral', () => {
+test('Today — below, exactly at and above target: "{n} g left" / "Target reached" + "+{overBy} g" (§4.2, I-07)', () => {
   const { app, actions } = setup();
   actions.chooseDayType('rest');
   app.logFood({ date: TODAY, mealSlot: 'dinner', foodId: 'food_core_fage_0_greek_yogurt', quantity: 2000 });
+  app.logFood({ date: TODAY, mealSlot: 'lunch', foodId: 'food_core_banana', quantity: 100 });
+  // Make fat land exactly on target, through the domain (current targets → explicit apply).
+  app.updateCurrentTargets('rest', { fat: app.getDaySummary(TODAY).logged.fat });
+  app.applyCurrentTargetsToToday();
   const s = app.getDaySummary(TODAY);
-  const rem = whole(s.remaining).protein;
-  assert.ok(rem < 0, 'fixture is past the protein target');
+  assert.deepEqual(s.reached, { protein: true, carbs: false, fat: true }, 'fixture: protein above, carbs below, fat exactly at');
+  assert.ok(s.overBy.protein > 0 && s.overBy.fat === 0 && s.remaining.fat === 0);
+
   const html = renderToday(todayModel(app));
-  assert.ok(html.includes(`<span class="macro-number">−${String(rem).slice(1)} g</span>`), 'shown as a negative number, not clamped to 0');
-  assert.match(html, /is-reached">Target reached</);
-  assert.ok(html.includes(`minus ${String(rem).slice(1)} grams remaining, target reached`), 'screen readers hear the same');
+  const block = (key) => html.slice(html.indexOf(`data-macro="${key}"`), html.indexOf('</li>', html.indexOf(`data-macro="${key}"`)));
+  const over = whole(s.overBy);
+  const r = whole(s.remaining);
+  const l = whole(s.logged);
+  const tg = whole(s.target);
+
+  // Below target: remaining grams with "left"; no +overBy.
+  assert.ok(block('carbs').includes(`<span class="macro-number">${grams(r.carbs)}</span> <span class="macro-caption">left</span>`));
+  assert.ok(!block('carbs').includes('data-over-by') && !block('carbs').includes('Target reached'));
+  assert.ok(block('carbs').includes(`Carbs: ${r.carbs} grams left of ${tg.carbs}.`), 'screen-reader phrase (§14)');
+
+  // Above target: "Target reached" + "+{overBy} g" from the domain's overBy; the negative remaining is not shown.
+  assert.ok(block('protein').includes('<span class="macro-number is-reached">Target reached</span>'));
+  assert.ok(block('protein').includes(`<p class="macro-over" data-over-by>+${over.protein} g</p>`), 'the contract\'s +overBy, not clamped');
+  assert.ok(!block('protein').includes('−'), 'no negative remaining on screen once reached');
+  assert.ok(block('protein').includes(`${l.protein} of ${tg.protein} g logged`), 'logged of target stays visible');
+  assert.ok(block('protein').includes(`Protein: target reached, ${over.protein} grams past.`), 'screen-reader phrase (§14)');
+
+  // Exactly at target: reached, +0 g.
+  assert.ok(block('fat').includes('Target reached'));
+  assert.ok(block('fat').includes('<p class="macro-over" data-over-by>+0 g</p>'));
+
   assert.ok(!/\b(over|missed|failed|below target|bad|good day|score|compliance|adherence)\b/i.test(text(html)), 'no judgmental language');
+  assert.ok(!/warning|danger/.test(html.slice(html.indexOf('macro-panel'), html.indexOf('</section>', html.indexOf('macro-panel')))), 'neutral styling');
 });
 
 test('Today — Night Snack is visibly optional; slots never decide completion', () => {
@@ -95,14 +121,23 @@ test('Today — Night Snack is visibly optional; slots never decide completion',
   for (const slot of ['breakfast', 'lunch', 'snack_afternoon', 'dinner']) app.logFood({ date: TODAY, mealSlot: slot, foodId: 'food_core_banana', quantity: 100 });
   let html = renderToday(todayModel(app));
   assert.match(text(html), /No slot is required, including Night Snack/);
-  assert.match(html, /4 meals logged · not marked done/);
+  assert.match(html, /4 meals logged · 4 of 5 slots/, 'slot coverage shown as information (§4.4.1)');
   assert.ok(!/incomplete|required slot|missing/i.test(text(html)));
   assert.match(html, /data-action="done">Done Logging</, 'Done Logging available with Night Snack empty');
 
   // All five slots filled is still not done: completion is explicit.
   app.logFood({ date: TODAY, mealSlot: 'snack_night', foodId: 'food_core_banana', quantity: 50 });
   assert.equal(app.getDaySummary(TODAY).status, 'partial');
-  assert.match(renderToday(todayModel(app)), /5 meals logged · not marked done/);
+  html = renderToday(todayModel(app));
+  assert.match(html, /5 meals logged · 5 of 5 slots/);
+  assert.match(html, /data-action="done">Done Logging</, 'five of five slots is still not done');
+  assert.ok(!/Done logging/.test(html) && !/class="badge"/.test(html), 'no done state from slot coverage');
+
+  // Status line: the day's state decides the wording; slot coverage never does.
+  const base = app.getDaySummary(TODAY);
+  assert.equal(statusLine({ ...base, status: 'no_data', instanceCount: 0, loggedSlots: [] }), 'Nothing logged yet');
+  assert.equal(statusLine({ ...base, status: 'partial', instanceCount: 1, loggedSlots: ['breakfast'] }), '1 meal logged · 1 of 5 slots');
+  assert.match(statusLine({ ...base, status: 'complete', instanceCount: 1, loggedSlots: ['breakfast'] }), /^Done logging /, 'Done with one slot: completion comes from Done Logging alone');
 });
 
 /* ---------------- day type ---------------- */
@@ -247,12 +282,38 @@ test('Today — Done Logging is explicit; empty Night Snack does not prevent it'
   assert.equal(done.message, 'Marked today as done. It now counts as a complete day in Progress.');
   assert.equal(app.getDaySummary(TODAY).status, 'complete');
   html = renderToday(todayModel(app));
-  assert.match(html, /<p class="day-status">Done logging<\/p>/);
+  assert.match(html, /<p class="day-status" data-day-status>Done logging <span aria-hidden="true">✓<\/span><\/p>/);
   assert.match(html, /<span class="badge">Done<\/span>/);
   assert.match(html, /data-action="reopen">Reopen day</);
   assert.match(html, /Still eating\? Build my next meal/);
   actions.setDone(false);
   assert.equal(app.getDaySummary(TODAY).status, 'partial');
+});
+
+test('Today — Clear this day: header overflow → confirmation → deleteDay; other days untouched (§4.6)', () => {
+  const { app, actions } = setup();
+  assert.ok(!/data-action="day-menu"/.test(renderToday(todayModel(app))), 'nothing to clear before a Day exists');
+  app.createDay('2026-09-26', 'long_run');
+  app.logFood({ date: '2026-09-26', mealSlot: 'lunch', foodId: 'food_core_banana', quantity: 100 });
+  const yesterday = JSON.stringify(app.getDay('2026-09-26'));
+  actions.chooseDayType('lift');
+  actions.logMeal({ mealId: 'meal_library_B1', mealSlot: 'breakfast' });
+  app.logFood({ date: TODAY, mealSlot: 'snack_afternoon', foodId: 'food_core_banana', quantity: 100 });
+  assert.match(renderToday(todayModel(app)), /data-action="day-menu" aria-haspopup="dialog" aria-label="More actions for this day"/);
+
+  const confirm = renderClearDayDialog({ date: TODAY, instanceCount: app.getDaySummary(TODAY).instanceCount });
+  assert.match(text(confirm), /This deletes its day type and all 2 logged meals\. Other days aren't affected\./);
+  assert.ok(confirm.indexOf('data-autofocus') < confirm.indexOf('confirm-clear-day'), 'Cancel takes focus on a destructive dialog');
+  assert.match(text(renderClearDayDialog({ date: TODAY, instanceCount: 1 })), /its day type and its 1 logged meal\./);
+  assert.match(text(renderClearDayDialog({ date: TODAY, instanceCount: 0 })), /This deletes its day type\. Other/);
+
+  const result = actions.clearDay();
+  assert.match(result.message, /^Cleared .+\. Other days weren't affected\.$/);
+  assert.equal(app.getDay(TODAY), null, 'the Day is gone');
+  assert.equal(JSON.stringify(app.getDay('2026-09-26')), yesterday, 'other days untouched');
+  assert.match(renderToday(todayModel(app)), /What kind of day is Sunday\?/, 'Today returns to the chooser');
+  const src = fs.readFileSync(path.join(ROOT, 'app/today.js'), 'utf8');
+  assert.match(src, /app\.deleteDay\(/, 'uses the existing domain operation');
 });
 
 /* ---------------- Coach ---------------- */
@@ -311,6 +372,7 @@ test('Today — small presentation helpers', () => {
   assert.equal(defaultSlot(null), 'breakfast');
   assert.equal(defaultSlot({ mealInstances: [{ mealSlot: 'lunch', loggedAt: '2026-09-27T12:00:00Z' }, { mealSlot: 'breakfast', loggedAt: '2026-09-27T08:00:00Z' }] }), 'snack_afternoon');
   assert.deepEqual(Object.keys(DAY_TYPE_LABELS), ['lift', 'long_run', 'rest']);
+  assert.deepEqual(['2026-09-25', '2026-09-27', '2026-09-28', '2026-03-01'].map(weekdayName), ['Friday', 'Sunday', 'Monday', 'Sunday'], 'local calendar date, not UTC');
 });
 
 /* ---------------- safety ---------------- */
