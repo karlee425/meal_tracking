@@ -1,0 +1,894 @@
+/*
+ * today.js — the Today screen (V2_UI_CONTRACT.md §4, with the Coach of §8 and the logging
+ * sheets of §5.4–5.5 that Today opens).
+ *
+ * Layers, so the domain stays the only place anything is calculated or decided:
+ *   todayModel(app)            reads domain state for the local date
+ *   render…(…)                 pure HTML from domain results (formatting only)
+ *   createTodayActions(app)    thin wrappers around domain operations, returning messages
+ *   todayScreen.mount(main)    DOM wiring: events, dialogs, focus
+ *
+ * Every number shown comes from a domain call (getDaySummary, previews, Coach `after`,
+ * snapshot totals) and is only rounded for display with macros.roundMacros.
+ */
+
+import { macros, constants } from '../src/domain/index.js';
+import { escapeHtml } from './shell.js';
+
+/* ---------------- labels and formatting ---------------- */
+
+export const SLOT_LABELS = Object.freeze({
+  breakfast: 'Breakfast',
+  lunch: 'Lunch',
+  snack_afternoon: 'Afternoon Snack',
+  dinner: 'Dinner',
+  snack_night: 'Night Snack'
+});
+
+export const DAY_TYPE_LABELS = Object.freeze({ lift: 'Lift', long_run: 'Long Run', rest: 'Rest' });
+
+const MACRO_LABELS = Object.freeze({ protein: 'Protein', carbs: 'Carbs', fat: 'Fat' });
+const MACRO_LETTERS = Object.freeze({ protein: 'P', carbs: 'C', fat: 'F' });
+
+const whole = (values) => macros.roundMacros(values, 0);
+const oneDecimal = (values) => macros.roundMacros(values, 1);
+
+/** A gram figure for display: the domain's (rounded) number, with a true minus sign. */
+export function grams(value) {
+  return `${String(value).replace('-', '−')} g`;
+}
+
+/** "P 42 · C 60 · F 12 g" from a rounded {protein, carbs, fat}. */
+export function macroLine(values) {
+  const r = whole(values);
+  return `P ${String(r.protein).replace('-', '−')} · C ${String(r.carbs).replace('-', '−')} · F ${String(r.fat).replace('-', '−')} g`;
+}
+
+/** The same line for screen readers. */
+function macroSpeech(values) {
+  const r = whole(values);
+  return macros.MACROS.map((key) => `${MACRO_LABELS[key]} ${r[key]} grams`).join(', ');
+}
+
+export function formatDate(isoDate) {
+  const [y, mo, d] = isoDate.split('-').map(Number);
+  return new Intl.DateTimeFormat(undefined, { weekday: 'short', day: 'numeric', month: 'short' }).format(new Date(y, mo - 1, d));
+}
+
+function formatTime(isoDateTime) {
+  return new Intl.DateTimeFormat(undefined, { hour: 'numeric', minute: '2-digit' }).format(new Date(isoDateTime));
+}
+
+/** Text typed into a grams field → a number, or null if it isn't a usable weight. */
+export function parseGrams(text) {
+  const t = String(text == null ? '' : text).trim().replace(',', '.');
+  if (!t) return null;
+  const n = Number(t);
+  return Number.isFinite(n) && n > 0 ? n : null;
+}
+
+/* ---------------- model ---------------- */
+
+/** Everything Today shows, read from the domain for the local date. */
+export function todayModel(app) {
+  const date = app.getToday();
+  const summary = app.getDaySummary(date);
+  const day = summary.exists ? app.getDay(date) : null;
+  const bySlot = {};
+  for (const slot of constants.MEAL_SLOTS) bySlot[slot] = day ? day.mealInstances.filter((mi) => mi.mealSlot === slot) : [];
+  const sourceOf = {};
+  for (const mi of day ? day.mealInstances : []) {
+    const meal = mi.sourceMealId ? app.getMeal(mi.sourceMealId) : null;
+    sourceOf[mi.id] = mi.sourceMealId ? (meal ? meal.source : 'deleted') : null;
+  }
+  return {
+    date,
+    summary,
+    day,
+    bySlot,
+    sourceOf,
+    currentTargets: app.getAllCurrentTargets()
+  };
+}
+
+/**
+ * The slot a new meal defaults to: the first empty slot after the most recently logged one
+ * (§8.4). A default only — the user can pick any slot, and it never changes any number.
+ */
+export function defaultSlot(day) {
+  const slots = constants.MEAL_SLOTS;
+  const instances = day ? day.mealInstances : [];
+  if (!instances.length) return slots[0];
+  const latest = instances.reduce((a, b) => (b.loggedAt > a.loggedAt ? b : a));
+  const used = new Set(instances.map((mi) => mi.mealSlot));
+  for (let k = slots.indexOf(latest.mealSlot); k < slots.length; k++) if (!used.has(slots[k])) return slots[k];
+  return latest.mealSlot;
+}
+
+/* ---------------- screen rendering ---------------- */
+
+function renderMacroPanel(summary) {
+  const target = whole(summary.target);
+  const remaining = whole(summary.remaining);
+  const logged = summary.logged ? whole(summary.logged) : null;
+  const items = macros.MACROS.map((key) => {
+    const reached = summary.reached[key];
+    const caption = reached ? 'Target reached' : 'left';
+    const ofLine = logged ? `${logged[key]} of ${target[key]} g logged` : 'Nothing logged yet';
+    const speech = `${MACRO_LABELS[key]}: ${String(remaining[key]).replace('-', 'minus ')} grams remaining${reached ? ', target reached' : ''}. ${logged ? `${logged[key]} of ${target[key]} grams logged` : 'Nothing logged yet'}.`;
+    return `<li class="macro" data-macro="${key}">
+<p class="visually-hidden">${escapeHtml(speech)}</p>
+<div aria-hidden="true">
+<p class="macro-name"><span class="macro-mark">${MACRO_LETTERS[key]}</span>${MACRO_LABELS[key]}</p>
+<p class="macro-remaining"><span class="macro-number">${grams(remaining[key])}</span> <span class="macro-caption${reached ? ' is-reached' : ''}">${caption}</span></p>
+<p class="macro-of">${ofLine}</p>
+<span class="macro-bar"><span class="macro-fill" style="--fill: ${summary.progress[key]}"></span></span>
+</div>
+</li>`;
+  }).join('\n');
+  return `<section class="macro-panel" aria-labelledby="macro-heading">
+<h2 id="macro-heading" class="visually-hidden">What's left today</h2>
+<ul class="macros">
+${items}
+</ul>
+</section>`;
+}
+
+function statusLine(summary) {
+  if (summary.status === 'complete') return 'Done logging';
+  if (summary.status === 'no_data') return 'Nothing logged yet';
+  return `${summary.instanceCount} ${summary.instanceCount === 1 ? 'meal' : 'meals'} logged · not marked done`;
+}
+
+function renderActionBar(summary) {
+  const done = summary.status === 'complete';
+  const nothing = summary.instanceCount === 0;
+  const coach = done
+    ? '<button type="button" class="link-button" data-action="coach">Still eating? Build my next meal</button>'
+    : '<button type="button" class="button primary" data-action="coach">Build My Next Meal</button>';
+  const doneButton = done
+    ? '<button type="button" class="button" data-action="reopen">Reopen day</button>'
+    : `<button type="button" class="button" data-action="done"${nothing ? ' disabled aria-describedby="done-hint"' : ''}>Done Logging</button>${nothing ? '<span id="done-hint" class="hint">Log something first</span>' : ''}`;
+  return `<div class="action-bar">
+${coach}
+<button type="button" class="button" data-action="add">Add</button>
+${doneButton}
+</div>`;
+}
+
+function sourceMarker(source) {
+  if (source === 'saved') return '<span class="marker">Saved</span>';
+  if (source === 'library') return '<span class="marker">Library</span>';
+  return '';
+}
+
+function renderSlots(model, { enabled }) {
+  const slots = constants.MEAL_SLOTS.map((slot) => {
+    const rows = model.bySlot[slot];
+    const list = rows.length
+      ? `<ul class="meal-rows">${rows.map((mi) => `<li><button type="button" class="meal-row" data-action="open-instance" data-id="${escapeHtml(mi.id)}" aria-label="${escapeHtml(`${mi.mealName}, ${SLOT_LABELS[slot]}, ${macroSpeech(mi.totals)}`)}">
+<span class="meal-name">${escapeHtml(mi.mealName)}</span>${sourceMarker(model.sourceOf[mi.id])}
+<span class="meal-macros">${macroLine(mi.totals)}</span>
+</button></li>`).join('\n')}</ul>`
+      : '<p class="slot-empty">Not logged</p>';
+    return `<section class="slot" aria-labelledby="slot-${slot}">
+<div class="slot-head">
+<h3 id="slot-${slot}" class="slot-name">${SLOT_LABELS[slot]}</h3>
+<button type="button" class="icon-button" data-action="add" data-slot="${slot}" aria-label="Add to ${SLOT_LABELS[slot]}"${enabled ? '' : ' data-needs-day="true"'}><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 5v14M5 12h14"/></svg></button>
+</div>
+${list}
+</section>`;
+  }).join('\n');
+  return `<section class="slots" aria-labelledby="slots-heading">
+<h2 id="slots-heading" class="section-title">Meals</h2>
+<p class="slots-note">Slots are just where you log food. An empty slot means nothing's logged there, not that you ate nothing. No slot is required, including Night Snack.</p>
+${slots}
+</section>`;
+}
+
+function renderChooser(model) {
+  const options = constants.DAY_TYPES.map((type) => `<li><button type="button" class="day-type-option" data-action="choose-day-type" data-type="${type}">
+<span class="day-type-name">${DAY_TYPE_LABELS[type]}</span>
+<span class="day-type-targets">${macroLine(model.currentTargets[type])}</span>
+</button></li>`).join('\n');
+  return `<section class="chooser" aria-labelledby="chooser-heading">
+<h2 id="chooser-heading" class="section-title">What kind of day is today?</h2>
+<p class="chooser-note">Your targets for today come from the day type you choose.</p>
+<ul class="day-type-options">
+${options}
+</ul>
+</section>`;
+}
+
+/** The Today screen body for a model. */
+export function renderToday(model) {
+  const { summary } = model;
+  const type = summary.exists ? DAY_TYPE_LABELS[summary.dayType] : null;
+  const head = `<div class="today-head">
+<h1 id="screen-title" class="screen-title" tabindex="-1">Today</h1>
+<p class="today-date">${escapeHtml(formatDate(model.date))}${summary.status === 'complete' ? ' <span class="badge">Done</span>' : ''}</p>
+${type ? `<button type="button" class="chip" data-action="day-type" aria-label="Day type: ${type}. Change day type">${type}</button>` : ''}
+</div>`;
+  if (!summary.exists) {
+    return `${head}
+${renderChooser(model)}
+${renderSlots(model, { enabled: false })}`;
+  }
+  return `${head}
+${renderMacroPanel(summary)}
+<p class="day-status">${statusLine(summary)}</p>
+${renderActionBar(summary)}
+${renderSlots(model, { enabled: true })}`;
+}
+
+/* ---------------- dialog rendering ---------------- */
+
+function slotRadios(name, selected) {
+  return `<fieldset class="slot-choice">
+<legend>Slot</legend>
+${constants.MEAL_SLOTS.map((slot) => `<label class="radio-chip"><input type="radio" name="${name}" value="${slot}"${slot === selected ? ' checked' : ''}><span>${SLOT_LABELS[slot]}</span></label>`).join('\n')}
+</fieldset>`;
+}
+
+/** "After this: P a · C b · F c left" (or target reached) from a domain standing. */
+export function afterLine(standing) {
+  if (!standing) return '';
+  const r = whole(standing.remaining);
+  const parts = macros.MACROS.map((key) => `${MACRO_LETTERS[key]} ${standing.reached[key] ? 'target reached' : `${String(r[key]).replace('-', '−')} g left`}`);
+  return `After this: ${parts.join(' · ')}`;
+}
+
+const dialogHead = (title, subtitle = '') => `<header class="sheet-head">
+<h2 id="sheet-title" class="sheet-title">${escapeHtml(title)}</h2>
+${subtitle ? `<p class="sheet-subtitle">${escapeHtml(subtitle)}</p>` : ''}
+<button type="button" class="icon-button" data-action="close" aria-label="Close"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+</header>`;
+
+const errorSlot = '<p class="sheet-error" role="alert" data-error hidden></p>';
+
+/** Day type: first choice, or a change with its preview (§4.5). */
+export function renderDayTypeDialog({ model, selected, preview, applyPreview, confirmingApply, continueTo }) {
+  const current = model.summary.exists ? model.summary.dayType : null;
+  if (confirmingApply && applyPreview) {
+    return `${dialogHead('Use current targets for today?')}
+<p>${DAY_TYPE_LABELS[applyPreview.dayType]} targets for today become ${macroLine(applyPreview.to)} (now ${macroLine(applyPreview.from)}).</p>
+<p>Logged food, today's day type and other days don't change.</p>
+${errorSlot}
+<div class="sheet-actions"><button type="button" class="button primary" data-action="apply-targets">Use for today</button><button type="button" class="button" data-action="close">Cancel</button></div>`;
+  }
+  const options = constants.DAY_TYPES.map((type) => `<label class="radio-row"><input type="radio" name="day-type" value="${type}"${type === (selected || current) ? ' checked' : ''}>
+<span class="radio-text"><span class="day-type-name">${DAY_TYPE_LABELS[type]}${type === current ? ' <span class="marker">Current</span>' : ''}</span>
+<span class="day-type-targets">${macroLine(model.currentTargets[type])}</span></span></label>`).join('\n');
+  let detail = '';
+  if (current && preview && !preview.noOp) {
+    const note = preview.to.targetSource === 'restored'
+      ? `Uses the ${DAY_TYPE_LABELS[preview.to.dayType]} targets this day had before.`
+      : `Uses your current ${DAY_TYPE_LABELS[preview.to.dayType]} targets.`;
+    detail = `<div class="preview" aria-live="polite">
+<p>Targets: ${macroLine(preview.from.target)} → ${macroLine(preview.to.target)}</p>
+<p>${note} Logged food stays exactly the same.</p>
+</div>`;
+  }
+  const applyLine = current && applyPreview && applyPreview.applies
+    ? `<p class="apply-note">Your ${DAY_TYPE_LABELS[current]} targets have changed since today was set up. <button type="button" class="link-button" data-action="confirm-apply-targets">Use current targets for today</button></p>`
+    : '';
+  const primary = current
+    ? `<button type="button" class="button primary" data-action="change-day-type"${!selected || selected === current ? ' disabled' : ''}>${selected && selected !== current ? `Change to ${DAY_TYPE_LABELS[selected]}` : 'Change day type'}</button>`
+    : '<button type="button" class="button primary" data-action="choose-day-type-confirm"' + (selected ? '' : ' disabled') + '>Set day type</button>';
+  return `${dialogHead(current ? 'Day type' : 'What kind of day is today?', current ? 'Changing it never changes your logged food.' : (continueTo ? 'Choose a day type first, then add your meal.' : ''))}
+<fieldset class="day-type-choice"><legend class="visually-hidden">Day type</legend>
+${options}
+</fieldset>
+${detail}
+${applyLine}
+${errorSlot}
+<div class="sheet-actions">${primary}<button type="button" class="button" data-action="close">Cancel</button></div>`;
+}
+
+function mealOption(item) {
+  const valid = item.calc.valid;
+  return `<li class="option-row">
+<button type="button" class="option-main" data-action="pick-meal" data-meal="${escapeHtml(item.meal.id)}"${valid ? '' : ' disabled aria-describedby="fix-' + escapeHtml(item.meal.id) + '"'}>
+<span class="meal-name">${escapeHtml(item.meal.name)}</span>${item.meal.source === 'library' ? '<span class="marker">Library</span>' : ''}${item.isFavorite ? '<span class="marker" aria-label="Favourite">★</span>' : ''}
+<span class="meal-macros">${valid ? macroLine(item.calc.totals) : `<span id="fix-${escapeHtml(item.meal.id)}">Needs a fix before it can be logged</span>`}</span>
+</button></li>`;
+}
+
+/** Add a meal: Saved Meals first, then the Library (§5.3 Meals, from Today). */
+export function pickerData(app) {
+  const prefs = app.getPreferences();
+  const fav = new Set(prefs.favoriteMeals);
+  const wrap = (meal) => ({ meal, isFavorite: fav.has(meal.id), calc: app.calculateMealMacros(meal.id) });
+  const saved = app.getSavedMeals().map(wrap);
+  return {
+    favorites: saved.filter((x) => x.isFavorite),
+    recent: app.getRecentMeals().map(wrap),
+    saved,
+    library: app.getLibraryMeals().map(wrap)
+  };
+}
+
+export function renderPickerDialog({ data, slot }) {
+  const group = (title, items, id) => (items.length ? `<section class="option-group" aria-labelledby="${id}"><h3 id="${id}" class="group-title">${title}</h3><ul class="options">${items.map(mealOption).join('\n')}</ul></section>` : '');
+  const noSaved = data.saved.length === 0;
+  return `${dialogHead(slot ? `Add to ${SLOT_LABELS[slot]}` : 'Add a meal')}
+${noSaved ? '<p class="empty-note">No saved meals yet. Start with a meal from the Library.</p>' : ''}
+${group('Favourite saved meals', data.favorites, 'grp-fav')}
+${group('Recently logged', data.recent, 'grp-recent')}
+${group('Saved meals', data.saved, 'grp-saved')}
+<details class="option-group"${noSaved ? ' open' : ''}>
+<summary class="group-title">Library (${data.library.length})</summary>
+<ul class="options">${data.library.map(mealOption).join('\n')}</ul>
+</details>`;
+}
+
+/** Log a meal: totals, what's left after, slot, and "adjust grams for this time" (§5.4). */
+export function renderMealConfirmDialog({ preview, slot, adjusting, quantities, foods }) {
+  const title = preview.mealName || 'Log meal';
+  const body = adjusting
+    ? `<fieldset class="adjust"><legend>Grams for this time</legend>
+${preview.ingredients.map((ing, i) => `<div class="adjust-row"><label for="adj-${i}">${escapeHtml(ing.foodName || ing.foodId)} <span class="state-chip">${escapeHtml(foods[ing.foodId] ? foods[ing.foodId].state : '')}</span></label>
+<span class="grams-input"><input id="adj-${i}" type="text" inputmode="decimal" autocomplete="off" data-quantity-index="${i}" value="${escapeHtml(quantities[i])}"><span aria-hidden="true">g</span></span></div>`).join('\n')}
+<p class="field-error" data-grams-error hidden>Enter a weight above 0 g</p>
+</fieldset>`
+    : '';
+  return `${dialogHead(title, 'Logging this doesn\'t change the saved or Library meal.')}
+<div class="preview" data-preview aria-live="polite">${renderMealPreview(preview)}</div>
+${body}
+${slotRadios('log-slot', slot)}
+${errorSlot}
+<div class="sheet-actions">
+<button type="button" class="button primary" data-action="log-meal"${preview.valid ? '' : ' disabled'}>Log</button>
+${adjusting ? '' : '<button type="button" class="button" data-action="adjust">Adjust grams for this time</button>'}
+<button type="button" class="button" data-action="close">Cancel</button>
+</div>`;
+}
+
+export function renderMealPreview(preview) {
+  if (!preview.valid) return '<p>Some ingredients can\'t be calculated, so this can\'t be logged.</p>';
+  return `<p class="preview-totals">${macroLine(preview.totals)}</p>
+${preview.day && preview.day.after ? `<p class="preview-after">${afterLine(preview.day.after)}</p>` : ''}`;
+}
+
+/** Log a single Food by weight (Coach top-up, §5.5). Grams only; state shown, never converted. */
+export function renderQuantityDialog({ food, slot, text, preview }) {
+  return `${dialogHead(food.name)}
+<p><span class="state-chip">${escapeHtml(food.state)}</span> Weigh it ${escapeHtml(food.state)}.</p>
+<label class="field" for="qty-grams">Grams</label>
+<span class="grams-input"><input id="qty-grams" type="text" inputmode="decimal" autocomplete="off" data-grams value="${escapeHtml(text || '')}" placeholder="grams"><span aria-hidden="true">g</span></span>
+<p class="field-error" data-grams-error hidden>Enter a weight above 0 g</p>
+<div class="preview" data-preview aria-live="polite">${preview ? renderMealPreview(preview) : '<p class="hint">Enter a weight to see what it adds.</p>'}</div>
+${slotRadios('log-slot', slot)}
+${errorSlot}
+<div class="sheet-actions">
+<button type="button" class="button primary" data-action="log-food"${preview && preview.valid ? '' : ' disabled'}>Log</button>
+<button type="button" class="button" data-action="close">Cancel</button>
+</div>`;
+}
+
+/** A logged meal as the historical record it is (§4.3.3). */
+export function renderInstanceDialog({ instance, slot, date, source, sourceName }) {
+  const rows = instance.ingredients.map((ing) => {
+    const r = oneDecimal(ing);
+    return `<tr><th scope="row">${escapeHtml(ing.foodName)}</th><td>${ing.quantity} g</td><td>${r.protein}</td><td>${r.carbs}</td><td>${r.fat}</td></tr>`;
+  }).join('\n');
+  const t = whole(instance.totals);
+  const sourceText = source === 'saved' ? `From Saved Meal “${escapeHtml(sourceName)}”`
+    : source === 'library' ? `From Library Meal “${escapeHtml(sourceName)}”`
+      : source === 'deleted' ? 'From a meal that’s since been deleted' : '';
+  return `${dialogHead(instance.mealName, `${SLOT_LABELS[slot]} · ${formatDate(date)} · Logged at ${formatTime(instance.loggedAt)}`)}
+${sourceText ? `<p class="source-line">${sourceText}</p>` : ''}
+<div class="table-wrap"><table class="ingredients">
+<caption class="visually-hidden">Ingredients as logged</caption>
+<thead><tr><th scope="col">Food</th><th scope="col">Grams</th><th scope="col"><abbr title="Protein">P</abbr></th><th scope="col"><abbr title="Carbs">C</abbr></th><th scope="col"><abbr title="Fat">F</abbr></th></tr></thead>
+<tbody>${rows}</tbody>
+<tfoot><tr><th scope="row">Total</th><td></td><td>${t.protein}</td><td>${t.carbs}</td><td>${t.fat}</td></tr></tfoot>
+</table></div>
+<p class="note">This is a record of what you logged. Later changes to foods or saved meals don't change it.</p>
+${errorSlot}
+<div class="sheet-actions">
+<button type="button" class="button primary" data-action="edit-instance">Edit this logged meal</button>
+<button type="button" class="button" data-action="move-instance">Move to another slot</button>
+<button type="button" class="button danger" data-action="delete-instance">Delete</button>
+</div>`;
+}
+
+/** Edit one logged meal: name, slot, grams, remove (§4.3.4). The Saved Meal is untouched. */
+export function renderEditDialog({ instance, date, name, slot, rows, preview }) {
+  const single = rows.length === 1;
+  return `${dialogHead('Edit logged meal', `${SLOT_LABELS[instance.mealSlot]} · ${formatDate(date)}`)}
+<p class="note">You're editing the record for ${escapeHtml(formatDate(date))}. Your saved meal won't change.</p>
+<label class="field" for="edit-name">Name</label>
+<input id="edit-name" type="text" data-edit-name value="${escapeHtml(name)}" autocomplete="off">
+<p class="field-error" data-name-error hidden>Give it a name</p>
+${slotRadios('edit-slot', slot)}
+<fieldset class="adjust"><legend>Ingredients</legend>
+${rows.map((row, i) => `<div class="adjust-row"><label for="edit-q-${i}">${escapeHtml(row.foodName)}</label>
+<span class="grams-input"><input id="edit-q-${i}" type="text" inputmode="decimal" autocomplete="off" data-quantity-index="${i}" value="${escapeHtml(row.text)}"><span aria-hidden="true">g</span></span>
+${single ? '' : `<button type="button" class="link-button" data-action="remove-ingredient" data-index="${i}" aria-label="Remove ${escapeHtml(row.foodName)}">Remove</button>`}</div>`).join('\n')}
+${single ? '<p class="hint">A logged meal needs at least one ingredient. <button type="button" class="link-button" data-action="delete-instance">Delete this logged meal instead</button></p>' : ''}
+<p class="field-error" data-grams-error hidden>Enter a weight above 0 g</p>
+</fieldset>
+<div class="preview" data-preview aria-live="polite">${preview ? `<p class="preview-totals">${macroLine(preview.instance.totals)}</p><p class="preview-after">${afterLine(preview.after)}</p>` : ''}</div>
+${errorSlot}
+<div class="sheet-actions"><button type="button" class="button primary" data-action="save-instance">Save</button><button type="button" class="button" data-action="close">Cancel</button></div>`;
+}
+
+export function renderMoveDialog({ instance, slot }) {
+  return `${dialogHead(`Move ${instance.mealName}`)}
+${slotRadios('move-slot', slot)}
+<p class="note">Moving it doesn't change any numbers.</p>
+${errorSlot}
+<div class="sheet-actions"><button type="button" class="button primary" data-action="save-move">Move</button><button type="button" class="button" data-action="close">Cancel</button></div>`;
+}
+
+export function renderDeleteDialog({ instance, date }) {
+  return `${dialogHead('Delete logged meal?')}
+<p>Delete “${escapeHtml(instance.mealName)}” from ${SLOT_LABELS[instance.mealSlot]} on ${escapeHtml(formatDate(date))}? Saved and Library meals aren't affected.</p>
+${errorSlot}
+<div class="sheet-actions"><button type="button" class="button" data-action="close" data-autofocus>Cancel</button><button type="button" class="button danger" data-action="confirm-delete">Delete logged meal</button></div>`;
+}
+
+/** After changing grams of a meal from a Saved Meal (§4.3.4, A-14). */
+export function renderFollowUpDialog({ savedName, mode, newName }) {
+  if (mode === 'name') {
+    return `${dialogHead('Save as a new saved meal')}
+<label class="field" for="new-meal-name">Name</label>
+<input id="new-meal-name" type="text" data-new-name value="${escapeHtml(newName)}" autocomplete="off">
+<p class="field-error" data-name-error hidden>Give it a name</p>
+${errorSlot}
+<div class="sheet-actions"><button type="button" class="button primary" data-action="followup-save-new">Save</button><button type="button" class="button" data-action="close">Cancel</button></div>`;
+  }
+  if (mode === 'confirm-update') {
+    return `${dialogHead(`Update “${savedName}”?`)}
+<p>This changes the recipe for next time. Meals you've already logged, including this one, stay as they are.</p>
+${errorSlot}
+<div class="sheet-actions"><button type="button" class="button primary" data-action="followup-update">Update saved meal</button><button type="button" class="button" data-action="close">Cancel</button></div>`;
+  }
+  return `${dialogHead('Keep this change just for today?', 'Your logged meal is saved.')}
+<div class="sheet-actions stacked">
+<button type="button" class="button primary" data-action="close" data-autofocus>Just this time</button>
+<button type="button" class="button" data-action="followup-name">Save as a new saved meal</button>
+<button type="button" class="button" data-action="followup-confirm-update">Also update “${escapeHtml(savedName)}”</button>
+</div>`;
+}
+
+/* ---------------- Coach ---------------- */
+
+const TIER_HEADINGS = Object.freeze({
+  favoriteSaved: 'Your favourites',
+  recent: 'Logged recently',
+  saved: 'Your saved meals',
+  library: 'Starter meals from the Library'
+});
+
+/** How many items a group shows before "Show all" (§8.3). */
+export function coachVisibleCount(tier, suggestions) {
+  if (tier === 'library' && suggestions.insufficientHistory) return 5;
+  if (tier === 'topUp') return 5;
+  return 3;
+}
+
+/** The Coach sheet, from getMacroCoachSuggestions as returned (order untouched). */
+export function renderCoachDialog({ suggestions, expanded = {} }) {
+  const r = whole(suggestions.remaining);
+  const allReached = macros.MACROS.every((key) => suggestions.reached[key]);
+  const left = macros.MACROS.map((key) => `${MACRO_LETTERS[key]} ${suggestions.reached[key] ? 'target reached' : grams(r[key])}`).join(' · ');
+  const groups = suggestions.tiers.filter((t) => t.items.length).map((t) => {
+    const limit = expanded[t.tier] ? t.items.length : coachVisibleCount(t.tier, suggestions);
+    const items = t.items.slice(0, limit).map((item) => `<li class="option-row">
+<div class="option-text"><span class="meal-name">${escapeHtml(item.name)}</span>${item.source === 'library' ? '<span class="marker">Library</span>' : ''}${item.isFavorite ? '<span class="marker" aria-label="Favourite">★</span>' : ''}
+<span class="meal-macros">${macroLine(item.totals)}</span>
+<span class="preview-after">${afterLine(item.after)}</span></div>
+<button type="button" class="button" data-action="coach-log-meal" data-meal="${escapeHtml(item.mealId)}" aria-label="Log ${escapeHtml(item.name)}">Log</button>
+</li>`).join('\n');
+    const more = t.items.length > limit ? `<button type="button" class="link-button" data-action="coach-more" data-tier="${t.tier}">Show all ${t.items.length}</button>` : '';
+    return `<section class="option-group" aria-labelledby="coach-${t.tier}"><h3 id="coach-${t.tier}" class="group-title">${TIER_HEADINGS[t.tier]}</h3><ul class="options">${items}</ul>${more}</section>`;
+  }).join('\n');
+  const foods = [...suggestions.topUpFoods.personalized.map((x) => ({ ...x, why: x.reasons.includes('favorite') ? 'Favourite' : 'Recent' })), ...suggestions.topUpFoods.starter.map((x) => ({ ...x, why: 'Common in Library meals' }))];
+  const foodLimit = expanded.topUp ? foods.length : coachVisibleCount('topUp', suggestions);
+  const foodGroup = foods.length ? `<section class="option-group" aria-labelledby="coach-topup"><h3 id="coach-topup" class="group-title">Top up with a food</h3><ul class="options">
+${foods.slice(0, foodLimit).map((x) => `<li class="option-row"><div class="option-text"><span class="meal-name">${escapeHtml(x.food.name)}</span><span class="state-chip">${escapeHtml(x.food.state)}</span><span class="marker">${x.why}</span>
+<span class="meal-macros">${macroLine(x.food.nutrition)} per 100 g</span></div>
+<button type="button" class="button" data-action="coach-log-food" data-food="${escapeHtml(x.food.id)}" aria-label="Log ${escapeHtml(x.food.name)} by weight">Log</button></li>`).join('\n')}
+</ul>${foods.length > foodLimit ? '<button type="button" class="link-button" data-action="coach-more" data-tier="topUp">Show all ' + foods.length + '</button>' : ''}</section>` : '';
+  const nothing = !groups && !foodGroup
+    ? '<p class="empty-note">Nothing to suggest right now. Suggestions come from your saved and recently logged meals.</p>'
+    : '';
+  const fix = suggestions.excluded.needsReplacement.length
+    ? `<p class="note">${suggestions.excluded.needsReplacement.length} saved ${suggestions.excluded.needsReplacement.length === 1 ? 'meal needs' : 'meals need'} a fix before ${suggestions.excluded.needsReplacement.length === 1 ? 'it' : 'they'} can be suggested.</p>`
+    : '';
+  return `${dialogHead('Build my next meal', `${DAY_TYPE_LABELS[suggestions.dayType]} · Left today: ${left}`)}
+${allReached ? '<p class="note">You\'ve reached today\'s targets.</p>' : ''}
+${suggestions.insufficientHistory ? '<p class="note">Not enough history yet for personal suggestions. These are starter meals from the Library. Log or save meals and this list becomes yours.</p>' : ''}
+${groups}
+${foodGroup}
+${nothing}
+${fix}`;
+}
+
+/* ---------------- actions (domain calls only) ---------------- */
+
+const errorMessage = (e) => {
+  switch (e && e.code) {
+    case 'INVALID_QUANTITY':
+    case 'UNSUPPORTED_UNIT': return 'Enter a weight above 0 g.';
+    case 'MEAL_NEEDS_REPLACEMENT':
+    case 'MEAL_INVALID': return "This meal uses a food that's been deleted, so it can't be logged until it's fixed.";
+    case 'FOOD_NOT_FOUND': return 'That food no longer exists.';
+    case 'MEAL_NOT_FOUND': return 'That meal no longer exists.';
+    case 'MEAL_INSTANCE_NOT_FOUND': return 'That logged meal no longer exists.';
+    case 'INVALID_MEAL_INSTANCE':
+    case 'INVALID_MEAL': return 'Give it a name and at least one ingredient.';
+    case 'NOTHING_LOGGED': return 'Log something first.';
+    default: return "That didn't save. Nothing was changed.";
+  }
+};
+export { errorMessage };
+
+/** Instance ingredients as a patch/recipe ingredient list. */
+export const recipeOf = (ingredients) => ingredients.map((i) => ({ foodId: i.foodId, quantity: i.quantity, unit: i.unit || 'g' }));
+
+export function createTodayActions(app) {
+  const date = () => app.getToday();
+  return {
+    chooseDayType(type) {
+      app.createDay(date(), type);
+      return { message: `Today is a ${DAY_TYPE_LABELS[type]} day.` };
+    },
+    changeDayType(type) {
+      const preview = app.previewDayTypeChange(date(), type);
+      if (preview.noOp) return { noOp: true, message: '' };
+      app.updateDayType(date(), type);
+      return { message: `Changed to ${DAY_TYPE_LABELS[type]}. Your logged food didn't change.` };
+    },
+    applyCurrentTargets() {
+      app.applyCurrentTargetsToToday();
+      return { message: "Today now uses your current targets. Logged food didn't change." };
+    },
+    logMeal({ mealId, mealSlot, ingredients }) {
+      const instance = app.createMealInstance({ date: date(), mealSlot, mealId, ...(ingredients ? { ingredients } : {}) });
+      return { instance, message: `Logged ${instance.mealName} to ${SLOT_LABELS[mealSlot]}.` };
+    },
+    logFood({ foodId, quantity, mealSlot }) {
+      const instance = app.logFood({ date: date(), mealSlot, foodId, quantity });
+      return { instance, message: `Logged ${instance.mealName} to ${SLOT_LABELS[mealSlot]}.` };
+    },
+    updateInstance(id, patch) {
+      const instance = app.updateMealInstance(date(), id, patch);
+      return { instance, message: 'Logged meal updated.' };
+    },
+    moveInstance(id, mealSlot) {
+      const instance = app.updateMealInstance(date(), id, { mealSlot });
+      return { instance, message: `Moved to ${SLOT_LABELS[mealSlot]}.` };
+    },
+    deleteInstance(id) {
+      const wasDone = app.getDaySummary(date()).loggingComplete;
+      app.deleteMealInstance(date(), id);
+      const reopened = wasDone && !app.getDaySummary(date()).loggingComplete;
+      return { reopened, message: reopened ? 'Deleted. The day is no longer marked done, because nothing is logged.' : 'Deleted.' };
+    },
+    setDone(done) {
+      app.setDayLoggingComplete(date(), done);
+      return { message: done ? 'Marked today as done. It now counts as a complete day in Progress.' : 'Reopened today.' };
+    },
+    saveAsNewSavedMeal({ name, mealType, ingredients }) {
+      const meal = app.createSavedMeal({ name, mealType: mealType || 'other', ingredients: recipeOf(ingredients) });
+      return { meal, message: `Saved “${meal.name}” as a new saved meal.` };
+    },
+    updateSavedMeal(mealId, ingredients) {
+      const meal = app.updateSavedMeal(mealId, { ingredients: recipeOf(ingredients) });
+      return { meal, message: `Updated “${meal.name}” for next time.` };
+    }
+  };
+}
+
+/* ---------------- DOM wiring ---------------- */
+
+function sameRecipe(a, b) {
+  return a.length === b.length && a.every((x, i) => x.foodId === b[i].foodId && x.quantity === b[i].quantity);
+}
+
+/** The Today screen, mounted by the shell into <main>. */
+export const todayScreen = {
+  mount(main, { app, doc }) {
+    const actions = createTodayActions(app);
+    let model = todayModel(app);
+    let ui = null; // the open dialog's state
+    let opener = null;
+    let highlightId = null;
+    let pendingFocus = null; // an element to focus once the open dialog has closed
+
+    main.innerHTML = `<div data-today-body></div>
+<p class="today-message" role="status" aria-live="polite" data-message></p>
+<dialog class="sheet" aria-labelledby="sheet-title" data-sheet></dialog>`;
+    const body = main.querySelector('[data-today-body]');
+    const dialog = main.querySelector('[data-sheet]');
+    const messageEl = main.querySelector('[data-message]');
+
+    let messageTimer = null;
+    const say = (text) => {
+      messageEl.textContent = '';
+      if (messageTimer) clearTimeout(messageTimer);
+      if (!text) return;
+      messageEl.textContent = text;
+      messageTimer = setTimeout(() => { messageEl.textContent = ''; }, 6000);
+    };
+
+    function refresh({ focusId } = {}) {
+      model = todayModel(app);
+      body.innerHTML = renderToday(model);
+      if (focusId) {
+        const row = body.querySelector(`[data-id="${CSS.escape(focusId)}"]`);
+        if (row) {
+          row.classList.add('is-new');
+          row.focus();
+          pendingFocus = row;
+          highlightId = focusId;
+          setTimeout(() => { if (highlightId === focusId) row.classList.remove('is-new'); }, 2000);
+        }
+      }
+    }
+
+    function showError(e) {
+      const el = dialog.querySelector('[data-error]');
+      const text = errorMessage(e);
+      if (el) { el.textContent = text; el.hidden = false; } else say(text);
+    }
+
+    function openDialog(next) {
+      if (!dialog.open) opener = doc.activeElement;
+      ui = next;
+      drawDialog();
+      if (!dialog.open) dialog.showModal();
+      const auto = dialog.querySelector('[data-autofocus]') || dialog.querySelector('input:not([type=radio]), .sheet-actions .button.primary:not([disabled])') || dialog.querySelector('#sheet-title');
+      if (auto) { if (auto.id === 'sheet-title') auto.setAttribute('tabindex', '-1'); auto.focus(); }
+    }
+
+    function closeDialog() {
+      if (dialog.open) dialog.close();
+    }
+
+    dialog.addEventListener('close', () => {
+      ui = null;
+      dialog.innerHTML = '';
+      const target = pendingFocus && pendingFocus.isConnected ? pendingFocus
+        : opener && opener.isConnected ? opener : body.querySelector('#screen-title');
+      opener = null;
+      pendingFocus = null;
+      if (target) target.focus();
+    });
+
+    function drawDialog() {
+      if (!ui) return;
+      switch (ui.type) {
+        case 'day-type': dialog.innerHTML = renderDayTypeDialog({ model, ...ui }); break;
+        case 'picker': dialog.innerHTML = renderPickerDialog(ui); break;
+        case 'meal': dialog.innerHTML = renderMealConfirmDialog(ui); break;
+        case 'quantity': dialog.innerHTML = renderQuantityDialog(ui); break;
+        case 'instance': dialog.innerHTML = renderInstanceDialog(ui); break;
+        case 'edit': dialog.innerHTML = renderEditDialog(ui); break;
+        case 'move': dialog.innerHTML = renderMoveDialog(ui); break;
+        case 'delete': dialog.innerHTML = renderDeleteDialog(ui); break;
+        case 'followup': dialog.innerHTML = renderFollowUpDialog(ui); break;
+        case 'coach': dialog.innerHTML = renderCoachDialog(ui); break;
+        default: break;
+      }
+    }
+
+    const checkedSlot = (name) => { const el = dialog.querySelector(`input[name="${name}"]:checked`); return el ? el.value : null; };
+
+    function openMeal(mealId, slot) {
+      const preview = app.previewMealInstance({ date: model.date, mealId });
+      const foods = {};
+      for (const ing of preview.ingredients) { const f = app.getFood(ing.foodId); if (f) foods[ing.foodId] = f; }
+      openDialog({ type: 'meal', mealId, preview, slot: slot || defaultSlot(model.day), adjusting: false, quantities: preview.ingredients.map((i) => String(i.quantity)), original: recipeOf(preview.ingredients), foods });
+    }
+
+    function openInstance(id) {
+      const instance = model.day.mealInstances.find((mi) => mi.id === id);
+      if (!instance) return;
+      const source = model.sourceOf[id];
+      const meal = instance.sourceMealId ? app.getMeal(instance.sourceMealId) : null;
+      openDialog({ type: 'instance', instance, slot: instance.mealSlot, date: model.date, source, sourceName: meal ? meal.name : '' });
+    }
+
+    function afterChange(result, { focusId, followUp } = {}) {
+      refresh({ focusId });
+      say(result.message);
+      if (followUp) openDialog(followUp); else closeDialog();
+    }
+
+    function followUpFor(instance, changed) {
+      if (!changed || !instance.sourceMealId) return null;
+      const meal = app.getMeal(instance.sourceMealId);
+      if (!meal || meal.source !== 'saved') return null; // Library meals are read-only: nothing to offer
+      return { type: 'followup', mode: 'choice', savedId: meal.id, savedName: meal.name, mealType: meal.mealType, ingredients: instance.ingredients, newName: `${meal.name} (adjusted)` };
+    }
+
+    /* ---- live previews on input ---- */
+    main.addEventListener('input', (event) => {
+      if (!ui) return;
+      const el = event.target;
+      if (ui.type === 'meal' && el.matches('[data-quantity-index]')) {
+        ui.quantities[Number(el.dataset.quantityIndex)] = el.value;
+        const parsed = ui.quantities.map(parseGrams);
+        const ok = parsed.every((q) => q !== null);
+        dialog.querySelector('[data-grams-error]').hidden = ok;
+        const logButton = dialog.querySelector('[data-action="log-meal"]');
+        if (!ok) { logButton.disabled = true; return; }
+        ui.preview = app.previewMealInstance({ date: model.date, mealId: ui.mealId, ingredients: ui.original.map((ing, i) => ({ ...ing, quantity: parsed[i] })) });
+        dialog.querySelector('[data-preview]').innerHTML = renderMealPreview(ui.preview);
+        logButton.disabled = !ui.preview.valid;
+      } else if (ui.type === 'quantity' && el.matches('[data-grams]')) {
+        ui.text = el.value;
+        const q = parseGrams(el.value);
+        dialog.querySelector('[data-grams-error]').hidden = q !== null || el.value.trim() === '';
+        ui.preview = q === null ? null : app.previewLogFood({ date: model.date, foodId: ui.food.id, quantity: q });
+        dialog.querySelector('[data-preview]').innerHTML = ui.preview ? renderMealPreview(ui.preview) : '<p class="hint">Enter a weight to see what it adds.</p>';
+        dialog.querySelector('[data-action="log-food"]').disabled = !(ui.preview && ui.preview.valid);
+      } else if (ui.type === 'edit' && el.matches('[data-quantity-index]')) {
+        ui.rows[Number(el.dataset.quantityIndex)].text = el.value;
+        updateEditPreview();
+      } else if (ui.type === 'edit' && el.matches('[data-edit-name]')) {
+        ui.name = el.value;
+      } else if (ui.type === 'followup' && el.matches('[data-new-name]')) {
+        ui.newName = el.value;
+      }
+    });
+
+    function editPatch() {
+      const parsed = ui.rows.map((row) => parseGrams(row.text));
+      if (parsed.some((q) => q === null)) return null;
+      return { mealName: ui.name.trim(), mealSlot: checkedSlot('edit-slot') || ui.slot, ingredients: ui.rows.map((row, i) => ({ foodId: row.foodId, unit: row.unit, quantity: parsed[i] })) };
+    }
+
+    function updateEditPreview() {
+      const patch = editPatch();
+      dialog.querySelector('[data-grams-error]').hidden = !!patch;
+      dialog.querySelector('[data-action="save-instance"]').disabled = !patch;
+      if (!patch) return;
+      try {
+        ui.preview = app.previewMealInstanceUpdate(model.date, ui.instance.id, { ingredients: patch.ingredients });
+        dialog.querySelector('[data-preview]').innerHTML = `<p class="preview-totals">${macroLine(ui.preview.instance.totals)}</p><p class="preview-after">${afterLine(ui.preview.after)}</p>`;
+      } catch (e) { showError(e); }
+    }
+
+    main.addEventListener('change', (event) => {
+      if (ui && ui.type === 'day-type' && event.target.name === 'day-type') {
+        const type = event.target.value;
+        ui.selected = type;
+        ui.preview = model.summary.exists ? app.previewDayTypeChange(model.date, type) : null;
+        drawDialog();
+        const radio = dialog.querySelector(`input[name="day-type"][value="${type}"]`);
+        if (radio) radio.focus();
+      }
+    });
+
+    main.addEventListener('click', (event) => {
+      const el = event.target.closest('[data-action]');
+      if (!el || !main.contains(el)) return;
+      const action = el.dataset.action;
+      try {
+        switch (action) {
+          case 'close': closeDialog(); break;
+          case 'choose-day-type': afterChange(actions.chooseDayType(el.dataset.type)); break;
+          case 'day-type': openDialog({ type: 'day-type', selected: model.summary.dayType, preview: null, applyPreview: app.previewApplyCurrentTargetsToToday() }); break;
+          case 'choose-day-type-confirm': {
+            const type = ui.selected;
+            const continueTo = ui.continueTo;
+            actions.chooseDayType(type);
+            refresh();
+            say(`Today is a ${DAY_TYPE_LABELS[type]} day.`);
+            if (continueTo) openDialog({ type: 'picker', data: pickerData(app), slot: continueTo.slot }); else closeDialog();
+            break;
+          }
+          case 'change-day-type': {
+            const result = actions.changeDayType(ui.selected);
+            if (result.noOp) closeDialog(); else afterChange(result);
+            break;
+          }
+          case 'confirm-apply-targets': ui.confirmingApply = true; drawDialog(); break;
+          case 'apply-targets': afterChange(actions.applyCurrentTargets()); break;
+          case 'add': {
+            const slot = el.dataset.slot || null;
+            if (!model.summary.exists) openDialog({ type: 'day-type', selected: null, preview: null, applyPreview: null, continueTo: { slot } });
+            else openDialog({ type: 'picker', data: pickerData(app), slot });
+            break;
+          }
+          case 'pick-meal': openMeal(el.dataset.meal, ui && ui.slot); break;
+          case 'adjust': ui.adjusting = true; ui.slot = checkedSlot('log-slot') || ui.slot; drawDialog(); dialog.querySelector('[data-quantity-index]')?.focus(); break;
+          case 'log-meal': {
+            const mealSlot = checkedSlot('log-slot');
+            let ingredients;
+            if (ui.adjusting) {
+              const parsed = ui.quantities.map(parseGrams);
+              if (parsed.some((q) => q === null)) { dialog.querySelector('[data-grams-error]').hidden = false; break; }
+              ingredients = ui.original.map((ing, i) => ({ ...ing, quantity: parsed[i] }));
+            }
+            const changed = ingredients && !sameRecipe(ingredients, ui.original);
+            const result = actions.logMeal({ mealId: ui.mealId, mealSlot, ingredients: changed ? ingredients : undefined });
+            afterChange(result, { focusId: result.instance.id, followUp: followUpFor(result.instance, changed) });
+            break;
+          }
+          case 'coach': {
+            const suggestions = app.getMacroCoachSuggestions({ date: model.date, mealSlot: defaultSlot(model.day) });
+            openDialog({ type: 'coach', suggestions, expanded: {} });
+            break;
+          }
+          case 'coach-more': ui.expanded[el.dataset.tier] = true; drawDialog(); break;
+          case 'coach-log-meal': openMeal(el.dataset.meal, null); break;
+          case 'coach-log-food': openDialog({ type: 'quantity', food: app.getFood(el.dataset.food), slot: defaultSlot(model.day), text: '', preview: null }); break;
+          case 'log-food': {
+            const q = parseGrams(ui.text);
+            if (q === null) { dialog.querySelector('[data-grams-error]').hidden = false; break; }
+            const result = actions.logFood({ foodId: ui.food.id, quantity: q, mealSlot: checkedSlot('log-slot') });
+            afterChange(result, { focusId: result.instance.id });
+            break;
+          }
+          case 'open-instance': openInstance(el.dataset.id); break;
+          case 'edit-instance': {
+            const instance = ui.instance;
+            openDialog({ type: 'edit', instance, date: model.date, name: instance.mealName, slot: instance.mealSlot, rows: instance.ingredients.map((i) => ({ foodId: i.foodId, unit: i.unit, foodName: i.foodName, text: String(i.quantity) })), preview: null });
+            break;
+          }
+          case 'remove-ingredient': {
+            ui.name = dialog.querySelector('[data-edit-name]').value;
+            ui.slot = checkedSlot('edit-slot') || ui.slot;
+            ui.rows.splice(Number(el.dataset.index), 1);
+            drawDialog();
+            updateEditPreview();
+            break;
+          }
+          case 'save-instance': {
+            const patch = editPatch();
+            if (!patch) { dialog.querySelector('[data-grams-error]').hidden = false; break; }
+            if (!patch.mealName) { dialog.querySelector('[data-name-error]').hidden = false; break; }
+            const before = recipeOf(ui.instance.ingredients);
+            const result = actions.updateInstance(ui.instance.id, patch);
+            const changed = !sameRecipe(recipeOf(result.instance.ingredients), before);
+            afterChange(result, { focusId: result.instance.id, followUp: followUpFor(result.instance, changed) });
+            break;
+          }
+          case 'move-instance': openDialog({ type: 'move', instance: ui.instance, slot: ui.instance.mealSlot }); break;
+          case 'save-move': {
+            const slot = checkedSlot('move-slot');
+            if (slot === ui.instance.mealSlot) { closeDialog(); break; }
+            const result = actions.moveInstance(ui.instance.id, slot);
+            afterChange(result, { focusId: result.instance.id });
+            break;
+          }
+          case 'delete-instance': openDialog({ type: 'delete', instance: ui.instance, date: model.date }); break;
+          case 'confirm-delete': afterChange(actions.deleteInstance(ui.instance.id)); break;
+          case 'done': afterChange(actions.setDone(true)); break;
+          case 'reopen': afterChange(actions.setDone(false)); break;
+          case 'followup-name': ui.mode = 'name'; drawDialog(); dialog.querySelector('[data-new-name]').focus(); break;
+          case 'followup-confirm-update': ui.mode = 'confirm-update'; drawDialog(); break;
+          case 'followup-save-new': {
+            const name = (ui.newName || '').trim();
+            if (!name) { dialog.querySelector('[data-name-error]').hidden = false; break; }
+            afterChange(actions.saveAsNewSavedMeal({ name, mealType: ui.mealType, ingredients: ui.ingredients }));
+            break;
+          }
+          case 'followup-update': afterChange(actions.updateSavedMeal(ui.savedId, ui.ingredients)); break;
+          default: break;
+        }
+      } catch (e) {
+        showError(e);
+      }
+    });
+
+    // The local date can roll over while the app is open (§4.5.6).
+    const onVisible = () => {
+      if (doc.visibilityState === 'visible' && app.getToday() !== model.date) { closeDialog(); refresh(); }
+    };
+    doc.addEventListener('visibilitychange', onVisible);
+    this._cleanup = () => { doc.removeEventListener('visibilitychange', onVisible); if (messageTimer) clearTimeout(messageTimer); };
+
+    refresh();
+  },
+
+  unmount() {
+    if (this._cleanup) { this._cleanup(); this._cleanup = null; }
+  }
+};

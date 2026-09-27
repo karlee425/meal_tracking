@@ -217,6 +217,6 @@ test('Shell — no nutrition arithmetic, no forbidden terms, domain reached only
   const shellSrc = fs.readFileSync(path.join(ROOT, 'app/shell.js'), 'utf8');
   assert.ok(!/^import /m.test(shellSrc), 'the shell imports nothing: no domain logic inside it');
   const mainSrc = fs.readFileSync(path.join(ROOT, 'app/main.js'), 'utf8');
-  assert.deepEqual([...mainSrc.matchAll(/from '([^']+)'/g)].map((m) => m[1]).sort(), ['../src/browser/app-data.js', './shell.js'], 'data comes only through the browser contract');
+  assert.deepEqual([...mainSrc.matchAll(/from '([^']+)'/g)].map((m) => m[1]).sort(), ['../src/browser/app-data.js', './shell.js', './today.js'], 'data comes only through the browser contract; built screens are registered with the shell');
   assert.ok(!/localStorage|sessionStorage|indexedDB/.test(shellSrc + mainSrc), 'no second persistence mechanism');
 });

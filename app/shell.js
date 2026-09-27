@@ -161,18 +161,25 @@ ${renderMain(state)}
 
 /**
  * Mount the shell.
- *   root   the element to render into
- *   win    the window (location.hash, history, events)
- *   doc    the document (title)
+ *   root     the element to render into
+ *   win      the window (location.hash, history, events)
+ *   doc      the document (title)
+ *   screens  optional { [destinationId]: { mount(mainElement, { app, win, doc }), unmount() } }
+ *            for destinations that are built; the rest show their placeholder
  * Returns { start, setDataLayer, showStartupError, state }.
  */
-export function createShell({ root, win, doc }) {
+export function createShell({ root, win, doc, screens = {} }) {
   const state = { route: DEFAULT_DESTINATION, startup: 'loading', errorCode: null, status: null };
   let app = null;
   let unsubscribe = null;
+  let mounted = null;
 
   function render({ focusHeading = false } = {}) {
+    if (mounted) { mounted.unmount(); mounted = null; }
     root.innerHTML = renderApp(state);
+    const screen = state.startup === 'ready' ? screens[state.route] : null;
+    const main = screen ? root.querySelector('#main') : null;
+    if (screen && main) { screen.mount(main, { app, win, doc }); mounted = screen; }
     const label = state.startup === 'error' ? startupErrorView(state.errorCode).title : destination(state.route).label;
     doc.title = `${label} · ${APP_NAME}`;
     if (focusHeading) {

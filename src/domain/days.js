@@ -214,6 +214,29 @@ export function createDaysApi(ctx, { meals, targets }) {
     },
 
     /**
+     * What applyCurrentTargetsToToday() would do, without doing it — so the user can see the
+     * effect before confirming. Returns { date, exists, applies, dayType, from, to, before, after }:
+     * applies is false when there is no Day for today or its snapshot already equals the
+     * current targets for its type (nothing would change).
+     */
+    previewApplyCurrentTargetsToToday() {
+      const date = ctx.today();
+      const current = findDay(date);
+      if (!current) return { date, exists: false, applies: false, dayType: null, from: null, to: null, before: null, after: null };
+      const fresh = targets.createTargetSnapshot(current.dayType);
+      return {
+        date,
+        exists: true,
+        applies: !sameMacros(fresh, current.targetSnapshot),
+        dayType: current.dayType,
+        from: clone(current.targetSnapshot),
+        to: fresh,
+        before: standing(current.targetSnapshot, current.mealInstances),
+        after: standing(fresh, current.mealInstances)
+      };
+    },
+
+    /**
      * Explicitly re-take TODAY's target snapshot from the current targets for its day type.
      * Only today's Day can change this way; no other Day is touched. Logged food and the
      * day type are unchanged; current targets stay as they are. No-op (nothing written)
