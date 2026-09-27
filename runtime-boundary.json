@@ -4,7 +4,8 @@
     "runtime": {
       "description": "V2 application runtime: the domain layer and its adapters (Node file, memory, browser/IndexedDB). Future UI code goes here too.",
       "paths": [
-        "src/**"
+        "src/**",
+        "app/**"
       ]
     },
     "canonicalData": {
