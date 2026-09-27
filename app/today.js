@@ -14,6 +14,7 @@
 
 import { macros, constants } from '../src/domain/index.js';
 import { escapeHtml } from './shell.js';
+import { session, routeParams, isIsoDate } from './session.js';
 
 /* ---------------- labels and formatting ---------------- */
 
@@ -78,9 +79,9 @@ export function parseGrams(text) {
 
 /* ---------------- model ---------------- */
 
-/** Everything Today shows, read from the domain for the local date. */
-export function todayModel(app) {
-  const date = app.getToday();
+/** Everything Today shows, read from the domain for one date (default: the local date). */
+export function todayModel(app, date = app.getToday()) {
+  const today = app.getToday();
   const summary = app.getDaySummary(date);
   const day = summary.exists ? app.getDay(date) : null;
   const bySlot = {};
@@ -92,6 +93,7 @@ export function todayModel(app) {
   }
   return {
     date,
+    isToday: date === today,
     summary,
     day,
     bySlot,
@@ -112,6 +114,17 @@ export function defaultSlot(day) {
   const used = new Set(instances.map((mi) => mi.mealSlot));
   for (let k = slots.indexOf(latest.mealSlot); k < slots.length; k++) if (!used.has(slots[k])) return slots[k];
   return latest.mealSlot;
+}
+
+/**
+ * "Left today: P 42 g · C target reached · F 12 g." from getDaySummary, for the announcement
+ * after logging (§5.8). Rounded domain values only.
+ */
+export function remainingSummary(summary, { isToday, date }) {
+  if (!summary || !summary.exists) return '';
+  const r = whole(summary.remaining);
+  const parts = macros.MACROS.map((key) => `${MACRO_LETTERS[key]} ${summary.reached[key] ? 'target reached' : grams(r[key])}`);
+  return `${isToday ? 'Left today' : `Left on ${formatDate(date)}`}: ${parts.join(' · ')}.`;
 }
 
 /* ---------------- screen rendering ---------------- */
@@ -215,7 +228,7 @@ function renderChooser(model) {
 </button></li>`).join('\n');
   return `<section class="chooser" aria-labelledby="chooser-heading">
 <h2 id="chooser-heading" class="section-title">What kind of day is ${weekdayName(model.date)}?</h2>
-<p class="chooser-note">Your targets for today come from the day type you choose.</p>
+<p class="chooser-note">Your targets for ${model.isToday ? 'today' : 'this day'} come from the day type you choose.</p>
 <ul class="day-type-options">
 ${options}
 </ul>
@@ -226,9 +239,11 @@ ${options}
 export function renderToday(model) {
   const { summary } = model;
   const type = summary.exists ? DAY_TYPE_LABELS[summary.dayType] : null;
+  // §4.1 header: "Today · {date}" for today; a past day shows its date and a way back to today.
   const head = `<div class="today-head">
-<h1 id="screen-title" class="screen-title" tabindex="-1">Today</h1>
-<p class="today-date">${escapeHtml(formatDate(model.date))}${summary.status === 'complete' ? ' <span class="badge">Done</span>' : ''}</p>
+<h1 id="screen-title" class="screen-title" tabindex="-1">${model.isToday ? 'Today' : escapeHtml(formatDate(model.date))}</h1>
+<p class="today-date">${model.isToday ? escapeHtml(formatDate(model.date)) : 'Past day'}${summary.status === 'complete' ? ' <span class="badge">Done</span>' : ''}</p>
+${model.isToday ? '' : '<a class="chip" href="#/today" aria-label="Go to today">Today</a>'}
 ${type ? `<button type="button" class="chip" data-action="day-type" aria-label="Day type: ${type}. Change day type">${type}</button>` : ''}
 ${summary.exists ? '<button type="button" class="icon-button day-menu" data-action="day-menu" aria-haspopup="dialog" aria-label="More actions for this day"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></svg></button>' : ''}
 </div>`;
@@ -246,7 +261,7 @@ ${renderSlots(model, { enabled: true })}`;
 
 /* ---------------- dialog rendering ---------------- */
 
-function slotRadios(name, selected) {
+export function slotRadios(name, selected) {
   return `<fieldset class="slot-choice">
 <legend>Slot</legend>
 ${constants.MEAL_SLOTS.map((slot) => `<label class="radio-chip"><input type="radio" name="${name}" value="${slot}"${slot === selected ? ' checked' : ''}><span>${SLOT_LABELS[slot]}</span></label>`).join('\n')}
@@ -261,13 +276,13 @@ export function afterLine(standing) {
   return `After this: ${parts.join(' · ')}`;
 }
 
-const dialogHead = (title, subtitle = '') => `<header class="sheet-head">
+export const dialogHead = (title, subtitle = '') => `<header class="sheet-head">
 <h2 id="sheet-title" class="sheet-title">${escapeHtml(title)}</h2>
 ${subtitle ? `<p class="sheet-subtitle">${escapeHtml(subtitle)}</p>` : ''}
 <button type="button" class="icon-button" data-action="close" aria-label="Close"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
 </header>`;
 
-const errorSlot = '<p class="sheet-error" role="alert" data-error hidden></p>';
+export const errorSlot = '<p class="sheet-error" role="alert" data-error hidden></p>';
 
 /** Day type: first choice, or a change with its preview (§4.5). */
 export function renderDayTypeDialog({ model, selected, preview, applyPreview, confirmingApply, continueTo }) {
@@ -286,7 +301,7 @@ ${errorSlot}
   if (current && preview && !preview.noOp) {
     const note = preview.to.targetSource === 'restored'
       ? `Uses the ${DAY_TYPE_LABELS[preview.to.dayType]} targets this day had before.`
-      : `Uses your current ${DAY_TYPE_LABELS[preview.to.dayType]} targets.`;
+      : `Uses your current ${DAY_TYPE_LABELS[preview.to.dayType]} targets.${model.isToday === false ? ` Targets from ${formatDate(model.date)} aren't on record for ${DAY_TYPE_LABELS[preview.to.dayType]}.` : ''}`;
     detail = `<div class="preview" aria-live="polite">
 <p>Targets: ${macroLine(preview.from.target)} → ${macroLine(preview.to.target)}</p>
 <p>${note} Logged food stays exactly the same.</p>
@@ -306,43 +321,6 @@ ${detail}
 ${applyLine}
 ${errorSlot}
 <div class="sheet-actions">${primary}<button type="button" class="button" data-action="close">Cancel</button></div>`;
-}
-
-function mealOption(item) {
-  const valid = item.calc.valid;
-  return `<li class="option-row">
-<button type="button" class="option-main" data-action="pick-meal" data-meal="${escapeHtml(item.meal.id)}"${valid ? '' : ' disabled aria-describedby="fix-' + escapeHtml(item.meal.id) + '"'}>
-<span class="meal-name">${escapeHtml(item.meal.name)}</span>${item.meal.source === 'library' ? '<span class="marker">Library</span>' : ''}${item.isFavorite ? '<span class="marker" aria-label="Favourite">★</span>' : ''}
-<span class="meal-macros">${valid ? macroLine(item.calc.totals) : `<span id="fix-${escapeHtml(item.meal.id)}">Needs a fix before it can be logged</span>`}</span>
-</button></li>`;
-}
-
-/** Add a meal: Saved Meals first, then the Library (§5.3 Meals, from Today). */
-export function pickerData(app) {
-  const prefs = app.getPreferences();
-  const fav = new Set(prefs.favoriteMeals);
-  const wrap = (meal) => ({ meal, isFavorite: fav.has(meal.id), calc: app.calculateMealMacros(meal.id) });
-  const saved = app.getSavedMeals().map(wrap);
-  return {
-    favorites: saved.filter((x) => x.isFavorite),
-    recent: app.getRecentMeals().map(wrap),
-    saved,
-    library: app.getLibraryMeals().map(wrap)
-  };
-}
-
-export function renderPickerDialog({ data, slot }) {
-  const group = (title, items, id) => (items.length ? `<section class="option-group" aria-labelledby="${id}"><h3 id="${id}" class="group-title">${title}</h3><ul class="options">${items.map(mealOption).join('\n')}</ul></section>` : '');
-  const noSaved = data.saved.length === 0;
-  return `${dialogHead(slot ? `Add to ${SLOT_LABELS[slot]}` : 'Add a meal')}
-${noSaved ? '<p class="empty-note">No saved meals yet. Start with a meal from the Library.</p>' : ''}
-${group('Favourite saved meals', data.favorites, 'grp-fav')}
-${group('Recently logged', data.recent, 'grp-recent')}
-${group('Saved meals', data.saved, 'grp-saved')}
-<details class="option-group"${noSaved ? ' open' : ''}>
-<summary class="group-title">Library (${data.library.length})</summary>
-<ul class="options">${data.library.map(mealOption).join('\n')}</ul>
-</details>`;
 }
 
 /** Log a meal: totals, what's left after, slot, and "adjust grams for this time" (§5.4). */
@@ -572,12 +550,14 @@ export { errorMessage };
 /** Instance ingredients as a patch/recipe ingredient list. */
 export const recipeOf = (ingredients) => ingredients.map((i) => ({ foodId: i.foodId, quantity: i.quantity, unit: i.unit || 'g' }));
 
-export function createTodayActions(app) {
-  const date = () => app.getToday();
+/** Today's actions for the date it shows (getDate; default the local date). */
+export function createTodayActions(app, getDate = () => app.getToday()) {
+  const date = getDate;
+  const dayWord = () => (date() === app.getToday() ? 'today' : formatDate(date()));
   return {
     chooseDayType(type) {
       app.createDay(date(), type);
-      return { message: `Today is a ${DAY_TYPE_LABELS[type]} day.` };
+      return { message: `${date() === app.getToday() ? 'Today' : formatDate(date())} is a ${DAY_TYPE_LABELS[type]} day.` };
     },
     changeDayType(type) {
       const preview = app.previewDayTypeChange(date(), type);
@@ -618,7 +598,7 @@ export function createTodayActions(app) {
     },
     setDone(done) {
       app.setDayLoggingComplete(date(), done);
-      return { message: done ? 'Marked today as done. It now counts as a complete day in Progress.' : 'Reopened today.' };
+      return { message: done ? `Marked ${dayWord()} as done. It now counts as a complete day in Progress.` : `Reopened ${dayWord()}.` };
     },
     saveAsNewSavedMeal({ name, mealType, ingredients }) {
       const meal = app.createSavedMeal({ name, mealType: mealType || 'other', ingredients: recipeOf(ingredients) });
@@ -639,9 +619,14 @@ function sameRecipe(a, b) {
 
 /** The Today screen, mounted by the shell into <main>. */
 export const todayScreen = {
-  mount(main, { app, doc }) {
-    const actions = createTodayActions(app);
-    let model = todayModel(app);
+  mount(main, { app, win, doc }) {
+    // The date comes from the route (#/today?date=YYYY-MM-DD, e.g. "View on Today" from Log);
+    // no date, an invalid one or a future one shows today. Past-day controls come later.
+    const requested = routeParams(win.location.hash).get('date');
+    let viewDate = requested && isIsoDate(requested) && requested <= app.getToday() ? requested : app.getToday();
+    const followsToday = viewDate === app.getToday();
+    const actions = createTodayActions(app, () => viewDate);
+    let model = todayModel(app, viewDate);
     let ui = null; // the open dialog's state
     let opener = null;
     let highlightId = null;
@@ -664,14 +649,16 @@ export const todayScreen = {
     };
 
     function refresh({ focusId } = {}) {
-      model = todayModel(app);
+      model = todayModel(app, viewDate);
+      session.todayDate = viewDate;
       body.innerHTML = renderToday(model);
       if (focusId) {
         const row = body.querySelector(`[data-id="${CSS.escape(focusId)}"]`);
         if (row) {
           row.classList.add('is-new');
           row.focus();
-          pendingFocus = row;
+          row.scrollIntoView({ block: 'center' });
+          if (dialog.open) pendingFocus = row;
           highlightId = focusId;
           setTimeout(() => { if (highlightId === focusId) row.classList.remove('is-new'); }, 2000);
         }
@@ -711,7 +698,6 @@ export const todayScreen = {
       if (!ui) return;
       switch (ui.type) {
         case 'day-type': dialog.innerHTML = renderDayTypeDialog({ model, ...ui }); break;
-        case 'picker': dialog.innerHTML = renderPickerDialog(ui); break;
         case 'meal': dialog.innerHTML = renderMealConfirmDialog(ui); break;
         case 'quantity': dialog.innerHTML = renderQuantityDialog(ui); break;
         case 'instance': dialog.innerHTML = renderInstanceDialog(ui); break;
@@ -823,16 +809,8 @@ export const todayScreen = {
         switch (action) {
           case 'close': closeDialog(); break;
           case 'choose-day-type': afterChange(actions.chooseDayType(el.dataset.type)); break;
-          case 'day-type': openDialog({ type: 'day-type', selected: model.summary.dayType, preview: null, applyPreview: app.previewApplyCurrentTargetsToToday() }); break;
-          case 'choose-day-type-confirm': {
-            const type = ui.selected;
-            const continueTo = ui.continueTo;
-            actions.chooseDayType(type);
-            refresh();
-            say(`Today is a ${DAY_TYPE_LABELS[type]} day.`);
-            if (continueTo) openDialog({ type: 'picker', data: pickerData(app), slot: continueTo.slot }); else closeDialog();
-            break;
-          }
+          case 'day-type': openDialog({ type: 'day-type', selected: model.summary.dayType, preview: null, applyPreview: model.isToday ? app.previewApplyCurrentTargetsToToday() : null }); break;
+          case 'choose-day-type-confirm': afterChange(actions.chooseDayType(ui.selected)); break;
           case 'change-day-type': {
             const result = actions.changeDayType(ui.selected);
             if (result.noOp) closeDialog(); else afterChange(result);
@@ -841,12 +819,12 @@ export const todayScreen = {
           case 'confirm-apply-targets': ui.confirmingApply = true; drawDialog(); break;
           case 'apply-targets': afterChange(actions.applyCurrentTargets()); break;
           case 'add': {
+            // §4.3.2: slot + and Add open Log with this date (and slot) preset; Log returns here.
             const slot = el.dataset.slot || null;
-            if (!model.summary.exists) openDialog({ type: 'day-type', selected: null, preview: null, applyPreview: null, continueTo: { slot } });
-            else openDialog({ type: 'picker', data: pickerData(app), slot });
+            session.log.launchedFromToday = true;
+            win.location.hash = `#/log?from=today&date=${model.date}${slot ? `&slot=${slot}` : ''}`;
             break;
           }
-          case 'pick-meal': openMeal(el.dataset.meal, ui && ui.slot); break;
           case 'adjust': ui.adjusting = true; ui.slot = checkedSlot('log-slot') || ui.slot; drawDialog(); dialog.querySelector('[data-quantity-index]')?.focus(); break;
           case 'log-meal': {
             const mealSlot = checkedSlot('log-slot');
@@ -933,12 +911,22 @@ export const todayScreen = {
 
     // The local date can roll over while the app is open (§4.5.6).
     const onVisible = () => {
-      if (doc.visibilityState === 'visible' && app.getToday() !== model.date) { closeDialog(); refresh(); }
+      if (followsToday && doc.visibilityState === 'visible' && app.getToday() !== model.date) { viewDate = app.getToday(); closeDialog(); refresh(); }
     };
     doc.addEventListener('visibilitychange', onVisible);
     this._cleanup = () => { doc.removeEventListener('visibilitychange', onVisible); if (messageTimer) clearTimeout(messageTimer); };
 
-    refresh();
+    // A handoff from Log (§5.8): highlight the meal just logged, or open it for editing (§5.7).
+    const handoff = session.handoff && session.handoff.date === viewDate ? session.handoff : null;
+    session.handoff = null;
+    refresh(handoff && handoff.highlightId ? { focusId: handoff.highlightId } : {});
+    if (!handoff) return false;
+    if (handoff.message) say(handoff.message);
+    if (handoff.openInstanceId && model.day && model.day.mealInstances.some((mi) => mi.id === handoff.openInstanceId)) {
+      openInstance(handoff.openInstanceId);
+      return true;
+    }
+    return !!(handoff.highlightId && body.querySelector(`[data-id="${CSS.escape(handoff.highlightId)}"]`));
   },
 
   unmount() {

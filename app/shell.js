@@ -165,7 +165,9 @@ ${renderMain(state)}
  *   win      the window (location.hash, history, events)
  *   doc      the document (title)
  *   screens  optional { [destinationId]: { mount(mainElement, { app, win, doc }), unmount() } }
- *            for destinations that are built; the rest show their placeholder
+ *            for destinations that are built; the rest show their placeholder. mount() may
+ *            return true when it has placed focus itself (e.g. on a row it just highlighted),
+ *            so the shell doesn't move focus to the heading over it.
  * Returns { start, setDataLayer, showStartupError, state }.
  */
 export function createShell({ root, win, doc, screens = {} }) {
@@ -179,10 +181,11 @@ export function createShell({ root, win, doc, screens = {} }) {
     root.innerHTML = renderApp(state);
     const screen = state.startup === 'ready' ? screens[state.route] : null;
     const main = screen ? root.querySelector('#main') : null;
-    if (screen && main) { screen.mount(main, { app, win, doc }); mounted = screen; }
+    let focusPlaced = false;
+    if (screen && main) { focusPlaced = screen.mount(main, { app, win, doc }) === true; mounted = screen; }
     const label = state.startup === 'error' ? startupErrorView(state.errorCode).title : destination(state.route).label;
     doc.title = `${label} · ${APP_NAME}`;
-    if (focusHeading) {
+    if (focusHeading && !focusPlaced) {
       const heading = root.querySelector('#screen-title');
       if (heading) heading.focus();
     }

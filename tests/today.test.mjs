@@ -13,8 +13,8 @@ import { createDataLayer, createMemoryAdapter, macros } from '../src/domain/inde
 import { createFileAdapter } from '../src/node/file-adapter.js';
 import {
   todayModel, renderToday, createTodayActions, renderDayTypeDialog, renderCoachDialog, renderInstanceDialog,
-  renderMealConfirmDialog, renderPickerDialog, pickerData, defaultSlot, parseGrams, grams, macroLine, afterLine,
-  coachVisibleCount, SLOT_LABELS, DAY_TYPE_LABELS, statusLine, weekdayName, renderClearDayDialog
+  renderMealConfirmDialog, defaultSlot, parseGrams, grams, macroLine, afterLine,
+  coachVisibleCount, SLOT_LABELS, DAY_TYPE_LABELS, statusLine, formatDate, weekdayName, renderClearDayDialog
 } from '../app/today.js';
 
 const TODAY = '2026-09-27';
@@ -233,13 +233,27 @@ test('Today — Library Meals log as Library Meals and never become Saved Meals'
   assert.match(renderToday(todayModel(app)), /<span class="marker">Library<\/span>/);
   const coach = app.getMacroCoachSuggestions({ date: TODAY, mealSlot: 'dinner' });
   assert.ok(!coach.tiers.find((t) => t.tier === 'recent').items.some((i) => i.mealId === 'meal_library_L26'), 'not a recent Saved Meal');
+});
 
-  const data = pickerData(app);
-  assert.equal(data.saved.length, 0);
-  assert.equal(data.library.length, app.getLibraryMeals().length, 'retired Library Meals are not offered');
-  const picker = renderPickerDialog({ data, slot: 'lunch' });
-  assert.match(picker, /No saved meals yet/);
-  assert.match(picker, /<details class="option-group" open>/, 'Library expanded for a new user');
+test('Today — Add and slot + open Log with this date and slot; a past date shown via the route (Slice 3 integration)', () => {
+  const src = fs.readFileSync(path.join(ROOT, 'app/today.js'), 'utf8');
+  assert.match(src, /win\.location\.hash = `#\/log\?from=today&date=\$\{model\.date\}\$\{slot \? `&slot=\$\{slot\}` : ''\}`/, 'Add routes into Log with date and slot');
+  assert.ok(!/renderPickerDialog|pickerData/.test(src), 'no second meal picker on Today');
+
+  const { app } = setup();
+  app.createDay('2026-09-20', 'rest');
+  const inst = app.logFood({ date: '2026-09-20', mealSlot: 'dinner', foodId: 'food_core_banana', quantity: 100 });
+  const past = todayModel(app, '2026-09-20');
+  assert.equal(past.isToday, false);
+  const html = renderToday(past);
+  assert.match(html, new RegExp(`<h1 id="screen-title"[^>]*>${formatDate('2026-09-20')}</h1>`), 'a past day is titled with its date');
+  assert.match(html, /<a class="chip" href="#\/today" aria-label="Go to today">Today<\/a>/, 'a way back to today');
+  assert.ok(html.includes(`data-id="${inst.id}"`));
+  const acts = createTodayActions(app, () => '2026-09-20');
+  assert.equal(acts.setDone(true).message, `Marked ${formatDate('2026-09-20')} as done. It now counts as a complete day in Progress.`);
+  assert.equal(app.getDaySummary('2026-09-20').status, 'complete');
+  assert.equal(app.getDay(TODAY), null, 'today untouched');
+  assert.match(renderDayTypeDialog({ model: past, selected: 'lift', preview: app.previewDayTypeChange('2026-09-20', 'lift') }), /Targets from .+ aren't on record for Lift\./, '§4.5.2 past-day note');
 });
 
 test('Today — inspecting, editing, moving and removing a logged meal use domain operations only', () => {
@@ -385,6 +399,6 @@ test('Today — no macro arithmetic, no forbidden terms, no second store, domain
     assert.deepEqual(domainImportsBypassingIndex(src), [], f);
   }
   const src = fs.readFileSync(path.join(ROOT, 'app/today.js'), 'utf8');
-  assert.deepEqual([...src.matchAll(/from '([^']+)'/g)].map((m) => m[1]).sort(), ['../src/domain/index.js', './shell.js']);
+  assert.deepEqual([...src.matchAll(/from '([^']+)'/g)].map((m) => m[1]).sort(), ['../src/domain/index.js', './session.js', './shell.js']);
   assert.ok(!/localStorage|sessionStorage|indexedDB|\.mealInstances\s*\.push|targetSnapshot\s*=/.test(src), 'no second store; no direct record mutation');
 });
