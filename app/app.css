@@ -738,4 +738,71 @@ details.option-group > summary.group-title { cursor: pointer; min-height: 44px; 
 .per-100 legend { font-weight: 600; padding: 0; }
 .amount-field { flex: 1 1 7rem; }
 .amount-field .field { margin-top: var(--space-1); font-weight: 500; }
-.button[aria-disabled="true"] { opacity: 0.55; }
+
+/* Log detail and editing views by width (§3.1, I-05). Short choices keep the sheet rules above.
+   compact: pushed, full screen, with a Back control · medium: side panel · wide: right-hand pane.
+   Breakpoints in em (as in log.js): larger text means less room, so the panes fall back to a panel. */
+.view-back { display: none; }
+.sheet[data-present="pushed"] .view-back {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  grid-column: 1 / -1;
+  grid-row: 1;
+  justify-self: start;
+  margin: 0 0 var(--space-2) calc(var(--space-1) * -1);
+  text-decoration: none;
+}
+.sheet[data-present="pushed"] .view-close { display: none; }
+@media (max-width: 37.49em) {
+  .sheet[data-present="pushed"] {
+    width: 100vw;
+    max-width: 100vw;
+    height: 100dvh;
+    max-height: 100dvh;
+    margin: 0;
+    border: 0;
+    border-radius: 0;
+    padding-top: max(var(--space-3), env(safe-area-inset-top));
+  }
+  .sheet[data-present="pushed"]::backdrop { background: var(--bg); }
+}
+@media (max-width: 599px) {
+  /* Log opened from Today is a pushed destination: no tab bar underneath, Back returns (§2.3). */
+  .app-frame:has(.log-screen[data-origin="today"]) .primary-nav { display: none; }
+  .app-main:has(.log-screen[data-origin="today"]) { padding-bottom: calc(var(--space-6) + env(safe-area-inset-bottom)); }
+  .log-screen[data-origin="today"] .tray { bottom: env(safe-area-inset-bottom); }
+}
+@media (min-width: 37.5em) and (max-width: 63.99em) {
+  .sheet[data-present="panel"] {
+    width: min(30rem, 90vw);
+    max-width: 90vw;
+    height: 100dvh;
+    max-height: 100dvh;
+    margin: 0 0 0 auto;
+    border-width: 0 0 0 1px;
+    border-radius: 0;
+  }
+}
+@media (min-width: 64em) {
+  .app-main:has(.log-page.has-view) { max-width: calc(var(--content-max) + 28rem); }
+  .log-page.has-view {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(20rem, 26rem);
+    gap: var(--space-5);
+    align-items: start;
+  }
+  .log-page.has-view > .log-screen { grid-column: 1; grid-row: 1; }
+  .sheet[data-present="pane"] {
+    position: sticky;
+    top: calc(56px + var(--space-4));
+    inset: auto;
+    grid-column: 2;
+    grid-row: 1;
+    width: auto;
+    max-width: none;
+    max-height: calc(100dvh - 56px - var(--space-6));
+    margin: 0;
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.08);
+  }
+}

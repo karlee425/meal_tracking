@@ -235,6 +235,43 @@ export function renderTrayBar(tray, preview) {
 </button>`;
 }
 
+/* ---------------- presentation by width (§3.1, I-05) ---------------- */
+
+/** Detail and editing surfaces; everything else in Log is a short choice (day type, date, slot, follow-up). */
+export const LOG_VIEW_TYPES = Object.freeze(['meal-detail', 'meal', 'food', 'tray', 'custom-food']);
+
+/**
+ * 'compact' (< ~600 px) · 'medium' · 'wide' (≥ ~1024 px), with the stylesheet's Log breakpoints.
+ * They are in em, so a larger text size counts as less room: two panes only when both fit.
+ */
+export const LOG_WIDE_QUERY = '(min-width: 64em)';
+export const LOG_COMPACT_QUERY = '(max-width: 37.49em)';
+export function widthClass(win) {
+  const matches = (q) => !!(win && win.matchMedia && win.matchMedia(q).matches);
+  if (matches(LOG_WIDE_QUERY)) return 'wide';
+  return matches(LOG_COMPACT_QUERY) ? 'compact' : 'medium';
+}
+
+/**
+ * How a Log surface is shown:
+ *   wide     'pane'   — non-modal, in the right-hand pane beside the results (two panes)
+ *   medium   'panel'  — detail/editing views as a side panel; short choices stay centred dialogs
+ *   compact  'pushed' — detail/editing views full screen with a Back control; short choices are bottom sheets
+ */
+export function presentationFor(type, width) {
+  if (width === 'wide') return 'pane';
+  if (!LOG_VIEW_TYPES.includes(type)) return 'sheet';
+  return width === 'compact' ? 'pushed' : 'panel';
+}
+
+/** Header for a detail/editing view: a Back control when pushed full screen, Close otherwise (CSS picks one). */
+export const viewHead = (title, subtitle = '') => `<header class="sheet-head view-head">
+<button type="button" class="link-button view-back" data-action="close"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M15 5l-7 7 7 7"/></svg>Back</button>
+<h2 id="sheet-title" class="sheet-title">${escapeHtml(title)}</h2>
+${subtitle ? `<p class="sheet-subtitle">${escapeHtml(subtitle)}</p>` : ''}
+<button type="button" class="icon-button view-close" data-action="close" aria-label="Close"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+</header>`;
+
 /* ---------------- rendering: sheets ---------------- */
 
 /** "What's left after this" waits for the day type when the date has no Day yet (§5.5). */
@@ -277,7 +314,7 @@ ${meta.storage ? `<p><strong>Storage:</strong> ${escapeHtml(meta.storage)}</p>` 
   const logButton = calc.valid
     ? `<button type="button" class="button primary" data-action="log-meal-start" data-meal="${escapeHtml(meal.id)}"${model.future ? ' disabled' : ''}>Log this meal</button>`
     : '<button type="button" class="button primary" disabled aria-describedby="detail-why">Log this meal</button><span id="detail-why" class="hint">Can’t be logged until the deleted food is replaced.</span>';
-  return `${dialogHead(meal.name, subtitle)}
+  return `${viewHead(meal.name, subtitle)}
 ${banner}
 ${calc.valid ? `<p class="preview-totals">${macroLine(calc.totals)}</p><p class="hint">Calculated from the ingredients below</p>` : '<p class="note">Totals will show once every ingredient is fixed.</p>'}
 <div class="table-wrap"><table class="ingredients">
@@ -299,7 +336,7 @@ ${preview.ingredients.map((ing, i) => `<div class="adjust-row"><label for="adj-$
 <p class="field-error" data-grams-error hidden>Enter a weight above 0 g</p>
 </fieldset>`
     : '';
-  return `${dialogHead(preview.mealName || 'Log meal', `${dateText(model)} · Logging this doesn't change the saved or Library meal.`)}
+  return `${viewHead(preview.mealName || 'Log meal', `${dateText(model)} · Logging this doesn't change the saved or Library meal.`)}
 <div class="preview" data-preview aria-live="polite">${previewBlock(preview)}</div>
 ${body}
 ${slotRadios('log-slot', slot)}
@@ -316,7 +353,7 @@ ${adjusting ? '' : '<button type="button" class="button" data-action="adjust">Ad
 /** Log a Food by weight (§5.5): state always shown, grams only, never converted. */
 export function renderFoodSheet({ model, food, text, preview, slot }) {
   const valid = !!(preview && preview.valid);
-  return `${dialogHead(food.name, dateText(model))}
+  return `${viewHead(food.name, dateText(model))}
 <p><span class="state-chip">${escapeHtml(food.state)}</span>${food.brand ? ` <span class="hint">${escapeHtml(food.brand)}</span>` : ''} Weigh it ${escapeHtml(food.state)}.</p>
 <label class="field" for="qty-grams">Grams</label>
 <span class="grams-input"><input id="qty-grams" type="text" inputmode="decimal" autocomplete="off" data-grams value="${escapeHtml(text || '')}" placeholder="grams" aria-describedby="qty-error"><span aria-hidden="true">g</span></span>
@@ -339,7 +376,7 @@ export function renderTraySheet({ model, rows, preview, name, slot, alsoSave }) 
 <span class="grams-input"><input id="tray-q-${i}" type="text" inputmode="decimal" autocomplete="off" data-tray-index="${i}" value="${escapeHtml(row.text)}"><span aria-hidden="true">g</span></span>
 <button type="button" class="link-button" data-action="tray-remove" data-index="${i}" aria-label="Remove ${escapeHtml(row.food ? row.food.name : row.foodId)}">Remove</button></div>`).join('\n');
   const ready = !!(preview && preview.valid) && !model.future;
-  return `${dialogHead('Log as one meal', dateText(model))}
+  return `${viewHead('Log as one meal', dateText(model))}
 <fieldset class="adjust"><legend>Foods in this meal</legend>
 ${items}
 <p class="field-error" data-grams-error hidden>Enter a weight above 0 g</p>
@@ -417,8 +454,15 @@ export function customFoodInput(values) {
   };
 }
 
-export function renderCustomFoodForm({ values, validation, showAll, touched }) {
-  const shown = (field) => showAll || touched.has(field);
+const NEEDED_NAMES = Object.freeze({ name: 'name', category: 'category', state: 'state', 'nutrition.protein': 'protein', 'nutrition.carbs': 'carbs', 'nutrition.fat': 'fat', nutrition: 'protein + carbs + fat' });
+
+/**
+ * The Custom Food form. Save is disabled while the domain says the input is invalid; errors
+ * show next to each field once it has been edited, and a line by Save always says what's
+ * still needed, so nobody has to press a disabled button to find out.
+ */
+export function renderCustomFoodForm({ values, validation, touched }) {
+  const shown = (field) => touched.has(field);
   const errorFor = (field) => {
     const e = validation.errors.find((x) => x.field === field);
     return e && shown(field.replace('nutrition.', '')) ? CUSTOM_FOOD_MESSAGES[e.code] || 'Check this value.' : '';
@@ -431,7 +475,7 @@ export function renderCustomFoodForm({ values, validation, showAll, touched }) {
   const amount = (field, label) => `<div class="amount-field"><label class="field" for="cf-${field}">${label}</label>
 <span class="grams-input"><input id="cf-${field}" type="text" inputmode="decimal" data-cf="${field}" value="${escapeHtml(values[field] || '')}" autocomplete="off" aria-describedby="cf-${field}-error"><span aria-hidden="true">g</span></span>
 ${fieldError(`nutrition.${field}`, `cf-${field}-error`)}</div>`;
-  return `${dialogHead('New food', 'Your own food, per 100 g')}
+  return `${viewHead('New food', 'Your own food, per 100 g')}
 ${text('name', 'Name')}
 ${fieldError('name', 'cf-name-error')}
 <p class="note" role="status" data-sync="cf-dup"${dup ? '' : ' hidden'}>${dup ? `You already have a food called ${escapeHtml(String(values.name).trim())}.` : ''}</p>
@@ -449,11 +493,12 @@ ${amount('protein', 'Protein')}
 ${amount('carbs', 'Carbs')}
 ${amount('fat', 'Fat')}
 </fieldset>
-<p class="field-error" role="alert" data-sync="cf-impossible"${impossible && (showAll || ['protein', 'carbs', 'fat'].every((f) => touched.has(f))) ? '' : ' hidden'}>${CUSTOM_FOOD_MESSAGES.NUTRITION_IMPOSSIBLE}</p>
+<p class="field-error" role="alert" data-sync="cf-impossible"${impossible ? '' : ' hidden'}>${CUSTOM_FOOD_MESSAGES.NUTRITION_IMPOSSIBLE}</p>
 ${text('aliases', 'Other names (optional, comma-separated)')}
+<p id="cf-save-hint" class="hint" data-sync="cf-save-hint"${validation.valid ? ' hidden' : ''}>${validation.valid ? '' : `Needed before saving: ${[...new Set(validation.errors.map((e) => NEEDED_NAMES[e.field] || e.field))].join(', ')}.`}</p>
 ${errorSlot}
 <div class="sheet-actions">
-<button type="button" class="button primary" data-action="cf-save" data-sync="cf-save"${validation.valid ? '' : ' aria-disabled="true"'}>Save and enter grams</button>
+<button type="button" class="button primary" data-action="cf-save" data-sync="cf-save" aria-describedby="cf-save-hint"${validation.valid ? '' : ' disabled'}>Save and enter grams</button>
 <button type="button" class="button" data-action="close">Cancel</button>
 </div>`;
 }
@@ -558,13 +603,18 @@ export const logScreen = {
     let followNote = '';
     let confirmation = null;
 
-    main.innerHTML = `<div class="log-screen" data-log-body>
+    // data-origin lets the stylesheet treat Log opened from Today as a pushed, full-screen
+    // destination on compact screens (no tab bar underneath; §2.3).
+    main.innerHTML = `<div class="log-page" data-log-page>
+<div class="log-screen" data-log-body data-origin="${ctx.origin}">
 <div data-log-top></div>
 <div class="log-confirmation-region" data-confirmation role="status" aria-live="polite"></div>
 <div class="log-results" data-results></div>
 <div class="tray" data-tray aria-live="polite"></div>
 </div>
-<dialog class="sheet" aria-labelledby="sheet-title" data-sheet></dialog>`;
+<dialog class="sheet" aria-labelledby="sheet-title" data-sheet></dialog>
+</div>`;
+    const page = main.querySelector('[data-log-page]');
     const top = main.querySelector('[data-log-top]');
     const confirmEl = main.querySelector('[data-confirmation]');
     const results = main.querySelector('[data-results]');
@@ -595,17 +645,54 @@ export const logScreen = {
     const renderConfirm = () => { confirmEl.innerHTML = renderConfirmation(confirmation); };
     function renderAll() { renderTop(); renderConfirm(); renderList(); renderTray(); }
 
-    /* ---- sheets ---- */
+    /* ---- sheets, panes and pushed views (§3.1) ---- */
+    let width = 'medium';
+    let modal = true;
+    // A full-screen view on compact screens gets its own history entry, so the browser's
+    // Back closes it (like any pushed view) instead of leaving Log.
+    let viewEntry = false;
+    let skipPops = 0;
+    let replaceAfterPop = null;
+    function popViewEntry() {
+      if (!viewEntry) return;
+      viewEntry = false;
+      skipPops += 1;
+      win.history.back();
+    }
+    const onPop = () => {
+      if (replaceAfterPop) { const href = replaceAfterPop; replaceAfterPop = null; win.location.replace(href); return; }
+      if (skipPops) { skipPops -= 1; return; }
+      if (viewEntry) { viewEntry = false; closeDialog(); } // browser Back closed the pushed view
+    };
+    win.addEventListener('popstate', onPop);
+    this._cleanup = () => win.removeEventListener('popstate', onPop);
+
     function openDialog(next) {
-      if (!dialog.open) opener = doc.activeElement;
+      const wasOpen = dialog.open;
+      if (!wasOpen) { opener = doc.activeElement; width = widthClass(win); }
       ui = next;
+      const present = presentationFor(ui.type, width);
+      dialog.dataset.present = present;
       drawDialog();
-      if (!dialog.open) dialog.showModal();
-      const auto = dialog.querySelector('[data-autofocus]') || dialog.querySelector('input:not([type=radio]):not([type=checkbox]), select, .sheet-actions .button.primary:not([disabled])') || dialog.querySelector('#sheet-title');
+      if (!wasOpen) {
+        modal = present !== 'pane';
+        if (modal) dialog.showModal();
+        else { page.classList.add('has-view'); dialog.show(); } // wide: the right-hand pane
+      }
+      if (present === 'pushed' && !viewEntry) { win.history.pushState({ logView: true }, '', win.location.href); viewEntry = true; }
+      // A read-only detail view starts at its title (and top); forms start at their first field.
+      const auto = dialog.querySelector('[data-autofocus]')
+        || (ui.type === 'meal-detail' ? null : dialog.querySelector('input:not([type=radio]):not([type=checkbox]), select, .sheet-actions .button.primary:not([disabled])'))
+        || dialog.querySelector('#sheet-title');
       if (auto) { if (auto.id === 'sheet-title') auto.setAttribute('tabindex', '-1'); auto.focus(); }
     }
     const closeDialog = () => { if (dialog.open) dialog.close(); };
+    // Escape closes the non-modal pane too (modal dialogs get it from the browser).
+    dialog.addEventListener('keydown', (event) => { if (event.key === 'Escape' && dialog.open && !modal) { event.preventDefault(); closeDialog(); } });
     dialog.addEventListener('close', () => {
+      popViewEntry();
+      page.classList.remove('has-view');
+      delete dialog.dataset.present;
       ui = null;
       dialog.innerHTML = '';
       const next = afterClose;
@@ -714,8 +801,11 @@ export const logScreen = {
       const nav = returnToToday(state, ctx, handoff ? handoff.date : ctx.launchDate);
       state.launchedFromToday = false;
       afterClose = null;
+      const hadViewEntry = viewEntry; // a pushed view's history entry sits on top of Log's
+      viewEntry = false;
       closeDialog();
-      if (nav.method === 'back') win.history.back();
+      if (nav.method === 'back') win.history.go(hadViewEntry ? -2 : -1);
+      else if (hadViewEntry) { replaceAfterPop = nav.href; win.history.back(); }
       else win.location.replace(nav.href);
     }
     function showOnToday(extra) {
@@ -779,6 +869,7 @@ export const logScreen = {
         state.trayName = el.value;
       } else if (ui.type === 'custom-food' && el.matches('[data-cf]')) {
         ui.values[el.dataset.cf] = el.value;
+        ui.touched.add(el.dataset.cf); // errors show as the user edits, not only after Save
         syncCustomFood();
       } else if (ui.type === 'followup' && el.matches('[data-new-name]')) {
         ui.newName = el.value;
@@ -924,19 +1015,12 @@ export const logScreen = {
           }
           case 'create-food': {
             const values = { name: state.query.trim(), category: '', state: '', brand: '', protein: '', carbs: '', fat: '', aliases: '' };
-            openDialog({ type: 'custom-food', values, touched: new Set(), showAll: false, validation: app.validateCustomFood(customFoodInput(values)) });
+            openDialog({ type: 'custom-food', values, touched: new Set(), validation: app.validateCustomFood(customFoodInput(values)) });
             break;
           }
           case 'cf-save': {
             ui.validation = app.validateCustomFood(customFoodInput(ui.values));
-            if (!ui.validation.valid) {
-              ui.showAll = true;
-              syncCustomFood();
-              const first = ui.validation.errors[0];
-              const key = first.field.replace('nutrition.', '');
-              (dialog.querySelector(`[data-cf="${key}"]`) || dialog.querySelector('[data-cf="protein"]')).focus();
-              break;
-            }
+            if (!ui.validation.valid) { syncCustomFood(); break; } // Save is disabled while invalid; a guard only
             const food = actions.createCustomFood(ui.values);
             renderList();
             openFood(food.id); // §5.6: straight into the quantity sheet for the new Food
@@ -965,5 +1049,7 @@ export const logScreen = {
     return false;
   },
 
-  unmount() {}
+  unmount() {
+    if (this._cleanup) { this._cleanup(); this._cleanup = null; }
+  }
 };

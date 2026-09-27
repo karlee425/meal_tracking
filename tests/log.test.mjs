@@ -18,7 +18,7 @@ import {
   resolveLogContext, logModel, mealResults, foodResults, renderResults, renderLogTop, renderConfirmation,
   renderMealDetail, renderLogMealSheet, renderFoodSheet, renderTraySheet, renderTrayBar, renderDateSheet,
   renderCustomFoodForm, customFoodInput, parseAmount, trayMealName, trayIngredients, createLogActions,
-  afterLogging, returnToToday, logSegment, logScreen
+  afterLogging, returnToToday, logSegment, logScreen, presentationFor, widthClass, LOG_VIEW_TYPES, LOG_WIDE_QUERY, LOG_COMPACT_QUERY
 } from '../app/log.js';
 
 const TODAY = '2026-09-27';
@@ -416,26 +416,31 @@ test('Log — Create a food: domain validation per field, duplicate warning, the
   const blank = { name: 'Protein bar', category: '', state: '', brand: '', protein: '', carbs: '', fat: '', aliases: '' };
   let validation = app.validateCustomFood(customFoodInput(blank));
   assert.equal(validation.valid, false);
-  let form = renderCustomFoodForm({ values: blank, validation, showAll: false, touched: new Set() });
+  let form = renderCustomFoodForm({ values: blank, validation, touched: new Set() });
   assert.match(form, /id="cf-name"[^>]*value="Protein bar"/, 'name prefilled from the query');
-  assert.match(form, /data-sync="cf-save" aria-disabled="true"/, 'Save disabled while invalid');
-  assert.ok(!/class="field-error" data-sync="cf-category-error">/.test(form), 'no errors before touching');
-  form = renderCustomFoodForm({ values: blank, validation, showAll: true, touched: new Set() });
-  assert.match(form, /Add a category, for example snack bar\./);
+  assert.match(form, /data-action="cf-save" data-sync="cf-save" aria-describedby="cf-save-hint" disabled>/, 'Save is really disabled while invalid (§7.4)');
+  assert.ok(!/aria-disabled/.test(form), 'not merely aria-disabled');
+  assert.match(form, /id="cf-save-hint" class="hint" data-sync="cf-save-hint">Needed before saving: category, state, protein, carbs, fat\.</, 'what is still needed is visible without pressing Save');
+  assert.ok(!/class="field-error" data-sync="cf-category-error">/.test(form), 'no field errors before a field is edited');
+  form = renderCustomFoodForm({ values: blank, validation, touched: new Set(['category', 'state', 'protein', 'carbs', 'fat']) });
+  assert.match(form, /Add a category, for example snack bar\./, 'errors show next to fields as they are edited');
   assert.match(form, /Choose a state\./);
   assert.equal((form.match(/>Required\.</g) || []).length, 3, 'empty macro fields read "Required", never NaN');
 
   const tooMuch = { ...blank, category: 'snack bar', state: 'prepared', protein: '60', carbs: '50', fat: '10' };
   validation = app.validateCustomFood(customFoodInput(tooMuch));
-  form = renderCustomFoodForm({ values: tooMuch, validation, showAll: true, touched: new Set() });
+  form = renderCustomFoodForm({ values: tooMuch, validation, touched: new Set(['protein', 'carbs', 'fat']) });
+  assert.match(form, /data-sync="cf-save" aria-describedby="cf-save-hint" disabled>/);
+  assert.match(form, /Needed before saving: protein \+ carbs \+ fat\./);
   assert.match(form, /Protein \+ carbs \+ fat can’t be more than 100 g in 100 g\. Check the label — values per serving need converting to per 100 g\./);
 
   const dup = { ...tooMuch, name: 'Banana', protein: '1', carbs: '23', fat: '0.3' };
   validation = app.validateCustomFood(customFoodInput(dup));
   assert.equal(validation.valid, true);
-  form = renderCustomFoodForm({ values: dup, validation, showAll: false, touched: new Set() });
+  form = renderCustomFoodForm({ values: dup, validation, touched: new Set(['name']) });
   assert.match(form, /You already have a food called Banana\./, 'a warning, not an error');
-  assert.ok(!/aria-disabled/.test(form), 'Save still allowed');
+  assert.match(form, /data-sync="cf-save" aria-describedby="cf-save-hint">Save and enter grams/, 'Save enabled once valid, duplicate name or not');
+  assert.match(form, /id="cf-save-hint" class="hint" data-sync="cf-save-hint" hidden>/);
 
   const food = actions.createCustomFood({ ...tooMuch, protein: '20', carbs: '45', fat: '12,5', aliases: 'bar, snack' });
   assert.equal(food.source, 'custom');
@@ -489,4 +494,82 @@ test('Log — no macro arithmetic, no forbidden terms, no second store, domain v
   assert.ok(!/\.sort\(|getMacroCoachSuggestions|score\s*[<>]/.test(src), 'no re-ranking; the Coach is not used here');
   assert.ok(!/\bunit\s*:\s*'(?!g')/.test(src), 'grams only');
   assert.ok(!/\byield/i.test(src), 'no yield factors (§7.7)');
+});
+
+/* ---------------- reconciliation of 4696ba5: responsive presentation, pushed Log, real disabled Save ---------------- */
+
+test('Log — detail and editing views are pushed full screen (compact), a side panel (medium), a right-hand pane (wide)', () => {
+  // em queries, evaluated with a text size (px per em): 16 is the default, 32 is 200 % text.
+  const mm = (w, em = 16) => ({ matchMedia: (q) => ({ matches: q === LOG_WIDE_QUERY ? w / em >= 64 : q === LOG_COMPACT_QUERY ? w / em <= 37.49 : false }) });
+  assert.deepEqual([320, 375, 599, 600, 800, 1023, 1024, 1280].map((w) => widthClass(mm(w))), ['compact', 'compact', 'compact', 'medium', 'medium', 'medium', 'wide', 'wide']);
+  assert.equal(widthClass(mm(1280, 32)), 'medium', '200 % text: no room for two panes, so a side panel');
+  assert.equal(widthClass(mm(375, 32)), 'compact');
+  assert.deepEqual([...LOG_VIEW_TYPES], ['meal-detail', 'meal', 'food', 'tray', 'custom-food'], 'Meal detail, the confirm/adjust and quantity views, the tray and the Custom Food form');
+  for (const type of LOG_VIEW_TYPES) {
+    assert.equal(presentationFor(type, 'compact'), 'pushed', `${type}: full screen on phones, not a bottom sheet`);
+    assert.equal(presentationFor(type, 'medium'), 'panel', `${type}: side panel`);
+    assert.equal(presentationFor(type, 'wide'), 'pane', `${type}: two panes`);
+  }
+  for (const type of ['day-type', 'date', 'slot', 'followup']) {
+    assert.equal(presentationFor(type, 'compact'), 'sheet', `${type}: a short choice stays a sheet`);
+    assert.equal(presentationFor(type, 'wide'), 'pane', `${type}: anchored beside the results on wide screens`);
+  }
+
+  // Every view has a Back control (shown when pushed) and a Close control (shown otherwise).
+  const { app } = setup();
+  const model = logModel(app, resolveLogContext(app, '#/log'));
+  const food = app.getFood('food_core_banana');
+  const meal = app.getMeal('meal_library_B1');
+  const views = [
+    renderMealDetail({ meal, calc: app.calculateMealMacros(meal.id), foods: {}, isFavorite: false, model }),
+    renderLogMealSheet({ model, preview: app.previewMealInstance({ date: TODAY, mealId: meal.id }), slot: null, adjusting: false, quantities: [], foods: {} }),
+    renderFoodSheet({ model, food, text: '', preview: null, slot: null }),
+    renderTraySheet({ model, rows: [{ foodId: food.id, text: '100', food }], preview: null, name: 'Banana', slot: null, alsoSave: false }),
+    renderCustomFoodForm({ values: { name: '' }, validation: app.validateCustomFood({}), touched: new Set() })
+  ];
+  for (const html of views) {
+    assert.match(html, /<button type="button" class="link-button view-back" data-action="close">[\s\S]*Back<\/button>/);
+    assert.match(html, /class="icon-button view-close" data-action="close" aria-label="Close"/);
+  }
+
+  const css = fs.readFileSync(path.join(ROOT, 'app/app.css'), 'utf8');
+  const block = (media) => { const i = css.indexOf(media, css.indexOf('Log detail and editing views by width')); return css.slice(i, css.indexOf('\n}\n', i)); };
+  assert.equal(LOG_WIDE_QUERY, '(min-width: 64em)');
+  assert.equal(LOG_COMPACT_QUERY, '(max-width: 37.49em)');
+  assert.match(block('@media (max-width: 37.49em)'), /\.sheet\[data-present="pushed"\] \{[^}]*width: 100vw;[^}]*height: 100dvh;[^}]*border-radius: 0;/, 'compact: full screen');
+  assert.match(block('@media (min-width: 37.5em) and (max-width: 63.99em)'), /\.sheet\[data-present="panel"\] \{[^}]*height: 100dvh;[^}]*margin: 0 0 0 auto;/, 'medium: side panel');
+  const wide = block('@media (min-width: 64em)');
+  assert.match(wide, /\.log-page\.has-view \{[^}]*grid-template-columns: minmax\(0, 1fr\) minmax\(20rem, 26rem\);/, 'wide: results left, detail right');
+  assert.match(wide, /\.sheet\[data-present="pane"\] \{[^}]*position: sticky;[^}]*grid-column: 2;/);
+  assert.match(css, /\.sheet\[data-present="pushed"\] \.view-close \{ display: none; \}/);
+  assert.match(css, /\.view-back \{ display: none; \}/);
+
+  const src = fs.readFileSync(path.join(ROOT, 'app/log.js'), 'utf8');
+  assert.match(src, /if \(modal\) dialog\.showModal\(\);\s*else \{ page\.classList\.add\('has-view'\); dialog\.show\(\); \}/, 'wide pane is non-modal, beside the list');
+  assert.match(src, /if \(present === 'pushed' && !viewEntry\) \{ win\.history\.pushState/, 'a pushed view has its own history entry');
+});
+
+test('Log — opened from Today on a phone, Log is a pushed destination: no tab bar underneath; the Log tab is unchanged', () => {
+  const css = fs.readFileSync(path.join(ROOT, 'app/app.css'), 'utf8');
+  const i = css.indexOf('Log opened from Today is a pushed destination');
+  const media = css.lastIndexOf('@media', i);
+  assert.ok(css.slice(media, i).startsWith('@media (max-width: 599px)'), 'compact only');
+  assert.match(css.slice(i, i + 400), /\.app-frame:has\(\.log-screen\[data-origin="today"\]\) \.primary-nav \{ display: none; \}/);
+  assert.ok(!/data-origin="log"\]\) \.primary-nav/.test(css), 'the Log tab keeps the tab bar');
+  const src = fs.readFileSync(path.join(ROOT, 'app/log.js'), 'utf8');
+  assert.match(src, /data-log-body data-origin="\$\{ctx\.origin\}"/);
+  const shell = fs.readFileSync(path.join(ROOT, 'app/shell.js'), 'utf8');
+  assert.ok(!/data-origin|log-screen/.test(shell), 'the shell and its navigation structure are unchanged');
+});
+
+test('Log — Back and browser history: leaving from a pushed view unwinds its history entry too', () => {
+  const src = fs.readFileSync(path.join(ROOT, 'app/log.js'), 'utf8');
+  assert.match(src, /if \(nav\.method === 'back'\) win\.history\.go\(hadViewEntry \? -2 : -1\);/, 'back to Today past the view entry and Log');
+  assert.match(src, /else if \(hadViewEntry\) \{ replaceAfterPop = nav\.href; win\.history\.back\(\); \}/, 'otherwise drop the view entry, then replace Log');
+  assert.match(src, /if \(viewEntry\) \{ viewEntry = false; closeDialog\(\); \}/, 'browser Back closes a pushed view');
+  assert.match(src, /win\.removeEventListener\('popstate', onPop\)/, 'the listener goes with the screen');
+  const { app } = setup();
+  const ctx = resolveLogContext(app, fromToday(TODAY, 'lunch'));
+  assert.deepEqual(returnToToday({ launchedFromToday: true }, ctx, TODAY), { method: 'back' });
+  assert.deepEqual(returnToToday({ launchedFromToday: false }, ctx, TODAY), { method: 'replace', href: `#/today?date=${TODAY}` });
 });
