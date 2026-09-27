@@ -21,8 +21,9 @@ import {
   createTodayActions, dialogHead, slotRadios, errorSlot
 } from './today.js';
 import { session, routeParams, isIsoDate } from './session.js';
+import { WIDE_QUERY, COMPACT_QUERY, widthClass, presentationFor as present, viewHead, syncInPlace, createViewHost } from './view-host.js';
 
-const MEAL_TYPE_LABELS = Object.freeze({ breakfast: 'Breakfast', lunch: 'Lunch', snack: 'Snack', dinner: 'Dinner', other: 'Other' });
+export const MEAL_TYPE_LABELS = Object.freeze({ breakfast: 'Breakfast', lunch: 'Lunch', snack: 'Snack', dinner: 'Dinner', other: 'Other' });
 const oneDecimal = (values) => macros.roundMacros(values, 1);
 
 /* ---------------- context: date · day type · slot (§5.2) ---------------- */
@@ -31,6 +32,8 @@ const oneDecimal = (values) => macros.roundMacros(values, 1);
  * Where Log logs to, from the route and the session.
  *   From Today (#/log?from=today&date=…&slot=…): that date and slot; returns there on success.
  *   From the Log tab (#/log): the date last viewed on Today (usually today), no slot.
+ *   From Meals (#/log?from=meals&meal=…): "Log this meal" — the Log tab's date, that meal's
+ *     confirm sheet open; returns to Meals (§3.3).
  * A future date is kept (so the screen can say it can't be logged yet) but never logged.
  */
 export function resolveLogContext(app, hash, state = session) {
@@ -42,6 +45,7 @@ export function resolveLogContext(app, hash, state = session) {
     return { origin: 'today', date, slot, launchDate: date };
   }
   const date = isIsoDate(state.todayDate) ? state.todayDate : today;
+  if (params.get('from') === 'meals') return { origin: 'meals', date, slot: null, launchDate: date, openMealId: params.get('meal') || null };
   return { origin: 'log', date, slot: null, launchDate: date };
 }
 
@@ -175,8 +179,8 @@ ${group('meals-saved', 'Saved meals', meals.saved, (m) => mealRow(m, opts))}
 /** Header, context bar, search and segment (§5.2, §5.3). */
 export function renderLogTop(model, { segment, query }) {
   const { ctx, summary } = model;
-  const back = ctx.origin === 'today'
-    ? '<button type="button" class="link-button log-back" data-action="back"><span aria-hidden="true">‹ </span>Back to Today</button>'
+  const back = ctx.origin === 'today' || ctx.origin === 'meals'
+    ? `<button type="button" class="link-button log-back" data-action="back"><span aria-hidden="true">‹ </span>Back to ${ctx.origin === 'meals' ? 'Meals' : 'Today'}</button>`
     : '';
   const typeText = summary.exists ? DAY_TYPE_LABELS[summary.dayType] : 'Choose day type';
   return `${back}
@@ -235,42 +239,16 @@ export function renderTrayBar(tray, preview) {
 </button>`;
 }
 
-/* ---------------- presentation by width (§3.1, I-05) ---------------- */
+/* ---------------- presentation by width (§3.1, I-05; shared with Meals in view-host.js) ---------------- */
 
 /** Detail and editing surfaces; everything else in Log is a short choice (day type, date, slot, follow-up). */
 export const LOG_VIEW_TYPES = Object.freeze(['meal-detail', 'meal', 'food', 'tray', 'custom-food']);
+export const LOG_WIDE_QUERY = WIDE_QUERY;
+export const LOG_COMPACT_QUERY = COMPACT_QUERY;
+export { widthClass, viewHead };
 
-/**
- * 'compact' (< ~600 px) · 'medium' · 'wide' (≥ ~1024 px), with the stylesheet's Log breakpoints.
- * They are in em, so a larger text size counts as less room: two panes only when both fit.
- */
-export const LOG_WIDE_QUERY = '(min-width: 64em)';
-export const LOG_COMPACT_QUERY = '(max-width: 37.49em)';
-export function widthClass(win) {
-  const matches = (q) => !!(win && win.matchMedia && win.matchMedia(q).matches);
-  if (matches(LOG_WIDE_QUERY)) return 'wide';
-  return matches(LOG_COMPACT_QUERY) ? 'compact' : 'medium';
-}
-
-/**
- * How a Log surface is shown:
- *   wide     'pane'   — non-modal, in the right-hand pane beside the results (two panes)
- *   medium   'panel'  — detail/editing views as a side panel; short choices stay centred dialogs
- *   compact  'pushed' — detail/editing views full screen with a Back control; short choices are bottom sheets
- */
-export function presentationFor(type, width) {
-  if (width === 'wide') return 'pane';
-  if (!LOG_VIEW_TYPES.includes(type)) return 'sheet';
-  return width === 'compact' ? 'pushed' : 'panel';
-}
-
-/** Header for a detail/editing view: a Back control when pushed full screen, Close otherwise (CSS picks one). */
-export const viewHead = (title, subtitle = '') => `<header class="sheet-head view-head">
-<button type="button" class="link-button view-back" data-action="close"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M15 5l-7 7 7 7"/></svg>Back</button>
-<h2 id="sheet-title" class="sheet-title">${escapeHtml(title)}</h2>
-${subtitle ? `<p class="sheet-subtitle">${escapeHtml(subtitle)}</p>` : ''}
-<button type="button" class="icon-button view-close" data-action="close" aria-label="Close"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
-</header>`;
+/** How a Log surface is shown at a width: 'pane' (wide) · 'panel' (medium view) · 'pushed' (compact view) · 'sheet'. */
+export const presentationFor = (type, width) => present(type, width, LOG_VIEW_TYPES);
 
 /* ---------------- rendering: sheets ---------------- */
 
@@ -284,8 +262,11 @@ function previewBlock(preview) {
 const slotError = '<p class="field-error" data-slot-error hidden>Choose a slot</p>';
 const futureNote = (model) => (model.future ? '<p class="note">You can log this day when it arrives.</p>' : '');
 
-/** Meal detail, read-only (§6.4), with the invalid-meal banner (§6.5). */
-export function renderMealDetail({ meal, calc, isFavorite, foods, model }) {
+/**
+ * Meal detail, read-only (§6.4), with the invalid-meal banner (§6.5). Shared with Meals, which
+ * passes its own actions, a "Copy of …" provenance line, and repair buttons on deleted foods.
+ */
+export function renderMealDetail({ meal, calc, isFavorite, foods, model, provenance = '', repair = false, actions = null, note = '' }) {
   const kind = meal.source === 'saved' ? 'Saved meal' : 'Library meal';
   const subtitle = [MEAL_TYPE_LABELS[meal.mealType] || 'Other', kind, isFavorite ? '★ Favourite' : '', retired(meal) ? 'Retired' : ''].filter(Boolean).join(' · ');
   const meta = meal.metadata || {};
@@ -298,7 +279,13 @@ export function renderMealDetail({ meal, calc, isFavorite, foods, model }) {
     if (ing.status !== 'ok') {
       const p = calc.problems.find((x) => x.index === ing.index) || {};
       const name = p.lastKnownName ? `Deleted food: ${escapeHtml(p.lastKnownName)}` : 'A deleted food';
-      return `<tr><th scope="row">${name}</th><td>${ing.quantity} g</td><td colspan="3">—</td></tr>`;
+      const only = meal.ingredients.length === 1;
+      const fix = repair && p.code === 'FOOD_MISSING'
+        ? `<span class="repair-actions"><button type="button" class="link-button" data-action="repair-replace" data-index="${ing.index}" aria-label="Replace ${escapeHtml(p.lastKnownName || 'the deleted food')}">Replace</button>${only
+          ? '<span class="hint">It’s the only ingredient: replace it, or delete this meal.</span>'
+          : ` <button type="button" class="link-button" data-action="repair-remove" data-index="${ing.index}" aria-label="Remove ${escapeHtml(p.lastKnownName || 'the deleted food')}">Remove</button>`}</span>`
+        : '';
+      return `<tr><th scope="row">${name}${fix}</th><td>${ing.quantity} g</td><td colspan="3">—</td></tr>`;
     }
     const r = oneDecimal(ing);
     const food = foods[ing.foodId];
@@ -312,9 +299,11 @@ ${meta.prepMinutes ? `<p>Prep: ${escapeHtml(meta.prepMinutes)} min</p>` : ''}${s
 ${meta.storage ? `<p><strong>Storage:</strong> ${escapeHtml(meta.storage)}</p>` : ''}${meta.notes ? `<p><strong>Notes:</strong> ${escapeHtml(meta.notes)}</p>` : ''}</section>`
     : '';
   const logButton = calc.valid
-    ? `<button type="button" class="button primary" data-action="log-meal-start" data-meal="${escapeHtml(meal.id)}"${model.future ? ' disabled' : ''}>Log this meal</button>`
+    ? `<button type="button" class="button primary" data-action="log-meal-start" data-meal="${escapeHtml(meal.id)}"${model && model.future ? ' disabled' : ''}>Log this meal</button>`
     : '<button type="button" class="button primary" disabled aria-describedby="detail-why">Log this meal</button><span id="detail-why" class="hint">Can’t be logged until the deleted food is replaced.</span>';
   return `${viewHead(meal.name, subtitle)}
+${provenance ? `<p class="source-line">${escapeHtml(provenance)}</p>` : ''}
+${note}
 ${banner}
 ${calc.valid ? `<p class="preview-totals">${macroLine(calc.totals)}</p><p class="hint">Calculated from the ingredients below</p>` : '<p class="note">Totals will show once every ingredient is fixed.</p>'}
 <div class="table-wrap"><table class="ingredients">
@@ -323,8 +312,8 @@ ${calc.valid ? `<p class="preview-totals">${macroLine(calc.totals)}</p><p class=
 <tbody>${rows}</tbody>
 </table></div>
 ${how}
-${futureNote(model)}
-<div class="sheet-actions">${logButton}<button type="button" class="button" data-action="close">Close</button></div>`;
+${model ? futureNote(model) : ''}
+${actions !== null ? actions : `<div class="sheet-actions">${logButton}<button type="button" class="button" data-action="close">Close</button></div>`}`;
 }
 
 /** Log a Meal: totals, date · slot, what's left after, adjust grams for this time (§5.4). */
@@ -560,6 +549,7 @@ export const logSegment = (state) => (state.segment === 'foods' ? 'foods' : 'mea
  *   From Today → { to: 'today', handoff } — Today highlights the row and announces
  *     "Logged {name} to {Slot}. {remaining summary}."
  *   From the Log tab → { to: 'log', confirmation } — "Logged {name} to {Slot}." · View on Today · Edit.
+ *   From Meals → { to: 'meals', confirmation } — back on Meals with the same confirmation (§3.3).
  */
 export function afterLogging(app, ctx, result, note = '') {
   const message = note ? `${result.message} ${note}` : result.message;
@@ -568,7 +558,13 @@ export function afterLogging(app, ctx, result, note = '') {
     const left = remainingSummary(summary, { isToday: result.date === app.getToday(), date: result.date });
     return { to: 'today', handoff: { date: result.date, highlightId: result.instance.id, message: `${message} ${left}` } };
   }
-  return { to: 'log', confirmation: { message, instanceId: result.instance.id, date: result.date } };
+  const confirmation = { message, instanceId: result.instance.id, date: result.date };
+  return ctx.origin === 'meals' ? { to: 'meals', confirmation } : { to: 'log', confirmation };
+}
+
+/** Back to Meals: one step back when Meals opened Log, otherwise replace Log with Meals. */
+export function returnToMeals(state) {
+  return state.launchedFromMeals ? { method: 'back' } : { method: 'replace', href: '#/meals' };
 }
 
 /**
@@ -594,18 +590,17 @@ export const logScreen = {
     state.segment = logSegment(state);
     const ctx = resolveLogContext(app, win.location.hash);
     if (ctx.origin !== 'today') state.launchedFromToday = false;
+    if (ctx.origin !== 'meals') state.launchedFromMeals = false;
     const actions = createLogActions(app);
     let model = logModel(app, ctx);
     let ui = null;
-    let opener = null;
-    let pendingFocus = null;
     let afterClose = null; // runs once when the open sheet closes (the follow-up after an adjusted log)
     let followNote = '';
     let confirmation = null;
 
     // data-origin lets the stylesheet treat Log opened from Today as a pushed, full-screen
     // destination on compact screens (no tab bar underneath; §2.3).
-    main.innerHTML = `<div class="log-page" data-log-page>
+    main.innerHTML = `<div class="log-page view-page" data-log-page>
 <div class="log-screen" data-log-body data-origin="${ctx.origin}">
 <div data-log-top></div>
 <div class="log-confirmation-region" data-confirmation role="status" aria-live="polite"></div>
@@ -645,65 +640,24 @@ export const logScreen = {
     const renderConfirm = () => { confirmEl.innerHTML = renderConfirmation(confirmation); };
     function renderAll() { renderTop(); renderConfirm(); renderList(); renderTray(); }
 
-    /* ---- sheets, panes and pushed views (§3.1) ---- */
-    let width = 'medium';
-    let modal = true;
-    // A full-screen view on compact screens gets its own history entry, so the browser's
-    // Back closes it (like any pushed view) instead of leaving Log.
-    let viewEntry = false;
-    let skipPops = 0;
-    let replaceAfterPop = null;
-    function popViewEntry() {
-      if (!viewEntry) return;
-      viewEntry = false;
-      skipPops += 1;
-      win.history.back();
-    }
-    const onPop = () => {
-      if (replaceAfterPop) { const href = replaceAfterPop; replaceAfterPop = null; win.location.replace(href); return; }
-      if (skipPops) { skipPops -= 1; return; }
-      if (viewEntry) { viewEntry = false; closeDialog(); } // browser Back closed the pushed view
-    };
-    win.addEventListener('popstate', onPop);
-    this._cleanup = () => win.removeEventListener('popstate', onPop);
-
-    function openDialog(next) {
-      const wasOpen = dialog.open;
-      if (!wasOpen) { opener = doc.activeElement; width = widthClass(win); }
-      ui = next;
-      const present = presentationFor(ui.type, width);
-      dialog.dataset.present = present;
-      drawDialog();
-      if (!wasOpen) {
-        modal = present !== 'pane';
-        if (modal) dialog.showModal();
-        else { page.classList.add('has-view'); dialog.show(); } // wide: the right-hand pane
+    /* ---- sheets, panes and pushed views (§3.1; view-host.js) ---- */
+    const host = createViewHost({
+      page, dialog, win, doc,
+      viewTypes: LOG_VIEW_TYPES,
+      fallbackFocus: () => main.querySelector('#screen-title'),
+      onClose: () => {
+        ui = null;
+        const next = afterClose;
+        afterClose = null;
+        if (next) next();
       }
-      if (present === 'pushed' && !viewEntry) { win.history.pushState({ logView: true }, '', win.location.href); viewEntry = true; }
-      // A read-only detail view starts at its title (and top); forms start at their first field.
-      const auto = dialog.querySelector('[data-autofocus]')
-        || (ui.type === 'meal-detail' ? null : dialog.querySelector('input:not([type=radio]):not([type=checkbox]), select, .sheet-actions .button.primary:not([disabled])'))
-        || dialog.querySelector('#sheet-title');
-      if (auto) { if (auto.id === 'sheet-title') auto.setAttribute('tabindex', '-1'); auto.focus(); }
-    }
-    const closeDialog = () => { if (dialog.open) dialog.close(); };
-    // Escape closes the non-modal pane too (modal dialogs get it from the browser).
-    dialog.addEventListener('keydown', (event) => { if (event.key === 'Escape' && dialog.open && !modal) { event.preventDefault(); closeDialog(); } });
-    dialog.addEventListener('close', () => {
-      popViewEntry();
-      page.classList.remove('has-view');
-      delete dialog.dataset.present;
-      ui = null;
-      dialog.innerHTML = '';
-      const next = afterClose;
-      afterClose = null;
-      if (next) next();
-      const target = pendingFocus && pendingFocus.isConnected ? pendingFocus
-        : opener && opener.isConnected ? opener : main.querySelector('#screen-title');
-      opener = null;
-      pendingFocus = null;
-      if (target) target.focus();
     });
+    this._cleanup = () => host.destroy();
+    function openDialog(next) {
+      ui = next;
+      host.open(ui.type, drawDialog, { startAtTitle: ui.type === 'meal-detail' });
+    }
+    const closeDialog = () => host.close();
     function drawDialog() {
       if (!ui) return;
       switch (ui.type) {
@@ -791,9 +745,10 @@ export const logScreen = {
       const outcome = afterLogging(app, ctx, result, followNote);
       followNote = '';
       if (outcome.to === 'today') { goToToday(outcome.handoff); return; }
+      if (outcome.to === 'meals') { goToMeals(outcome.confirmation); return; }
       confirmation = outcome.confirmation;
       renderConfirm();
-      pendingFocus = top.querySelector('[data-query]');
+      host.returnFocusTo(top.querySelector('[data-query]'));
       closeDialog();
     }
     function goToToday(handoff) {
@@ -801,12 +756,15 @@ export const logScreen = {
       const nav = returnToToday(state, ctx, handoff ? handoff.date : ctx.launchDate);
       state.launchedFromToday = false;
       afterClose = null;
-      const hadViewEntry = viewEntry; // a pushed view's history entry sits on top of Log's
-      viewEntry = false;
-      closeDialog();
-      if (nav.method === 'back') win.history.go(hadViewEntry ? -2 : -1);
-      else if (hadViewEntry) { replaceAfterPop = nav.href; win.history.back(); }
-      else win.location.replace(nav.href);
+      host.leave(nav);
+    }
+    /** Back to Meals, with the confirmation for Meals to show (or none when nothing was logged). */
+    function goToMeals(confirmationForMeals) {
+      session.mealsHandoff = confirmationForMeals ? { confirmation: confirmationForMeals } : null;
+      const nav = returnToMeals(state);
+      state.launchedFromMeals = false;
+      afterClose = null;
+      host.leave(nav);
     }
     function showOnToday(extra) {
       if (!confirmation || !confirmation.instanceId) return;
@@ -817,17 +775,7 @@ export const logScreen = {
     /* ---- custom food form: domain validation as fields change (§7.4) ---- */
     function syncCustomFood() {
       ui.validation = app.validateCustomFood(customFoodInput(ui.values));
-      const tpl = doc.createElement('template');
-      tpl.innerHTML = renderCustomFoodForm(ui);
-      // Update in place (never replace): a field's change event fires on the same click that
-      // presses Save, and replacing the button mid-click would swallow that click.
-      for (const el of tpl.content.querySelectorAll('[data-sync]')) {
-        const current = dialog.querySelector(`[data-sync="${el.dataset.sync}"]`);
-        if (!current) continue;
-        for (const name of current.getAttributeNames()) if (!el.hasAttribute(name)) current.removeAttribute(name);
-        for (const name of el.getAttributeNames()) current.setAttribute(name, el.getAttribute(name));
-        if (current.innerHTML !== el.innerHTML) current.innerHTML = el.innerHTML;
-      }
+      syncInPlace(dialog, renderCustomFoodForm(ui), doc);
     }
 
     /* ---- input ---- */
@@ -904,7 +852,7 @@ export const logScreen = {
       try {
         switch (el.dataset.action) {
           case 'close': closeDialog(); break;
-          case 'back': goToToday(null); break;
+          case 'back': if (ctx.origin === 'meals') goToMeals(null); else goToToday(null); break;
           case 'segment': {
             state.segment = el.dataset.segment;
             renderTop();
@@ -994,7 +942,7 @@ export const logScreen = {
           case 'tray-remove': {
             state.tray.splice(Number(el.dataset.index), 1);
             renderTray();
-            if (!state.tray.length) { state.trayName = null; pendingFocus = top.querySelector('[data-query]'); closeDialog(); break; }
+            if (!state.tray.length) { state.trayName = null; host.returnFocusTo(top.querySelector('[data-query]')); closeDialog(); break; }
             ui.rows = trayRows();
             ui.preview = trayPreview(true);
             ui.name = currentTrayName();
@@ -1046,6 +994,13 @@ export const logScreen = {
     });
 
     renderAll();
+    // "Log this meal" from Meals opens straight into that meal's confirm sheet; closing it
+    // without logging goes back to Meals, where the user was (§3.3, §5.8).
+    if (ctx.origin === 'meals' && ctx.openMealId && app.getMeal(ctx.openMealId)) {
+      openMeal(ctx.openMealId);
+      afterClose = () => goToMeals(null);
+      return true;
+    }
     return false;
   },
 

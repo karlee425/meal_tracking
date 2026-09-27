@@ -772,6 +772,10 @@ details.option-group > summary.group-title { cursor: pointer; min-height: 44px; 
   .app-frame:has(.log-screen[data-origin="today"]) .primary-nav { display: none; }
   .app-main:has(.log-screen[data-origin="today"]) { padding-bottom: calc(var(--space-6) + env(safe-area-inset-bottom)); }
   .log-screen[data-origin="today"] .tray { bottom: env(safe-area-inset-bottom); }
+  /* …and so is Log opened from Meals ("Log this meal", §3.3). */
+  .app-frame:has(.log-screen[data-origin="meals"]) .primary-nav { display: none; }
+  .app-main:has(.log-screen[data-origin="meals"]) { padding-bottom: calc(var(--space-6) + env(safe-area-inset-bottom)); }
+  .log-screen[data-origin="meals"] .tray { bottom: env(safe-area-inset-bottom); }
 }
 @media (min-width: 37.5em) and (max-width: 63.99em) {
   .sheet[data-present="panel"] {
@@ -785,14 +789,14 @@ details.option-group > summary.group-title { cursor: pointer; min-height: 44px; 
   }
 }
 @media (min-width: 64em) {
-  .app-main:has(.log-page.has-view) { max-width: calc(var(--content-max) + 28rem); }
-  .log-page.has-view {
+  .app-main:has(.view-page.has-view) { max-width: calc(var(--content-max) + 28rem); }
+  .view-page.has-view {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(20rem, 26rem);
     gap: var(--space-5);
     align-items: start;
   }
-  .log-page.has-view > .log-screen { grid-column: 1; grid-row: 1; }
+  .view-page.has-view > :first-child { grid-column: 1; grid-row: 1; }
   .sheet[data-present="pane"] {
     position: sticky;
     top: calc(56px + var(--space-4));
@@ -806,3 +810,22 @@ details.option-group > summary.group-title { cursor: pointer; min-height: 44px; 
     box-shadow: 0 2px 16px rgba(0, 0, 0, 0.08);
   }
 }
+
+/* ---------- Meals (§6) ---------- */
+
+.meals-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-2) var(--space-3); margin-bottom: var(--space-3); }
+.meals-head .screen-title { margin: 0; }
+.filter-chips { display: flex; flex-wrap: wrap; gap: var(--space-2); margin: var(--space-3) 0 0; }
+.filter-chip { font-weight: 500; }
+.filter-chip[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); font-weight: 650; }
+.meal-type { flex-basis: 100%; color: var(--text-muted); font-size: 0.8125rem; overflow-wrap: anywhere; }
+.marker-fix { background: transparent; border: 1px solid var(--warning); color: var(--text); }
+.empty-state .sheet-actions { margin-top: var(--space-3); }
+.banner-info { border-left-color: var(--accent); }
+.repair-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 0 var(--space-3); font-weight: 400; }
+.adjust-row .row-macros { flex-basis: 100%; }
+.adjust-row.is-missing .adjust-label { flex: 1 1 12rem; overflow-wrap: anywhere; }
+.add-ingredient { margin-top: var(--space-3); }
+.picker-results { margin-top: var(--space-3); }
+.sheet .search-input { width: 100%; }
+.edit-source { margin: var(--space-4) 0 0; padding-top: var(--space-3); border-top: 1px solid var(--border); color: var(--text-muted); font-size: 0.9375rem; }

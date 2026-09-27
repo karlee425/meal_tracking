@@ -9,8 +9,9 @@ import { openBrowserDataLayer } from '../src/browser/app-data.js';
 import { createShell } from './shell.js';
 import { todayScreen } from './today.js';
 import { logScreen } from './log.js';
+import { mealsScreen } from './meals.js';
 
-const shell = createShell({ root: document.getElementById('app'), win: window, doc: document, screens: { today: todayScreen, log: logScreen } });
+const shell = createShell({ root: document.getElementById('app'), win: window, doc: document, screens: { today: todayScreen, log: logScreen, meals: mealsScreen } });
 shell.start();
 
 openBrowserDataLayer()

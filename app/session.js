@@ -15,9 +15,17 @@ function fresh() {
       query: '',
       tray: [], // [{ foodId, text }] — the meal builder tray (§5.5)
       trayName: null, // the user's edit of the prefilled tray name, if any
-      launchedFromToday: false // true while Log sits on top of a Today history entry
+      launchedFromToday: false, // true while Log sits on top of a Today history entry
+      launchedFromMeals: false // true while Log sits on top of a Meals history entry
     },
-    handoff: null // { date, highlightId?, openInstanceId?, message? } for Today to pick up once
+    meals: {
+      segment: null, // 'saved' | 'library', remembered per session (§6.1)
+      query: '',
+      type: 'all', // meal-type filter chip: 'all' or a meal type (filter only, never a slot rule)
+      favorites: false // the Favourites chip
+    },
+    handoff: null, // { date, highlightId?, openInstanceId?, message? } for Today to pick up once
+    mealsHandoff: null // { confirmation } for Meals to show once, after "Log this meal"
   };
 }
 

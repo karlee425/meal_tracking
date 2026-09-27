@@ -67,7 +67,7 @@ test('Log — renders through the existing shell and navigation', () => {
   assert.ok(!mounted.includes('heading-focus'));
 
   const mainSrc = fs.readFileSync(path.join(ROOT, 'app/main.js'), 'utf8');
-  assert.match(mainSrc, /screens: \{ today: todayScreen, log: logScreen \}/);
+  assert.match(mainSrc, /screens: \{ today: todayScreen, log: logScreen, meals: mealsScreen \}/);
   assert.equal(typeof logScreen.mount, 'function');
 });
 
@@ -482,14 +482,14 @@ test('Log — adjusted grams on a Saved Meal leave the Saved Meal alone; a Libra
 /* 16 ---------------- architecture ---------------- */
 
 test('Log — no macro arithmetic, no forbidden terms, no second store, domain via its entry point', () => {
-  for (const f of ['app/log.js', 'app/session.js', 'app/app.css']) {
+  for (const f of ['app/log.js', 'app/session.js', 'app/view-host.js', 'app/app.css']) {
     const src = fs.readFileSync(path.join(ROOT, f), 'utf8');
     assert.deepEqual(macroArithmeticInSource(src, f), [], f);
     assert.ok(!FORBIDDEN_NUTRITION.test(src), f);
     assert.deepEqual(domainImportsBypassingIndex(src), [], f);
   }
   const src = fs.readFileSync(path.join(ROOT, 'app/log.js'), 'utf8');
-  assert.deepEqual([...src.matchAll(/from '([^']+)'/g)].map((m) => m[1]).sort(), ['../src/domain/index.js', './session.js', './shell.js', './today.js']);
+  assert.deepEqual([...src.matchAll(/from '([^']+)'/g)].map((m) => m[1]).sort(), ['../src/domain/index.js', './session.js', './shell.js', './today.js', './view-host.js']);
   assert.ok(!/localStorage|sessionStorage|indexedDB|\bfetch\(|import\(/.test(src), 'no second persistence mechanism');
   assert.ok(!/\.sort\(|getMacroCoachSuggestions|score\s*[<>]/.test(src), 'no re-ranking; the Coach is not used here');
   assert.ok(!/\bunit\s*:\s*'(?!g')/.test(src), 'grams only');
@@ -539,12 +539,13 @@ test('Log — detail and editing views are pushed full screen (compact), a side 
   assert.match(block('@media (max-width: 37.49em)'), /\.sheet\[data-present="pushed"\] \{[^}]*width: 100vw;[^}]*height: 100dvh;[^}]*border-radius: 0;/, 'compact: full screen');
   assert.match(block('@media (min-width: 37.5em) and (max-width: 63.99em)'), /\.sheet\[data-present="panel"\] \{[^}]*height: 100dvh;[^}]*margin: 0 0 0 auto;/, 'medium: side panel');
   const wide = block('@media (min-width: 64em)');
-  assert.match(wide, /\.log-page\.has-view \{[^}]*grid-template-columns: minmax\(0, 1fr\) minmax\(20rem, 26rem\);/, 'wide: results left, detail right');
+  assert.match(wide, /\.view-page\.has-view \{[^}]*grid-template-columns: minmax\(0, 1fr\) minmax\(20rem, 26rem\);/, 'wide: results left, detail right');
   assert.match(wide, /\.sheet\[data-present="pane"\] \{[^}]*position: sticky;[^}]*grid-column: 2;/);
   assert.match(css, /\.sheet\[data-present="pushed"\] \.view-close \{ display: none; \}/);
   assert.match(css, /\.view-back \{ display: none; \}/);
 
-  const src = fs.readFileSync(path.join(ROOT, 'app/log.js'), 'utf8');
+  const src = fs.readFileSync(path.join(ROOT, 'app/view-host.js'), 'utf8'); // shared with Meals
+  assert.match(fs.readFileSync(path.join(ROOT, 'app/log.js'), 'utf8'), /createViewHost\(\{[\s\S]*?viewTypes: LOG_VIEW_TYPES/, 'Log presents through the shared view host');
   assert.match(src, /if \(modal\) dialog\.showModal\(\);\s*else \{ page\.classList\.add\('has-view'\); dialog\.show\(\); \}/, 'wide pane is non-modal, beside the list');
   assert.match(src, /if \(present === 'pushed' && !viewEntry\) \{ win\.history\.pushState/, 'a pushed view has its own history entry');
 });
@@ -563,10 +564,11 @@ test('Log — opened from Today on a phone, Log is a pushed destination: no tab 
 });
 
 test('Log — Back and browser history: leaving from a pushed view unwinds its history entry too', () => {
-  const src = fs.readFileSync(path.join(ROOT, 'app/log.js'), 'utf8');
+  assert.match(fs.readFileSync(path.join(ROOT, 'app/log.js'), 'utf8'), /host\.leave\(nav\);/, 'Log leaves through the view host');
+  const src = fs.readFileSync(path.join(ROOT, 'app/view-host.js'), 'utf8');
   assert.match(src, /if \(nav\.method === 'back'\) win\.history\.go\(hadViewEntry \? -2 : -1\);/, 'back to Today past the view entry and Log');
   assert.match(src, /else if \(hadViewEntry\) \{ replaceAfterPop = nav\.href; win\.history\.back\(\); \}/, 'otherwise drop the view entry, then replace Log');
-  assert.match(src, /if \(viewEntry\) \{ viewEntry = false; closeDialog\(\); \}/, 'browser Back closes a pushed view');
+  assert.match(src, /if \(viewEntry\) \{[\s\S]*?viewEntry = false;\s*closeDialog\(\);\s*\}/, 'browser Back closes a pushed view');
   assert.match(src, /win\.removeEventListener\('popstate', onPop\)/, 'the listener goes with the screen');
   const { app } = setup();
   const ctx = resolveLogContext(app, fromToday(TODAY, 'lunch'));

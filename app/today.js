@@ -391,7 +391,8 @@ ${errorSlot}
 <button type="button" class="button primary" data-action="edit-instance">Edit this logged meal</button>
 <button type="button" class="button" data-action="move-instance">Move to another slot</button>
 <button type="button" class="button danger" data-action="delete-instance">Delete</button>
-</div>`;
+</div>
+${source === 'saved' && instance.sourceMealId ? `<p class="edit-source">Want to change the recipe for next time? <a class="link-button" href="#/meals?meal=${encodeURIComponent(instance.sourceMealId)}&edit=1">Edit Saved Meal “${escapeHtml(sourceName)}”</a></p>` : ''}`;
 }
 
 /** Edit one logged meal: name, slot, grams, remove (§4.3.4). The Saved Meal is untouched. */
