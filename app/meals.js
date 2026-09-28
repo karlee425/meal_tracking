@@ -50,12 +50,17 @@ export function copyOfName(app, meal) {
   return src ? src.name : null;
 }
 
+/** Saved Meals that need a fix: the domain can't calculate them (a Food they use was deleted, §6.5). */
+export const needsFixCount = (app) => app.getSavedMeals().filter((m) => !app.calculateMealMacros(m.id).valid).length;
+
 /**
  * The active segment's meals. No query: Saved by last update, Library in shipped order
  * (retired hidden). A query: searchMeals within the segment, in the domain's ranking (§6.2).
- * The type chip and the Favourites chip then filter; they never reorder.
+ * The type chip, the Favourites chip and the "Needs a fix" chip then filter; they never
+ * reorder. "Needs a fix" is a view over the Saved Meals, decided by calculateMealMacros —
+ * the same state the Coach footer counts (§8.3) — never a separate list.
  */
-export function mealsList(app, { segment, query = '', type = 'all', favorites = false }) {
+export function mealsList(app, { segment, query = '', type = 'all', favorites = false, needsFix = false }) {
   const fav = new Set(app.getPreferences().favoriteMeals);
   const q = String(query).trim();
   const pool = q
@@ -63,12 +68,15 @@ export function mealsList(app, { segment, query = '', type = 'all', favorites = 
     : segment === 'saved' ? sortSavedMeals(app.getSavedMeals()) : app.getLibraryMeals();
   const items = pool
     .filter((m) => (type === 'all' || m.mealType === type) && (!favorites || fav.has(m.id)))
-    .map((meal) => ({ meal, isFavorite: fav.has(meal.id), calc: app.calculateMealMacros(meal.id), copyOf: copyOfName(app, meal) }));
+    .map((meal) => ({ meal, isFavorite: fav.has(meal.id), calc: app.calculateMealMacros(meal.id), copyOf: copyOfName(app, meal) }))
+    .filter((x) => !(needsFix && segment === 'saved') || !x.calc.valid);
   return {
     segment,
     query: q,
     type,
     favorites,
+    needsFix: needsFix && segment === 'saved', // a Saved-only filter (Library meals always calculate)
+    fixCount: needsFixCount(app),
     savedCount: app.getSavedMeals().length,
     items
   };
@@ -79,8 +87,11 @@ export function mealsList(app, { segment, query = '', type = 'all', favorites = 
 const TYPE_FILTERS = Object.freeze(['all', ...constants.MEAL_TYPES]);
 const typeLabel = (t) => (t === 'all' ? 'All' : MEAL_TYPE_LABELS[t]);
 
-/** Heading, New meal, Saved | Library, search, type chips and the Favourites chip (§6.1). */
-export function renderMealsTop(state) {
+/**
+ * Heading, New meal, Saved | Library, search, type chips and the Favourites chip (§6.1). The
+ * "Needs a fix" chip (Saved only) is there while any Saved Meal needs a fix, or while it's on.
+ */
+export function renderMealsTop(state, { fixCount = 0 } = {}) {
   const seg = state.segment;
   return `<div class="meals-head">
 <h1 id="screen-title" class="screen-title" tabindex="-1">Meals</h1>
@@ -97,6 +108,7 @@ export function renderMealsTop(state) {
 <div class="filter-chips" role="group" aria-label="Filter">
 ${TYPE_FILTERS.map((t) => `<button type="button" class="chip filter-chip" data-action="type-filter" data-type="${t}" aria-pressed="${state.type === t}">${typeLabel(t)}</button>`).join('\n')}
 <button type="button" class="chip filter-chip" data-action="favorites-filter" aria-pressed="${!!state.favorites}"><span aria-hidden="true">★ </span>Favourites</button>
+${seg === 'saved' ? `<button type="button" class="chip filter-chip" data-action="needs-fix-filter" aria-pressed="${!!state.needsFix}"${state.needsFix || fixCount ? '' : ' hidden'}>Needs a fix</button>` : ''}
 </div>`;
 }
 
@@ -125,11 +137,12 @@ export function renderMealsList(list) {
 <div class="sheet-actions"><button type="button" class="button" data-action="segment" data-segment="library">Browse Library</button><button type="button" class="button" data-action="new-meal">New meal</button></div></div>`;
   }
   if (!list.items.length) {
-    if (list.favorites && !list.query && list.type === 'all') return '<p class="empty-note">Star a meal to find it here.</p>';
-    const clear = [list.query ? '<button type="button" class="button" data-action="clear-search">Clear search</button>' : '', list.type !== 'all' || list.favorites ? '<button type="button" class="button" data-action="clear-filters">Show all meals</button>' : ''].join('');
+    if (list.favorites && !list.query && list.type === 'all' && !list.needsFix) return '<p class="empty-note">Star a meal to find it here.</p>';
+    if (list.needsFix && !list.query && list.type === 'all' && !list.favorites) return '<p class="empty-note">No saved meals need a fix.</p><div class="sheet-actions"><button type="button" class="button" data-action="clear-filters">Show all meals</button></div>';
+    const clear = [list.query ? '<button type="button" class="button" data-action="clear-search">Clear search</button>' : '', list.type !== 'all' || list.favorites || list.needsFix ? '<button type="button" class="button" data-action="clear-filters">Show all meals</button>' : ''].join('');
     return `<p class="empty-note">${list.query ? `No meals match “${q}”.` : 'No meals match these filters.'}</p><div class="sheet-actions">${clear}</div>`;
   }
-  const title = list.segment === 'saved' ? 'Your saved meals' : 'Library meals';
+  const title = list.segment === 'saved' ? (list.needsFix ? 'Saved meals that need a fix' : 'Your saved meals') : 'Library meals';
   return `<section class="option-group" aria-labelledby="meals-list-title"><h2 id="meals-list-title" class="group-title">${title}${list.query ? ` matching “${q}”` : ''}</h2>
 <ul class="options">${list.items.map(mealCard).join('\n')}</ul></section>`;
 }
@@ -390,10 +403,13 @@ export const mealsScreen = {
     const dialog = main.querySelector('[data-sheet]');
     const searchInput = () => top.querySelector('[data-query]');
 
-    const renderTop = () => { top.innerHTML = renderMealsTop(state); };
+    const renderTop = () => { top.innerHTML = renderMealsTop(state, { fixCount: needsFixCount(app) }); };
     function renderList({ announceCount = false } = {}) {
       const list = mealsList(app, state);
       listEl.innerHTML = renderMealsList(list);
+      // The "Needs a fix" chip follows repairs and deletions without re-rendering the search field.
+      const fixChip = top.querySelector('[data-action="needs-fix-filter"]');
+      if (fixChip) fixChip.hidden = !(state.needsFix || list.fixCount);
       if (announceCount) countEl.textContent = listCountText(list);
     }
     const renderAnnouncement = () => { announceEl.innerHTML = renderConfirmation(announcement); };
@@ -596,7 +612,13 @@ export const mealsScreen = {
             top.querySelector('[data-action="favorites-filter"]').focus();
             break;
           case 'clear-search': state.query = ''; renderTop(); renderList({ announceCount: true }); searchInput().focus(); break;
-          case 'clear-filters': state.type = 'all'; state.favorites = false; renderTop(); renderList({ announceCount: true }); searchInput().focus(); break;
+          case 'needs-fix-filter':
+            state.needsFix = !state.needsFix;
+            renderTop();
+            renderList({ announceCount: true });
+            top.querySelector('[data-action="needs-fix-filter"]').focus();
+            break;
+          case 'clear-filters': state.type = 'all'; state.favorites = false; state.needsFix = false; renderTop(); renderList({ announceCount: true }); searchInput().focus(); break;
           case 'new-meal': openEditor(newDraft(), { returnTo: 'list' }); break;
           case 'meal-detail': openDetail(mealId); break;
 
@@ -749,6 +771,13 @@ export const mealsScreen = {
     // #/meals?meal=ID opens that meal; &edit=1 opens a Saved Meal in the editor (Today's
     // "Edit Saved Meal" link, §4.3.3). The query is then dropped so a refresh doesn't repeat it.
     const params = routeParams(win.location.hash);
+    // #/meals?filter=needs-fix (the Coach footer, §8.3): Saved, filtered to the meals that need a fix.
+    if (params.get('filter') === 'needs-fix') {
+      Object.assign(state, { segment: 'saved', query: '', type: 'all', favorites: false, needsFix: true });
+      win.history.replaceState(null, '', '#/meals');
+      renderTop();
+      renderList({ announceCount: true });
+    }
     const linked = params.get('meal') ? app.getMeal(params.get('meal')) : null;
     if (params.get('meal')) win.history.replaceState(null, '', '#/meals');
     if (linked) {

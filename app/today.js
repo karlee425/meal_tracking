@@ -16,7 +16,13 @@ import { macros, constants, addDays } from '../src/domain/index.js';
 import { escapeHtml } from './shell.js';
 import { session, routeParams, isIsoDate } from './session.js';
 import { createViewHost, viewHead, syncInPlace } from './view-host.js';
-import { renderPicker, pickerResults, renderCustomFoodForm, customFoodInput } from './log.js';
+import {
+  renderPicker, pickerResults, renderCustomFoodForm, customFoodInput, renderMealDetail,
+  customFoodValues, customFoodPatch, customFoodDirty, validateCustomFoodForm
+} from './log.js';
+import {
+  foodDetailModel, renderFoodDetail, renderDeleteFood, renderDiscardFood, foodUsageMeals, renderLinkedMessage, createFoodActions
+} from './foods.js';
 
 /* ---------------- labels and formatting ---------------- */
 
@@ -144,10 +150,15 @@ export function claimDoneEditNote(state, date, summary) {
   return true;
 }
 
-/** Surfaces presented as views (pushed · panel · pane, §2.3); the rest are short sheets. */
-export const TODAY_VIEW_TYPES = Object.freeze(['instance', 'edit', 'picker', 'custom-food']);
-/** Today's own sheets (Coach, day type, day menu…): short modal sheets at every width, as before. */
-export const TODAY_SHEET_TYPES = Object.freeze(['day-type', 'meal', 'quantity', 'coach', 'day-menu', 'clear-day']);
+/**
+ * Surfaces presented as views (pushed · panel · pane, §2.3): the logged meal, its editor and
+ * Food picker, and the Meal and Food detail the Coach and a logged meal's source line open.
+ * Everything else is a short sheet on compact and medium screens; on wide screens it opens in
+ * the right-hand pane — the Coach included (§8.2), so the macro panel stays visible.
+ */
+export const TODAY_VIEW_TYPES = Object.freeze(['instance', 'edit', 'picker', 'custom-food', 'meal-detail', 'food-detail']);
+/** Day-level sheets opened from Today itself (day type, day menu, clear day): modal sheets at every width. */
+export const TODAY_SHEET_TYPES = Object.freeze(['day-type', 'day-menu', 'clear-day']);
 
 /**
  * "Left today: P 42 g · C target reached · F 12 g." from getDaySummary, for the announcement
@@ -423,8 +434,11 @@ export function renderInstanceDialog({ instance, slot, date, source, sourceName 
     return `<tr><th scope="row">${escapeHtml(ing.foodName)}</th><td>${ing.quantity} g</td><td>${r.protein}</td><td>${r.carbs}</td><td>${r.fat}</td></tr>`;
   }).join('\n');
   const t = whole(instance.totals);
-  const sourceText = source === 'saved' ? `From Saved Meal “${escapeHtml(sourceName)}”`
-    : source === 'library' ? `From Library Meal “${escapeHtml(sourceName)}”`
+  // §13.2 / §2.2: the source line opens the current recipe (read-only Meal detail) while that
+  // meal exists; a deleted source is plain text. The logged meal itself never changes.
+  const sourceLink = (label) => `<button type="button" class="link-button" data-action="source-meal" data-meal="${escapeHtml(instance.sourceMealId)}" aria-label="${escapeHtml(`${label} ${sourceName}: open the current recipe`)}">“${escapeHtml(sourceName)}”</button>`;
+  const sourceText = source === 'saved' ? `From Saved Meal ${sourceLink('Saved Meal')}`
+    : source === 'library' ? `From Library Meal ${sourceLink('Library Meal')}`
       : source === 'deleted' ? 'From a meal that’s since been deleted' : '';
   return `${viewHead(instance.mealName, `${SLOT_LABELS[slot]} · ${formatDate(date)} · Logged at ${formatTime(instance.loggedAt)}`)}
 ${sourceText ? `<p class="source-line">${sourceText}</p>` : ''}
@@ -545,16 +559,16 @@ export function coachVisibleCount(tier, suggestions) {
 }
 
 /** The Coach sheet, from getMacroCoachSuggestions as returned (order untouched). */
-export function renderCoachDialog({ suggestions, expanded = {} }) {
+export function renderCoachDialog({ suggestions, expanded = {}, note = null }) {
   const r = whole(suggestions.remaining);
   const allReached = macros.MACROS.every((key) => suggestions.reached[key]);
   const left = macros.MACROS.map((key) => `${MACRO_LETTERS[key]} ${suggestions.reached[key] ? 'target reached' : grams(r[key])}`).join(' · ');
   const groups = suggestions.tiers.filter((t) => t.items.length).map((t) => {
     const limit = expanded[t.tier] ? t.items.length : coachVisibleCount(t.tier, suggestions);
     const items = t.items.slice(0, limit).map((item) => `<li class="option-row">
-<div class="option-text"><span class="meal-name">${escapeHtml(item.name)}</span>${item.source === 'library' ? '<span class="marker">Library</span>' : ''}${item.isFavorite ? '<span class="marker" aria-label="Favourite">★</span>' : ''}
+<button type="button" class="option-main" data-action="coach-meal-detail" data-meal="${escapeHtml(item.mealId)}" aria-label="${escapeHtml(item.name)}: details"><span class="meal-name">${escapeHtml(item.name)}</span>${item.source === 'library' ? '<span class="marker">Library</span>' : ''}${item.isFavorite ? '<span class="marker" aria-label="Favourite">★</span>' : ''}
 <span class="meal-macros">${macroLine(item.totals)}</span>
-<span class="preview-after">${afterLine(item.after)}</span></div>
+<span class="preview-after">${afterLine(item.after)}</span></button>
 <button type="button" class="button" data-action="coach-log-meal" data-meal="${escapeHtml(item.mealId)}" aria-label="Log ${escapeHtml(item.name)}">Log</button>
 </li>`).join('\n');
     const more = t.items.length > limit ? `<button type="button" class="link-button" data-action="coach-more" data-tier="${t.tier}">Show all ${t.items.length}</button>` : '';
@@ -563,17 +577,22 @@ export function renderCoachDialog({ suggestions, expanded = {} }) {
   const foods = [...suggestions.topUpFoods.personalized.map((x) => ({ ...x, why: x.reasons.includes('favorite') ? 'Favourite' : 'Recent' })), ...suggestions.topUpFoods.starter.map((x) => ({ ...x, why: 'Common in Library meals' }))];
   const foodLimit = expanded.topUp ? foods.length : coachVisibleCount('topUp', suggestions);
   const foodGroup = foods.length ? `<section class="option-group" aria-labelledby="coach-topup"><h3 id="coach-topup" class="group-title">Top up with a food</h3><ul class="options">
-${foods.slice(0, foodLimit).map((x) => `<li class="option-row"><div class="option-text"><span class="meal-name">${escapeHtml(x.food.name)}</span><span class="state-chip">${escapeHtml(x.food.state)}</span><span class="marker">${x.why}</span>
-<span class="meal-macros">${macroLine(x.food.nutrition)} per 100 g</span></div>
+${foods.slice(0, foodLimit).map((x) => `<li class="option-row"><button type="button" class="option-main" data-action="coach-food-detail" data-food="${escapeHtml(x.food.id)}" aria-label="${escapeHtml(`${x.food.name}, ${x.food.state}: details`)}"><span class="meal-name">${escapeHtml(x.food.name)}</span><span class="state-chip">${escapeHtml(x.food.state)}</span><span class="marker">${x.why}</span>
+<span class="meal-macros">${macroLine(x.food.nutrition)} per 100 g</span></button>
 <button type="button" class="button" data-action="coach-log-food" data-food="${escapeHtml(x.food.id)}" aria-label="Log ${escapeHtml(x.food.name)} by weight">Log</button></li>`).join('\n')}
 </ul>${foods.length > foodLimit ? '<button type="button" class="link-button" data-action="coach-more" data-tier="topUp">Show all ' + foods.length + '</button>' : ''}</section>` : '';
+  // §8.6: the empty state offers its two ways on — Log's food search, and Meals.
   const nothing = !groups && !foodGroup
-    ? '<p class="empty-note">Nothing to suggest right now. Suggestions come from your saved and recently logged meals.</p>'
+    ? `<p class="empty-note">Nothing to suggest right now. Suggestions come from your saved and recently logged meals.</p>
+<div class="sheet-actions"><button type="button" class="button" data-action="coach-add-food">Add food</button><button type="button" class="button" data-action="coach-browse-meals">Browse meals</button></div>`
     : '';
-  const fix = suggestions.excluded.needsReplacement.length
-    ? `<p class="note">${suggestions.excluded.needsReplacement.length} saved ${suggestions.excluded.needsReplacement.length === 1 ? 'meal needs' : 'meals need'} a fix before ${suggestions.excluded.needsReplacement.length === 1 ? 'it' : 'they'} can be suggested.</p>`
+  // §8.3 item 6: "{n} saved meal(s) need a fix" → Meals, filtered to those meals.
+  const n = suggestions.excluded.needsReplacement.length;
+  const fix = n
+    ? `<p class="note coach-fix"><button type="button" class="link-button" data-action="coach-fix">${n} saved ${n === 1 ? 'meal needs' : 'meals need'} a fix</button> ${n === 1 ? 'It isn’t' : 'They aren’t'} suggested until ${n === 1 ? 'it’s' : 'they’re'} fixed.</p>`
     : '';
   return `${dialogHead('Build my next meal', `${DAY_TYPE_LABELS[suggestions.dayType]} · Left today: ${left}`)}
+${note ? `<div class="foods-message" role="status">${renderLinkedMessage(note)}</div>` : ''}
 ${allReached ? '<p class="note">You\'ve reached today\'s targets.</p>' : ''}
 ${suggestions.insufficientHistory ? '<p class="note">Not enough history yet for personal suggestions. These are starter meals from the Library. Log or save meals and this list becomes yours.</p>' : ''}
 ${groups}
@@ -680,6 +699,7 @@ export const todayScreen = {
     let viewDate = todayViewDate(app, win.location.hash);
     const followsToday = viewDate === app.getToday();
     const actions = createTodayActions(app, () => viewDate);
+    const foodActions = createFoodActions(app);
     let model = todayModel(app, viewDate);
     let ui = null; // the open surface's state
     let highlightId = null;
@@ -752,8 +772,13 @@ export const todayScreen = {
         closeDialog();
         return;
       }
+      // A Today control (e.g. Build My Next Meal) used while a pane is open beside Today: the pane
+      // shows the new surface, and closing it returns focus to that control (§14).
+      const trigger = doc.activeElement;
+      const fromToday = dialog.open && trigger && !dialog.contains(trigger) && body.contains(trigger);
       ui = next;
       host.open(next.type, drawDialog, { startAtTitle: next.type === 'instance' });
+      if (fromToday) host.returnFocusTo(trigger);
     }
 
     const closeDialog = () => host.close();
@@ -774,6 +799,10 @@ export const todayScreen = {
         case 'day-menu': dialog.innerHTML = renderDayMenuDialog(); break;
         case 'clear-day': dialog.innerHTML = renderClearDayDialog(ui); break;
         case 'coach': dialog.innerHTML = renderCoachDialog(ui); break;
+        case 'meal-detail': dialog.innerHTML = renderMealDetail({ ...mealDetailData(ui.mealId), model: { future: model.isFuture } }); break;
+        case 'food-detail': dialog.innerHTML = renderFoodDetail({ ...ui, context: 'coach' }); break;
+        case 'food-delete': dialog.innerHTML = renderDeleteFood(ui); break;
+        case 'discard-food': dialog.innerHTML = renderDiscardFood(); break;
         default: break;
       }
     }
@@ -786,8 +815,59 @@ export const todayScreen = {
     function beforeLeave() {
       if (!ui) return true;
       if (ui.type === 'picker') { backToEdit(ui.edit, '[data-action="add-ingredient"]'); return false; }
-      if (ui.type === 'custom-food') { openDialog(ui.pickUi); return false; }
+      if (ui.type === 'custom-food' && ui.pickUi) { openDialog(ui.pickUi); return false; }
+      // Food detail's own forms step back to it, asking first about unsaved edits (§3.2, §7.4).
+      if (ui.type === 'custom-food' && ui.mode === 'edit') {
+        if (customFoodDirty(ui)) { openDialog({ type: 'discard-food', form: ui }); return false; }
+        openFoodDetail(ui.foodId, ui.detail.back);
+        return false;
+      }
+      if (ui.type === 'discard-food') { openDialog(ui.form); return false; }
+      if (ui.type === 'food-delete') { openFoodDetail(ui.food.id, ui.detail.back); return false; }
+      // Meal / Food detail opened from the Coach or a logged meal's source line: Back returns there (§8.4, §16).
+      if ((ui.type === 'meal-detail' || ui.type === 'food-detail') && ui.back) { returnTo(ui.back, ui); return false; }
       return true;
+    }
+
+    /* ---- Meal and Food detail from the Coach (§8.4) and a logged meal's source line (§13.2) ---- */
+    function mealDetailData(mealId) {
+      const meal = app.getMeal(mealId);
+      const calc = app.calculateMealMacros(mealId);
+      const foods = {};
+      for (const ing of calc.ingredients) { const f = app.getFood(ing.foodId); if (f) foods[ing.foodId] = f; }
+      return { meal, calc, foods, isFavorite: app.getPreferences().favoriteMeals.includes(mealId) };
+    }
+    function openMealDetail(mealId, back) {
+      if (!app.getMeal(mealId)) { showError({ code: 'MEAL_NOT_FOUND' }); return; }
+      openDialog({ type: 'meal-detail', mealId, back });
+    }
+    function openFoodDetail(foodId, back, note = '') {
+      const detail = foodDetailModel(app, foodId);
+      if (!detail) { returnTo(back); return; }
+      openDialog({ type: 'food-detail', ...detail, note, back });
+    }
+    /** Back to the Coach (re-queried, so it reflects any change; groups stay expanded) or the logged meal. */
+    function returnTo(back, from = null) {
+      if (!back) { closeDialog(); return; }
+      if (back.type === 'coach') {
+        back.suggestions = app.getMacroCoachSuggestions({ date: model.date, mealSlot: defaultSlot(model.day) });
+        openDialog(back);
+        back.note = null; // a delete message shows once
+        const item = from && (from.type === 'meal-detail'
+          ? dialog.querySelector(`[data-action="coach-meal-detail"][data-meal="${CSS.escape(from.mealId)}"]`)
+          : dialog.querySelector(`[data-action="coach-food-detail"][data-food="${CSS.escape(from.food.id)}"]`));
+        if (item) item.focus();
+        return;
+      }
+      openInstance(back.instance.id);
+      const link = dialog.querySelector('[data-action="source-meal"]');
+      if (link) link.focus();
+    }
+    function refreshFoodDetail(message) {
+      Object.assign(ui, foodDetailModel(app, ui.food.id));
+      syncInPlace(dialog, renderFoodDetail({ ...ui, context: 'coach' }), doc);
+      const el = dialog.querySelector('[data-food-status]');
+      if (el) { el.textContent = ''; el.textContent = message; }
     }
 
     const checkedSlot = (name) => { const el = dialog.querySelector(`input[name="${name}"]:checked`); return el ? el.value : null; };
@@ -880,11 +960,11 @@ export const todayScreen = {
       }
     });
 
-    /** The picker's new-food form: domain validation as fields change (§7.4). */
+    /** The Custom Food form (a new food from the picker, or an edit from Food detail): domain validation as fields change (§7.4). */
     function syncCustomFood(el) {
       ui.values[el.dataset.cf] = el.value;
       ui.touched.add(el.dataset.cf);
-      ui.validation = app.validateCustomFood(customFoodInput(ui.values));
+      ui.validation = validateCustomFoodForm(app, ui);
       syncInPlace(dialog, renderCustomFoodForm(ui), doc);
     }
 
@@ -1005,10 +1085,51 @@ export const todayScreen = {
             break;
           }
           case 'cf-save': {
-            ui.validation = app.validateCustomFood(customFoodInput(ui.values));
+            ui.validation = validateCustomFoodForm(app, ui);
             if (!ui.validation.valid) { syncInPlace(dialog, renderCustomFoodForm(ui), doc); break; } // Save is disabled while invalid
+            if (ui.mode === 'edit') {
+              const food = foodActions.updateCustomFood(ui.foodId, customFoodPatch(ui.values));
+              openFoodDetail(food.id, ui.detail.back, 'Saved.'); // §7.4: back to the detail of the Food just saved
+              break;
+            }
             const food = app.createCustomFood(customFoodInput(ui.values));
             pickIngredient(food.id, ui.pickUi);
+            break;
+          }
+          /* Coach items → Meal / Food detail (§8.4); the logged meal's source → its current recipe (§13.2) */
+          case 'coach-meal-detail': openMealDetail(el.dataset.meal, ui); break;
+          case 'coach-food-detail': openFoodDetail(el.dataset.food, ui); break;
+          case 'source-meal': openMealDetail(el.dataset.meal, ui); break;
+          case 'log-meal-start': openMeal(el.dataset.meal, null); break;
+          case 'fd-favorite': refreshFoodDetail(foodActions.setFavorite(ui.food, !ui.isFavorite)); break;
+          case 'fd-suggest': refreshFoodDetail(foodActions.setNotSuggested(ui.food, !ui.isDisliked)); break;
+          case 'fd-edit': {
+            const food = app.getFood(ui.food.id);
+            if (!food) { returnTo(ui.back); break; }
+            const values = customFoodValues(food);
+            const form = { type: 'custom-food', mode: 'edit', foodId: food.id, initial: { ...values }, values, touched: new Set(), detail: ui };
+            form.validation = validateCustomFoodForm(app, form);
+            openDialog(form);
+            break;
+          }
+          case 'fd-delete': openDialog({ type: 'food-delete', food: ui.food, meals: foodUsageMeals(app, ui.food.id), detail: ui }); break;
+          case 'fd-delete-confirm': {
+            const back = ui.detail.back;
+            const note = foodActions.deleteCustomFood(ui.food); // §7.6: history untouched; Saved Meals that use it need a fix
+            if (back && back.type === 'coach') back.note = note;
+            refresh();
+            returnTo(back);
+            break;
+          }
+          case 'keep-editing': openDialog(ui.form); break;
+          case 'discard': openFoodDetail(ui.form.foodId, ui.form.detail.back); break;
+          /* Coach footer and empty state: to Meals, or Log's food search (§8.3, §8.6) */
+          case 'coach-fix': host.leave({ method: 'push', href: '#/meals?filter=needs-fix' }); break;
+          case 'coach-browse-meals': host.leave({ method: 'push', href: '#/meals' }); break;
+          case 'coach-add-food': {
+            session.log.segment = 'foods';
+            session.log.launchedFromToday = true;
+            host.leave({ method: 'push', href: `#/log?from=today&date=${model.date}` });
             break;
           }
           case 'save-instance': {

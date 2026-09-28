@@ -26,7 +26,8 @@ function fresh() {
       segment: null, // 'saved' | 'library', remembered per session (§6.1)
       query: '',
       type: 'all', // meal-type filter chip: 'all' or a meal type (filter only, never a slot rule)
-      favorites: false // the Favourites chip
+      favorites: false, // the Favourites chip
+      needsFix: false // the "Needs a fix" chip: Saved Meals the domain can't calculate (§6.5, §8.3)
     },
     progress: {
       period: null, // 7 | 14 | 30, remembered per session (§3.2)

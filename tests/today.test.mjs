@@ -18,7 +18,8 @@ import {
   renderEditDialog, todayViewDate, dayHref, claimDoneEditNote, DONE_EDIT_NOTE, TODAY_VIEW_TYPES, TODAY_SHEET_TYPES
 } from '../app/today.js';
 import { createViewHost, WIDE_QUERY, COMPACT_QUERY } from '../app/view-host.js';
-import { renderPicker, pickerResults } from '../app/log.js';
+import { renderPicker, pickerResults, renderMealDetail } from '../app/log.js';
+import { renderFoodDetail, foodDetailModel } from '../app/foods.js';
 
 const TODAY = '2026-09-27';
 const SEED = createFileAdapter(ROOT).load();
@@ -403,7 +404,7 @@ test('Today — no macro arithmetic, no forbidden terms, no second store, domain
     assert.deepEqual(domainImportsBypassingIndex(src), [], f);
   }
   const src = fs.readFileSync(path.join(ROOT, 'app/today.js'), 'utf8');
-  assert.deepEqual([...src.matchAll(/from '([^']+)'/g)].map((m) => m[1]).sort(), ['../src/domain/index.js', './log.js', './session.js', './shell.js', './view-host.js']);
+  assert.deepEqual([...src.matchAll(/from '([^']+)'/g)].map((m) => m[1]).sort(), ['../src/domain/index.js', './foods.js', './log.js', './session.js', './shell.js', './view-host.js']);
   assert.ok(!/localStorage|sessionStorage|indexedDB|\.mealInstances\s*\.push|targetSnapshot\s*=/.test(src), 'no second store; no direct record mutation');
 });
 
@@ -522,7 +523,7 @@ test('Today G4 — editing a logged meal can add an ingredient through the share
   assert.deepEqual(saved.instance.ingredients.slice(0, 2), JSON.parse(original).mealInstances[0].ingredients, 'existing ingredients keep their snapshot');
   assert.equal(app.getMeal(meal.id).ingredients.length, 2, 'the Saved Meal is untouched (A-13)');
   const src = fs.readFileSync(path.join(ROOT, 'app/today.js'), 'utf8');
-  assert.match(src, /import \{ renderPicker, pickerResults, renderCustomFoodForm, customFoodInput \} from '\.\/log\.js';/, 'the shared picker, not a second one');
+  assert.match(src, /import \{\s*renderPicker, pickerResults,[^}]*\} from '\.\/log\.js';/, 'the shared picker, not a second one');
   assert.ok(!/function renderPicker/.test(src) && !/function renderPicker/.test(fs.readFileSync(path.join(ROOT, 'app/meals.js'), 'utf8')), 'one picker implementation (log.js)');
 });
 
@@ -543,8 +544,8 @@ function fakeHost(width, em = 16) {
 }
 
 test('Today G5 — logged-meal detail, edit and picker are views in the shared view host; Today’s sheets stay sheets', () => {
-  assert.deepEqual([...TODAY_VIEW_TYPES], ['instance', 'edit', 'picker', 'custom-food']);
-  assert.deepEqual([...TODAY_SHEET_TYPES], ['day-type', 'meal', 'quantity', 'coach', 'day-menu', 'clear-day']);
+  assert.deepEqual([...TODAY_VIEW_TYPES], ['instance', 'edit', 'picker', 'custom-food', 'meal-detail', 'food-detail']);
+  assert.deepEqual([...TODAY_SHEET_TYPES], ['day-type', 'day-menu', 'clear-day']);
   const draw = () => {};
   for (const [width, present, modal, pane] of [[1280, 'pane', false, true], [800, 'panel', true, false], [375, 'pushed', true, false]]) {
     const { host, dialog, classes } = fakeHost(width);
@@ -559,14 +560,13 @@ test('Today G5 — logged-meal detail, edit and picker are views in the shared v
   }
   // 200 % text on a wide window: no room for two panes, so a side panel.
   { const { host, dialog } = fakeHost(1280, 32); host.open('instance', draw); assert.equal(dialog.dataset.present, 'panel'); }
-  // Coach (and everything opened from it) stays a modal sheet at every width — G6 is a later slice.
+  // Today's day-level sheets stay modal sheets at every width, and what opens on top of them too.
   for (const width of [1280, 800, 375]) {
     const { host, dialog, classes } = fakeHost(width);
-    host.open('coach', draw);
-    assert.deepEqual([dialog.dataset.present, dialog.modal, classes.has('has-view')], ['sheet', true, false], `Coach at ${width}px`);
-    host.open('meal', draw);
-    host.open('followup', draw);
-    assert.equal(dialog.dataset.present, 'sheet', 'what the Coach opens stays a sheet');
+    host.open('day-type', draw);
+    assert.deepEqual([dialog.dataset.present, dialog.modal, classes.has('has-view')], ['sheet', true, false], `day type at ${width}px`);
+    host.open('clear-day', draw);
+    assert.equal(dialog.dataset.present, 'sheet', 'what a day sheet opens stays a sheet');
     host.close();
     host.open('instance', draw);
     assert.notEqual(dialog.dataset.present, 'sheet', 'the sheet rule ends when it closes');
@@ -589,4 +589,145 @@ test('Today G5 — logged-meal detail, edit and picker are views in the shared v
   assert.match(detail, /class="link-button view-back" data-action="close"/, 'a Back control when pushed, Close otherwise');
   assert.match(renderEditDialog({ instance, date: TODAY, name: instance.mealName, slot: 'breakfast', rows: [{ foodId: 'a', unit: 'g', foodName: 'A', text: '1' }], preview: null }), /class="link-button view-back"/);
   assert.match(renderToday(todayModel(app)), /data-action="open-instance"/);
+});
+
+/* ---------------- G6–G10: Coach panel, Coach items → detail, needs-a-fix footer, empty state, source line ---------------- */
+
+test('Today G6 — the Coach is a right-hand pane on wide screens and a sheet otherwise; what it opens follows it', () => {
+  const draw = () => {};
+  for (const [width, present, modal, pane] of [[1280, 'pane', false, true], [800, 'sheet', true, false], [375, 'sheet', true, false]]) {
+    const { host, dialog, classes } = fakeHost(width);
+    host.open('coach', draw);
+    assert.deepEqual([dialog.dataset.present, dialog.modal, classes.has('has-view')], [present, modal, pane], `Coach at ${width}px (§8.2)`);
+    host.open('meal-detail', draw);
+    assert.equal(dialog.dataset.present, { 1280: 'pane', 800: 'panel', 375: 'pushed' }[width], `Meal detail from the Coach at ${width}px`);
+    host.open('coach', draw);
+    assert.equal(dialog.dataset.present, present, 'Back: the Coach again, in the same place');
+    host.open('meal', draw);
+    assert.equal(dialog.dataset.present, width === 1280 ? 'pane' : 'sheet', 'its Log confirmation stays in the pane on wide screens');
+    host.close();
+  }
+  { const { host, dialog } = fakeHost(1280, 32); host.open('coach', draw); assert.equal(dialog.dataset.present, 'sheet', '200 % text on a wide window: no room for two panes'); }
+  const src = fs.readFileSync(path.join(ROOT, 'app/today.js'), 'utf8');
+  assert.ok(!TODAY_SHEET_TYPES.includes('coach'), 'the Coach is no longer forced to a modal sheet');
+  assert.match(src, /case 'coach': \{\n\s+const suggestions = app\.getMacroCoachSuggestions\(\{ date: model\.date, mealSlot: defaultSlot\(model\.day\) \}\);/, 'same suggestions, same order');
+});
+
+test('Today G7 — every Coach item opens its Meal or Food detail; Log stays on the item; Back returns to the Coach', () => {
+  const { app, actions } = setup();
+  actions.chooseDayType('lift');
+  const fav = savedYogurt(app);
+  app.setFavoriteMeal(fav.id, true);
+  app.setFavoriteFood('food_custom_oats_overnight', true);
+  const suggestions = app.getMacroCoachSuggestions({ date: TODAY, mealSlot: 'lunch' });
+  const html = renderCoachDialog({ suggestions, expanded: { favoriteSaved: true, recent: true, saved: true, library: true, topUp: true } });
+  const detailMeals = [...html.matchAll(/data-action="coach-meal-detail" data-meal="([^"]+)"/g)].map((m) => m[1]);
+  const logMeals = [...html.matchAll(/data-action="coach-log-meal" data-meal="([^"]+)"/g)].map((m) => m[1]);
+  assert.deepEqual(detailMeals, logMeals, 'each meal item: details and Log, in the domain order');
+  const foods = [...suggestions.topUpFoods.personalized, ...suggestions.topUpFoods.starter].map((x) => x.food.id);
+  assert.deepEqual([...html.matchAll(/data-action="coach-food-detail" data-food="([^"]+)"/g)].map((m) => m[1]), foods, 'each top-up Food: details and Log');
+  assert.match(html, new RegExp(`class="option-main" data-action="coach-meal-detail" data-meal="${fav.id}" aria-label="Yogurt bowl: details"`));
+  // Meal detail: the one read-only Meal detail Log and Meals share (§6.4).
+  const meal = app.getMeal(fav.id);
+  const detail = renderMealDetail({ meal, calc: app.calculateMealMacros(fav.id), foods: {}, isFavorite: true, model: { future: false } });
+  assert.match(detail, /data-action="log-meal-start" data-meal="[^"]+">Log this meal/);
+  assert.match(detail, /class="link-button view-back" data-action="close"/);
+  // Food detail from the Coach (§7.3 table): Favourite, Don't suggest, Custom Food Edit · Delete; no Log this food.
+  const custom = renderFoodDetail({ ...foodDetailModel(app, 'food_custom_oats_overnight'), context: 'coach' });
+  assert.ok(!/data-action="fd-log"|data-action="fd-add"/.test(custom), 'no Log this food, no Add to a meal');
+  assert.match(custom, /data-action="fd-favorite"/);
+  assert.match(custom, /data-action="fd-suggest"/);
+  assert.match(custom, /data-action="fd-edit">Edit</);
+  assert.match(custom, /data-action="fd-delete">Delete</);
+  const core = renderFoodDetail({ ...foodDetailModel(app, 'food_core_banana'), context: 'coach' });
+  assert.match(core, /<p class="sheet-subtitle">App food · can’t be edited<\/p>/, 'Core Foods stay read-only');
+  assert.ok(!/data-action="fd-(log|add|edit|delete)"/.test(core));
+  const src = fs.readFileSync(path.join(ROOT, 'app/today.js'), 'utf8');
+  assert.match(src, /case 'coach-meal-detail': openMealDetail\(el\.dataset\.meal, ui\); break;/);
+  assert.match(src, /case 'coach-food-detail': openFoodDetail\(el\.dataset\.food, ui\); break;/);
+  assert.match(src, /\(ui\.type === 'meal-detail' \|\| ui\.type === 'food-detail'\) && ui\.back\) \{ returnTo\(ui\.back, ui\); return false; \}/, 'Back / Escape / Close return to where the detail was opened');
+  assert.match(src, /back\.suggestions = app\.getMacroCoachSuggestions/, 'the Coach is re-queried on return, its expanded groups kept');
+  assert.match(src, /case 'food-detail': dialog\.innerHTML = renderFoodDetail\(\{ \.\.\.ui, context: 'coach' \}\)/, 'the one Food detail (foods.js)');
+  assert.ok(!/function renderFoodDetail|function renderMealDetail/.test(src), 'no second detail implementation');
+});
+
+test('Today G7 — deleting a Custom Food from the Coach follows §7.6 and leaves history alone', () => {
+  const { app, actions } = setup();
+  actions.chooseDayType('lift');
+  const meal = app.createSavedMeal({ name: 'Oats bowl', mealType: 'breakfast', ingredients: [{ foodId: 'food_custom_oats_overnight', quantity: 80 }] });
+  app.logFood({ date: TODAY, mealSlot: 'breakfast', foodId: 'food_custom_oats_overnight', quantity: 90 });
+  const history = JSON.stringify(app.getDay(TODAY));
+  app.deleteCustomFood('food_custom_oats_overnight');
+  assert.equal(JSON.stringify(app.getDay(TODAY)), history, 'logged meals keep their snapshot');
+  const suggestions = app.getMacroCoachSuggestions({ date: TODAY, mealSlot: 'lunch' });
+  assert.deepEqual(suggestions.excluded.needsReplacement, [meal.id], 'the Saved Meal now needs a fix (A-18)');
+  const html = renderCoachDialog({ suggestions, expanded: {}, note: { message: 'Deleted Oats overnight. 1 Saved Meal needs a fix:', links: [{ href: `#/meals?meal=${meal.id}`, label: 'Oats bowl' }] } });
+  assert.match(html, /<div class="foods-message" role="status"><p>Deleted Oats overnight\. 1 Saved Meal needs a fix: <a href="#\/meals\?meal=[^"]+">Oats bowl<\/a><\/p><\/div>/);
+});
+
+test('Today G8 — the needs-a-fix footer appears only when a Saved Meal needs a fix, and goes to Meals filtered to those meals', () => {
+  const { app, actions } = setup();
+  actions.chooseDayType('lift');
+  const ok = savedYogurt(app);
+  const bar = app.createCustomFood({ name: 'Test bar', category: 'snack bar', state: 'prepared', nutrition: { protein: 20, carbs: 40, fat: 10 } });
+  const broken = app.createSavedMeal({ name: 'Bar snack', mealType: 'snack', ingredients: [{ foodId: bar.id, quantity: 50 }] });
+  let html = renderCoachDialog({ suggestions: app.getMacroCoachSuggestions({ date: TODAY, mealSlot: 'lunch' }), expanded: {} });
+  assert.ok(!/coach-fix/.test(html), 'no footer while every Saved Meal can be calculated');
+  app.deleteCustomFood(bar.id);
+  const suggestions = app.getMacroCoachSuggestions({ date: TODAY, mealSlot: 'lunch' });
+  html = renderCoachDialog({ suggestions, expanded: {} });
+  assert.match(html, /<p class="note coach-fix"><button type="button" class="link-button" data-action="coach-fix">1 saved meal needs a fix<\/button> It isn’t suggested until it’s fixed\.<\/p>/);
+  assert.ok(!html.includes(`data-meal="${broken.id}"`), 'the meal itself isn’t suggested');
+  assert.ok(html.includes(`data-meal="${ok.id}"`));
+  const src = fs.readFileSync(path.join(ROOT, 'app/today.js'), 'utf8');
+  assert.match(src, /case 'coach-fix': host\.leave\(\{ method: 'push', href: '#\/meals\?filter=needs-fix' \}\); break;/);
+  assert.equal(app.getMeal(broken.id).ingredients.length, 1, 'nothing is repaired or removed automatically');
+});
+
+test('Today G9 — the Coach empty state offers Add food (Log’s Foods) and Browse meals (Meals)', () => {
+  const { app, actions } = setup();
+  actions.chooseDayType('rest');
+  // Only reachable when every Library starter uses a Food the user asked not to suggest, and there's no history (§8.6).
+  const used = new Set(app.getLibraryMeals().flatMap((m) => m.ingredients.map((i) => i.foodId)));
+  for (const id of used) if (app.getFood(id)) app.setDislikedFood(id, true);
+  const suggestions = app.getMacroCoachSuggestions({ date: TODAY, mealSlot: 'breakfast' });
+  assert.ok(suggestions.tiers.every((t) => !t.items.length) && !suggestions.topUpFoods.personalized.length && !suggestions.topUpFoods.starter.length, 'fixture: nothing to suggest');
+  const html = renderCoachDialog({ suggestions, expanded: {} });
+  assert.match(text(html), /Nothing to suggest right now\. Suggestions come from your saved and recently logged meals\./);
+  assert.match(html, /<button type="button" class="button" data-action="coach-add-food">Add food<\/button><button type="button" class="button" data-action="coach-browse-meals">Browse meals<\/button>/);
+  const src = fs.readFileSync(path.join(ROOT, 'app/today.js'), 'utf8');
+  assert.match(src, /case 'coach-add-food': \{\n\s+session\.log\.segment = 'foods';\n\s+session\.log\.launchedFromToday = true;\n\s+host\.leave\(\{ method: 'push', href: `#\/log\?from=today&date=\$\{model\.date\}` \}\);/, 'Log’s own food search, with this date, returning to Today after logging');
+  assert.match(src, /case 'coach-browse-meals': host\.leave\(\{ method: 'push', href: '#\/meals' \}\); break;/, 'the existing Meals screen');
+  const withHistory = renderCoachDialog({ suggestions: setup().app.getMacroCoachSuggestions({ date: TODAY, mealSlot: 'breakfast', dayType: 'lift' }), expanded: {} });
+  assert.ok(!/coach-add-food/.test(withHistory), 'only when there is nothing to suggest');
+});
+
+test('Today G10 — the source line opens the current recipe while it exists; history never changes', () => {
+  const { app, actions } = setup();
+  actions.chooseDayType('lift');
+  const meal = savedYogurt(app);
+  const { instance } = actions.logMeal({ mealId: meal.id, mealSlot: 'lunch' });
+  const lib = actions.logMeal({ mealId: 'meal_library_B1', mealSlot: 'breakfast' }).instance;
+  const direct = actions.logFood({ foodId: 'food_core_banana', quantity: 100, mealSlot: 'dinner' }).instance;
+  const snapshot = JSON.stringify(app.getDay(TODAY));
+  let m = todayModel(app);
+  const detail = (inst) => renderInstanceDialog({ instance: inst, slot: inst.mealSlot, date: TODAY, source: m.sourceOf[inst.id], sourceName: inst.sourceMealId && app.getMeal(inst.sourceMealId) ? app.getMeal(inst.sourceMealId).name : '' });
+  assert.match(detail(instance), new RegExp(`From Saved Meal <button type="button" class="link-button" data-action="source-meal" data-meal="${meal.id}" aria-label="Saved Meal Yogurt bowl: open the current recipe">“Yogurt bowl”</button>`));
+  assert.match(detail(lib), /From Library Meal <button type="button" class="link-button" data-action="source-meal" data-meal="meal_library_B1"/, 'a Library source opens the Library meal (not as a Saved Meal)');
+  assert.ok(!/source-line/.test(detail(direct)), 'a Food logged directly has no source line');
+  // The recipe changes: the link shows the current recipe; the logged meal stays as logged.
+  app.updateSavedMeal(meal.id, { name: 'Yogurt bowl v2', ingredients: [{ foodId: 'food_core_banana', quantity: 150 }] });
+  const current = renderMealDetail({ meal: app.getMeal(meal.id), calc: app.calculateMealMacros(meal.id), foods: {}, isFavorite: false, model: { future: false } });
+  assert.match(current, /Yogurt bowl v2/);
+  assert.equal(JSON.stringify(app.getDay(TODAY)), snapshot, 'history unchanged by the recipe edit');
+  assert.equal(app.getMeal('meal_library_B1').source, 'library');
+  // The Saved Meal is deleted: plain text, no broken link, history intact.
+  app.deleteSavedMeal(meal.id);
+  m = todayModel(app);
+  const gone = detail(app.getDay(TODAY).mealInstances.find((mi) => mi.id === instance.id));
+  assert.match(gone, /<p class="source-line">From a meal that’s since been deleted<\/p>/);
+  assert.ok(!/data-action="source-meal"/.test(gone));
+  assert.equal(JSON.stringify(app.getDay(TODAY)), snapshot, 'historical macros unchanged');
+  const src = fs.readFileSync(path.join(ROOT, 'app/today.js'), 'utf8');
+  assert.match(src, /case 'source-meal': openMealDetail\(el\.dataset\.meal, ui\); break;/, 'opened as a view on top of the logged meal; Back returns to it');
 });

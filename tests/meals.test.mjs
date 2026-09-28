@@ -16,7 +16,7 @@ import { resetSession, session } from '../app/session.js';
 import { resolveLogContext, afterLogging, returnToMeals, createLogActions } from '../app/log.js';
 import { presentationFor } from '../app/view-host.js';
 import {
-  MEALS_VIEW_TYPES, mealsSegment, sortSavedMeals, copyOfName, mealsList, renderMealsTop, renderMealsList, listCountText,
+  MEALS_VIEW_TYPES, mealsSegment, sortSavedMeals, copyOfName, mealsList, renderMealsTop, renderMealsList, listCountText, needsFixCount,
   renderMealsDetail, newDraft, draftFromMeal, draftIngredients, draftMeal, ingredientsChanged, draftDirty, draftNeeds,
   renderEditor, renderPicker, renderReplace, renderDeleteMeal, renderSaveCopy, renderRemoveIngredient, renderDiscard,
   mealsErrorMessage, createMealsActions, mealsScreen
@@ -452,4 +452,34 @@ test('Meals — no macro arithmetic, no forbidden terms, no second store, domain
   const code = src.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, ''); // executable code, not comments
   assert.ok(!/\byield|convert/i.test(code), 'no yield or unit conversion');
   assert.ok(!/score|best match|rank/i.test(code), 'no ranking or scoring');
+});
+
+test('Meals — "Needs a fix" is a filter over the Saved Meals the domain can’t calculate (the Coach footer lands here, §8.3)', () => {
+  const { app } = setup();
+  const good = app.createSavedMeal({ name: 'Good bowl', mealType: 'lunch', ingredients: [{ foodId: 'food_core_banana', quantity: 100 }] });
+  const bar = app.createCustomFood({ name: 'Test bar', category: 'snack bar', state: 'prepared', nutrition: { protein: 20, carbs: 40, fat: 10 } });
+  const broken = app.createSavedMeal({ name: 'Bar snack', mealType: 'snack', ingredients: [{ foodId: bar.id, quantity: 50 }, { foodId: 'food_core_banana', quantity: 80 }] });
+  assert.equal(needsFixCount(app), 0);
+  assert.match(renderMealsTop({ segment: 'saved', query: '', type: 'all', favorites: false }, { fixCount: 0 }), /data-action="needs-fix-filter" aria-pressed="false" hidden>Needs a fix</, 'no chip while nothing needs a fix');
+  app.deleteCustomFood(bar.id);
+  assert.equal(needsFixCount(app), 1);
+  const top = renderMealsTop({ segment: 'saved', query: '', type: 'all', favorites: false, needsFix: true }, { fixCount: 1 });
+  assert.match(top, /data-action="needs-fix-filter" aria-pressed="true">Needs a fix</);
+  assert.ok(!/needs-fix-filter/.test(renderMealsTop({ segment: 'library', query: '', type: 'all', favorites: false }, { fixCount: 1 })), 'Saved only');
+  const list = mealsList(app, { segment: 'saved', needsFix: true });
+  assert.deepEqual(list.items.map((x) => x.meal.id), [broken.id], 'only the meal that needs a fix; the good one is not included');
+  assert.equal(list.items[0].calc.valid, false, 'decided by calculateMealMacros, the same state the Coach counts');
+  const html = renderMealsList(list);
+  assert.match(html, /<h2 id="meals-list-title" class="group-title">Saved meals that need a fix<\/h2>/);
+  assert.match(html, /<span class="marker marker-fix">Needs a fix<\/span>/);
+  assert.match(html, /data-action="meal-detail" data-meal="[^"]+" aria-label="Fix Bar snack">Fix</, 'the existing repair flow (§6.5)');
+  assert.deepEqual(mealsList(app, { segment: 'library', needsFix: true }).items.length, app.getLibraryMeals().length, 'no effect on Library');
+  // Repair through the existing flow: the meal leaves the filter; nothing was changed by filtering.
+  assert.equal(app.getMeal(broken.id).ingredients.length, 2);
+  app.replaceSavedMealIngredient(broken.id, bar.id, 'food_core_fage_0_greek_yogurt', { quantity: 50 });
+  assert.equal(needsFixCount(app), 0);
+  assert.match(text(renderMealsList(mealsList(app, { segment: 'saved', needsFix: true }))), /No saved meals need a fix\. Show all meals/);
+  assert.ok(app.getMeal(good.id));
+  const src = fs.readFileSync(path.join(ROOT, 'app/meals.js'), 'utf8');
+  assert.match(src, /if \(params\.get\('filter'\) === 'needs-fix'\) \{\n\s+Object\.assign\(state, \{ segment: 'saved', query: '', type: 'all', favorites: false, needsFix: true \}\);/, '#/meals?filter=needs-fix turns the filter on');
 });
