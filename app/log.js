@@ -1,6 +1,6 @@
 /*
- * log.js — the Log screen (V2_UI_CONTRACT.md §5, with Meal detail §6.4–6.5 read-only and the
- * Custom Food form §7.4 that Log opens).
+ * log.js — the Log screen (V2_UI_CONTRACT.md §5, with Meal detail §6.4–6.5 read-only, the
+ * Custom Food form §7.4 that Log opens, and Food detail §7.3 from the quantity sheet).
  *
  * Log records; Today edits (§5.7). Layers, as on Today:
  *   resolveLogContext / logModel      where and when the user is logging (date · day type · slot)
@@ -22,6 +22,7 @@ import {
 } from './today.js';
 import { session, routeParams, isIsoDate } from './session.js';
 import { WIDE_QUERY, COMPACT_QUERY, widthClass, presentationFor as present, viewHead, syncInPlace, createViewHost } from './view-host.js';
+import { foodDetailModel, renderFoodDetail, renderDeleteFood, renderDiscardFood, foodUsageMeals, renderLinkedMessage, createFoodActions } from './foods.js';
 
 export const MEAL_TYPE_LABELS = Object.freeze({ breakfast: 'Breakfast', lunch: 'Lunch', snack: 'Snack', dinner: 'Dinner', other: 'Other' });
 const oneDecimal = (values) => macros.roundMacros(values, 1);
@@ -207,6 +208,7 @@ ${model.future ? '<p id="log-future" class="note log-future">You can log this da
 /** The Log-tab confirmation (§5.8, §5.7): "Logged {name} to {Slot}" · View on Today · Edit. */
 export function renderConfirmation(confirmation) {
   if (!confirmation) return '';
+  if (confirmation.links) return renderLinkedMessage(confirmation).replace('<p>', '<p class="log-confirmation">');
   const links = confirmation.instanceId
     ? ' <button type="button" class="link-button" data-action="view-today">View on Today</button> <button type="button" class="link-button" data-action="edit-on-today">Edit</button>'
     : '';
@@ -242,7 +244,7 @@ export function renderTrayBar(tray, preview) {
 /* ---------------- presentation by width (§3.1, I-05; shared with Meals in view-host.js) ---------------- */
 
 /** Detail and editing surfaces; everything else in Log is a short choice (day type, date, slot, follow-up). */
-export const LOG_VIEW_TYPES = Object.freeze(['meal-detail', 'meal', 'food', 'tray', 'custom-food']);
+export const LOG_VIEW_TYPES = Object.freeze(['meal-detail', 'meal', 'food', 'tray', 'custom-food', 'food-detail']);
 export const LOG_WIDE_QUERY = WIDE_QUERY;
 export const LOG_COMPACT_QUERY = COMPACT_QUERY;
 export { widthClass, viewHead };
@@ -340,10 +342,12 @@ ${adjusting ? '' : '<button type="button" class="button" data-action="adjust">Ad
 }
 
 /** Log a Food by weight (§5.5): state always shown, grams only, never converted. */
-export function renderFoodSheet({ model, food, text, preview, slot }) {
+export function renderFoodSheet({ model, food, text, preview, slot, intent = 'log' }) {
   const valid = !!(preview && preview.valid);
+  const tray = intent === 'tray'; // opened with "Add to a meal" from Food detail: that's the main action
   return `${viewHead(food.name, dateText(model))}
 <p><span class="state-chip">${escapeHtml(food.state)}</span>${food.brand ? ` <span class="hint">${escapeHtml(food.brand)}</span>` : ''} Weigh it ${escapeHtml(food.state)}.</p>
+<p><button type="button" class="link-button" data-action="food-detail" data-food="${escapeHtml(food.id)}" aria-label="Details for ${escapeHtml(food.name)}">Food details</button></p>
 <label class="field" for="qty-grams">Grams</label>
 <span class="grams-input"><input id="qty-grams" type="text" inputmode="decimal" autocomplete="off" data-grams value="${escapeHtml(text || '')}" placeholder="grams" aria-describedby="qty-error"><span aria-hidden="true">g</span></span>
 <p id="qty-error" class="field-error" data-grams-error hidden>Enter a weight above 0 g</p>
@@ -353,8 +357,8 @@ ${slotError}
 ${futureNote(model)}
 ${errorSlot}
 <div class="sheet-actions">
-<button type="button" class="button primary" data-action="log-food"${valid && !model.future ? '' : ' disabled'}>Log</button>
-<button type="button" class="button" data-action="add-to-tray"${valid ? '' : ' disabled'}>Add to a meal</button>
+<button type="button" class="button${tray ? '' : ' primary'}" data-action="log-food"${valid && !model.future ? '' : ' disabled'}>Log</button>
+<button type="button" class="button${tray ? ' primary' : ''}" data-action="add-to-tray"${valid ? '' : ' disabled'}>Add to a meal</button>
 <button type="button" class="button" data-action="close">Cancel</button>
 </div>`;
 }
@@ -443,6 +447,34 @@ export function customFoodInput(values) {
   };
 }
 
+/** A Custom Food as form values (for Edit). Numbers are shown exactly as stored. */
+export function customFoodValues(food) {
+  return {
+    name: food.name,
+    category: food.category,
+    state: food.state,
+    brand: food.brand || '',
+    protein: String(food.nutrition.protein),
+    carbs: String(food.nutrition.carbs),
+    fat: String(food.nutrition.fat),
+    aliases: (food.aliases || []).join(', ')
+  };
+}
+
+/** Form values → the patch for updateCustomFood: every field, aliases included (clearing them clears them). */
+export function customFoodPatch(values) {
+  const aliases = String(values.aliases || '').split(',').map((a) => a.trim()).filter(Boolean);
+  return { ...customFoodInput(values), aliases };
+}
+
+/** Whether a Custom Food form differs from the values it opened with (for "Discard changes?"). */
+export const customFoodDirty = (form) => Object.keys(form.values).some((k) => String(form.values[k] || '') !== String((form.initial || {})[k] || ''));
+
+/** The domain check for the form's mode: a new Food, or an edit checked as merged with the stored one. */
+export const validateCustomFoodForm = (app, form) => (form.mode === 'edit'
+  ? app.validateCustomFood(customFoodPatch(form.values), { id: form.foodId })
+  : app.validateCustomFood(customFoodInput(form.values)));
+
 const NEEDED_NAMES = Object.freeze({ name: 'name', category: 'category', state: 'state', 'nutrition.protein': 'protein', 'nutrition.carbs': 'carbs', 'nutrition.fat': 'fat', nutrition: 'protein + carbs + fat' });
 
 /**
@@ -450,7 +482,7 @@ const NEEDED_NAMES = Object.freeze({ name: 'name', category: 'category', state: 
  * show next to each field once it has been edited, and a line by Save always says what's
  * still needed, so nobody has to press a disabled button to find out.
  */
-export function renderCustomFoodForm({ values, validation, touched }) {
+export function renderCustomFoodForm({ values, validation, touched, mode = 'create', initial = null }) {
   const shown = (field) => touched.has(field);
   const errorFor = (field) => {
     const e = validation.errors.find((x) => x.field === field);
@@ -464,7 +496,12 @@ export function renderCustomFoodForm({ values, validation, touched }) {
   const amount = (field, label) => `<div class="amount-field"><label class="field" for="cf-${field}">${label}</label>
 <span class="grams-input"><input id="cf-${field}" type="text" inputmode="decimal" data-cf="${field}" value="${escapeHtml(values[field] || '')}" autocomplete="off" aria-describedby="cf-${field}-error"><span aria-hidden="true">g</span></span>
 ${fieldError(`nutrition.${field}`, `cf-${field}-error`)}</div>`;
-  return `${viewHead('New food', 'Your own food, per 100 g')}
+  const head = mode === 'edit'
+    ? `${viewHead('Edit food', initial ? initial.name : '')}
+<div class="banner banner-info" role="note"><p>Changing these values updates your Saved Meals that use this food. Meals you’ve already logged won’t change.</p></div>`
+    : viewHead('New food', 'Your own food, per 100 g');
+  const saveLabel = mode === 'edit' ? 'Save changes' : mode === 'create-settings' ? 'Save' : 'Save and enter grams';
+  return `${head}
 ${text('name', 'Name')}
 ${fieldError('name', 'cf-name-error')}
 <p class="note" role="status" data-sync="cf-dup"${dup ? '' : ' hidden'}>${dup ? `You already have a food called ${escapeHtml(String(values.name).trim())}.` : ''}</p>
@@ -487,7 +524,7 @@ ${text('aliases', 'Other names (optional, comma-separated)')}
 <p id="cf-save-hint" class="hint" data-sync="cf-save-hint"${validation.valid ? ' hidden' : ''}>${validation.valid ? '' : `Needed before saving: ${[...new Set(validation.errors.map((e) => NEEDED_NAMES[e.field] || e.field))].join(', ')}.`}</p>
 ${errorSlot}
 <div class="sheet-actions">
-<button type="button" class="button primary" data-action="cf-save" data-sync="cf-save" aria-describedby="cf-save-hint"${validation.valid ? '' : ' disabled'}>Save and enter grams</button>
+<button type="button" class="button primary" data-action="cf-save" data-sync="cf-save" aria-describedby="cf-save-hint"${validation.valid ? '' : ' disabled'}>${saveLabel}</button>
 <button type="button" class="button" data-action="close">Cancel</button>
 </div>`;
 }
@@ -592,6 +629,7 @@ export const logScreen = {
     if (ctx.origin !== 'today') state.launchedFromToday = false;
     if (ctx.origin !== 'meals') state.launchedFromMeals = false;
     const actions = createLogActions(app);
+    const foodActions = createFoodActions(app);
     let model = logModel(app, ctx);
     let ui = null;
     let afterClose = null; // runs once when the open sheet closes (the follow-up after an adjusted log)
@@ -650,7 +688,8 @@ export const logScreen = {
         const next = afterClose;
         afterClose = null;
         if (next) next();
-      }
+      },
+      beforeLeave
     });
     this._cleanup = () => host.destroy();
     function openDialog(next) {
@@ -669,6 +708,9 @@ export const logScreen = {
         case 'food': dialog.innerHTML = renderFoodSheet({ model, ...ui }); break;
         case 'tray': dialog.innerHTML = renderTraySheet({ model, ...ui }); break;
         case 'custom-food': dialog.innerHTML = renderCustomFoodForm(ui); break;
+        case 'food-detail': dialog.innerHTML = renderFoodDetail({ ...ui, context: 'log', future: model.future }); break;
+        case 'food-delete': dialog.innerHTML = renderDeleteFood(ui); break;
+        case 'discard-food': dialog.innerHTML = renderDiscardFood(); break;
         case 'followup': dialog.innerHTML = renderFollowUpDialog(ui); break;
         default: break;
       }
@@ -704,11 +746,54 @@ export const logScreen = {
       for (const ing of preview.ingredients) { const f = app.getFood(ing.foodId); if (f) foods[ing.foodId] = f; }
       openDialog({ type: 'meal', mealId, preview, slot: ctx.slot, adjusting: false, quantities: preview.ingredients.map((i) => String(i.quantity)), original: recipeOf(preview.ingredients), foods });
     }
-    function openFood(foodId, text = '') {
+    function openFood(foodId, text = '', intent = 'log') {
       const food = app.getFood(foodId);
       if (!food) { showError({ code: 'FOOD_NOT_FOUND' }); return; }
       const q = parseGrams(text);
-      openDialog({ type: 'food', food, text, preview: q === null ? null : app.previewLogFood({ date: ctx.date, foodId, quantity: q }), slot: ctx.slot });
+      openDialog({ type: 'food', food, text, preview: q === null ? null : app.previewLogFood({ date: ctx.date, foodId, quantity: q }), slot: ctx.slot, intent });
+    }
+    /* ---- Food detail (§7.3): from the quantity sheet; Edit / Delete for Custom Foods ---- */
+    function openFoodDetail(foodId, note = '') {
+      const detail = foodDetailModel(app, foodId);
+      if (!detail) { renderList(); if (dialog.open) closeDialog(); showError({ code: 'FOOD_NOT_FOUND' }); return; }
+      ui = { type: 'food-detail', ...detail, note };
+      host.open(ui.type, drawDialog, { startAtTitle: true });
+    }
+    /** Favourite / Don't suggest changed: redraw the detail's controls in place (focus stays) and the lists. */
+    function refreshFoodDetail(message) {
+      const detail = foodDetailModel(app, ui.food.id);
+      Object.assign(ui, detail);
+      syncInPlace(dialog, renderFoodDetail({ ...ui, context: 'log', future: model.future }), doc);
+      renderList(); // the Favourite foods group follows the star; nothing else in Log reads "Don't suggest" (A-32)
+      returnToFoodRow(ui.food.id);
+      announceInDialog(message);
+    }
+    /** The results re-rendered behind a view: closing it returns to that Food's row, else the search field. */
+    function returnToFoodRow(foodId) {
+      host.returnFocusTo(results.querySelector(`[data-action="food"][data-food="${foodId}"]`) || top.querySelector('[data-query]'));
+    }
+    function announceInDialog(message) {
+      const el = dialog.querySelector('[data-food-status]');
+      if (el) { el.textContent = ''; el.textContent = message; }
+    }
+    /**
+     * Escape / Back / Cancel on the food forms step back to Food detail (the previous view),
+     * asking first when an edit has unsaved changes (§3.2). Every other Log surface just closes.
+     */
+    function beforeLeave() {
+      if (!ui) return true;
+      if (ui.type === 'custom-food' && ui.mode === 'edit') {
+        if (customFoodDirty(ui)) { ui = { type: 'discard-food', form: ui }; host.open(ui.type, drawDialog); return false; }
+        openFoodDetail(ui.foodId);
+        return false;
+      }
+      if (ui.type === 'discard-food') { reopenForm(ui.form); return false; }
+      if (ui.type === 'food-delete') { openFoodDetail(ui.food.id); return false; }
+      return true;
+    }
+    function reopenForm(form) {
+      ui = form;
+      host.open(ui.type, drawDialog);
     }
     function openTray() {
       openDialog({ type: 'tray', rows: trayRows(), preview: trayPreview(true), name: currentTrayName(), slot: ctx.slot, alsoSave: false });
@@ -774,7 +859,7 @@ export const logScreen = {
 
     /* ---- custom food form: domain validation as fields change (§7.4) ---- */
     function syncCustomFood() {
-      ui.validation = app.validateCustomFood(customFoodInput(ui.values));
+      ui.validation = validateCustomFoodForm(app, ui);
       syncInPlace(dialog, renderCustomFoodForm(ui), doc);
     }
 
@@ -851,7 +936,7 @@ export const logScreen = {
       if (!el || !main.contains(el)) return;
       try {
         switch (el.dataset.action) {
-          case 'close': closeDialog(); break;
+          case 'close': if (beforeLeave()) closeDialog(); break;
           case 'back': if (ctx.origin === 'meals') goToMeals(null); else goToToday(null); break;
           case 'segment': {
             state.segment = el.dataset.segment;
@@ -967,13 +1052,47 @@ export const logScreen = {
             break;
           }
           case 'cf-save': {
-            ui.validation = app.validateCustomFood(customFoodInput(ui.values));
+            ui.validation = validateCustomFoodForm(app, ui);
             if (!ui.validation.valid) { syncCustomFood(); break; } // Save is disabled while invalid; a guard only
+            if (ui.mode === 'edit') {
+              const food = foodActions.updateCustomFood(ui.foodId, customFoodPatch(ui.values));
+              renderList();
+              openFoodDetail(food.id, 'Saved.'); // §7.4: back to the detail of the Food just saved
+              returnToFoodRow(food.id);
+              break;
+            }
             const food = actions.createCustomFood(ui.values);
             renderList();
             openFood(food.id); // §5.6: straight into the quantity sheet for the new Food
             break;
           }
+          /* Food detail (§7.3) */
+          case 'food-detail': openFoodDetail(el.dataset.food); break;
+          case 'fd-log': openFood(ui.food.id); break;
+          case 'fd-add': openFood(ui.food.id, '', 'tray'); break;
+          case 'fd-favorite': refreshFoodDetail(foodActions.setFavorite(ui.food, !ui.isFavorite)); break;
+          case 'fd-suggest': refreshFoodDetail(foodActions.setNotSuggested(ui.food, !ui.isDisliked)); break;
+          case 'fd-edit': {
+            const food = app.getFood(ui.food.id);
+            if (!food) { openFoodDetail(ui.food.id); break; }
+            const values = customFoodValues(food);
+            const form = { type: 'custom-food', mode: 'edit', foodId: food.id, initial: { ...values }, values, touched: new Set() };
+            form.validation = validateCustomFoodForm(app, form);
+            reopenForm(form);
+            break;
+          }
+          case 'fd-delete': ui = { type: 'food-delete', food: ui.food, meals: foodUsageMeals(app, ui.food.id) }; host.open(ui.type, drawDialog); break;
+          case 'fd-delete-confirm': {
+            confirmation = foodActions.deleteCustomFood(ui.food);
+            renderList();
+            renderConfirm();
+            host.returnFocusTo(top.querySelector('[data-query]'));
+            ui = null;
+            closeDialog();
+            break;
+          }
+          case 'keep-editing': reopenForm(ui.form); break;
+          case 'discard': openFoodDetail(ui.form.foodId); break;
           case 'view-today': showOnToday({ highlightId: confirmation.instanceId }); break;
           case 'edit-on-today': showOnToday({ openInstanceId: confirmation.instanceId }); break;
           case 'followup-name': ui.mode = 'name'; drawDialog(); dialog.querySelector('[data-new-name]').focus(); break;

@@ -935,3 +935,17 @@ details.option-group > summary.group-title { cursor: pointer; min-height: 44px; 
 .recovery-message:empty { display: none; }
 .recovery-message { margin-top: var(--space-3); }
 .conflict-dialog p { margin: 0 0 var(--space-2); }
+
+/* ---------------- Food detail (§7.3) and Settings food lists (§10.1) ---------------- */
+.food-facts { margin-top: var(--space-2); }
+.per-100-table { margin-bottom: var(--space-3); }
+.per-100-table caption { text-align: left; padding: var(--space-2) 0; font-weight: 600; }
+.per-100-table th, .per-100-table td { text-align: left; }
+.food-prefs { margin-top: var(--space-4); }
+.food-prefs .group-title { margin: 0 0 var(--space-2); }
+.food-pref-actions { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.food-pref-actions .button[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); font-weight: 650; }
+.food-prefs .hint { margin: var(--space-2) 0 0; }
+.foods-message:empty { display: none; }
+.foods-message p { margin: 0 0 var(--space-2); padding: var(--space-2) var(--space-3); border-radius: var(--radius); background: var(--accent-soft); overflow-wrap: anywhere; }
+.log-confirmation a, .foods-message a { color: inherit; }

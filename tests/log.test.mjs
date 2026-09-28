@@ -482,14 +482,14 @@ test('Log — adjusted grams on a Saved Meal leave the Saved Meal alone; a Libra
 /* 16 ---------------- architecture ---------------- */
 
 test('Log — no macro arithmetic, no forbidden terms, no second store, domain via its entry point', () => {
-  for (const f of ['app/log.js', 'app/session.js', 'app/view-host.js', 'app/app.css']) {
+  for (const f of ['app/log.js', 'app/foods.js', 'app/session.js', 'app/view-host.js', 'app/app.css']) {
     const src = fs.readFileSync(path.join(ROOT, f), 'utf8');
     assert.deepEqual(macroArithmeticInSource(src, f), [], f);
     assert.ok(!FORBIDDEN_NUTRITION.test(src), f);
     assert.deepEqual(domainImportsBypassingIndex(src), [], f);
   }
   const src = fs.readFileSync(path.join(ROOT, 'app/log.js'), 'utf8');
-  assert.deepEqual([...src.matchAll(/from '([^']+)'/g)].map((m) => m[1]).sort(), ['../src/domain/index.js', './session.js', './shell.js', './today.js', './view-host.js']);
+  assert.deepEqual([...src.matchAll(/from '([^']+)'/g)].map((m) => m[1]).sort(), ['../src/domain/index.js', './foods.js', './session.js', './shell.js', './today.js', './view-host.js']);
   assert.ok(!/localStorage|sessionStorage|indexedDB|\bfetch\(|import\(/.test(src), 'no second persistence mechanism');
   assert.ok(!/\.sort\(|getMacroCoachSuggestions|score\s*[<>]/.test(src), 'no re-ranking; the Coach is not used here');
   assert.ok(!/\bunit\s*:\s*'(?!g')/.test(src), 'grams only');
@@ -504,7 +504,7 @@ test('Log — detail and editing views are pushed full screen (compact), a side 
   assert.deepEqual([320, 375, 599, 600, 800, 1023, 1024, 1280].map((w) => widthClass(mm(w))), ['compact', 'compact', 'compact', 'medium', 'medium', 'medium', 'wide', 'wide']);
   assert.equal(widthClass(mm(1280, 32)), 'medium', '200 % text: no room for two panes, so a side panel');
   assert.equal(widthClass(mm(375, 32)), 'compact');
-  assert.deepEqual([...LOG_VIEW_TYPES], ['meal-detail', 'meal', 'food', 'tray', 'custom-food'], 'Meal detail, the confirm/adjust and quantity views, the tray and the Custom Food form');
+  assert.deepEqual([...LOG_VIEW_TYPES], ['meal-detail', 'meal', 'food', 'tray', 'custom-food', 'food-detail'], 'Meal detail, the confirm/adjust and quantity views, the tray, the Custom Food form and Food detail');
   for (const type of LOG_VIEW_TYPES) {
     assert.equal(presentationFor(type, 'compact'), 'pushed', `${type}: full screen on phones, not a bottom sheet`);
     assert.equal(presentationFor(type, 'medium'), 'panel', `${type}: side panel`);

@@ -22,7 +22,7 @@ import {
 } from '../app/shell.js';
 import {
   SETTINGS_VIEW_TYPES, targetLine, parseTargetInput, parseTargets, saveStatusText, renderSettings, renderTargetForm,
-  renderTargetConfirm, renderApplyToday, renderBackupSheet, renderRestorePreview, restoreMessage, settingsScreen
+  renderTargetConfirm, renderApplyToday, renderBackupSheet, renderRestorePreview, restoreMessage, settingsScreen, settingsFoodsModel
 } from '../app/settings.js';
 
 const TODAY = '2026-09-28';
@@ -48,7 +48,7 @@ function withHistory(app) {
   app.createMealInstance({ date: TODAY, mealSlot: 'breakfast', mealId: meal.id });
   return meal;
 }
-const settingsHtml = (app, restore = null) => renderSettings({ targets: app.getAllCurrentTargets(), status: app.getPersistenceStatus(), lastBackupAt: (app.getPreferences().appPreferences || {}).lastBackupAt || null, restore });
+const settingsHtml = (app, restore = null, foodsNote = null) => renderSettings({ targets: app.getAllCurrentTargets(), status: app.getPersistenceStatus(), lastBackupAt: (app.getPreferences().appPreferences || {}).lastBackupAt || null, restore, foods: settingsFoodsModel(app), foodsNote });
 
 /* ---------------- Settings ---------------- */
 
@@ -61,11 +61,11 @@ test('Settings — the route is built and reached from the header, not the tabs'
   assert.ok(!/class="nav-link" href="#\/settings"/.test(html), 'Settings is not a primary tab');
 });
 
-test('Settings — sections: Targets (the seeded canonical values), Data on this device, About', () => {
+test('Settings — sections in the contract order (§10.1): Targets (the seeded canonical values), My foods, Favourites, Foods not suggested, Data on this device, About', () => {
   const { app } = setup();
   assert.deepEqual(app.getAllCurrentTargets(), CANONICAL, 'seeded targets unchanged');
   const html = settingsHtml(app);
-  assert.deepEqual([...html.matchAll(/<h2 id="[a-z-]+" class="section-title">([^<]+)<\/h2>/g)].map((m) => m[1]), ['Targets', 'Data on this device', 'About']);
+  assert.deepEqual([...html.matchAll(/<h2 id="[a-z-]+" class="section-title"[^>]*>([^<]+)<\/h2>/g)].map((m) => m[1]), ['Targets', 'My foods', 'Favourites', 'Foods not suggested', 'Data on this device', 'About']);
   assert.match(html, /<h1 id="screen-title"[^>]*>Settings<\/h1>/);
   assert.deepEqual([...html.matchAll(/<p class="target-values">([^<]+)<\/p>/g)].map((m) => m[1]), ['P 150 · C 293 · F 70 g', 'P 150 · C 343 · F 70 g', 'P 150 · C 218 · F 70 g']);
   assert.match(html, /aria-label="Edit Long Run targets">Edit</);
@@ -425,7 +425,7 @@ test('Settings — one persistence path, no UI schema checks, no macro arithmeti
     assert.ok(!/localStorage|sessionStorage|indexedDB|\bfetch\(|import\(/.test(src), `${f}: no second store`);
   }
   const settings = fs.readFileSync(path.join(ROOT, 'app/settings.js'), 'utf8');
-  assert.deepEqual([...settings.matchAll(/from '([^']+)'/g)].map((m) => m[1]).sort(), ['../src/domain/index.js', './session.js', './shell.js', './today.js', './view-host.js']);
+  assert.deepEqual([...settings.matchAll(/from '([^']+)'/g)].map((m) => m[1]).sort(), ['../src/domain/index.js', './foods.js', './log.js', './session.js', './shell.js', './today.js', './view-host.js']);
   assert.ok(!/app-data|browser-adapter|snapshotStore|\$schema|minimum|additionalProperties/.test(settings), 'no storage access or schema checks in the screen');
   assert.match(settings, /app\.validateBackup\(text\)/, 'restore validates through the domain');
   assert.match(settings, /app\.restoreUserData\(text\)/, 'and replaces through the domain');

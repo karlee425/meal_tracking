@@ -1,11 +1,12 @@
 /*
  * settings.js — Settings (V2_UI_CONTRACT.md §10) with manual Backup / Restore (§11).
  *
- * Deliberately small: current targets (§10.2–10.3), data on this device (save status, last
- * backup, Download backup, Restore from backup) and About. Everything goes through the data
- * layer:
+ * Sections in the contract's order (§10.1): Targets · My foods · Favourites · Foods not
+ * suggested · Data on this device · About. Everything goes through the data layer:
  *   targets   getAllCurrentTargets · validateTargets (a dry run) · updateCurrentTargets ·
  *             previewApplyCurrentTargetsToToday / applyCurrentTargetsToToday (today only, on request)
+ *   foods     getCustomFoods (A-36) → Food detail (foods.js) · the Custom Food form (log.js) ·
+ *             setFavoriteMeal / setFavoriteFood / setDislikedFood with false to remove from a list
  *   backup    exportUserData → validateBackup (the text to be saved) → a local file
  *   restore   validateBackup (nothing changes) → preview → explicit confirm → restoreUserData
  *             (validated again, then one atomic replacement; any failure changes nothing)
@@ -17,9 +18,13 @@ import { escapeHtml, restoreErrorMessage, backupSummaryText, exportedAtText, det
 import { DAY_TYPE_LABELS, dialogHead, errorSlot } from './today.js';
 import { createViewHost, viewHead, syncInPlace } from './view-host.js';
 import { resetSession } from './session.js';
+import { MEAL_TYPE_LABELS, renderCustomFoodForm, customFoodInput, customFoodValues, customFoodPatch, customFoodDirty, validateCustomFoodForm } from './log.js';
+import {
+  foodDetailModel, renderFoodDetail, renderDeleteFood, renderDiscardFood, foodUsageMeals, foodDetailRow, renderLinkedMessage, createFoodActions
+} from './foods.js';
 
-/** The target form is an editing view; confirmations and the backup / restore sheets are short choices. */
-export const SETTINGS_VIEW_TYPES = Object.freeze(['target-edit']);
+/** The target form, Food detail and the Custom Food form are views; confirmations and the backup / restore sheets are short choices. */
+export const SETTINGS_VIEW_TYPES = Object.freeze(['target-edit', 'food-detail', 'custom-food']);
 const FIELDS = Object.freeze([['protein', 'Protein'], ['carbs', 'Carbs'], ['fat', 'Fat']]);
 
 /* ---------------- formatting ---------------- */
@@ -63,6 +68,78 @@ ${cards}
 </section>`;
 }
 
+/* ---------------- My foods · Favourites · Foods not suggested (§10.1, A-31, A-32, A-36) ---------------- */
+
+/**
+ * The food lists Settings shows, straight from the domain: Custom Foods sorted by the domain
+ * (name, then ID); favourites split into Saved Meals, Library bookmarks (A-15) and Foods; and
+ * the Foods not to suggest. IDs that no longer resolve are left out (the domain removes them
+ * on delete anyway).
+ */
+export function settingsFoodsModel(app) {
+  const prefs = app.getPreferences();
+  const meals = prefs.favoriteMeals.map((id) => app.getMeal(id)).filter(Boolean);
+  const food = (id) => app.getFood(id);
+  return {
+    custom: app.getCustomFoods(),
+    favoriteFoodIds: new Set(prefs.favoriteFoods),
+    favorites: {
+      saved: meals.filter((m) => m.source === 'saved'),
+      library: meals.filter((m) => m.source === 'library'),
+      foods: prefs.favoriteFoods.map(food).filter(Boolean)
+    },
+    notSuggested: prefs.dislikedFoods.map(food).filter(Boolean)
+  };
+}
+
+function myFoodsSection(foods, note) {
+  const list = foods.custom.length
+    ? `<ul class="options" data-list="my-foods">${foods.custom.map((f) => foodDetailRow(f, { starred: foods.favoriteFoodIds.has(f.id) })).join('\n')}</ul>`
+    : '<p class="empty-note">No foods of your own yet. Create one when something isn’t in search.</p>';
+  return `<section class="settings-section" aria-labelledby="my-foods-title">
+<h2 id="my-foods-title" class="section-title" tabindex="-1">My foods</h2>
+<p class="section-note">Foods you’ve added, per 100 g. App foods can’t be changed.</p>
+<div class="foods-message" data-foods-message role="status">${renderLinkedMessage(note)}</div>
+${list}
+<div class="sheet-actions"><button type="button" class="button" data-action="new-food">New food</button></div>
+</section>`;
+}
+
+const mealLine = (meal) => `<span class="meal-name">${escapeHtml(meal.name)}</span>${meal.source === 'library' ? '<span class="marker">Library</span>' : ''}${meal.metadata && meal.metadata.retired ? '<span class="marker">Retired</span>' : ''}<span class="hint">${MEAL_TYPE_LABELS[meal.mealType] || 'Other'}</span>`;
+
+function favouritesSection(foods) {
+  const { saved, library } = foods.favorites;
+  const mealGroup = (id, title, meals) => (meals.length ? `<section class="option-group" aria-labelledby="${id}"><h3 id="${id}" class="group-title">${title}</h3>
+<ul class="options" data-list="${id}">${meals.map((m) => `<li class="option-row"><span class="option-text">${mealLine(m)}</span>
+<button type="button" class="button" data-action="unfavorite-meal" data-meal="${escapeHtml(m.id)}" aria-label="Remove ${escapeHtml(m.name)} from favourites">Remove</button></li>`).join('\n')}</ul></section>` : '');
+  const foodGroup = foods.favorites.foods.length ? `<section class="option-group" aria-labelledby="fav-foods"><h3 id="fav-foods" class="group-title">Foods</h3>
+<ul class="options" data-list="fav-foods">${foods.favorites.foods.map((f) => foodDetailRow(f, {
+    starred: true,
+    trailing: `<button type="button" class="button" data-action="unfavorite-food" data-food="${escapeHtml(f.id)}" aria-label="Remove ${escapeHtml(f.name)} from favourites">Remove</button>`
+  })).join('\n')}</ul></section>` : '';
+  const any = saved.length || library.length || foods.favorites.foods.length;
+  return `<section class="settings-section" aria-labelledby="favourites-title">
+<h2 id="favourites-title" class="section-title" tabindex="-1">Favourites</h2>
+${any ? `${mealGroup('fav-saved', 'Saved meals', saved)}
+${mealGroup('fav-library', 'Library bookmarks', library)}
+${foodGroup}` : '<p class="empty-note">Nothing starred yet. Star meals in Meals, and foods from their details.</p>'}
+</section>`;
+}
+
+function notSuggestedSection(foods) {
+  const list = foods.notSuggested.length
+    ? `<ul class="options" data-list="not-suggested">${foods.notSuggested.map((f) => foodDetailRow(f, {
+      starred: foods.favoriteFoodIds.has(f.id),
+      trailing: `<button type="button" class="button" data-action="suggest-again" data-food="${escapeHtml(f.id)}" aria-label="Suggest ${escapeHtml(f.name)} again">Suggest again</button>`
+    })).join('\n')}</ul>`
+    : '<p class="empty-note">None. Choose “Don’t suggest this food” in a food’s details to leave it out.</p>';
+  return `<section class="settings-section" aria-labelledby="not-suggested-title">
+<h2 id="not-suggested-title" class="section-title" tabindex="-1">Foods not suggested</h2>
+<p class="section-note">Left out of Build My Next Meal. They still show in search and your lists.</p>
+${list}
+</section>`;
+}
+
 /** The restore outcome line: an alert for problems (nothing changed), a status for success. */
 export function restoreMessage(r) {
   if (!r) return '';
@@ -97,9 +174,12 @@ function aboutSection() {
 </section>`;
 }
 
-export function renderSettings({ targets, status, lastBackupAt, restore }) {
+export function renderSettings({ targets, status, lastBackupAt, restore, foods, foodsNote = null }) {
   return `<h1 id="screen-title" class="screen-title" tabindex="-1">Settings</h1>
 ${targetsSection(targets)}
+${myFoodsSection(foods, foodsNote)}
+${favouritesSection(foods)}
+${notSuggestedSection(foods)}
 ${dataSection({ status, lastBackupAt, restore })}
 ${aboutSection()}`;
 }
@@ -191,6 +271,9 @@ export const settingsScreen = {
   mount(main, { app, win, doc, services = {} }) {
     let ui = null;
     let restore = null; // the last restore outcome, shown in "Data on this device"
+    let foodsNote = null; // the last Custom Food delete outcome, shown in "My foods"
+    let foodOrigin = null; // the list Food detail was opened from, so focus can go back to that row
+    const foodActions = createFoodActions(app);
 
     main.innerHTML = `<div class="settings-page view-page" data-settings-page>
 <div class="settings-screen" data-settings-body></div>
@@ -208,7 +291,9 @@ export const settingsScreen = {
         targets: app.getAllCurrentTargets(),
         status: app.getPersistenceStatus(),
         lastBackupAt: (app.getPreferences().appPreferences || {}).lastBackupAt || null,
-        restore
+        restore,
+        foods: settingsFoodsModel(app),
+        foodsNote
       });
     }
     // Keep the save-status line current without re-rendering (or moving focus).
@@ -235,6 +320,10 @@ export const settingsScreen = {
         case 'discard': dialog.innerHTML = renderDiscardTargets(); break;
         case 'backup': dialog.innerHTML = renderBackupSheet(ui); break;
         case 'restore-preview': dialog.innerHTML = renderRestorePreview(ui); break;
+        case 'food-detail': dialog.innerHTML = renderFoodDetail({ ...ui, context: 'settings' }); break;
+        case 'custom-food': dialog.innerHTML = renderCustomFoodForm(ui); break;
+        case 'food-delete': dialog.innerHTML = renderDeleteFood(ui); break;
+        case 'discard-food': dialog.innerHTML = renderDiscardFood(); break;
         default: break;
       }
     }
@@ -245,11 +334,66 @@ export const settingsScreen = {
       if (!ui) return true;
       if (ui.type === 'target-edit' && formDirty(ui)) { show({ type: 'discard', form: ui }); return false; }
       if (ui.type === 'target-confirm' || ui.type === 'discard') { backToForm(ui.form); return false; }
+      // The food forms step back to the view they came from, asking first about unsaved edits (§3.2).
+      if (ui.type === 'custom-food') {
+        if (customFoodDirty(ui)) { show({ type: 'discard-food', form: ui }); return false; }
+        if (ui.mode === 'edit') { openFoodDetail(ui.foodId); return false; }
+        return true;
+      }
+      if (ui.type === 'discard-food') { backToForm(ui.form); return false; }
+      if (ui.type === 'food-delete') { openFoodDetail(ui.food.id); return false; }
       return true;
     }
+
+    /* ---- My foods, Favourites, Foods not suggested ---- */
+    function openFoodDetail(foodId, note = '') {
+      const detail = foodDetailModel(app, foodId);
+      if (!detail) { render(); if (dialog.open) host.close(); announce('That food no longer exists.'); return; }
+      ui = { type: 'food-detail', ...detail, note };
+      host.open(ui.type, draw, { startAtTitle: true });
+      returnToFoodRow(foodId);
+    }
+    /** After the lists re-render behind Food detail, closing it returns to the same Food's row. */
+    function returnToFoodRow(foodId) {
+      const rows = [...body.querySelectorAll(`[data-action="food-detail"][data-food="${foodId}"]`)];
+      const row = rows.find((r) => r.closest(`[data-list="${foodOrigin}"]`)) || rows[0];
+      host.returnFocusTo(row || body.querySelector('#my-foods-title'));
+    }
+    /** Favourite / Don't suggest changed from Food detail: the lists behind it and the detail's controls (in place). */
+    function refreshFoodDetail(message) {
+      Object.assign(ui, foodDetailModel(app, ui.food.id));
+      render();
+      returnToFoodRow(ui.food.id);
+      syncInPlace(dialog, renderFoodDetail({ ...ui, context: 'settings' }), doc);
+      const el = dialog.querySelector('[data-food-status]');
+      if (el) { el.textContent = ''; el.textContent = message; }
+    }
+    function openFoodForm(form) {
+      form.validation = validateCustomFoodForm(app, form);
+      show(form);
+    }
+    function syncFoodForm() {
+      ui.validation = validateCustomFoodForm(app, ui);
+      syncInPlace(dialog, renderCustomFoodForm(ui), doc);
+    }
+    /**
+     * After removing an item from a list, focus the next item's button in the same list, or the
+     * section heading when the list is now empty (so focus never falls back to the page top).
+     */
+    function removedFrom(listSelector, index, headingId, message) {
+      render();
+      const buttons = [...body.querySelectorAll(`${listSelector} [data-action]:not(.option-main)`)];
+      const next = buttons[Math.min(index, buttons.length - 1)];
+      (next || body.querySelector(`#${headingId}`)).focus();
+      announce(message);
+    }
+    const indexIn = (el) => [...el.closest('ul').querySelectorAll('[data-action]:not(.option-main)')].indexOf(el);
     function showDialogError(e) {
       const el = dialog.querySelector('[data-error]');
-      const text = e && e.code === 'INVALID_TARGETS' ? 'Targets need to be whole grams, 0 or more.' : 'That didn’t save. Nothing was changed.';
+      const text = e && e.code === 'INVALID_TARGETS' ? 'Targets need to be whole grams, 0 or more.'
+        : e && e.code === 'INVALID_FOOD' ? 'Check the fields above.'
+          : e && (e.code === 'FOOD_NOT_FOUND' || e.code === 'NOT_FOUND') ? 'That food no longer exists.'
+            : 'That didn’t save. Nothing was changed.';
       if (el) { el.textContent = text; el.hidden = false; } else announce(text);
     }
     function setRestore(next) {
@@ -282,6 +426,12 @@ export const settingsScreen = {
 
     main.addEventListener('input', (event) => {
       const el = event.target;
+      if (ui && ui.type === 'custom-food' && el.matches('[data-cf]')) {
+        ui.values[el.dataset.cf] = el.value;
+        ui.touched.add(el.dataset.cf); // errors show as the user edits (§7.4)
+        syncFoodForm();
+        return;
+      }
       if (ui && ui.type === 'target-edit' && el.matches('[data-target-field]')) {
         ui.values[el.dataset.targetField] = el.value;
         ui.touched.add(el.dataset.targetField);
@@ -291,6 +441,11 @@ export const settingsScreen = {
     });
     main.addEventListener('change', (event) => {
       if (event.target.matches('[data-restore-file]')) onRestoreFile(event.target);
+      else if (ui && ui.type === 'custom-food' && event.target.matches('[data-cf]')) {
+        ui.values[event.target.dataset.cf] = event.target.value;
+        ui.touched.add(event.target.dataset.cf);
+        syncFoodForm();
+      }
     });
 
     main.addEventListener('click', (event) => {
@@ -335,7 +490,70 @@ export const settingsScreen = {
             break;
           }
           case 'keep-editing': backToForm(ui.form); break;
-          case 'discard': host.close(); break;
+          case 'discard':
+            if (ui.type === 'discard-food' && ui.form.mode === 'edit') openFoodDetail(ui.form.foodId);
+            else host.close();
+            break;
+
+          /* My foods · Favourites · Foods not suggested */
+          case 'food-detail': foodOrigin = el.closest('[data-list]') ? el.closest('[data-list]').dataset.list : null; openFoodDetail(el.dataset.food); break;
+          case 'new-food': {
+            const values = { name: '', category: '', state: '', brand: '', protein: '', carbs: '', fat: '', aliases: '' };
+            openFoodForm({ type: 'custom-food', mode: 'create-settings', initial: { ...values }, values, touched: new Set() });
+            break;
+          }
+          case 'fd-favorite': refreshFoodDetail(foodActions.setFavorite(ui.food, !ui.isFavorite)); break;
+          case 'fd-suggest': refreshFoodDetail(foodActions.setNotSuggested(ui.food, !ui.isDisliked)); break;
+          case 'fd-edit': {
+            const food = app.getFood(ui.food.id);
+            if (!food) { openFoodDetail(ui.food.id); break; }
+            const values = customFoodValues(food);
+            openFoodForm({ type: 'custom-food', mode: 'edit', foodId: food.id, initial: { ...values }, values, touched: new Set() });
+            break;
+          }
+          case 'cf-save': {
+            ui.validation = validateCustomFoodForm(app, ui);
+            if (!ui.validation.valid) { syncFoodForm(); break; } // Save is disabled while invalid; a guard only
+            const food = ui.mode === 'edit'
+              ? foodActions.updateCustomFood(ui.foodId, customFoodPatch(ui.values))
+              : app.createCustomFood(customFoodInput(ui.values));
+            foodsNote = null;
+            render();
+            if (ui.mode !== 'edit') foodOrigin = 'my-foods';
+            openFoodDetail(food.id, 'Saved.'); // §7.4: the detail of the Food just saved
+            break;
+          }
+          case 'fd-delete': show({ type: 'food-delete', food: ui.food, meals: foodUsageMeals(app, ui.food.id) }); break;
+          case 'fd-delete-confirm': {
+            foodsNote = foodActions.deleteCustomFood(ui.food);
+            ui = null;
+            render();
+            host.returnFocusTo(body.querySelector('#my-foods-title'));
+            host.close();
+            break;
+          }
+          case 'unfavorite-meal': {
+            const meal = app.getMeal(el.dataset.meal);
+            const list = `[data-list="${el.closest('ul').dataset.list}"]`;
+            const i = indexIn(el);
+            app.setFavoriteMeal(el.dataset.meal, false);
+            removedFrom(list, i, 'favourites-title', `${meal ? meal.name : 'Meal'} removed from favourites.`);
+            break;
+          }
+          case 'unfavorite-food': {
+            const food = app.getFood(el.dataset.food);
+            const i = indexIn(el);
+            app.setFavoriteFood(el.dataset.food, false);
+            removedFrom('[data-list="fav-foods"]', i, 'favourites-title', `${food ? food.name : 'Food'} removed from favourites.`);
+            break;
+          }
+          case 'suggest-again': {
+            const food = app.getFood(el.dataset.food);
+            const i = indexIn(el);
+            app.setDislikedFood(el.dataset.food, false);
+            removedFrom('[data-list="not-suggested"]', i, 'not-suggested-title', `${food ? food.name : 'Food'} can be suggested again.`);
+            break;
+          }
 
           /* backup */
           case 'backup': show({ type: 'backup', summary: app.validateBackup(app.exportUserData()).summary, note: '' }); break;
@@ -364,6 +582,7 @@ export const settingsScreen = {
             try {
               const { restored } = app.restoreUserData(text); // validated again, then one atomic replacement
               resetSession(); // no pre-restore screen state (search text, meal tray, handoffs) survives
+              foodsNote = null; // nor a message about foods from before the restore
               restore = { tone: 'status', message: `Restored. ${backupSummaryText(restored)}.` };
             } catch (e) {
               restore = { tone: 'error', message: restoreErrorMessage(e && e.code), code: e && e.code, errors: (e && e.details) || [] };
