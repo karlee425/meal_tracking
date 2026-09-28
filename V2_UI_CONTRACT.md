@@ -1,7 +1,7 @@
 # V2 UI / Product Contract
 
 **Repository:** `karlee425/meal_tracking` · **Branch:** `v2-data-architecture`
-**Status:** authoritative implementation contract for the V2 UI. Written against the commit that adds this file (on `f040b70`, `2046613`, `2cd7932`). Supersedes `V2_UI_CONTRACT_DRAFT.md` and the review drafts. Amended by "Reconcile V2 product decisions" (A-41–A-45, I-58–I-60).
+**Status:** authoritative implementation contract for the V2 UI. Written against the commit that adds this file (on `f040b70`, `2046613`, `2cd7932`). Supersedes `V2_UI_CONTRACT_DRAFT.md` and the review drafts. Amended by "Reconcile V2 product decisions" (A-41–A-45, I-58–I-60) and "Resolve remaining V2 contract ambiguities" (A-46–A-48; A-44 extended).
 
 ---
 
@@ -112,7 +112,7 @@ Summarised here; full map in §16. [IMPLEMENTATION NOTE I-23]
 | Today (slot +, Add, Coach) | Today, scrolled to the slot, new row highlighted briefly |
 | Log tab | Log, ready to log another item, with a "View on Today" link in the confirmation |
 | Meals (Log this meal) | Meals (same place), with a "View on Today" link |
-| Editor (Saved Meal, Custom Food) | The detail view of the thing just saved |
+| Editor (Saved Meal, Custom Food) | The detail view of the thing just saved; except a Custom Food created or edited from the Log flow, which returns to the Log quantity sheet for that Food (§5.6, §7.4) |
 | Settings actions | Settings, same section |
 
 ---
@@ -508,11 +508,15 @@ Entry points [APPROVED A-42]: the Log quantity sheet's **Food details** action (
 
 Actions:
 
-- **Log this food**. Not shown when opened from Settings: Settings is a food-management context, not a logging context, and there is no Settings → Log flow. To log a Food, the user searches for it in Log. [APPROVED A-41]
+- **Log this food**. Not shown when opened from Settings: Settings is a food-management context, not a logging context, and there is no Settings → Log flow. To log a Food, the user searches for it in Log. [APPROVED A-41] Not shown when opened from the Food picker either (below). [APPROVED A-46]
 - **Add to a meal** (builder tray, when opened from Log). It opens the quantity step first, since grams are required. [IMPLEMENTATION NOTE I-59]
 - ☆ **Favourite** (`setFavoriteFood`)
 - **Don't suggest this food** (`setDislikedFood`; affects only Coach suggestions [APPROVED A-32]; the Food still appears in search)
 - Custom Foods only: **Edit** · **Delete**. Core Foods show "App food · can't be edited". [APPROVED A-17]
+  - Opened from a Coach top-up Food: **Edit** and **Delete** are offered for Custom Foods as anywhere else. Deleting follows §7.6 (including the Saved Meal repair it can require), and Back returns to the Coach. There's no Coach-specific food management. [APPROVED A-47]
+  - Opened from the Food picker: **Edit** and **Delete** are not offered. The picker runs inside an in-progress Saved Meal edit, and nothing done from it may invalidate that draft; the user manages the Food from Settings → My foods instead. [APPROVED A-46]
+
+**From the Food picker, Food detail is informational** [APPROVED A-46]: it has no **Log this food**, no **Edit** or **Delete**, and no action to choose the Food ("Select this food" or similar). Choosing a Food stays with the picker (§7.5); Food detail never becomes a second way to pick one. Back returns to the picker with its search text and the editor's draft kept.
 
 Never shown: `yieldFactor`, `yieldKey`, `stateInferred`, `macroRole`, `swapFoodId`, `legacySwap`, `portionStep`. [IMPLEMENTATION NOTE I-30]
 
@@ -530,12 +534,12 @@ Never shown: `yieldFactor`, `yieldKey`, `stateInferred`, `macroRole`, `swapFoodI
 - **Validation runs in the domain:** `validateCustomFood(input)` (or `(patch, { id })` when editing), called as fields change. Errors come back per field (`field`, `code`): NAME_REQUIRED, CATEGORY_REQUIRED, STATE_INVALID, NUTRITION_REQUIRED, NUTRITION_NOT_A_NUMBER, NUTRITION_NEGATIVE, NUTRITION_IMPOSSIBLE (P + C + F more than 100 g per 100 g). The UI turns each into a friendly message next to its field; NUTRITION_IMPOSSIBLE shows under the three macro fields: "Protein + carbs + fat can't be more than 100 g in 100 g. Check the label — values per serving need converting to per 100 g."
 - **UI-only concerns:** an empty field is "required" (never NaN); a decimal comma is accepted as a point; Save is disabled while `valid` is false.
 - **Warning, not an error:** `DUPLICATE_NAME` → "You already have a food called {name}." Save is still allowed.
-- **Save:** `createCustomFood` / `updateCustomFood` → Food detail (or back to the quantity sheet if launched from Log).
+- **Save:** `createCustomFood` / `updateCustomFood` → Food detail (or back to the quantity sheet if launched from Log). Editing from the Log flow (Food detail opened from the quantity sheet, then **Edit**) is part of the Log exception: **Save changes** returns to the Log quantity sheet for that Food, not to a standalone Food detail, keeping the grams, slot and context already chosen in Log where the session keeps them. Cancel and Back follow the normal navigation and "Discard changes?" rules (§3.2). [APPROVED A-48]
 - **Edit banner:** "Changing these values updates your Saved Meals that use this food. Meals you've already logged won't change." [APPROVED A-13]
 
 ### 7.5 Food picker (inside meal creation, replacement, and logged-meal edits)
 
-The Log Foods segment in "pick" mode: same search, favourites and recents. Choosing a Food returns it with a grams field to the calling editor; nothing is logged. [IMPLEMENTATION NOTE I-30] Food detail is reachable from the picker; Back returns to the picker with its search kept. [APPROVED A-42]
+The Log Foods segment in "pick" mode: same search, favourites and recents. Choosing a Food returns it with a grams field to the calling editor; nothing is logged. [IMPLEMENTATION NOTE I-30] Food detail is reachable from the picker; Back returns to the picker with its search kept. [APPROVED A-42] There it's informational only (no Log this food, Edit, Delete or choose action; §7.3), and the editor's draft is kept. [APPROVED A-46]
 
 ### 7.6 Deleting a Custom Food [APPROVED behaviour A-17 · UI IMPLEMENTATION NOTE I-31]
 
@@ -663,7 +667,7 @@ Energy figures, scores, grades, rankings, compliance or adherence scores, good/b
    - "Protected from automatic clean-up: Yes / Not granted" (the result of `requestPersistentStorage()`)
    - Last backup date
    - **Download backup**, **Restore from backup** (§11)
-6. **About:** app version, data format version (`BACKUP_FORMAT_VERSION`), "Macros only: protein, carbs and fat, in grams." The app version comes from the repository's single authoritative version source; the UI never keeps a second, hand-maintained version constant. [APPROVED A-44]
+6. **About:** app version, data format version (`BACKUP_FORMAT_VERSION`), "Macros only: protein, carbs and fat, in grams." The app version comes from the repository's single authoritative version source; the UI never keeps a second, hand-maintained version constant. The repository has no application-version source yet, so About shows **Version unavailable** until one is introduced by a later, explicit decision. The data format version is never presented as the app version. [APPROVED A-44]
 
 Not in V2 Settings: `mealPreferences` and `coachingPreferences` toggles (no domain behaviour reads them), themes beyond following the system, units, accounts, notifications. [IMPLEMENTATION NOTE I-43]
 
@@ -983,8 +987,11 @@ These are enforced by existing tests once the UI directory is classified as `run
 | A-41 | Food detail opened from Settings (My foods, Favourites, Foods not suggested) doesn't offer **Log this food**; there's no Settings → Log flow. | Approved; product decision D1 |
 | A-42 | Food detail is reachable from the Log quantity sheet, the Food picker, Coach top-up Foods and Settings; it's one implementation; Back returns to the originating context with its search/selection kept. | Approved; product decision D3 |
 | A-43 | A Custom Food deleted while in the meal tray stays as a row marked "No longer available" (user-facing name, never an ID), with Remove; the tray can't be logged until it's removed; the rest of the tray is kept; nothing stored changes. | Approved; product decision D4 |
-| A-44 | The About app version comes from one authoritative repository version source, never a second hand-maintained constant. | Approved; product decision D2 |
+| A-44 | The About app version comes from one authoritative repository version source, never a second hand-maintained constant. Until such a source exists, About shows "Version unavailable"; no version number is invented and the data format version is never shown as the app version. | Approved; product decision D2 (extended) |
 | A-45 | Disabled Save while invalid and submit-time validation are complementary: Save stays disabled while invalid; validation may run on blur; submit (including Enter or programmatic) re-validates, saves nothing if invalid, and focuses the first invalid field. | Approved; resolves the §7.4/§10.2 vs §14 inconsistency |
+| A-46 | Food detail opened from the Food picker is informational: no Log this food, no Edit or Delete, no choose action. Selection stays with the picker; Back returns to it with its search and the Saved Meal draft kept. | Approved; product decision |
+| A-47 | Food detail opened from a Coach top-up Food offers Custom Food Edit and Delete as elsewhere (Core Foods stay read-only); deletion follows §7.6; Back returns to the Coach. No Coach-specific food management. | Approved; product decision |
+| A-48 | A Custom Food edited from the Log flow returns to the Log quantity sheet for that Food after Save changes (not to a standalone Food detail), keeping the Log context where the session keeps it. | Approved; product decision |
 
 ---
 
