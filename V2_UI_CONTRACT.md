@@ -1,7 +1,7 @@
 # V2 UI / Product Contract
 
 **Repository:** `karlee425/meal_tracking` · **Branch:** `v2-data-architecture`
-**Status:** authoritative implementation contract for the V2 UI. Written against the commit that adds this file (on `f040b70`, `2046613`, `2cd7932`). Supersedes `V2_UI_CONTRACT_DRAFT.md` and the review drafts.
+**Status:** authoritative implementation contract for the V2 UI. Written against the commit that adds this file (on `f040b70`, `2046613`, `2cd7932`). Supersedes `V2_UI_CONTRACT_DRAFT.md` and the review drafts. Amended by "Reconcile V2 product decisions" (A-41–A-45, I-58–I-60).
 
 ---
 
@@ -53,7 +53,7 @@ App shell
     ├── Day-type chooser       ← Today, Log (when a date has no Day)
     ├── Logged-meal detail/edit← Today
     ├── Meal detail / editor   ← Meals, Log, Today, Coach
-    ├── Food detail / Custom Food form ← Log, Food picker, Settings
+    ├── Food detail / Custom Food form ← Log, Food picker, Coach, Settings
     └── Backup / Restore       ← Settings (and error screens)
 ```
 
@@ -359,7 +359,7 @@ Invalid Saved Meals show **Fix** instead of Log and route to Meal detail (§6.5)
 
 ### 5.5 Logging a Food [IMPLEMENTATION NOTE I-21, I-22]
 
-Tap a Food row → **quantity sheet**:
+Tap a Food row → **quantity sheet**. The quantity sheet has a **Food details** action that opens Food detail (§7.3); the row itself always opens the quantity sheet. [IMPLEMENTATION NOTE I-58]
 
 | Element | Rule |
 |---|---|
@@ -372,6 +372,8 @@ Tap a Food row → **quantity sheet**:
 | Validation | Empty, 0, negative or non-numeric → inline "Enter a weight above 0 g"; Log disabled. Domain codes `INVALID_QUANTITY` / `MEAL_INVALID` map to the same message. |
 
 **Meal builder tray** (IMPLEMENTATION NOTE I-22): a bar at the bottom of Log showing "{n} foods · P / C / F" (`previewMealInstance({ ingredients })`). **Log as one meal** → name (prefilled "{first food} + {n−1} more", editable) → `createMealInstance({ date, mealSlot, ingredients, mealName })`. An optional tick-box **Also save as a Saved Meal** → `createSavedMeal({ name, mealType, ingredients })`. The tray is kept while the user browses and cleared after logging. It isn't persisted across app restarts.
+
+**A tray Food that no longer exists** (a Custom Food deleted while it was in the tray) [APPROVED A-43]: the row stays in the tray, marked "No longer available", and is never silently dropped. It's labelled with a user-facing name, never the Food's internal ID. The tray doesn't show grams-derived values or totals for it as if they were still valid. The row has an obvious **Remove**. **Log as one meal** is unavailable while such a row is in the tray, and the reason is shown. The other rows are kept. This is tray state in memory only: nothing stored or historical changes.
 
 ### 5.6 Custom Foods from Log
 
@@ -500,10 +502,14 @@ Similar Foods are never merged or grouped: three Oats Overnight entries are thre
 
 ### 7.3 Food detail [IMPLEMENTATION NOTE I-30]
 
-Name, state, category, brand, source (App food / My food), P/C/F per 100 g, aliases. Actions:
+Name, state, category, brand, source (App food / My food), P/C/F per 100 g, aliases (an alias identical to the name isn't repeated under other names [IMPLEMENTATION NOTE I-60]).
 
-- **Log this food**
-- **Add to a meal** (builder tray, when opened from Log)
+Entry points [APPROVED A-42]: the Log quantity sheet's **Food details** action (I-58), the Food picker (§7.5), Coach top-up Food items (§8.4), and Settings (My foods, Favourites, Foods not suggested). There is one Food detail. Opened from any of these, Back returns to where it was opened, with that context kept (search text, selection, open list).
+
+Actions:
+
+- **Log this food**. Not shown when opened from Settings: Settings is a food-management context, not a logging context, and there is no Settings → Log flow. To log a Food, the user searches for it in Log. [APPROVED A-41]
+- **Add to a meal** (builder tray, when opened from Log). It opens the quantity step first, since grams are required. [IMPLEMENTATION NOTE I-59]
 - ☆ **Favourite** (`setFavoriteFood`)
 - **Don't suggest this food** (`setDislikedFood`; affects only Coach suggestions [APPROVED A-32]; the Food still appears in search)
 - Custom Foods only: **Edit** · **Delete**. Core Foods show "App food · can't be edited". [APPROVED A-17]
@@ -529,7 +535,7 @@ Never shown: `yieldFactor`, `yieldKey`, `stateInferred`, `macroRole`, `swapFoodI
 
 ### 7.5 Food picker (inside meal creation, replacement, and logged-meal edits)
 
-The Log Foods segment in "pick" mode: same search, favourites and recents. Choosing a Food returns it with a grams field to the calling editor; nothing is logged. [IMPLEMENTATION NOTE I-30]
+The Log Foods segment in "pick" mode: same search, favourites and recents. Choosing a Food returns it with a grams field to the calling editor; nothing is logged. [IMPLEMENTATION NOTE I-30] Food detail is reachable from the picker; Back returns to the picker with its search kept. [APPROVED A-42]
 
 ### 7.6 Deleting a Custom Food [APPROVED behaviour A-17 · UI IMPLEMENTATION NOTE I-31]
 
@@ -657,7 +663,7 @@ Energy figures, scores, grades, rankings, compliance or adherence scores, good/b
    - "Protected from automatic clean-up: Yes / Not granted" (the result of `requestPersistentStorage()`)
    - Last backup date
    - **Download backup**, **Restore from backup** (§11)
-6. **About:** app version, data format version (`BACKUP_FORMAT_VERSION`), "Macros only: protein, carbs and fat, in grams."
+6. **About:** app version, data format version (`BACKUP_FORMAT_VERSION`), "Macros only: protein, carbs and fat, in grams." The app version comes from the repository's single authoritative version source; the UI never keeps a second, hand-maintained version constant. [APPROVED A-44]
 
 Not in V2 Settings: `mealPreferences` and `coachingPreferences` toggles (no domain behaviour reads them), themes beyond following the system, units, accounts, notifications. [IMPLEMENTATION NOTE I-43]
 
@@ -750,6 +756,7 @@ The UI explains what happened and what to do in plain language. Error codes, IDs
 | **Done day, last meal deleted** | Domain reopens it; message "No longer marked done, because nothing is logged." | APPROVED A-08 |
 | **Invalid Saved Meal** | §6.5 | APPROVED A-18 |
 | **Food deleted between listing and logging** | `FOOD_NOT_FOUND` → "That food no longer exists." The list refreshes. | IMPLEMENTATION NOTE I-10 |
+| **Custom Food deleted while it's in the meal tray** | The row stays, marked "No longer available", with a user-facing name (never an ID) and **Remove**. Logging the tray is unavailable until it's removed; the other rows are kept (§5.5). | APPROVED A-43 |
 | **Deleted Custom Food in history** | Logged meals show the snapshot name and values as recorded; no warning on history | APPROVED A-13 |
 | **Saved Meal changed after logging** | Logged meals keep their snapshot; the detail view's source link opens the current recipe | APPROVED A-13 |
 | **Saved Meal deleted after logging** | Logged meals unchanged; source line "From a meal that's since been deleted"; "Edit Saved Meal" hidden | APPROVED A-13 |
@@ -799,7 +806,7 @@ The UI explains what happened and what to do in plain language. Error codes, IDs
 | **Keyboard** | Every action is reachable and operable by keyboard in a logical order. Tabs are a navigation landmark. Desktop shortcuts: `/` focuses search in Log/Meals; Enter confirms the focused form; Esc closes the top sheet or dialog. No keyboard traps except intentional focus containment in dialogs. |
 | **Focus** | Always-visible focus ring (≥ 2 px, ≥ 3:1 contrast). Opening a sheet/dialog moves focus into it (the first field, or the title); closing returns focus to the control that opened it. After logging from Today, focus lands on the new row. After a destructive dialog, focus goes to the nearest logical element. |
 | **Dialogs and sheets** | Modal semantics with a title; background inert; Esc and a visible close control; destructive dialogs default-focus Cancel. |
-| **Forms** | Visible labels (never placeholder-only); units in the label ("Protein per 100 g"); required fields marked in text; validation on blur after the first edit and on submit; errors inline, programmatically tied to the field, and summarised at the top of long forms; the first invalid field receives focus on submit. |
+| **Forms** | Visible labels (never placeholder-only); units in the label ("Protein per 100 g"); required fields marked in text; errors inline, programmatically tied to the field, and summarised at the top of long forms. Validation and a disabled Save are complementary [APPROVED A-45]: while editing, invalid fields are identified by the existing (domain) validation, which may run on blur (or as fields change) for field-level feedback, and **Save stays disabled while the form is invalid** (§7.4, §10.2). Validation runs again on submit, including Enter or any programmatic submission, as a final guard; a submission while invalid saves nothing and moves focus to the first invalid field. The UI never duplicates validation rules. |
 | **Macro values for screen readers** | Each macro reads as one phrase: "Carbs: 142 grams left of 293", "Protein: target reached, 12 grams past", "Fat: 30 of 70 grams logged". Logged-meal rows read "Chicken bowl, lunch, protein 42 grams, carbs 60 grams, fat 12 grams". The same terms as the visible text. |
 | **Live updates** | One polite announcement after each write (new remaining values, or save status changes to error/conflict). Not on every keystroke. |
 | **Colour independence** | Macro identity, day status (Done / Not marked done / Nothing logged), save state and "target reached" always pair colour with text and/or an icon or shape. Charts use markers and labels, not colour alone. |
@@ -877,6 +884,7 @@ The UI explains what happened and what to do in plain language. Error codes, IDs
 | Meals | card Log | Log confirm sheet | Meals (confirmation with View on Today) | Meals |
 | Meals | New meal / Edit / Duplicate / Save a copy | Saved Meal editor | Meal detail | Previous view |
 | Saved Meal editor | Add ingredient | Food picker | Editor with the Food added | Editor |
+| Food picker | Food details | Food detail | — | Food picker, search kept |
 | Meal detail (invalid) | Replace | Food picker → replace confirm | Meal detail (now valid if all fixed) | Meal detail |
 | Progress | day row | Today (that date) | — | Progress, range kept |
 | Settings | Edit targets | Targets form → confirm | Settings (with "use for today?" if relevant) | Settings |
@@ -972,6 +980,11 @@ These are enforced by existing tests once the UI directory is classified as `run
 | A-38 | Invalid stored data is never discarded automatically. Recovery is an explicit user choice: `recoverStoredData({ backup })` (validated in full first; an invalid backup writes nothing) or `recoverStoredData({ startFresh: true })` (shipped seed). | Approved; `src/browser/app-data.js` |
 | A-39 | Progress-bar fill comes from the domain: `targetStatus().progress` (logged ÷ target, capped at 1) in `getDaySummary`, previews and Coach `after`. The UI never divides macros. | Approved; domain |
 | A-40 | NaN, Infinity and −Infinity are rejected at every input boundary (schemas, store, copies) and can never be stored as `null`. | Approved; domain |
+| A-41 | Food detail opened from Settings (My foods, Favourites, Foods not suggested) doesn't offer **Log this food**; there's no Settings → Log flow. | Approved; product decision D1 |
+| A-42 | Food detail is reachable from the Log quantity sheet, the Food picker, Coach top-up Foods and Settings; it's one implementation; Back returns to the originating context with its search/selection kept. | Approved; product decision D3 |
+| A-43 | A Custom Food deleted while in the meal tray stays as a row marked "No longer available" (user-facing name, never an ID), with Remove; the tray can't be logged until it's removed; the rest of the tray is kept; nothing stored changes. | Approved; product decision D4 |
+| A-44 | The About app version comes from one authoritative repository version source, never a second hand-maintained constant. | Approved; product decision D2 |
+| A-45 | Disabled Save while invalid and submit-time validation are complementary: Save stays disabled while invalid; validation may run on blur; submit (including Enter or programmatic) re-validates, saves nothing if invalid, and focuses the first invalid field. | Approved; resolves the §7.4/§10.2 vs §14 inconsistency |
 
 ---
 
@@ -1038,6 +1051,9 @@ How the UI implements the approved decisions. Followed as written.
 | I-55 | Hosting: any static host that serves the repository root with `.json` as `application/json` (e.g. GitHub Pages or a local static server). Which host to use is a deployment choice, not part of the UI contract. | 22 |
 | I-56 | Progress shows "Reached on {n} of {m} logged days" and "{k} days not marked done"; a below-target count for Done days (`missed`) is not headlined; the day list shows logged vs target per day. | 9.2 |
 | I-57 | Data note, outside the UI: the first-run seed holds two Oats Overnight Custom Foods whose values conflict with the Core packet (10.7 vs 26.3 g protein per 100 g). Resolve from the pack label before first real use, through the normal Custom Food flow. The UI shows all three separately. | 7.1, 12 |
+| I-58 | Log reaches Food detail through a **Food details** action on the quantity sheet; the Food row keeps opening the quantity sheet. | 5.5, 7.3 |
+| I-59 | **Add to a meal** from Food detail opens the quantity step first (grams are required). | 7.3 |
+| I-60 | An alias identical to the Food's name isn't repeated under other names on Food detail. | 7.3 |
 
 ---
 
