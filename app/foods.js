@@ -66,18 +66,22 @@ function preferenceControls({ food, isFavorite, isDisliked }) {
  * food and Add to a meal when opened from Log; Favourite; Don't suggest; Edit · Delete for
  * Custom Foods ("App food · can't be edited" for Core Foods). Food metadata from the migration
  * (cooked-weight factors, roles, swaps, portion steps) is never shown (I-30).
+ *
+ * context: 'log' · 'coach' · 'settings' · 'picker' — the §7.3 action table. From the Food picker
+ * it's information-only (A-46): no Log, Add, Favourite, Don't suggest, Edit, Delete or choose.
  */
 export function renderFoodDetail({ food, isFavorite, isDisliked, context = 'settings', future = false, note = '' }) {
   const per100 = oneDecimal(food.nutrition);
   const names = otherNames(food);
   const custom = food.source === 'custom';
+  const manage = context !== 'picker';
   const logActions = context === 'log'
     ? `<div class="sheet-actions">
 <button type="button" class="button primary" data-action="fd-log" data-food="${escapeHtml(food.id)}"${future ? ' disabled aria-describedby="fd-future"' : ''}>Log this food</button>
 <button type="button" class="button" data-action="fd-add" data-food="${escapeHtml(food.id)}">Add to a meal</button>
 </div>${future ? '<p id="fd-future" class="note">You can log this day when it arrives.</p>' : ''}`
     : '';
-  const ownership = custom
+  const ownership = custom && manage
     ? `<div class="sheet-actions">
 <button type="button" class="button" data-action="fd-edit">Edit</button>
 <button type="button" class="button danger" data-action="fd-delete">Delete</button>
@@ -98,7 +102,7 @@ ${names.length ? `<div><dt>Other names</dt><dd>${names.map(escapeHtml).join(', '
 <tbody><tr><td>${per100.protein} g</td><td>${per100.carbs} g</td><td>${per100.fat} g</td></tr></tbody>
 </table></div>
 ${logActions}
-${preferenceControls({ food, isFavorite, isDisliked })}
+${manage ? preferenceControls({ food, isFavorite, isDisliked }) : ''}
 ${ownership}
 ${errorSlot}
 <p class="visually-hidden" role="status" aria-live="polite" data-food-status></p>

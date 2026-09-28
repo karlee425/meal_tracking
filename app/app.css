@@ -833,6 +833,9 @@ details.option-group > summary.group-title { cursor: pointer; min-height: 44px; 
 .repair-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 0 var(--space-3); font-weight: 400; }
 .adjust-row .row-macros { flex-basis: 100%; }
 .adjust-row.is-missing .adjust-label { flex: 1 1 12rem; overflow-wrap: anywhere; }
+/* A-43: a tray Food that no longer exists — its name, "No longer available", Remove. */
+.tray-unavailable .tray-food { flex: 1 1 12rem; overflow-wrap: anywhere; }
+.tray-unavailable .marker { white-space: nowrap; }
 .add-ingredient { margin-top: var(--space-3); }
 .picker-results { margin-top: var(--space-3); }
 .sheet .search-input { width: 100%; }

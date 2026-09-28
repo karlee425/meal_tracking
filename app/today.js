@@ -830,7 +830,7 @@ export const todayScreen = {
         case 'clear-day': dialog.innerHTML = renderClearDayDialog(ui); break;
         case 'coach': dialog.innerHTML = renderCoachDialog(ui); break;
         case 'meal-detail': dialog.innerHTML = renderMealDetail({ ...mealDetailData(ui.mealId), model: { future: model.isFuture } }); break;
-        case 'food-detail': dialog.innerHTML = renderFoodDetail({ ...ui, context: 'coach' }); break;
+        case 'food-detail': dialog.innerHTML = renderFoodDetail({ ...ui, context: ui.pickUi ? 'picker' : 'coach' }); break;
         case 'food-delete': dialog.innerHTML = renderDeleteFood(ui); break;
         case 'discard-food': dialog.innerHTML = renderDiscardFood({ created: !!ui.form.pickUi }); break;
         case 'discard-edit': dialog.innerHTML = renderDiscardEdit(); break;
@@ -854,6 +854,8 @@ export const todayScreen = {
       }
       if (ui.type === 'discard-edit') { keepEditing(); return false; }
       if (ui.type === 'picker') { backToEdit(ui.edit, '[data-action="add-ingredient"]'); return false; }
+      // Food detail from the picker (information-only, A-46): Back returns to the picker as it was.
+      if (ui.type === 'food-detail' && ui.pickUi) { backToPicker(ui); return false; }
       if (ui.type === 'custom-food' && ui.pickUi) {
         if (customFoodDirty(ui)) { openDialog({ type: 'discard-food', form: ui, proceed: null }); return false; }
         openDialog(ui.pickUi);
@@ -883,7 +885,7 @@ export const todayScreen = {
       if (!ui) return null;
       if (ui.type === 'discard-edit' || ui.type === 'discard-food') return 'prompt';
       if (ui.type === 'edit') keepEditFields(ui);
-      const edit = ui.type === 'edit' ? ui : ui.type === 'picker' ? ui.edit : ui.type === 'custom-food' && ui.pickUi ? ui.pickUi.edit : null;
+      const edit = ui.type === 'edit' ? ui : ui.type === 'picker' ? ui.edit : (ui.type === 'custom-food' || ui.type === 'food-detail') && ui.pickUi ? ui.pickUi.edit : null;
       if (edit && (editDirty(edit) || (ui.type === 'custom-food' && customFoodDirty(ui)))) return 'edit';
       if (ui.type === 'custom-food' && ui.mode === 'edit' && customFoodDirty(ui)) return 'food';
       return null;
@@ -1010,6 +1012,17 @@ export const todayScreen = {
       host.open('edit', drawDialog);
       updateEditPreview();
       const el = focusSelector ? dialog.querySelector(focusSelector) : null;
+      if (el) el.focus();
+    }
+    /** Food detail from the picker (§7.5, A-42, A-46): information only; the picker and the edit are kept. */
+    function openPickerFoodDetail(foodId, pickUi) {
+      const detail = foodDetailModel(app, foodId);
+      if (!detail) { openDialog(pickUi); showError({ code: 'FOOD_NOT_FOUND' }); return; }
+      openDialog({ type: 'food-detail', ...detail, note: '', pickUi });
+    }
+    function backToPicker(detailUi) {
+      openDialog(detailUi.pickUi);
+      const el = dialog.querySelector(`[data-action="picker-food-detail"][data-food="${CSS.escape(detailUi.food.id)}"]`) || dialog.querySelector('[data-pick-query]');
       if (el) el.focus();
     }
     /** A Food chosen in the picker joins the edit as a new row with empty grams; nothing is saved yet. */
@@ -1183,6 +1196,7 @@ export const todayScreen = {
             break;
           }
           case 'food': if (ui && ui.type === 'picker') pickIngredient(el.dataset.food, ui); break;
+          case 'picker-food-detail': if (ui && ui.type === 'picker') openPickerFoodDetail(el.dataset.food, ui); break;
           case 'create-food': {
             if (!ui || ui.type !== 'picker') break;
             const values = { name: String(ui.query || '').trim(), category: '', state: '', brand: '', protein: '', carbs: '', fat: '', aliases: '' };

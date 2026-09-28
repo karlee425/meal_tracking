@@ -133,14 +133,21 @@ ${action}
 </li>`;
 }
 
-function foodRow(hit, fav) {
+/**
+ * One Food row. In Log the row opens the quantity sheet (whose Food details action opens Food
+ * detail, I-58). In the Food picker (§7.5) the row chooses the Food, and a Details button beside
+ * it opens Food detail information-only (A-42, A-46).
+ */
+function foodRow(hit, fav, picker = false) {
   const food = hit.food || hit;
   const alias = hit.matchedOn === 'alias' ? `<span class="hint">matched: ${escapeHtml(hit.matchedText)}</span>` : '';
+  const label = `${food.name}, ${food.state}${food.brand ? `, ${food.brand}` : ''}`;
   return `<li class="option-row">
-<button type="button" class="option-main" data-action="food" data-food="${escapeHtml(food.id)}" aria-label="${escapeHtml(`${food.name}, ${food.state}${food.brand ? `, ${food.brand}` : ''}: enter grams`)}">
+<button type="button" class="option-main" data-action="food" data-food="${escapeHtml(food.id)}" aria-label="${escapeHtml(`${label}: ${picker ? 'choose' : 'enter grams'}`)}">
 <span class="meal-name">${escapeHtml(food.name)}</span><span class="state-chip">${escapeHtml(food.state)}</span>${food.brand ? `<span class="hint">${escapeHtml(food.brand)}</span>` : ''}${food.source === 'custom' ? '<span class="marker">My food</span>' : ''}${fav.has(food.id) ? '<span class="marker" aria-label="Favourite">★</span>' : ''}
 <span class="meal-macros">${macroLine(food.nutrition)} per 100 g</span>${alias}
 </button>
+${picker ? `<button type="button" class="button" data-action="picker-food-detail" data-food="${escapeHtml(food.id)}" aria-label="${escapeHtml(`Food details: ${label}`)}">Details</button>` : ''}
 </li>`;
 }
 
@@ -149,18 +156,18 @@ const group = (id, title, items, rowOf) => (items.length
   : '');
 
 /** The results region for the active segment. */
-export function renderResults({ segment, meals, foods, future }) {
+export function renderResults({ segment, meals, foods, future, picker = false }) {
   const opts = { future };
   if (segment === 'foods') {
     if (foods.mode === 'search') {
       const q = escapeHtml(foods.query);
       const create = `<button type="button" class="button create-food" data-action="create-food">Create a food named “${q}”</button>`;
       if (!foods.hits.length) return `<p class="empty-note">No foods match “${q}”.</p>${create}`;
-      return `<section class="option-group" aria-label="Foods matching ${q}"><ul class="options">${foods.hits.map((h) => foodRow(h, foods.fav)).join('\n')}</ul></section>${create}`;
+      return `<section class="option-group" aria-label="Foods matching ${q}"><ul class="options">${foods.hits.map((h) => foodRow(h, foods.fav, picker)).join('\n')}</ul></section>${create}`;
     }
     if (!foods.favorites.length && !foods.recent.length) return '<p class="empty-note">Search for a food. Things you log will show up here.</p>';
-    return `${group('foods-fav', 'Favourite foods', foods.favorites, (f) => foodRow(f, foods.fav))}
-${group('foods-recent', 'Recent foods', foods.recent, (f) => foodRow(f, foods.fav))}`;
+    return `${group('foods-fav', 'Favourite foods', foods.favorites, (f) => foodRow(f, foods.fav, picker))}
+${group('foods-recent', 'Recent foods', foods.recent, (f) => foodRow(f, foods.fav, picker))}`;
   }
   if (meals.mode === 'search') {
     if (!meals.saved.length && !meals.library.length) return `<p class="empty-note">No meals match “${escapeHtml(meals.query)}”.</p>`;
@@ -227,7 +234,7 @@ export function renderPicker({ title, query, results }) {
 }
 
 /** The picker's results for a query: the Foods segment as Log renders it. */
-export const pickerResults = (app, query) => renderResults({ segment: 'foods', meals: null, foods: foodResults(app, query), future: false });
+export const pickerResults = (app, query) => renderResults({ segment: 'foods', meals: null, foods: foodResults(app, query), future: false, picker: true });
 
 /* ---------------- meal builder tray (§5.5, I-22) ---------------- */
 
@@ -245,11 +252,36 @@ export function trayIngredients(tray) {
   return tray.map((row, i) => ({ foodId: row.foodId, quantity: parsed[i], unit: 'g' }));
 }
 
-/** The bar at the bottom of Log: "{n} foods · P / C / F" from previewMealInstance. */
-export function renderTrayBar(tray, preview) {
+/**
+ * The tray's rows against the current Foods (§5.5, A-43). A row whose Food no longer exists (a
+ * Custom Food deleted while it was in the tray) stays, marked unavailable and named by the name
+ * it was added under — never its ID. Reads only; the tray itself is session memory.
+ * Returns { rows: [{ foodId, text, food, name, unavailable }], unavailable: [rows] }.
+ */
+export function trayView(app, tray) {
+  const rows = tray.map((row) => {
+    const food = app.getFood(row.foodId);
+    return { ...row, food, name: food ? food.name : row.foodName || 'A deleted food', unavailable: !food };
+  });
+  return { rows, unavailable: rows.filter((r) => r.unavailable) };
+}
+
+/** Why the tray can't be logged while a row is unavailable (A-43: "the reason is shown"). */
+export function trayUnavailableReason(unavailable) {
+  if (!unavailable.length) return '';
+  return unavailable.length === 1
+    ? `${unavailable[0].name || 'A deleted food'} is no longer available. Remove it to log this meal.`
+    : `${unavailable.length} foods are no longer available. Remove them to log this meal.`;
+}
+
+/**
+ * The bar at the bottom of Log: "{n} foods · P / C / F" from previewMealInstance. While a row is
+ * unavailable there are no totals (they'd no longer be true): "{n} no longer available".
+ */
+export function renderTrayBar(tray, preview, { unavailable = 0 } = {}) {
   if (!tray.length) return '';
   const count = `${tray.length} ${tray.length === 1 ? 'food' : 'foods'}`;
-  const totals = preview && preview.valid ? macroLine(preview.totals) : 'check the grams';
+  const totals = unavailable ? `${unavailable} no longer available` : preview && preview.valid ? macroLine(preview.totals) : 'check the grams';
   return `<button type="button" class="tray-bar" data-action="tray-open" aria-label="Meal being built: ${count}, ${escapeHtml(totals)}. Review and log">
 <span class="tray-count">${count}</span><span class="tray-totals">${escapeHtml(totals)}</span><span class="tray-cta">Review and log</span>
 </button>`;
@@ -379,16 +411,23 @@ ${errorSlot}
 
 /** The tray as one meal: grams, remove, name, slot, "Also save as a Saved Meal" (§5.5). */
 export function renderTraySheet({ model, rows, preview, name, slot, alsoSave }) {
-  const items = rows.map((row, i) => `<div class="adjust-row"><label for="tray-q-${i}">${escapeHtml(row.food ? row.food.name : row.foodId)} ${row.food ? `<span class="state-chip">${escapeHtml(row.food.state)}</span>` : ''}</label>
+  const available = (row, i) => `<div class="adjust-row"><label for="tray-q-${i}">${escapeHtml(row.food.name)} <span class="state-chip">${escapeHtml(row.food.state)}</span></label>
 <span class="grams-input"><input id="tray-q-${i}" type="text" inputmode="decimal" autocomplete="off" data-tray-index="${i}" value="${escapeHtml(row.text)}"><span aria-hidden="true">g</span></span>
-<button type="button" class="link-button" data-action="tray-remove" data-index="${i}" aria-label="Remove ${escapeHtml(row.food ? row.food.name : row.foodId)}">Remove</button></div>`).join('\n');
-  const ready = !!(preview && preview.valid) && !model.future;
+<button type="button" class="link-button" data-action="tray-remove" data-index="${i}" aria-label="Remove ${escapeHtml(row.food.name)}">Remove</button></div>`;
+  // A-43: the name it was added under, "No longer available", an obvious Remove — no grams field or values.
+  const gone = (row, i) => `<div class="adjust-row tray-unavailable" data-unavailable>
+<span class="tray-food"><span class="meal-name">${escapeHtml(row.name || 'A deleted food')}</span> <span class="marker">No longer available</span></span>
+<button type="button" class="button" data-action="tray-remove" data-index="${i}" aria-label="Remove ${escapeHtml(row.name)}, no longer available">Remove</button></div>`;
+  const items = rows.map((row, i) => (row.food ? available(row, i) : gone(row, i))).join('\n');
+  const unavailable = rows.filter((r) => !r.food);
+  const ready = !!(preview && preview.valid) && !model.future && !unavailable.length;
   return `${viewHead('Log as one meal', dateText(model))}
 <fieldset class="adjust"><legend>Foods in this meal</legend>
 ${items}
 <p class="field-error" data-grams-error hidden>Enter a weight above 0 g</p>
 </fieldset>
-<div class="preview" data-preview aria-live="polite">${preview ? previewBlock(preview) : ''}</div>
+${unavailable.length ? `<p id="tray-why" class="note" data-tray-why>${escapeHtml(trayUnavailableReason(unavailable))}</p>` : ''}
+<div class="preview" data-preview aria-live="polite"${unavailable.length ? ' hidden' : ''}>${preview && !unavailable.length ? previewBlock(preview) : ''}</div>
 <label class="field" for="tray-name">Name</label>
 <input id="tray-name" type="text" data-tray-name value="${escapeHtml(name)}" autocomplete="off">
 <p class="field-error" data-name-error hidden>Give it a name</p>
@@ -398,7 +437,7 @@ ${slotError}
 ${futureNote(model)}
 ${errorSlot}
 <div class="sheet-actions">
-<button type="button" class="button primary" data-action="tray-log"${ready ? '' : ' disabled'}>Log as one meal</button>
+<button type="button" class="button primary" data-action="tray-log"${ready ? '' : ' disabled'}${unavailable.length ? ' aria-describedby="tray-why"' : ''}>Log as one meal</button>
 <button type="button" class="button" data-action="close">Keep browsing</button>
 </div>`;
 }
@@ -674,9 +713,15 @@ export const logScreen = {
     const trayEl = main.querySelector('[data-tray]');
     const dialog = main.querySelector('[data-sheet]');
 
-    const trayRows = () => state.tray.map((row) => ({ ...row, food: app.getFood(row.foodId) }));
-    const currentTrayName = () => (state.trayName !== null ? state.trayName : trayMealName(trayRows().map((r) => (r.food ? r.food.name : r.foodId))));
+    /** The tray against current Foods (A-43). Keeps each row's last known name current, in memory. */
+    function trayRows() {
+      const view = trayView(app, state.tray);
+      view.rows.forEach((row, i) => { if (row.food) state.tray[i].foodName = row.food.name; });
+      return view.rows;
+    }
+    const currentTrayName = () => (state.trayName !== null ? state.trayName : trayMealName(trayRows().map((r) => r.name)));
     function trayPreview(withDate) {
+      if (trayRows().some((r) => r.unavailable)) return null; // no totals while a Food is gone (A-43)
       const ingredients = trayIngredients(state.tray);
       if (!ingredients || !ingredients.length) return null;
       return app.previewMealInstance({ ...(withDate ? { date: ctx.date } : {}), ingredients, mealName: currentTrayName() || 'Meal' });
@@ -694,7 +739,10 @@ export const logScreen = {
         future: model.future
       });
     }
-    const renderTray = () => { trayEl.innerHTML = renderTrayBar(state.tray, trayPreview(false)); trayEl.classList.toggle('is-empty', !state.tray.length); };
+    const renderTray = () => {
+      trayEl.innerHTML = renderTrayBar(state.tray, trayPreview(false), { unavailable: trayRows().filter((r) => r.unavailable).length });
+      trayEl.classList.toggle('is-empty', !state.tray.length);
+    };
     const renderConfirm = () => { confirmEl.innerHTML = renderConfirmation(confirmation); };
     function renderAll() { renderTop(); renderConfirm(); renderList(); renderTray(); }
 
@@ -766,16 +814,40 @@ export const logScreen = {
       for (const ing of preview.ingredients) { const f = app.getFood(ing.foodId); if (f) foods[ing.foodId] = f; }
       openDialog({ type: 'meal', mealId, preview, slot: ctx.slot, adjusting: false, quantities: preview.ingredients.map((i) => String(i.quantity)), original: recipeOf(preview.ingredients), foods });
     }
+    /**
+     * §13.2 / I-10, a Food deleted between listing and using it: "That food no longer exists."
+     * The results are rendered again from the current Foods (the search text and segment are
+     * kept, nothing is cached), the tray follows (A-43), and a surface for that Food closes.
+     */
+    function foodGone() {
+      renderList();
+      renderTray();
+      confirmation = { message: 'That food no longer exists.' };
+      renderConfirm();
+      if (ui && ui.type === 'tray') { refreshTraySheet(); return; }
+      if (dialog.open) { host.returnFocusTo(top.querySelector('[data-query]')); ui = null; closeDialog(); }
+    }
+    /** Whether what's open is about a Food (quantity sheet, Food detail, tray, or the day-type step before logging one). */
+    const foodSurface = () => !ui || ['food', 'food-detail', 'tray'].includes(ui.type)
+      || (ui.type === 'day-type' && !!ui.continueTo && ui.continueTo.kind !== 'meal');
+    /** Redraw the open tray sheet against the current Foods, keeping the name, slot and tick-box. */
+    function refreshTraySheet() {
+      ui.rows = trayRows();
+      ui.preview = trayPreview(true);
+      ui.name = currentTrayName();
+      ui.slot = checkedSlot('log-slot') || ui.slot;
+      drawDialog();
+    }
     function openFood(foodId, text = '', intent = 'log') {
       const food = app.getFood(foodId);
-      if (!food) { showError({ code: 'FOOD_NOT_FOUND' }); return; }
+      if (!food) { foodGone(); return; }
       const q = parseGrams(text);
       openDialog({ type: 'food', food, text, preview: q === null ? null : app.previewLogFood({ date: ctx.date, foodId, quantity: q }), slot: ctx.slot, intent });
     }
     /* ---- Food detail (§7.3): from the quantity sheet; Edit / Delete for Custom Foods ---- */
     function openFoodDetail(foodId, note = '') {
       const detail = foodDetailModel(app, foodId);
-      if (!detail) { renderList(); if (dialog.open) closeDialog(); showError({ code: 'FOOD_NOT_FOUND' }); return; }
+      if (!detail) { foodGone(); return; }
       ui = { type: 'food-detail', ...detail, note };
       host.open(ui.type, drawDialog, { startAtTitle: true });
     }
@@ -1071,7 +1143,8 @@ export const logScreen = {
           case 'add-to-tray': {
             const q = parseGrams(ui.text);
             if (q === null) { dialog.querySelector('[data-grams-error]').hidden = false; break; }
-            state.tray.push({ foodId: ui.food.id, text: String(q) });
+            if (!app.getFood(ui.food.id)) { foodGone(); break; }
+            state.tray.push({ foodId: ui.food.id, foodName: ui.food.name, text: String(q) });
             closeDialog();
             renderTray();
             break;
@@ -1086,10 +1159,12 @@ export const logScreen = {
             ui.name = currentTrayName();
             ui.slot = checkedSlot('log-slot') || ui.slot;
             drawDialog();
-            dialog.querySelector('[data-tray-index]')?.focus();
+            (dialog.querySelector('[data-unavailable] [data-action="tray-remove"]') || dialog.querySelector('[data-tray-index]'))?.focus();
             break;
           }
           case 'tray-log': {
+            // A-43: never logged while a row's Food is gone; the reason is shown and Remove gets focus.
+            if (trayRows().some((r) => r.unavailable)) { refreshTraySheet(); dialog.querySelector('[data-unavailable] [data-action="tray-remove"]')?.focus(); break; }
             const ingredients = trayIngredients(state.tray);
             if (!ingredients) { dialog.querySelector('[data-grams-error]').hidden = false; break; }
             const name = String(ui.name || '').trim();
@@ -1137,7 +1212,8 @@ export const logScreen = {
           case 'fd-delete': ui = { type: 'food-delete', food: ui.food, meals: foodUsageMeals(app, ui.food.id) }; host.open(ui.type, drawDialog); break;
           case 'fd-delete-confirm': {
             confirmation = foodActions.deleteCustomFood(ui.food);
-            renderList();
+            renderList(); // §13.2: the results follow the current Foods; the search text is kept
+            renderTray(); // A-43: a tray row for it is now "No longer available"
             renderConfirm();
             host.returnFocusTo(top.querySelector('[data-query]'));
             ui = null;
@@ -1161,7 +1237,9 @@ export const logScreen = {
           default: break;
         }
       } catch (e) {
-        showError(e);
+        // A tray the domain can't log because a Food is gone reads as the same case (A-43).
+        if (e && (e.code === 'FOOD_NOT_FOUND' || (e.code === 'MEAL_NEEDS_REPLACEMENT' && ui && ui.type === 'tray')) && foodSurface()) foodGone();
+        else { if (e && e.code === 'FOOD_NOT_FOUND') renderList(); showError(e); }
       }
     });
 

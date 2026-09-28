@@ -20,14 +20,15 @@ import { constants } from '../src/domain/index.js';
 import { escapeHtml } from './shell.js';
 import { macroLine, parseGrams, errorMessage, dialogHead, errorSlot } from './today.js';
 import {
-  MEAL_TYPE_LABELS, renderMealDetail, foodResults, renderResults, renderCustomFoodForm, customFoodInput,
-  renderConfirmation, renderPicker
+  MEAL_TYPE_LABELS, renderMealDetail, renderCustomFoodForm, customFoodInput,
+  renderConfirmation, renderPicker, pickerResults
 } from './log.js';
+import { foodDetailModel, renderFoodDetail } from './foods.js';
 import { session, routeParams } from './session.js';
 import { createViewHost, viewHead, syncInPlace } from './view-host.js';
 
 /** Detail and editing surfaces (pushed / panel / pane); the rest are short choices. */
-export const MEALS_VIEW_TYPES = Object.freeze(['meal-detail', 'editor', 'picker', 'custom-food', 'replace']);
+export const MEALS_VIEW_TYPES = Object.freeze(['meal-detail', 'editor', 'picker', 'custom-food', 'replace', 'food-detail']);
 
 /* ---------------- lists (§6.1–6.3, §6.8) ---------------- */
 
@@ -442,7 +443,9 @@ export const mealsScreen = {
           break;
         }
         case 'editor': dialog.innerHTML = renderEditor({ draft, calc: app.calculateMealMacros(draftMeal(draft)), foods: foodsFor(draft.rows.map((r) => r.foodId)), touched }); break;
-        case 'picker': dialog.innerHTML = renderPicker({ title: ui.title, query: ui.query, results: pickerResults(ui.query) }); break;
+        case 'picker': dialog.innerHTML = renderPicker({ title: ui.title, query: ui.query, results: pickerResults(app, ui.query) }); break;
+        // The one Food detail (foods.js), information-only from the picker (§7.3, A-46).
+        case 'food-detail': dialog.innerHTML = renderFoodDetail({ ...ui, context: 'picker' }); break;
         case 'custom-food': dialog.innerHTML = renderCustomFoodForm(ui); break;
         case 'replace': dialog.innerHTML = renderReplace(ui); break;
         case 'delete': dialog.innerHTML = renderDeleteMeal({ meal: app.getMeal(ui.mealId) }); break;
@@ -467,7 +470,6 @@ export const mealsScreen = {
       const text = mealsErrorMessage(e, context);
       if (el) { el.textContent = text; el.hidden = false; } else announce(text);
     }
-    const pickerResults = (query) => renderResults({ segment: 'foods', meals: null, foods: foodResults(app, query), future: false });
 
     const openDetail = (mealId) => show({ type: 'meal-detail', mealId }, { startAtTitle: true });
     function openEditor(next, { returnTo }) {
@@ -495,6 +497,7 @@ export const mealsScreen = {
           if (ui.parent === 'editor') backToEditor('[data-action="add-ingredient"]'); else openDetail(ui.mealId);
           return false;
         case 'custom-food': show(ui.pickUi); return false;
+        case 'food-detail': backToPicker(ui); return false;
         case 'replace': openDetail(ui.mealId); return false;
         case 'discard': backToEditor(); return false;
         case 'editor':
@@ -510,6 +513,22 @@ export const mealsScreen = {
       }
     }
     const requestLeave = () => { if (beforeLeave()) host.close(); };
+
+    /**
+     * Food detail from the picker (§7.5, A-42, A-46): information only. The picker object itself
+     * (search text, mode, the row it's for) is kept, and so is the editor's draft; Back returns
+     * to the picker with focus on the Food's Details button.
+     */
+    function openPickerFoodDetail(foodId, pickUi) {
+      const detail = foodDetailModel(app, foodId);
+      if (!detail) { redraw('[data-pick-query]'); showError({ code: 'FOOD_NOT_FOUND' }); return; }
+      show({ type: 'food-detail', ...detail, pickUi }, { startAtTitle: true });
+    }
+    function backToPicker(detailUi) {
+      show(detailUi.pickUi);
+      const el = dialog.querySelector(`[data-action="picker-food-detail"][data-food="${CSS.escape(detailUi.food.id)}"]`) || dialog.querySelector('[data-pick-query]');
+      if (el) el.focus();
+    }
 
     /** A Food chosen in the picker goes back to whoever asked for it; nothing is logged (§7.5). */
     function pick(foodId, pickUi) {
@@ -551,7 +570,7 @@ export const mealsScreen = {
         syncEditor();
       } else if (ui.type === 'picker' && el.matches('[data-pick-query]')) {
         ui.query = el.value;
-        dialog.querySelector('[data-pick-results]').innerHTML = pickerResults(ui.query);
+        dialog.querySelector('[data-pick-results]').innerHTML = pickerResults(app, ui.query);
       } else if (ui.type === 'custom-food' && el.matches('[data-cf]')) {
         ui.values[el.dataset.cf] = el.value;
         ui.touched.add(el.dataset.cf);
@@ -741,6 +760,7 @@ export const mealsScreen = {
 
           /* picker */
           case 'food': pick(el.dataset.food, ui); break;
+          case 'picker-food-detail': openPickerFoodDetail(el.dataset.food, ui); break;
           case 'create-food': {
             const values = { name: String(ui.query || '').trim(), category: '', state: '', brand: '', protein: '', carbs: '', fat: '', aliases: '' };
             show({ type: 'custom-food', values, touched: new Set(), validation: app.validateCustomFood(customFoodInput(values)), pickUi: ui });

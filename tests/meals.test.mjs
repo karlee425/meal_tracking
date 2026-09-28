@@ -376,7 +376,7 @@ test('Meals — the only ingredient can be replaced but not removed', () => {
 /* ---------------- presentation, focus, navigation ---------------- */
 
 test('Meals — presented like Log: views pushed on phones, a side panel at medium, a right-hand pane on wide', () => {
-  assert.deepEqual([...MEALS_VIEW_TYPES], ['meal-detail', 'editor', 'picker', 'custom-food', 'replace']);
+  assert.deepEqual([...MEALS_VIEW_TYPES], ['meal-detail', 'editor', 'picker', 'custom-food', 'replace', 'food-detail']);
   for (const type of MEALS_VIEW_TYPES) {
     assert.equal(presentationFor(type, 'compact', MEALS_VIEW_TYPES), 'pushed');
     assert.equal(presentationFor(type, 'medium', MEALS_VIEW_TYPES), 'panel');
@@ -446,7 +446,7 @@ test('Meals — no macro arithmetic, no forbidden terms, no second store, domain
     assert.deepEqual(domainImportsBypassingIndex(src), [], f);
   }
   const src = fs.readFileSync(path.join(ROOT, 'app/meals.js'), 'utf8');
-  assert.deepEqual([...src.matchAll(/from '([^']+)'/g)].map((m) => m[1]).sort(), ['../src/domain/index.js', './log.js', './session.js', './shell.js', './today.js', './view-host.js']);
+  assert.deepEqual([...src.matchAll(/from '([^']+)'/g)].map((m) => m[1]).sort(), ['../src/domain/index.js', './foods.js', './log.js', './session.js', './shell.js', './today.js', './view-host.js']);
   assert.ok(!/localStorage|sessionStorage|indexedDB|\bfetch\(|import\(/.test(src), 'no second persistence mechanism');
   assert.ok(!/savedMeals\s*[.=[]|libraryMeals\s*[.=[]|store\./.test(src), 'no direct data access: domain calls only');
   const code = src.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, ''); // executable code, not comments

@@ -647,7 +647,7 @@ test('Today G7 — every Coach item opens its Meal or Food detail; Log stays on 
   assert.match(src, /case 'coach-food-detail': openFoodDetail\(el\.dataset\.food, ui\); break;/);
   assert.match(src, /\(ui\.type === 'meal-detail' \|\| ui\.type === 'food-detail'\) && ui\.back\) \{ returnTo\(ui\.back, ui\); return false; \}/, 'Back / Escape / Close return to where the detail was opened');
   assert.match(src, /back\.suggestions = app\.getMacroCoachSuggestions/, 'the Coach is re-queried on return, its expanded groups kept');
-  assert.match(src, /case 'food-detail': dialog\.innerHTML = renderFoodDetail\(\{ \.\.\.ui, context: 'coach' \}\)/, 'the one Food detail (foods.js)');
+  assert.match(src, /case 'food-detail': dialog\.innerHTML = renderFoodDetail\(\{ \.\.\.ui, context: ui\.pickUi \? 'picker' : 'coach' \}\)/, 'the one Food detail (foods.js): the Coach context, or the picker’s (G16)');
   assert.ok(!/function renderFoodDetail|function renderMealDetail/.test(src), 'no second detail implementation');
 });
 
