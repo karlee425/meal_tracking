@@ -106,7 +106,11 @@ ${aboutSection()}`;
 
 /* ---------------- targets (§10.2, §10.3) ---------------- */
 
-const TARGET_MESSAGES = Object.freeze({ TARGET_NOT_A_VALID_NUMBER: 'Enter grams, 0 or more.' });
+// Wording for the domain's codes (§13 error table: "Targets need to be whole grams, 0 or more"); the rule itself is validateTargets.
+const TARGET_MESSAGES = Object.freeze({
+  TARGET_NOT_A_VALID_NUMBER: 'Enter whole grams, 0 or more.',
+  TARGET_NOT_A_WHOLE_NUMBER: 'Use whole grams, no decimals.'
+});
 
 /** The form for one day type. Checked by the domain (validateTargets) as fields change; Save is disabled while invalid or unchanged. */
 export function renderTargetForm({ dayType, values, original, validation, touched }) {
@@ -114,14 +118,14 @@ export function renderTargetForm({ dayType, values, original, validation, touche
   const unchanged = FIELDS.every(([key]) => parsed[key] === original[key]);
   const invalidFields = new Set(validation.errors.map((e) => e.field));
   const needs = !validation.valid
-    ? `Needed before saving: ${FIELDS.filter(([key]) => invalidFields.has(key)).map(([, label]) => label.toLowerCase()).join(', ')} as grams, 0 or more.`
+    ? `Needed before saving: ${FIELDS.filter(([key]) => invalidFields.has(key)).map(([, label]) => label.toLowerCase()).join(', ')} as whole grams, 0 or more.`
     : unchanged ? 'No changes yet.' : '';
   const field = ([key, label]) => {
     const err = validation.errors.find((e) => e.field === key);
     const shown = err && touched.has(key);
     return `<div class="amount-field"><label class="field" for="tf-${key}">${label}</label>
-<span class="grams-input"><input id="tf-${key}" type="text" inputmode="decimal" autocomplete="off" data-target-field="${key}" value="${escapeHtml(values[key])}" aria-describedby="tf-${key}-error" data-sync="tf-${key}-state"${shown ? ' aria-invalid="true"' : ''}><span aria-hidden="true">g</span></span>
-<p id="tf-${key}-error" class="field-error" data-sync="tf-${key}-error"${shown ? '' : ' hidden'}>${shown ? escapeHtml(TARGET_MESSAGES[err.code] || 'Enter grams, 0 or more.') : ''}</p></div>`;
+<span class="grams-input"><input id="tf-${key}" type="text" inputmode="numeric" autocomplete="off" data-target-field="${key}" value="${escapeHtml(values[key])}" aria-describedby="tf-${key}-error" data-sync="tf-${key}-state"${shown ? ' aria-invalid="true"' : ''}><span aria-hidden="true">g</span></span>
+<p id="tf-${key}-error" class="field-error" data-sync="tf-${key}-error"${shown ? '' : ' hidden'}>${shown ? escapeHtml(TARGET_MESSAGES[err.code] || TARGET_MESSAGES.TARGET_NOT_A_VALID_NUMBER) : ''}</p></div>`;
   };
   return `${viewHead(`Edit ${DAY_TYPE_LABELS[dayType]} targets`, 'Daily targets in grams')}
 <div class="banner banner-info" role="note"><p>Changes apply to days you set up from now on. Days already set up keep their targets.</p></div>
@@ -245,7 +249,7 @@ export const settingsScreen = {
     }
     function showDialogError(e) {
       const el = dialog.querySelector('[data-error]');
-      const text = e && e.code === 'INVALID_TARGETS' ? 'Targets need to be grams, 0 or more.' : 'That didn’t save. Nothing was changed.';
+      const text = e && e.code === 'INVALID_TARGETS' ? 'Targets need to be whole grams, 0 or more.' : 'That didn’t save. Nothing was changed.';
       if (el) { el.textContent = text; el.hidden = false; } else announce(text);
     }
     function setRestore(next) {

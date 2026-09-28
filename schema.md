@@ -190,6 +190,8 @@ Current configuration:
 
 The source repo calls the long-run type `long`; the canonical model calls it `long_run`.
 
+Each current target is a whole number of grams, 0 or more (`targets.schema.json` uses `integer`; the domain's `validateTargets` / `updateCurrentTargets` enforce the same rule). A Day's `targetSnapshot` keeps its existing rule, so tightening current targets never re-judges history.
+
 Do not migrate the legacy `perSlot`, `nightSnack`, or `carbShiftByDayType` structures as authoritative targets. They become future coaching heuristics if needed. Targets are daily only; remaining macros are always daily target − logged P/C/F.
 
 `data/targets.json` is seeded once by the migration with the values above and is never overwritten by a re-run. After that it is current-target configuration owned by the app; changing it affects new Days only.

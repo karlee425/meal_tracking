@@ -31,15 +31,15 @@
       ],
       "properties": {
         "protein": {
-          "type": "number",
+          "type": "integer",
           "minimum": 0
         },
         "carbs": {
-          "type": "number",
+          "type": "integer",
           "minimum": 0
         },
         "fat": {
-          "type": "number",
+          "type": "integer",
           "minimum": 0
         }
       }

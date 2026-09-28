@@ -13,7 +13,8 @@ import { MACROS, pickMacros } from './macros.js';
 
 /**
  * Problems with target values ([] when they can be saved): only protein / carbs / fat, each a
- * finite number ≥ 0. One rule set for validateTargets (a dry run) and updateCurrentTargets.
+ * whole number of grams ≥ 0 (150 and 150.0 are the same value; 150.5 is not). One rule set for
+ * validateTargets (a dry run) and updateCurrentTargets, matching targets.schema.json ("integer").
  */
 function targetProblems(values) {
   if (!values || typeof values !== 'object' || Array.isArray(values)) {
@@ -24,8 +25,11 @@ function targetProblems(values) {
     if (!MACROS.includes(k)) problems.push({ field: k, code: 'TARGET_UNKNOWN_FIELD', message: `targets only have protein, carbs and fat; got "${k}"` });
   }
   for (const [k, v] of Object.entries(values)) {
-    if (MACROS.includes(k) && !(typeof v === 'number' && Number.isFinite(v) && v >= 0)) {
-      problems.push({ field: k, code: 'TARGET_NOT_A_VALID_NUMBER', message: `${k} must be a finite number ≥ 0` });
+    if (!MACROS.includes(k)) continue;
+    if (!(typeof v === 'number' && Number.isFinite(v) && v >= 0)) {
+      problems.push({ field: k, code: 'TARGET_NOT_A_VALID_NUMBER', message: `${k} must be a whole number ≥ 0` });
+    } else if (!Number.isInteger(v)) {
+      problems.push({ field: k, code: 'TARGET_NOT_A_WHOLE_NUMBER', message: `${k} must be a whole number ≥ 0 (got ${v})` });
     }
   }
   return problems;

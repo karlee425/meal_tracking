@@ -80,7 +80,8 @@ test('Today — below, exactly at and above target: "{n} g left" / "Target reach
   const { app, actions } = setup();
   actions.chooseDayType('rest');
   app.logFood({ date: TODAY, mealSlot: 'dinner', foodId: 'food_core_fage_0_greek_yogurt', quantity: 2000 });
-  app.logFood({ date: TODAY, mealSlot: 'lunch', foodId: 'food_core_banana', quantity: 100 });
+  // Farro (fat 2 g per 100 g) keeps logged fat whole, since targets are whole grams.
+  app.logFood({ date: TODAY, mealSlot: 'lunch', foodId: 'food_core_farro_dry', quantity: 100 });
   // Make fat land exactly on target, through the domain (current targets → explicit apply).
   app.updateCurrentTargets('rest', { fat: app.getDaySummary(TODAY).logged.fat });
   app.applyCurrentTargetsToToday();

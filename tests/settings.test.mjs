@@ -113,8 +113,8 @@ test('Settings — the target form: domain errors per field, Save disabled while
   const bad = { ...values, carbs: 'abc' };
   html = renderTargetForm({ dayType: 'lift', values: bad, original, validation: app.validateTargets(parseTargets(bad)), touched: new Set(['carbs']) });
   assert.match(html, /id="tf-carbs"[^>]*aria-describedby="tf-carbs-error"[^>]*aria-invalid="true"/);
-  assert.match(html, /<p id="tf-carbs-error" class="field-error" data-sync="tf-carbs-error">Enter grams, 0 or more\.<\/p>/);
-  assert.match(html, /Needed before saving: carbs as grams, 0 or more\./);
+  assert.match(html, /<p id="tf-carbs-error" class="field-error" data-sync="tf-carbs-error">Enter whole grams, 0 or more\.<\/p>/);
+  assert.match(html, /Needed before saving: carbs as whole grams, 0 or more\./);
   assert.match(html, /data-action="target-save"[^>]*disabled>Save/);
   const good = { ...values, carbs: '310' };
   html = renderTargetForm({ dayType: 'lift', values: good, original, validation: app.validateTargets(parseTargets(good)), touched: new Set(['carbs']) });
@@ -143,6 +143,75 @@ test('Settings — changing current targets never rewrites a Day; today changes 
   app.createDay(ago(1), 'lift');
   assert.equal(app.getDay(ago(1)).targetSnapshot.carbs, 310, 'new days use the new current targets');
   assert.match(settingsHtml(app), /P 150 · C 310 · F 70 g/);
+});
+
+test('Settings — targets are whole grams: one domain rule for validateTargets, updateCurrentTargets and the schema', () => {
+  const { app, writes } = setup();
+  for (const ok of [150, 293, 0, 150.0, Number('150.0'), parseTargetInput('150.0')]) {
+    assert.deepEqual(app.validateTargets({ protein: 150, carbs: ok, fat: 70 }), { valid: true, errors: [] }, `${ok} is a whole number`);
+  }
+  for (const dec of [150.5, 0.3, parseTargetInput('150.5'), parseTargetInput('293,4'), 1e-7]) {
+    const v = app.validateTargets({ protein: 150, carbs: dec, fat: 70 });
+    assert.equal(v.valid, false, `${dec} rejected`);
+    assert.deepEqual(v.errors.map((e) => [e.field, e.code]), [['carbs', 'TARGET_NOT_A_WHOLE_NUMBER']]);
+    assert.throws(() => app.updateCurrentTargets('lift', { carbs: dec }),
+      (e) => e.code === 'INVALID_TARGETS' && e.details.length === 1 && e.details[0].field === 'carbs' && e.details[0].code === 'TARGET_NOT_A_WHOLE_NUMBER' && /whole number/.test(e.message));
+  }
+  // NaN / ±Infinity / negative / text / empty keep their existing code; negative decimals are "not a valid number".
+  for (const bad of [Number.NaN, Infinity, -Infinity, -1, -0.5, parseTargetInput('abc'), parseTargetInput('')]) {
+    assert.deepEqual(app.validateTargets({ protein: 150, carbs: bad, fat: 70 }).errors.map((e) => e.code), ['TARGET_NOT_A_VALID_NUMBER'], String(bad));
+  }
+  assert.deepEqual(app.validateTargets({ protein: 150.5, carbs: 'x', fat: 70.25 }).errors.map((e) => [e.field, e.code]),
+    [['protein', 'TARGET_NOT_A_WHOLE_NUMBER'], ['carbs', 'TARGET_NOT_A_VALID_NUMBER'], ['fat', 'TARGET_NOT_A_WHOLE_NUMBER']], 'every problem reported at once');
+  assert.equal(writes.length, 0, 'nothing is written for a rejected value');
+  assert.deepEqual(app.getAllCurrentTargets(), CANONICAL, 'canonical seeded targets unchanged');
+  // A whole-number save still works, and 150.0 is stored as 150.
+  app.updateCurrentTargets('lift', { protein: 150.0, carbs: 310, fat: 70 });
+  assert.deepEqual(app.getCurrentTargets('lift'), { protein: 150, carbs: 310, fat: 70 });
+  assert.deepEqual(writes, [['targets']], 'one write, targets only');
+  // The schema says the same thing (the store validates every commit against it).
+  const schema = JSON.parse(fs.readFileSync(path.join(ROOT, 'data/schemas/targets.schema.json'), 'utf8'));
+  for (const key of ['protein', 'carbs', 'fat']) assert.deepEqual(schema.$defs.macros.properties[key], { type: 'integer', minimum: 0 });
+  const seed = JSON.parse(fs.readFileSync(path.join(ROOT, 'data/targets.json'), 'utf8'));
+  assert.deepEqual(seed, CANONICAL, 'data/targets.json (the canonical seed) is untouched');
+});
+
+test('Settings — the save path rejects decimals: whole-grams message, Save disabled, nothing reaches the confirmation', () => {
+  const { app, writes } = setup();
+  const original = app.getCurrentTargets('lift');
+  const values = { protein: '150', carbs: '293.5', fat: '70' };
+  const validation = app.validateTargets(parseTargets(values));
+  assert.equal(validation.valid, false);
+  const html = renderTargetForm({ dayType: 'lift', values, original, validation, touched: new Set(['carbs']) });
+  assert.match(html, /<p id="tf-carbs-error" class="field-error" data-sync="tf-carbs-error">Use whole grams, no decimals\.<\/p>/);
+  assert.match(html, /id="tf-carbs"[^>]*aria-invalid="true"/);
+  assert.match(html, /Needed before saving: carbs as whole grams, 0 or more\./);
+  assert.match(html, /data-action="target-save"[^>]*disabled>Save/);
+  assert.match(html, /id="tf-carbs" type="text" inputmode="numeric"/, 'a whole-number keypad');
+  // The confirmation step saves through updateCurrentTargets, which refuses the same value.
+  assert.throws(() => app.updateCurrentTargets('lift', parseTargets(values)), (e) => e.code === 'INVALID_TARGETS');
+  assert.equal(writes.length, 0);
+  assert.deepEqual(app.getAllCurrentTargets(), CANONICAL);
+  // The mount has no rule of its own: it asks validateTargets on input and on Save, and the domain again on confirm.
+  const src = fs.readFileSync(path.join(ROOT, 'app/settings.js'), 'utf8');
+  assert.ok(!/isInteger|Number\.isFinite|% ?1\b|Math\.(floor|round|trunc)/.test(src), 'no integer check in the UI');
+  assert.equal((src.match(/app\.validateTargets\(/g) || []).length, 3, 'input, open and Save all use the domain');
+  assert.match(src, /app\.updateCurrentTargets\(dayType, parsed\)/);
+});
+
+test('Settings — tightening the rule never re-judges history: stored Day snapshots with decimals still open and stay as stored', () => {
+  const daySchema = JSON.parse(fs.readFileSync(path.join(ROOT, 'data/schemas/day.schema.json'), 'utf8'));
+  for (const key of ['protein', 'carbs', 'fat']) assert.equal(daySchema.$defs.macros.properties[key].type, 'number', 'Day snapshots keep the existing number rule');
+  const { app } = setup();
+  withHistory(app);
+  const past = app.getDay(ago(2));
+  // A Day recorded under the old rule, e.g. a snapshot of 292.5 g carbs.
+  const legacy = { ...SEED, days: [...app.exportUserData().data.days].map((d) => (d.date === ago(2) ? { ...d, targetSnapshot: { ...d.targetSnapshot, carbs: 292.5 } } : d)) };
+  const reopened = createDataLayer({ adapter: createMemoryAdapter({ ...SEED, ...legacy, targets: CANONICAL }), today: () => TODAY });
+  assert.equal(reopened.getDay(ago(2)).targetSnapshot.carbs, 292.5, 'opened and read back unchanged');
+  reopened.updateCurrentTargets('lift', { carbs: 300 });
+  assert.equal(reopened.getDay(ago(2)).targetSnapshot.carbs, 292.5, 'a target edit leaves it alone');
+  assert.equal(JSON.stringify(app.getDay(ago(2))), JSON.stringify(past));
 });
 
 /* ---------------- Backup ---------------- */
