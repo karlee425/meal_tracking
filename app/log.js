@@ -489,6 +489,9 @@ export const validateCustomFoodForm = (app, form) => (form.mode === 'edit'
   ? app.validateCustomFood(customFoodPatch(form.values), { id: form.foodId })
   : app.validateCustomFood(customFoodInput(form.values)));
 
+/** The Custom Food form's fields, top to bottom. */
+const CUSTOM_FOOD_FIELD_ORDER = Object.freeze(['name', 'category', 'state', 'brand', 'protein', 'carbs', 'fat', 'aliases']);
+
 const NEEDED_NAMES = Object.freeze({ name: 'name', category: 'category', state: 'state', 'nutrition.protein': 'protein', 'nutrition.carbs': 'carbs', 'nutrition.fat': 'fat', nutrition: 'protein + carbs + fat' });
 
 /**
@@ -505,6 +508,9 @@ export function renderCustomFoodForm({ values, validation, touched, mode = 'crea
   const fieldError = (field, id) => { const t = errorFor(field); return `<p id="${id}" class="field-error" data-sync="${id}"${t ? '' : ' hidden'}>${escapeHtml(t)}</p>`; };
   const impossible = validation.errors.find((x) => x.code === 'NUTRITION_IMPOSSIBLE');
   const dup = validation.warnings.find((w) => w.code === 'DUPLICATE_NAME');
+  // Where a submit while invalid (Enter, §14 / A-45) puts focus: the first field the domain flagged.
+  const flagged = new Set(validation.errors.map((e) => (e.field === 'nutrition' ? 'protein' : String(e.field).replace('nutrition.', ''))));
+  const firstInvalid = CUSTOM_FOOD_FIELD_ORDER.find((f) => flagged.has(f));
   const text = (field, label, placeholder = '') => `<label class="field" for="cf-${field}">${label}</label>
 <input id="cf-${field}" type="text" data-cf="${field}" value="${escapeHtml(values[field] || '')}" autocomplete="off"${placeholder ? ` placeholder="${placeholder}"` : ''} aria-describedby="cf-${field}-error">`;
   const amount = (field, label) => `<div class="amount-field"><label class="field" for="cf-${field}">${label}</label>
@@ -535,7 +541,7 @@ ${amount('fat', 'Fat')}
 </fieldset>
 <p class="field-error" role="alert" data-sync="cf-impossible"${impossible ? '' : ' hidden'}>${CUSTOM_FOOD_MESSAGES.NUTRITION_IMPOSSIBLE}</p>
 ${text('aliases', 'Other names (optional, comma-separated)')}
-<p id="cf-save-hint" class="hint" data-sync="cf-save-hint"${validation.valid ? ' hidden' : ''}>${validation.valid ? '' : `Needed before saving: ${[...new Set(validation.errors.map((e) => NEEDED_NAMES[e.field] || e.field))].join(', ')}.`}</p>
+<p id="cf-save-hint" class="hint" data-sync="cf-save-hint"${validation.valid ? ' hidden' : ` data-first-invalid="cf-${firstInvalid || 'name'}"`}>${validation.valid ? '' : `Needed before saving: ${[...new Set(validation.errors.map((e) => NEEDED_NAMES[e.field] || e.field))].join(', ')}.`}</p>
 ${errorSlot}
 <div class="sheet-actions">
 <button type="button" class="button primary" data-action="cf-save" data-sync="cf-save" aria-describedby="cf-save-hint"${validation.valid ? '' : ' disabled'}>${saveLabel}</button>
@@ -724,7 +730,7 @@ export const logScreen = {
         case 'custom-food': dialog.innerHTML = renderCustomFoodForm(ui); break;
         case 'food-detail': dialog.innerHTML = renderFoodDetail({ ...ui, context: 'log', future: model.future }); break;
         case 'food-delete': dialog.innerHTML = renderDeleteFood(ui); break;
-        case 'discard-food': dialog.innerHTML = renderDiscardFood(); break;
+        case 'discard-food': dialog.innerHTML = renderDiscardFood({ created: ui.form.mode !== 'edit' }); break;
         case 'followup': dialog.innerHTML = renderFollowUpDialog(ui); break;
         default: break;
       }
@@ -791,16 +797,14 @@ export const logScreen = {
       if (el) { el.textContent = ''; el.textContent = message; }
     }
     /**
-     * Escape / Back / Cancel on the food forms step back to Food detail (the previous view),
-     * asking first when an edit has unsaved changes (§3.2). Every other Log surface just closes.
+     * Escape / Back / Cancel on the food forms: an edit steps back to Food detail (the previous
+     * view) and a new food closes, each asking first when it has unsaved changes (§3.2, I-01).
+     * Every other Log surface just closes.
      */
     function beforeLeave() {
       if (!ui) return true;
-      if (ui.type === 'custom-food' && ui.mode === 'edit') {
-        if (customFoodDirty(ui)) { ui = { type: 'discard-food', form: ui }; host.open(ui.type, drawDialog); return false; }
-        openFoodDetail(ui.foodId);
-        return false;
-      }
+      if (ui.type === 'custom-food' && customFoodDirty(ui)) { askDiscard(ui, null); return false; }
+      if (ui.type === 'custom-food' && ui.mode === 'edit') { openFoodDetail(ui.foodId); return false; }
       if (ui.type === 'discard-food') { reopenForm(ui.form); return false; }
       if (ui.type === 'food-delete') { openFoodDetail(ui.food.id); return false; }
       return true;
@@ -808,6 +812,39 @@ export const logScreen = {
     function reopenForm(form) {
       ui = form;
       host.open(ui.type, drawDialog);
+    }
+    function askDiscard(form, proceed) {
+      ui = { type: 'discard-food', form, proceed };
+      host.open(ui.type, drawDialog);
+    }
+    /**
+     * Before Log is left (another tab, a link, browser Back) or a Log control replaces the open
+     * pane: true when no food form holds unsaved changes; otherwise "Discard changes?" asks and
+     * proceed() runs only after Discard.
+     */
+    function guardLeave(proceed) {
+      if (!ui) return true;
+      if (ui.type === 'discard-food') {
+        ui.proceed = proceed;
+        const keep = dialog.querySelector('[data-action="keep-editing"]');
+        if (keep) keep.focus();
+        return false;
+      }
+      if (ui.type === 'custom-food' && customFoodDirty(ui)) { askDiscard(ui, proceed); return false; }
+      return true;
+    }
+    this._leaveGuard = guardLeave;
+    /** Discard: nothing is saved. Then where the user was going, back to Food detail (an edit), or closed (a new food). */
+    function discardChanges() {
+      const { form, proceed } = ui;
+      if (proceed) {
+        afterClose = () => win.setTimeout(proceed, 0);
+        closeDialog();
+      } else if (form.mode === 'edit') {
+        openFoodDetail(form.foodId);
+      } else {
+        closeDialog();
+      }
     }
     function openTray() {
       openDialog({ type: 'tray', rows: trayRows(), preview: trayPreview(true), name: currentTrayName(), slot: ctx.slot, alsoSave: false });
@@ -948,6 +985,8 @@ export const logScreen = {
     main.addEventListener('click', (event) => {
       const el = event.target.closest('[data-action]');
       if (!el || !main.contains(el)) return;
+      // A Log control used beside an open pane (wide screens) would replace an unsaved food form: ask first.
+      if (dialog.open && !dialog.contains(el) && !guardLeave(() => { if (el.isConnected) el.click(); })) return;
       try {
         switch (el.dataset.action) {
           case 'close': if (beforeLeave()) closeDialog(); break;
@@ -1062,7 +1101,7 @@ export const logScreen = {
           }
           case 'create-food': {
             const values = { name: state.query.trim(), category: '', state: '', brand: '', protein: '', carbs: '', fat: '', aliases: '' };
-            openDialog({ type: 'custom-food', values, touched: new Set(), validation: app.validateCustomFood(customFoodInput(values)) });
+            openDialog({ type: 'custom-food', values, initial: { ...values }, touched: new Set(), validation: app.validateCustomFood(customFoodInput(values)) });
             break;
           }
           case 'cf-save': {
@@ -1106,7 +1145,7 @@ export const logScreen = {
             break;
           }
           case 'keep-editing': reopenForm(ui.form); break;
-          case 'discard': openFoodDetail(ui.form.foodId); break;
+          case 'discard': discardChanges(); break;
           case 'view-today': showOnToday({ highlightId: confirmation.instanceId }); break;
           case 'edit-on-today': showOnToday({ openInstanceId: confirmation.instanceId }); break;
           case 'followup-name': ui.mode = 'name'; drawDialog(); dialog.querySelector('[data-new-name]').focus(); break;
@@ -1137,7 +1176,13 @@ export const logScreen = {
     return false;
   },
 
+  /** Asked by the shell before a route change (§3.2): false keeps Log while "Discard changes?" asks. */
+  leaveGuard(proceed) {
+    return this._leaveGuard ? this._leaveGuard(proceed) : true;
+  },
+
   unmount() {
+    this._leaveGuard = null;
     if (this._cleanup) { this._cleanup(); this._cleanup = null; }
   }
 };

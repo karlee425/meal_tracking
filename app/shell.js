@@ -252,6 +252,80 @@ ${renderMain(state)}
 <dialog class="sheet conflict-dialog" data-conflict aria-labelledby="conflict-title"></dialog>`;
 }
 
+/* ---------------- keyboard shortcuts (§14) ---------------- */
+
+/** Input types where Enter confirms the form (not buttons, lists, radios, checkboxes or files). */
+const ENTER_TYPES = new Set(['', 'text', 'search', 'number', 'date', 'email', 'tel', 'url', 'password']);
+/** Screens whose list has a search field that "/" focuses. */
+export const SEARCH_SHORTCUT_ROUTES = Object.freeze(['log', 'meals']);
+
+/** Whether keys pressed here are typing (or choosing from a list): "/" and Escape leave them alone. */
+export function isEditable(el) {
+  if (!el || !el.tagName) return false;
+  const tag = String(el.tagName).toLowerCase();
+  return tag === 'input' || tag === 'textarea' || tag === 'select' || el.isContentEditable === true;
+}
+
+/** An input where Enter confirms the form it's in. Textareas, buttons and links keep Enter's own meaning. */
+export function confirmsOnEnter(el) {
+  if (!el || !el.tagName || String(el.tagName).toLowerCase() !== 'input') return false;
+  return ENTER_TYPES.has(String(el.getAttribute('type') || '').toLowerCase());
+}
+
+function modalOpen(doc) {
+  try { return !!doc.querySelector('dialog:modal'); } catch { return !!doc.querySelector('dialog[open]'); }
+}
+
+/**
+ * The keyboard shortcuts (§14), in one place:
+ *   /       focuses the search field on Log and Meals — not while typing, not under a modal
+ *   Enter   in a field of a sheet, dialog or [data-enter-scope] form: presses its primary action
+ *           once; when that action is unavailable (the form is invalid) nothing is submitted and
+ *           focus moves to the first invalid field (A-45). Never repeats while Enter is held.
+ *   Escape  modal sheets and dialogs close themselves (the browser's cancel, routed through the
+ *           screen's "Discard changes?" check); this only covers a wide-screen pane while focus
+ *           is outside it, by handing it the same Escape the pane handles itself.
+ * Returns what it did ('search' | 'confirm' | 'invalid' | 'escape') or null when it let the key be.
+ */
+export function handleShortcut(event, { route, doc, win }) {
+  if (event.defaultPrevented || event.isComposing || event.keyCode === 229) return null;
+  if (event.ctrlKey || event.metaKey || event.altKey) return null;
+  const target = event.target;
+  if (event.key === '/') {
+    if (!SEARCH_SHORTCUT_ROUTES.includes(route) || isEditable(target) || modalOpen(doc)) return null;
+    const search = doc.querySelector('#main [data-query]');
+    if (!search) return null;
+    event.preventDefault();
+    search.focus();
+    return 'search';
+  }
+  if (event.key === 'Enter') {
+    if (event.shiftKey || !confirmsOnEnter(target)) return null;
+    const scope = target.closest('[data-enter-scope], dialog[open]');
+    if (!scope) return null;
+    const primary = Array.from(scope.querySelectorAll('.sheet-actions .button.primary')).find((b) => !b.closest('[hidden]'));
+    if (!primary) return null;
+    event.preventDefault();
+    if (event.repeat) return null; // held down: one confirmation only
+    if (!primary.disabled) { primary.click(); return 'confirm'; }
+    const named = scope.querySelector('[data-first-invalid]');
+    const first = (named && scope.querySelector(`[id="${named.getAttribute('data-first-invalid')}"]`))
+      || scope.querySelector('[data-invalid], [aria-invalid="true"]');
+    if (first) first.focus();
+    return 'invalid';
+  }
+  if (event.key === 'Escape') {
+    if (modalOpen(doc)) return null;
+    const pane = doc.querySelector('#main dialog[open]');
+    if (!pane || pane.contains(target)) return null; // inside the pane, the view host handles it
+    if (isEditable(target) && target.value) return null; // Escape clears a search field first
+    event.preventDefault();
+    pane.dispatchEvent(new win.KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true }));
+    return 'escape';
+  }
+  return null;
+}
+
 /* ---------------- controller ---------------- */
 
 /**
@@ -262,7 +336,10 @@ ${renderMain(state)}
  *   screens  optional { [destinationId]: { mount(mainElement, { app, win, doc, services }), unmount() } }
  *            for destinations that are built; the rest show their placeholder. mount() may
  *            return true when it has placed focus itself (e.g. on a row it just highlighted),
- *            so the shell doesn't move focus to the heading over it.
+ *            so the shell doesn't move focus to the heading over it. A screen may also have
+ *            leaveGuard(proceed) → boolean: asked before any route change while it's mounted;
+ *            false means it is asking "Discard changes?" (§3.2) and will call proceed() only
+ *            after Discard, so the shell stays put until then.
  *   services optional, from main.js (the shell imports nothing):
  *            downloadBackup(app)          → offer the app's data as a backup file (throws if refused)
  *            downloadStoredRecord(error)  → Promise; offer the unopenable stored record as a file
@@ -277,6 +354,7 @@ export function createShell({ root, win, doc, screens = {}, services = {} }) {
   let app = null;
   let unsubscribe = null;
   let mounted = null;
+  let shownHref = null; // the URL the mounted screen was rendered for
 
   function render({ focusHeading = false } = {}) {
     if (mounted) { mounted.unmount(); mounted = null; }
@@ -285,6 +363,7 @@ export function createShell({ root, win, doc, screens = {}, services = {} }) {
     const main = screen ? root.querySelector('#main') : null;
     let focusPlaced = false;
     if (screen && main) { focusPlaced = screen.mount(main, { app, win, doc, services }) === true; mounted = screen; }
+    shownHref = win.location.href;
     const label = state.startup === 'error' ? startupErrorView(state.errorCode).title : destination(state.route).label;
     doc.title = `${label} · ${APP_NAME}`;
     if (focusHeading && !focusPlaced) {
@@ -305,7 +384,20 @@ export function createShell({ root, win, doc, screens = {}, services = {} }) {
     } else if (dialog.open) dialog.close();
   }
 
+  /**
+   * A route change while the mounted screen has unsaved edits (§3.2, I-01): the URL goes back to
+   * what's showing (a new entry, so the destination stays one Back away) and nothing re-renders.
+   * After Discard the screen calls proceed, which steps back to the destination.
+   */
+  function heldByScreen() {
+    if (!mounted || typeof mounted.leaveGuard !== 'function' || shownHref === null || win.location.href === shownHref) return false;
+    if (mounted.leaveGuard(() => win.history.back())) return false;
+    win.history.pushState(null, '', shownHref);
+    return true;
+  }
+
   function syncRoute({ focusHeading }) {
+    if (heldByScreen()) return;
     const { id, known } = resolveRoute(win.location.hash);
     if (!known) win.history.replaceState(null, '', destination(id).href); // unknown → Today, no reload, no extra history entry
     const changed = id !== state.route;
@@ -428,6 +520,7 @@ export function createShell({ root, win, doc, screens = {}, services = {} }) {
       root.addEventListener?.('cancel', (event) => { if (event.target.matches && event.target.matches('[data-conflict]')) event.preventDefault(); }, true);
       syncRoute({ focusHeading: false });
       win.addEventListener('hashchange', () => syncRoute({ focusHeading: true }));
+      doc.addEventListener?.('keydown', (event) => { if (state.startup === 'ready') handleShortcut(event, { route: state.route, doc, win }); });
       win.addEventListener('pagehide', flush);
       doc.addEventListener?.('visibilitychange', () => { if (doc.visibilityState === 'hidden') flush(); });
     },

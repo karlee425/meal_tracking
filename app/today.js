@@ -92,6 +92,11 @@ export function todayModel(app, date = app.getToday()) {
   const today = app.getToday();
   const summary = app.getDaySummary(date);
   const day = summary.exists ? app.getDay(date) : null;
+  // §12 / I-49: first run is "no stored data" — nothing has ever been saved on this device (the
+  // data layer reports no save yet, and none is pending or failing). The first save (choosing
+  // the day type, or anything else) ends it for good; nothing extra is stored to remember it.
+  const status = app.getPersistenceStatus();
+  const firstRun = date === today && !summary.exists && !!status && status.state === 'saved' && !status.lastSavedAt;
   const bySlot = {};
   for (const slot of constants.MEAL_SLOTS) bySlot[slot] = day ? day.mealInstances.filter((mi) => mi.mealSlot === slot) : [];
   const sourceOf = {};
@@ -103,6 +108,7 @@ export function todayModel(app, date = app.getToday()) {
     date,
     isToday: date === today,
     isFuture: date > today, // I-04: viewable, empty, never created or logged into
+    firstRun,
     prevDate: addDays(date, -1),
     nextDate: addDays(date, 1),
     summary,
@@ -265,6 +271,14 @@ ${slots}
 </section>`;
 }
 
+/** §12 step 2: the one-time welcome card (first run only; its wording is the contract's). */
+export const WELCOME_TEXT = 'Log what you eat against three daily targets: protein, carbs and fat. Start with a meal from the Library or search for a food.';
+function renderWelcome() {
+  return `<section class="welcome-card" aria-label="Welcome" data-welcome>
+<p>${WELCOME_TEXT}</p>
+</section>`;
+}
+
 function renderChooser(model) {
   const options = constants.DAY_TYPES.map((type) => `<li><button type="button" class="day-type-option" data-action="choose-day-type" data-type="${type}">
 <span class="day-type-name">${DAY_TYPE_LABELS[type]}</span>
@@ -308,6 +322,7 @@ ${renderSlots(model, { enabled: false, addable: false })}`;
   }
   if (!summary.exists) {
     return `${head}
+${model.firstRun ? renderWelcome() : ''}
 ${renderChooser(model)}
 ${renderSlots(model, { enabled: false })}`;
   }
@@ -481,6 +496,21 @@ ${single ? '<p class="hint">A logged meal needs at least one ingredient. <button
 <div class="preview" data-preview aria-live="polite">${preview ? `<p class="preview-totals">${macroLine(preview.instance.totals)}</p><p class="preview-after">${afterLine(preview.after)}</p>` : ''}</div>
 ${errorSlot}
 <div class="sheet-actions"><button type="button" class="button primary" data-action="save-instance">Save</button><button type="button" class="button" data-action="close">Cancel</button></div>`;
+}
+
+/**
+ * The editor's fields as they stand (name, slot, each row's Food and grams text), for
+ * "Discard changes?" (§3.2). Compared with the same key taken when the editor opened.
+ */
+export const editKey = ({ name, slot, rows }) => JSON.stringify([String(name || '').trim(), slot, rows.map((r) => [r.foodId, String(r.text || '').trim()])]);
+/** Whether the logged-meal editor differs from what it opened with. */
+export const editDirty = (edit) => !!edit && typeof edit.original === 'string' && editKey(edit) !== edit.original;
+
+/** Leaving the logged-meal editor with unsaved edits (§3.2, I-01): Keep editing / Discard. */
+export function renderDiscardEdit() {
+  return `${dialogHead('Discard changes?')}
+<p>Your changes to this logged meal haven’t been saved. Discard keeps it as it was.</p>
+<div class="sheet-actions"><button type="button" class="button primary" data-action="keep-editing" data-autofocus>Keep editing</button><button type="button" class="button danger" data-action="discard">Discard</button></div>`;
 }
 
 export function renderMoveDialog({ instance, slot }) {
@@ -802,7 +832,8 @@ export const todayScreen = {
         case 'meal-detail': dialog.innerHTML = renderMealDetail({ ...mealDetailData(ui.mealId), model: { future: model.isFuture } }); break;
         case 'food-detail': dialog.innerHTML = renderFoodDetail({ ...ui, context: 'coach' }); break;
         case 'food-delete': dialog.innerHTML = renderDeleteFood(ui); break;
-        case 'discard-food': dialog.innerHTML = renderDiscardFood(); break;
+        case 'discard-food': dialog.innerHTML = renderDiscardFood({ created: !!ui.form.pickUi }); break;
+        case 'discard-edit': dialog.innerHTML = renderDiscardEdit(); break;
         default: break;
       }
     }
@@ -814,19 +845,85 @@ export const todayScreen = {
      */
     function beforeLeave() {
       if (!ui) return true;
+      // The logged-meal editor with unsaved edits asks first (§3.2, I-01); untouched, it just closes.
+      if (ui.type === 'edit') {
+        keepEditFields(ui);
+        if (!editDirty(ui)) return true;
+        openDialog({ type: 'discard-edit', back: ui, proceed: null });
+        return false;
+      }
+      if (ui.type === 'discard-edit') { keepEditing(); return false; }
       if (ui.type === 'picker') { backToEdit(ui.edit, '[data-action="add-ingredient"]'); return false; }
-      if (ui.type === 'custom-food' && ui.pickUi) { openDialog(ui.pickUi); return false; }
+      if (ui.type === 'custom-food' && ui.pickUi) {
+        if (customFoodDirty(ui)) { openDialog({ type: 'discard-food', form: ui, proceed: null }); return false; }
+        openDialog(ui.pickUi);
+        return false;
+      }
       // Food detail's own forms step back to it, asking first about unsaved edits (§3.2, §7.4).
       if (ui.type === 'custom-food' && ui.mode === 'edit') {
-        if (customFoodDirty(ui)) { openDialog({ type: 'discard-food', form: ui }); return false; }
+        if (customFoodDirty(ui)) { openDialog({ type: 'discard-food', form: ui, proceed: null }); return false; }
         openFoodDetail(ui.foodId, ui.detail.back);
         return false;
       }
-      if (ui.type === 'discard-food') { openDialog(ui.form); return false; }
+      if (ui.type === 'discard-food') { keepEditing(); return false; }
       if (ui.type === 'food-delete') { openFoodDetail(ui.food.id, ui.detail.back); return false; }
       // Meal / Food detail opened from the Coach or a logged meal's source line: Back returns there (§8.4, §16).
       if ((ui.type === 'meal-detail' || ui.type === 'food-detail') && ui.back) { returnTo(ui.back, ui); return false; }
       return true;
+    }
+
+    /* ---- "Discard changes?" (§3.2, I-01): Back, Close, Escape and navigating away ---- */
+
+    /**
+     * What leaving now would lose: 'edit' (the logged-meal editor, including its Food picker and
+     * the new-food form opened from it), 'food' (a Custom Food edit from Food detail),
+     * 'prompt' (the question is already showing), or null (nothing unsaved).
+     */
+    function unsaved() {
+      if (!ui) return null;
+      if (ui.type === 'discard-edit' || ui.type === 'discard-food') return 'prompt';
+      if (ui.type === 'edit') keepEditFields(ui);
+      const edit = ui.type === 'edit' ? ui : ui.type === 'picker' ? ui.edit : ui.type === 'custom-food' && ui.pickUi ? ui.pickUi.edit : null;
+      if (edit && (editDirty(edit) || (ui.type === 'custom-food' && customFoodDirty(ui)))) return 'edit';
+      if (ui.type === 'custom-food' && ui.mode === 'edit' && customFoodDirty(ui)) return 'food';
+      return null;
+    }
+    /**
+     * Before Today is left (another tab, a link, browser Back) or another Today control replaces
+     * the open pane: true when nothing would be lost; otherwise asks and returns false, and
+     * proceed() runs only after Discard. Keep editing stays exactly where it was.
+     */
+    function guardLeave(proceed) {
+      const kind = unsaved();
+      if (!kind) return true;
+      if (kind === 'prompt') {
+        ui.proceed = proceed;
+        const keep = dialog.querySelector('[data-action="keep-editing"]');
+        if (keep) keep.focus();
+      } else if (kind === 'edit') {
+        openDialog({ type: 'discard-edit', back: ui, proceed });
+      } else {
+        openDialog({ type: 'discard-food', form: ui, proceed });
+      }
+      return false;
+    }
+    this._leaveGuard = guardLeave;
+    /** Keep editing: back to the form as it was left (the editor keeps its rows, name and slot). */
+    function keepEditing() {
+      const back = ui.type === 'discard-edit' ? ui.back : ui.form;
+      if (back.type === 'edit') backToEdit(back); else openDialog(back);
+    }
+    /** Discard: nothing is written. Then where the user was going, or back a step. */
+    function discardChanges() {
+      const { proceed } = ui;
+      if (proceed) {
+        dialog.addEventListener('close', () => win.setTimeout(proceed, 0), { once: true });
+        closeDialog();
+        return;
+      }
+      if (ui.type === 'discard-edit') { closeDialog(); return; }
+      const form = ui.form;
+      if (form.pickUi) openDialog(form.pickUi); else openFoodDetail(form.foodId, form.detail.back);
     }
 
     /* ---- Meal and Food detail from the Coach (§8.4) and a logged meal's source line (§13.2) ---- */
@@ -975,6 +1072,10 @@ export const todayScreen = {
     }
 
     function updateEditPreview() {
+      // Rows without a usable weight are marked, so a submit while invalid (Enter, §14) can focus the first.
+      dialog.querySelectorAll('[data-quantity-index]').forEach((input) => {
+        input.toggleAttribute('data-invalid', parseGrams(ui.rows[Number(input.dataset.quantityIndex)].text) === null);
+      });
       const patch = editPatch();
       dialog.querySelector('[data-grams-error]').hidden = !!patch;
       dialog.querySelector('[data-action="save-instance"]').disabled = !patch;
@@ -1007,6 +1108,8 @@ export const todayScreen = {
     main.addEventListener('click', (event) => {
       const el = event.target.closest('[data-action]');
       if (!el || !main.contains(el)) return;
+      // A Today control used beside an open pane (wide screens) would replace an unsaved form: ask first.
+      if (dialog.open && !dialog.contains(el) && !guardLeave(() => { if (el.isConnected) el.click(); })) return;
       const action = el.dataset.action;
       try {
         switch (action) {
@@ -1062,7 +1165,9 @@ export const todayScreen = {
           case 'open-instance': openInstance(el.dataset.id); break;
           case 'edit-instance': {
             const instance = ui.instance;
-            openDialog({ type: 'edit', instance, date: model.date, name: instance.mealName, slot: instance.mealSlot, rows: instance.ingredients.map((i) => ({ foodId: i.foodId, unit: i.unit, foodName: i.foodName, text: String(i.quantity) })), preview: null });
+            const edit = { type: 'edit', instance, date: model.date, name: instance.mealName, slot: instance.mealSlot, rows: instance.ingredients.map((i) => ({ foodId: i.foodId, unit: i.unit, foodName: i.foodName, text: String(i.quantity) })), preview: null };
+            edit.original = editKey(edit);
+            openDialog(edit);
             break;
           }
           case 'remove-ingredient': {
@@ -1081,7 +1186,7 @@ export const todayScreen = {
           case 'create-food': {
             if (!ui || ui.type !== 'picker') break;
             const values = { name: String(ui.query || '').trim(), category: '', state: '', brand: '', protein: '', carbs: '', fat: '', aliases: '' };
-            openDialog({ type: 'custom-food', values, touched: new Set(), validation: app.validateCustomFood(customFoodInput(values)), pickUi: ui });
+            openDialog({ type: 'custom-food', values, initial: { ...values }, touched: new Set(), validation: app.validateCustomFood(customFoodInput(values)), pickUi: ui });
             break;
           }
           case 'cf-save': {
@@ -1121,8 +1226,8 @@ export const todayScreen = {
             returnTo(back);
             break;
           }
-          case 'keep-editing': openDialog(ui.form); break;
-          case 'discard': openFoodDetail(ui.form.foodId, ui.form.detail.back); break;
+          case 'keep-editing': keepEditing(); break;
+          case 'discard': discardChanges(); break;
           /* Coach footer and empty state: to Meals, or Log's food search (§8.3, §8.6) */
           case 'coach-fix': host.leave({ method: 'push', href: '#/meals?filter=needs-fix' }); break;
           case 'coach-browse-meals': host.leave({ method: 'push', href: '#/meals' }); break;
@@ -1202,7 +1307,13 @@ export const todayScreen = {
     return !!(handoff.highlightId && body.querySelector(`[data-id="${CSS.escape(handoff.highlightId)}"]`));
   },
 
+  /** Asked by the shell before a route change (§3.2): false keeps Today while "Discard changes?" asks. */
+  leaveGuard(proceed) {
+    return this._leaveGuard ? this._leaveGuard(proceed) : true;
+  },
+
   unmount() {
+    this._leaveGuard = null;
     if (this._cleanup) { this._cleanup(); this._cleanup = null; }
   }
 };

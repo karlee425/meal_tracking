@@ -6,6 +6,7 @@
  */
 
 import { openBrowserDataLayer, recoverStoredData, validateRecoveryBackup } from '../src/browser/app-data.js';
+import { createStorageProtection } from '../src/browser/storage-protection.js';
 import { createShell } from './shell.js';
 import { todayScreen } from './today.js';
 import { logScreen } from './log.js';
@@ -23,9 +24,19 @@ const services = {
     downloadText(document, `macro-tracker-stored-data-${localStamp()}.json`, JSON.stringify(record, null, 2));
   },
   validateRecoveryBackup: (text) => validateRecoveryBackup(text),
-  recover: (options) => recoverStoredData(options).then(({ app }) => app),
+  recover: (options) => recoverStoredData(options).then(({ app }) => protect(app)),
   reload: () => window.location.reload()
 };
+
+/**
+ * §12 step 3 / I-51: ask the browser to protect the stored data, once, after the first save;
+ * Settings shows the answer (services.storageProtection). Never blocks the app.
+ */
+function protect(app) {
+  services.storageProtection = createStorageProtection({ app });
+  services.storageProtection.start();
+  return app;
+}
 
 const shell = createShell({
   root: document.getElementById('app'),
@@ -37,5 +48,5 @@ const shell = createShell({
 shell.start();
 
 openBrowserDataLayer()
-  .then(({ app }) => shell.setDataLayer(app))
+  .then(({ app }) => shell.setDataLayer(protect(app)))
   .catch((error) => shell.showStartupError(error));

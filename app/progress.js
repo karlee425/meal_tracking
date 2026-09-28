@@ -2,7 +2,8 @@
  * progress.js — the Progress screen (V2_UI_CONTRACT.md §9). Descriptive, not judgmental
  * (A-22): what was logged against each day's own targets, and nothing else.
  *
- * Everything comes from one domain call, getProgress({ period, endDate: getToday() }):
+ * Everything comes from one domain call, getProgress({ period, endDate }) or
+ * getProgress({ startDate, endDate }) for a Custom range (§9.1, A-21):
  * statuses (no_data / partial / complete), each day's stored target snapshot, the averages,
  * the per-macro "reached" tallies, the daily list and the trend series. The UI only rounds
  * for display, counts day types from daily[] (§9.2.8), and draws the trend with the domain's
@@ -12,7 +13,7 @@
  * ranking or judgment of a day; and the words for the domain's non-"hit" values.
  */
 
-import { macros, constants } from '../src/domain/index.js';
+import { macros, constants, addDays } from '../src/domain/index.js';
 import { escapeHtml } from './shell.js';
 import { DAY_TYPE_LABELS, formatDate } from './today.js';
 import { session } from './session.js';
@@ -26,12 +27,86 @@ const whole = (values) => macros.roundMacros(values, 0);
 
 /* ---------------- model ---------------- */
 
-/** The selected period (7 by default), remembered for the session (§3.2). */
-export const progressPeriod = (state) => (PROGRESS_PERIODS.includes(state.period) ? state.period : 7);
+/**
+ * The selected range (7 by default), remembered for the session (§3.2): 7 | 14 | 30, or
+ * 'custom' once a Custom range has been chosen.
+ */
+export const progressPeriod = (state) => {
+  if (state.period === 'custom' && state.custom && state.custom.startDate && state.custom.endDate) return 'custom';
+  return PROGRESS_PERIODS.includes(state.period) ? state.period : 7;
+};
 export const progressMacro = (state) => (macros.MACROS.includes(state.macro) ? state.macro : 'protein');
 
-/** Progress for the window ending today, straight from the domain (§9.1). */
-export const progressModel = (app, { period }) => app.getProgress({ period, endDate: app.getToday() });
+/**
+ * The getProgress options for the selected range (§9.2.1). A 7 / 14 / 30 window ends today by
+ * default; after ◀ it ends on state.endDate (never later than today). A Custom range is its
+ * own start and end.
+ */
+export function progressWindow(app, state) {
+  const today = app.getToday();
+  const period = progressPeriod(state);
+  if (period === 'custom') return { startDate: state.custom.startDate, endDate: state.custom.endDate };
+  return { period, endDate: state.endDate && state.endDate < today ? state.endDate : today };
+}
+
+/** The one place Progress reads the domain (§9.1). */
+const readProgress = (app, options) => app.getProgress(options);
+
+/** Progress for the selected range, straight from the domain (§9.1). */
+export const progressModel = (app, state) => readProgress(app, progressWindow(app, state));
+
+/** Whether the window ends before today, so ▶ can move it (never past today). */
+export const canStepForward = (app, progress) => progress.period.endDate < app.getToday();
+
+/**
+ * ◀ ▶ (§9.2.1): the range moved by its own length (progress.period.days, from the domain),
+ * never past today — a step that would pass today stops at a window ending today, the same
+ * length. Returns the new { endDate, custom } for the session; nothing is stored.
+ */
+export function steppedRange(app, state, progress, direction) {
+  const today = app.getToday();
+  const length = progress.period.days;
+  const moved = direction < 0 ? addDays(progress.period.startDate, -1) : addDays(progress.period.endDate, length);
+  const endDate = moved < today ? moved : today;
+  if (progressPeriod(state) === 'custom') return { endDate: null, custom: { startDate: addDays(endDate, 1 - length), endDate } };
+  return { endDate: endDate === today ? null : endDate, custom: state.custom };
+}
+
+/** I-41: a Custom range is at most 90 days and ends today at the latest. */
+export const CUSTOM_MAX_DAYS = 90;
+
+/** Inline messages under the Custom range pickers (§9.2.1, §15: INVALID_DATE / INVALID_PERIOD inline under the picker). */
+export const RANGE_MESSAGES = Object.freeze({
+  START_REQUIRED: 'Choose a start date.',
+  END_REQUIRED: 'Choose an end date.',
+  INVALID_DATE: 'Enter real dates for the start and the end.',
+  INVALID_PERIOD: 'The start date must be on or before the end date.',
+  END_AFTER_TODAY: 'The end date can’t be after today.',
+  TOO_LONG: `A custom range can be at most ${CUSTOM_MAX_DAYS} days.`
+});
+
+/**
+ * Checks a Custom range. The domain decides whether the dates are real and in order
+ * (getProgress throws INVALID_DATE / INVALID_PERIOD); the two I-41 limits are read from its
+ * result (period.endDate against today, period.days against 90). Returns
+ * { ok: true, progress } or { ok: false, code, fields: ['start'|'end', …], message }.
+ */
+export function checkCustomRange(app, { startDate, endDate }) {
+  const invalid = (code, fields) => ({ ok: false, code, fields, message: RANGE_MESSAGES[code] });
+  if (!startDate) return invalid('START_REQUIRED', ['start']);
+  if (!endDate) return invalid('END_REQUIRED', ['end']);
+  let progress;
+  try {
+    progress = readProgress(app, { startDate, endDate });
+  } catch (e) {
+    if (e && e.code === 'INVALID_PERIOD') return invalid('INVALID_PERIOD', ['start', 'end']);
+    if (e && e.code === 'INVALID_DATE') return invalid('INVALID_DATE', ['start', 'end']);
+    throw e;
+  }
+  if (progress.period.endDate > app.getToday()) return invalid('END_AFTER_TODAY', ['end']);
+  if (progress.period.days > CUSTOM_MAX_DAYS) return invalid('TOO_LONG', ['start', 'end']);
+  return { ok: true, progress };
+}
 
 /**
  * "Lift 4 · Long Run 1 · Rest 2", counted from daily[].dayType (§9.2.8) for the logged days it
@@ -50,17 +125,63 @@ export const loggedDayCount = (progress) => (progress.averages.loggedDays ? prog
 
 const rangeText = (progress) => `${formatDate(progress.period.startDate)} – ${formatDate(progress.period.endDate)}`;
 
+const dayCount = (n) => `${n} ${n === 1 ? 'day' : 'days'}`;
+
 function periodSelector(period) {
-  return `<div class="segment period-selector" role="group" aria-label="Period">
+  return `<div class="segment period-selector" role="group" aria-label="Range">
 ${PROGRESS_PERIODS.map((p) => `<button type="button" class="segment-button" data-action="period" data-period="${p}" aria-pressed="${p === period}">${p} days</button>`).join('\n')}
+<button type="button" class="segment-button" data-action="period-custom" aria-pressed="${period === 'custom'}">Custom</button>
 </div>`;
 }
 
-/** Heading, period selector, range and the basis line (always visible, §9.2.2). */
-export function renderProgressTop(progress, { period }) {
+/** "Last 7 days · …" for a window ending today; otherwise the range's own length (from the domain). */
+export function rangeLabel(progress, { period, endsToday }) {
+  if (period !== 'custom' && endsToday) return `Last ${period} days · ${rangeText(progress)}`;
+  return `${period === 'custom' ? 'Custom · ' : ''}${dayCount(progress.period.days)} · ${rangeText(progress)}`;
+}
+
+const chevron = (d) => `<svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="${d}"/></svg>`;
+
+/** ◀ range ▶ — ▶ is unavailable (still focusable, aria-disabled) once the range ends today. */
+function rangeNav(progress, { period, endsToday }) {
+  const length = dayCount(progress.period.days);
+  return `<div class="range-nav" role="group" aria-label="Move the range">
+<button type="button" class="icon-button" data-action="range-prev" aria-label="Previous ${length}">${chevron('M15 5l-7 7 7 7')}</button>
+<p class="progress-range" data-range>${escapeHtml(rangeLabel(progress, { period, endsToday }))}</p>
+<button type="button" class="icon-button" data-action="range-next" aria-label="${endsToday ? `Next ${length}, not available: the range already ends today` : `Next ${length}`}"${endsToday ? ' aria-disabled="true"' : ''}>${chevron('M9 5l7 7-7 7')}</button>
+</div>`;
+}
+
+/**
+ * Custom start / end pickers (§9.2.1, I-41). draft: { startDate, endDate, check } — the values
+ * being chosen and the last check, if any. "Show range" stays unavailable while the check fails;
+ * Enter or a click re-checks (A-45).
+ */
+export function renderCustomRange({ startDate = '', endDate = '', check = null }, { today }) {
+  const bad = (field) => !!(check && !check.ok && check.fields.includes(field));
+  const input = (field, label, value) => `<div class="range-field">
+<label class="field" for="range-${field}">${label}</label>
+<input id="range-${field}" type="date" data-range-field="${field}" value="${escapeHtml(value || '')}" max="${today}" required aria-describedby="range-error range-hint"${bad(field) ? ' aria-invalid="true" data-invalid' : ''}>
+</div>`;
+  const invalid = !!(check && !check.ok);
+  return `<section class="custom-range" aria-labelledby="custom-range-title" data-enter-scope>
+<h2 id="custom-range-title" class="group-title">Custom range</h2>
+<div class="range-fields">
+${input('start', 'Start', startDate)}
+${input('end', 'End', endDate)}
+</div>
+<p id="range-error" class="field-error" data-range-error${invalid ? ` data-code="${check.code}"` : ' hidden'}>${invalid ? escapeHtml(check.message) : ''}</p>
+<p id="range-hint" class="hint">Up to ${CUSTOM_MAX_DAYS} days, ending today at the latest.</p>
+<div class="sheet-actions"><button type="button" class="button primary" data-action="range-apply"${invalid ? ' disabled' : ''}>Show range</button></div>
+</section>`;
+}
+
+/** Heading, range selector, ◀ range ▶, Custom pickers when chosen, and the basis line (always visible, §9.2.2). */
+export function renderProgressTop(progress, { period, endsToday = true, draft = null, today = progress.period.endDate }) {
   return `<h1 id="screen-title" class="screen-title" tabindex="-1">Progress</h1>
 ${periodSelector(period)}
-<p class="progress-range">Last ${period} days · ${escapeHtml(rangeText(progress))}</p>
+${period === 'custom' ? renderCustomRange(draft || progress.period, { today }) : ''}
+${rangeNav(progress, { period, endsToday })}
 <p class="basis-line">Based on logged meals. Days with nothing logged aren’t counted as zero.</p>`;
 }
 
@@ -218,9 +339,9 @@ export function renderNothingLogged(progress) {
 </section>`;
 }
 
-/** The whole body for a period. */
-export function renderProgress(progress, { period, macro }) {
-  const top = renderProgressTop(progress, { period });
+/** The whole body for a range. */
+export function renderProgress(progress, { period, macro, endsToday = true, draft = null, today }) {
+  const top = renderProgressTop(progress, { period, endsToday, draft, today });
   if (!loggedDayCount(progress)) return `${top}\n${renderNothingLogged(progress)}`;
   return `${top}
 ${renderCoverage(progress)}
@@ -238,27 +359,98 @@ export const progressScreen = {
     const state = session.progress;
     state.period = progressPeriod(state);
     state.macro = progressMacro(state);
+    let draft = null; // Custom pickers being edited: { startDate, endDate, check }
     main.innerHTML = '<div class="progress-screen" data-progress-body></div><p class="visually-hidden" role="status" aria-live="polite" data-progress-status></p>';
     const body = main.querySelector('[data-progress-body]');
     const status = main.querySelector('[data-progress-status]');
+    let current = null;
     const render = () => {
-      const progress = progressModel(app, state);
-      body.innerHTML = renderProgress(progress, state);
-      return progress;
+      current = progressModel(app, state);
+      body.innerHTML = renderProgress(current, { ...state, endsToday: !canStepForward(app, current), draft, today: app.getToday() });
+      return current;
     };
+    const announce = (progress) => {
+      const what = state.period !== 'custom' && !canStepForward(app, progress)
+        ? `the last ${state.period} days, ${rangeText(progress)}`
+        : `${dayCount(progress.period.days)}, ${rangeText(progress)}`;
+      status.textContent = `Showing ${what}: ${loggedDayCount(progress)} logged.`;
+    };
+    const focus = (selector) => { const el = body.querySelector(selector); if (el) el.focus(); };
+    const pickerValues = () => ({
+      startDate: body.querySelector('[data-range-field="start"]')?.value || '',
+      endDate: body.querySelector('[data-range-field="end"]')?.value || ''
+    });
+    /** Updates the pickers' messages and "Show range" in place, so focus and typing are undisturbed. */
+    const showCheck = (check) => {
+      for (const field of ['start', 'end']) {
+        const input = body.querySelector(`[data-range-field="${field}"]`);
+        const bad = !check.ok && check.fields.includes(field);
+        input.toggleAttribute('data-invalid', bad);
+        if (bad) input.setAttribute('aria-invalid', 'true'); else input.removeAttribute('aria-invalid');
+      }
+      const error = body.querySelector('[data-range-error]');
+      error.hidden = check.ok;
+      error.textContent = check.ok ? '' : check.message;
+      if (check.ok) error.removeAttribute('data-code'); else error.dataset.code = check.code;
+      body.querySelector('[data-action="range-apply"]').disabled = !check.ok;
+    };
+
+    const onInput = (event) => {
+      if (!event.target.matches('[data-range-field]')) return;
+      const values = pickerValues();
+      draft = { ...values, check: checkCustomRange(app, values) };
+      showCheck(draft.check);
+    };
+    main.addEventListener('input', onInput);
+    main.addEventListener('change', onInput);
 
     main.addEventListener('click', (event) => {
       const el = event.target.closest('[data-action]');
       if (!el || !main.contains(el)) return;
-      if (el.dataset.action === 'period') {
+      const action = el.dataset.action;
+      if (action === 'period') {
         state.period = Number(el.dataset.period);
-        const progress = render();
-        status.textContent = `Showing the last ${state.period} days: ${loggedDayCount(progress)} logged.`;
-        body.querySelector(`[data-period="${state.period}"]`).focus();
-      } else if (el.dataset.action === 'trend-macro') {
+        state.endDate = null; // a 7 / 14 / 30 window ends today by default
+        draft = null;
+        announce(render());
+        focus(`[data-period="${state.period}"]`);
+      } else if (action === 'period-custom') {
+        if (state.period !== 'custom') {
+          // Start from the range on screen; the pickers change it from there.
+          state.custom = { startDate: current.period.startDate, endDate: current.period.endDate };
+          state.period = 'custom';
+          draft = null;
+          render();
+          status.textContent = 'Choose a start and an end date, then Show range.';
+        }
+        focus('[data-range-field="start"]');
+      } else if (action === 'range-apply') {
+        // Submitting re-checks (A-45): nothing changes while the range is invalid.
+        const values = pickerValues();
+        const check = checkCustomRange(app, values);
+        if (!check.ok) {
+          draft = { ...values, check };
+          showCheck(check);
+          focus('[data-range-field][data-invalid]');
+          return;
+        }
+        state.custom = { startDate: check.progress.period.startDate, endDate: check.progress.period.endDate };
+        draft = null;
+        announce(render());
+        focus('[data-action="range-apply"]');
+      } else if (action === 'range-prev' || action === 'range-next') {
+        if (el.getAttribute('aria-disabled') === 'true') {
+          status.textContent = 'The range already ends today.';
+          return;
+        }
+        Object.assign(state, steppedRange(app, state, current, action === 'range-prev' ? -1 : 1));
+        draft = null;
+        announce(render());
+        focus(`[data-action="${action}"]`);
+      } else if (action === 'trend-macro') {
         state.macro = el.dataset.macro;
         render();
-        body.querySelector(`[data-action="trend-macro"][data-macro="${state.macro}"]`).focus();
+        focus(`[data-action="trend-macro"][data-macro="${state.macro}"]`);
       }
     });
     render();

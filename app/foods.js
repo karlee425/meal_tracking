@@ -144,10 +144,10 @@ export function renderLinkedMessage(note) {
   return `<p>${escapeHtml(note.message)}${links ? ` ${links}` : ''}</p>`;
 }
 
-/** Leaving the Custom Food form with unsaved edits (§3.2): Keep editing / Discard. */
-export function renderDiscardFood() {
+/** Leaving the Custom Food form with unsaved edits (§3.2): Keep editing / Discard. created: a new food not yet saved. */
+export function renderDiscardFood({ created = false } = {}) {
   return `${dialogHead('Discard changes?')}
-<p>Your changes to this food haven’t been saved.</p>
+<p>${created ? 'This new food hasn’t been saved.' : 'Your changes to this food haven’t been saved.'}</p>
 <div class="sheet-actions"><button type="button" class="button primary" data-action="keep-editing" data-autofocus>Keep editing</button><button type="button" class="button danger" data-action="discard">Discard</button></div>`;
 }
 

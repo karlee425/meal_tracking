@@ -146,11 +146,15 @@ export function restoreMessage(r) {
   return `<p>${escapeHtml(r.message)}</p>${r.tone === 'error' ? detailsDisclosure(r.code, r.errors) : ''}`;
 }
 
-function dataSection({ status, lastBackupAt, restore }) {
+/** §10.1: the browser's answer to requestPersistentStorage() — "Yes" only when it granted protection. */
+export const protectionText = (state) => (state === 'granted' ? 'Yes' : 'Not granted');
+
+function dataSection({ status, lastBackupAt, restore, protection }) {
   return `<section class="settings-section" aria-labelledby="data-title">
 <h2 id="data-title" class="section-title">Data on this device</h2>
 <dl class="data-facts">
 <div><dt>Save status</dt><dd><span data-save-status>${escapeHtml(saveStatusText(status))}</span>${status && status.state === 'error' ? ' <button type="button" class="link-button" data-action="retry-save">Try again</button>' : ''}</dd></div>
+<div><dt>Protected from automatic clean-up</dt><dd><span data-storage-protection>${protectionText(protection)}</span></dd></div>
 <div><dt>Last backup</dt><dd>${lastBackupAt ? escapeHtml(exportedAtText(lastBackupAt)) : 'Never'}</dd></div>
 </dl>
 <p class="section-note">A backup is a file you download and keep yourself. The app doesn’t back up automatically, and nothing leaves this device.</p>
@@ -174,13 +178,13 @@ function aboutSection() {
 </section>`;
 }
 
-export function renderSettings({ targets, status, lastBackupAt, restore, foods, foodsNote = null }) {
+export function renderSettings({ targets, status, lastBackupAt, restore, foods, foodsNote = null, protection = null }) {
   return `<h1 id="screen-title" class="screen-title" tabindex="-1">Settings</h1>
 ${targetsSection(targets)}
 ${myFoodsSection(foods, foodsNote)}
 ${favouritesSection(foods)}
 ${notSuggestedSection(foods)}
-${dataSection({ status, lastBackupAt, restore })}
+${dataSection({ status, lastBackupAt, restore, protection })}
 ${aboutSection()}`;
 }
 
@@ -212,7 +216,7 @@ export function renderTargetForm({ dayType, values, original, validation, touche
 <fieldset class="per-100"><legend>Targets</legend>
 ${FIELDS.map(field).join('\n')}
 </fieldset>
-<p id="tf-needs" class="hint" data-sync="tf-needs"${needs ? '' : ' hidden'}>${needs}</p>
+<p id="tf-needs" class="hint" data-sync="tf-needs"${needs ? '' : ' hidden'}${validation.valid ? '' : ` data-first-invalid="tf-${(FIELDS.find(([key]) => invalidFields.has(key)) || FIELDS[0])[0]}"`}>${needs}</p>
 ${errorSlot}
 <div class="sheet-actions">
 <button type="button" class="button primary" data-action="target-save" data-sync="tf-save" aria-describedby="tf-needs"${validation.valid && !unchanged ? '' : ' disabled'}>Save</button>
@@ -293,7 +297,8 @@ export const settingsScreen = {
         lastBackupAt: (app.getPreferences().appPreferences || {}).lastBackupAt || null,
         restore,
         foods: settingsFoodsModel(app),
-        foodsNote
+        foodsNote,
+        protection: services.storageProtection ? services.storageProtection.state() : null
       });
     }
     // Keep the save-status line current without re-rendering (or moving focus).
@@ -301,6 +306,13 @@ export const settingsScreen = {
       const el = body.querySelector('[data-save-status]');
       if (el) el.textContent = saveStatusText(status);
     });
+    // The browser's answer can arrive while Settings is open (it's asked after the first save).
+    const unsubscribeProtection = services.storageProtection
+      ? services.storageProtection.onChange((state) => {
+        const el = body.querySelector('[data-storage-protection]');
+        if (el) el.textContent = protectionText(state);
+      })
+      : null;
 
     const host = createViewHost({
       page, dialog, win, doc,
@@ -309,7 +321,7 @@ export const settingsScreen = {
       onClose: () => { ui = null; },
       beforeLeave
     });
-    this._cleanup = () => { host.destroy(); if (typeof unsubscribe === 'function') unsubscribe(); };
+    this._cleanup = () => { host.destroy(); if (typeof unsubscribe === 'function') unsubscribe(); if (unsubscribeProtection) unsubscribeProtection(); };
 
     function draw() {
       if (!ui) return;

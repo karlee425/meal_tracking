@@ -30,8 +30,10 @@ function fresh() {
       needsFix: false // the "Needs a fix" chip: Saved Meals the domain can't calculate (§6.5, §8.3)
     },
     progress: {
-      period: null, // 7 | 14 | 30, remembered per session (§3.2)
-      macro: null // the trend's macro
+      period: null, // 7 | 14 | 30 | 'custom', remembered per session (§3.2, §9.2.1)
+      macro: null, // the trend's macro
+      endDate: null, // where a 7 / 14 / 30 window ends after ◀ ▶; null = today
+      custom: null // { startDate, endDate } of the chosen Custom range
     },
     handoff: null, // { date, highlightId?, openInstanceId?, message? } for Today to pick up once
     mealsHandoff: null // { confirmation } for Meals to show once, after "Log this meal"

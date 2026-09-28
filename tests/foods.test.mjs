@@ -335,7 +335,7 @@ test('Settings — the existing sections keep their place and content around the
   assert.match(html, /data-action="backup">Download backup</);
   assert.match(html, /data-action="restore">Restore from backup</);
   assert.match(html, /data-action="edit-targets" data-type="lift"/);
-  assert.ok(!/Protected from automatic clean-up/.test(html), 'still deferred');
+  assert.match(html, /<dt>Protected from automatic clean-up<\/dt><dd><span data-storage-protection>Not granted<\/span><\/dd>/, 'G13: shown, never claiming protection it doesn’t have');
 });
 
 /* ---------------- boundaries ---------------- */

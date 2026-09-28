@@ -420,7 +420,7 @@ test('Log — Create a food: domain validation per field, duplicate warning, the
   assert.match(form, /id="cf-name"[^>]*value="Protein bar"/, 'name prefilled from the query');
   assert.match(form, /data-action="cf-save" data-sync="cf-save" aria-describedby="cf-save-hint" disabled>/, 'Save is really disabled while invalid (§7.4)');
   assert.ok(!/aria-disabled/.test(form), 'not merely aria-disabled');
-  assert.match(form, /id="cf-save-hint" class="hint" data-sync="cf-save-hint">Needed before saving: category, state, protein, carbs, fat\.</, 'what is still needed is visible without pressing Save');
+  assert.match(form, /id="cf-save-hint" class="hint" data-sync="cf-save-hint" data-first-invalid="cf-category">Needed before saving: category, state, protein, carbs, fat\.</, 'what is still needed is visible without pressing Save; Enter focuses the first (G15)');
   assert.ok(!/class="field-error" data-sync="cf-category-error">/.test(form), 'no field errors before a field is edited');
   form = renderCustomFoodForm({ values: blank, validation, touched: new Set(['category', 'state', 'protein', 'carbs', 'fat']) });
   assert.match(form, /Add a category, for example snack bar\./, 'errors show next to fields as they are edited');

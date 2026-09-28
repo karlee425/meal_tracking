@@ -72,7 +72,7 @@ test('Progress — 7 / 14 / 30 days ending today, straight from getProgress; 7 b
   assert.equal(progressPeriod({ period: 30 }), 30);
   assert.equal(progressPeriod({ period: 5 }), 7, 'only the three periods');
   assert.equal(progressMacro({}), 'protein');
-  assert.deepEqual(session.progress, { period: null, macro: null });
+  assert.deepEqual(session.progress, { period: null, macro: null, endDate: null, custom: null });
   for (const period of PROGRESS_PERIODS) {
     const p = progressModel(app, { period });
     assert.deepEqual(p, app.getProgress({ period, endDate: TODAY }), 'the domain result, unchanged');
@@ -84,7 +84,9 @@ test('Progress — 7 / 14 / 30 days ending today, straight from getProgress; 7 b
     assert.match(top, new RegExp(`Last ${period} days · ${formatDate(p.period.startDate)} – ${formatDate(TODAY)}`));
   }
   const src = fs.readFileSync(path.join(ROOT, 'app/progress.js'), 'utf8');
-  assert.ok(!/new Date|addDays|setDate|getTime/.test(src), 'no second date/period calculation in the UI');
+  // G12: ◀ ▶ move dates only with the domain's own addDays (re-exported by src/domain/index.js);
+  // the window's length is the domain's period.days. The UI has no date arithmetic of its own.
+  assert.ok(!/new Date|Date\.|setDate|getTime|getUTC|86400/.test(src), 'no second date calculation in the UI');
 });
 
 /* ---------------- empty and few days ---------------- */

@@ -288,6 +288,9 @@ body {
 /* ◀ ▶ (§4.1, I-03): the previous and next day, beside the date. */
 .date-nav { display: flex; gap: var(--space-2); }
 .future-note, .done-note { margin: 0 0 var(--space-3); }
+/* §12: the first-run welcome card, above the day-type chooser. */
+.welcome-card { margin: 0 0 var(--space-4); padding: var(--space-3) var(--space-4); border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); }
+.welcome-card p { margin: 0; }
 .adjust .add-ingredient { margin-top: var(--space-3); }
 
 .badge,
@@ -673,6 +676,7 @@ details.option-group > summary.group-title { cursor: pointer; min-height: 44px; 
 .log-search { display: flex; flex-wrap: wrap; gap: var(--space-2); align-items: center; }
 .search-input,
 .sheet input[type="date"],
+.custom-range input[type="date"],
 .sheet select {
   min-height: 44px;
   padding: 0 var(--space-3);
@@ -837,7 +841,18 @@ details.option-group > summary.group-title { cursor: pointer; min-height: 44px; 
 /* ---------- Progress (§9): descriptive only; status by shape and label, never colour alone ---------- */
 
 .period-selector { margin-bottom: var(--space-2); }
-.progress-range { margin: var(--space-2) 0 0; font-weight: 600; overflow-wrap: anywhere; }
+.progress-range { margin: 0; font-weight: 600; overflow-wrap: anywhere; min-width: 0; }
+/* ◀ range ▶ (§9.2.1): the range moves by its own length; ▶ is unavailable once it ends today. */
+.range-nav { display: flex; align-items: center; gap: var(--space-2); margin-top: var(--space-2); }
+.range-nav .progress-range { flex: 1 1 auto; }
+.range-nav [aria-disabled="true"] { opacity: 0.4; cursor: not-allowed; }
+.custom-range { margin: var(--space-2) 0 0; padding: var(--space-3); border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); }
+.custom-range .group-title { margin: 0; }
+.range-fields { display: flex; flex-wrap: wrap; gap: 0 var(--space-3); }
+.range-field { flex: 1 1 10rem; min-width: 0; }
+.range-field input { width: 100%; box-sizing: border-box; background: var(--bg); }
+.range-field input[aria-invalid="true"] { border-color: var(--warning); }
+.custom-range .hint { margin: var(--space-1) 0 0; }
 .basis-line { margin: var(--space-1) 0 0; color: var(--text-muted); font-size: 0.9375rem; }
 .progress-section { margin-top: var(--space-5); }
 .progress-section .section-title { margin: 0 0 var(--space-2); }
