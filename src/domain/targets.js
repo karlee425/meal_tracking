@@ -11,6 +11,26 @@
 import { DomainError, clone, assertDayType } from './util.js';
 import { MACROS, pickMacros } from './macros.js';
 
+/**
+ * Problems with target values ([] when they can be saved): only protein / carbs / fat, each a
+ * finite number ≥ 0. One rule set for validateTargets (a dry run) and updateCurrentTargets.
+ */
+function targetProblems(values) {
+  if (!values || typeof values !== 'object' || Array.isArray(values)) {
+    return [{ field: null, code: 'TARGETS_REQUIRED', message: 'values {protein, carbs, fat} are required' }];
+  }
+  const problems = [];
+  for (const k of Object.keys(values)) {
+    if (!MACROS.includes(k)) problems.push({ field: k, code: 'TARGET_UNKNOWN_FIELD', message: `targets only have protein, carbs and fat; got "${k}"` });
+  }
+  for (const [k, v] of Object.entries(values)) {
+    if (MACROS.includes(k) && !(typeof v === 'number' && Number.isFinite(v) && v >= 0)) {
+      problems.push({ field: k, code: 'TARGET_NOT_A_VALID_NUMBER', message: `${k} must be a finite number ≥ 0` });
+    }
+  }
+  return problems;
+}
+
 export function createTargetsApi(ctx) {
   const { store } = ctx;
 
@@ -26,6 +46,16 @@ export function createTargetsApi(ctx) {
       return clone(store.get('targets'));
     },
 
+    /**
+     * Check target values without saving anything — the same rules updateCurrentTargets
+     * enforces, so a form can explain problems before asking the user to confirm.
+     * Returns { valid, errors: [{ field, code, message }] }.
+     */
+    validateTargets(values) {
+      const errors = targetProblems(values);
+      return { valid: errors.length === 0, errors };
+    },
+
     /** A copy of the current targets, for storing on a new Day. */
     createTargetSnapshot(dayType) {
       return pickMacros(api.getCurrentTargets(dayType));
@@ -37,13 +67,8 @@ export function createTargetsApi(ctx) {
      */
     updateCurrentTargets(dayType, values) {
       assertDayType(dayType);
-      if (!values || typeof values !== 'object') throw new DomainError('INVALID_TARGETS', 'values {protein, carbs, fat} are required');
-      for (const k of Object.keys(values)) if (!MACROS.includes(k)) throw new DomainError('INVALID_TARGETS', `targets only have protein, carbs and fat; got "${k}"`);
-      const bad = Object.entries(values).filter(([, v]) => !(typeof v === 'number' && Number.isFinite(v) && v >= 0));
-      if (bad.length) {
-        throw new DomainError('INVALID_TARGETS', `targets must be finite numbers ≥ 0 (${bad.map(([k]) => k).join(', ')})`,
-          bad.map(([k]) => ({ field: k, code: 'TARGET_NOT_A_VALID_NUMBER', message: `${k} must be a finite number ≥ 0` })));
-      }
+      const problems = targetProblems(values);
+      if (problems.length) throw new DomainError('INVALID_TARGETS', `targets not changed: ${problems.map((p) => p.message).join('; ')}`, problems);
       const next = clone(store.get('targets'));
       next[dayType] = { ...next[dayType], ...pickMacros({ ...next[dayType], ...values }) };
       store.commit({ targets: next });

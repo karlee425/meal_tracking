@@ -95,14 +95,24 @@ export async function openBrowserDataLayer({ snapshotStore, appData = APP_DATA, 
  * Never called automatically: stored data is only replaced on this explicit request.
  * Returns { app, adapter } like openBrowserDataLayer.
  */
+/**
+ * Check a backup for recoverStoredData without writing anything, when the stored data can't
+ * be opened (so there is no running data layer to ask). Validated against the shipped app
+ * data with a throwaway in-memory data layer; returns validateBackup's result
+ * ({ valid, code, errors, formatVersion, summary }), so a screen can preview it and ask
+ * before anything is replaced.
+ */
+export function validateRecoveryBackup(backup, { appData = APP_DATA } = {}) {
+  const probe = createDataLayer({ adapter: createMemoryAdapter({ schemas: appData.schemas, coreFoods: appData.coreFoods, libraryMeals: appData.libraryMeals, ...appData.seed }) });
+  return probe.validateBackup(backup);
+}
+
 export async function recoverStoredData({ snapshotStore, appData = APP_DATA, backup, startFresh = false, clock, today, newId, now } = {}) {
   if ((backup === undefined) === (startFresh !== true)) throw new DomainError('INVALID_ARGUMENT', 'pass exactly one of: backup, or startFresh: true');
   const store = snapshotStore || createIndexedDbSnapshotStore();
   let data;
   if (backup !== undefined) {
-    // Validate against the shipped app data with a throwaway in-memory data layer.
-    const probe = createDataLayer({ adapter: createMemoryAdapter({ schemas: appData.schemas, coreFoods: appData.coreFoods, libraryMeals: appData.libraryMeals, ...appData.seed }) });
-    const result = probe.validateBackup(backup);
+    const result = validateRecoveryBackup(backup, { appData }); // validated in full before any write
     if (!result.valid) throw new DomainError(result.code, `backup not restored: ${result.errors.slice(0, 3).join('; ')}`, result.errors);
     data = (typeof backup === 'string' ? JSON.parse(backup) : backup).data;
   } else {

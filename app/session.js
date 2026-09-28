@@ -35,7 +35,7 @@ function fresh() {
 
 export const session = fresh();
 
-/** Back to a clean session (tests; never called by the app). */
+/** Back to a clean session: after a restore replaces all data (so nothing from before survives), and in tests. */
 export function resetSession() {
   const next = fresh();
   for (const key of Object.keys(next)) session[key] = next[key];

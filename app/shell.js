@@ -93,6 +93,99 @@ export function startupErrorView(code) {
   }
 }
 
+/* ---------------- recovery, backup and save-error views (§4.8, §11, §13.1) ---------------- */
+
+/** Start-up errors the user can recover from here: the stored record exists but can't be opened. */
+export const RECOVERABLE_CODES = Object.freeze(['DATA_INVALID', 'STORED_DATA_UNRECOGNIZED']);
+
+/** §11.2 / §13.3: what a failed restore or recovery means, by domain code. Nothing is changed in any of them. */
+export function restoreErrorMessage(code) {
+  switch (code) {
+    case 'BACKUP_UNREADABLE': return 'This file isn’t a backup this app can read.';
+    case 'BACKUP_INCOMPATIBLE': return 'This backup is from a different or newer version of the app and can’t be restored here.';
+    case 'BACKUP_INVALID': return 'This backup has problems, so it wasn’t restored. Your current data is untouched.';
+    case 'STORAGE_CONFLICT': return 'The app changed in another tab. Close other tabs and try again.';
+    case 'STORAGE_UNAVAILABLE': return 'This browser isn’t letting the app save right now, so nothing was replaced. Try again in a normal browser window.';
+    default: return 'Something went wrong. Nothing was changed.';
+  }
+}
+
+const plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
+/** "3 logged days · 7 logged meals · 2 saved meals · 2 of your foods" from validateBackup's summary. */
+export function backupSummaryText(summary) {
+  return [plural(summary.days, 'logged day', 'logged days'), plural(summary.mealInstances, 'logged meal', 'logged meals'), plural(summary.savedMeals, 'saved meal', 'saved meals'), `${summary.customFoods} of your foods`].join(' · ');
+}
+
+/** A backup's exportedAt in local time, or a neutral fallback. */
+export function exportedAtText(iso) {
+  const d = typeof iso === 'string' ? new Date(iso) : null;
+  if (!d || Number.isNaN(d.getTime())) return 'an unknown date';
+  return new Intl.DateTimeFormat(undefined, { dateStyle: 'medium', timeStyle: 'short' }).format(d);
+}
+
+/** A "Details" disclosure for codes and technical messages (§13: never in the main text). */
+export function detailsDisclosure(code, errors = []) {
+  if (!code && !errors.length) return '';
+  const items = errors.slice(0, 5).map((e) => `<li>${escapeHtml(e)}</li>`).join('');
+  return `<details class="error-details"><summary>Details</summary>${code ? `<p><code>${escapeHtml(code)}</code></p>` : ''}${items ? `<ul>${items}</ul>` : ''}</details>`;
+}
+
+/** §4.8: the persistent banner while saving is failing. Empty otherwise. */
+export function saveBannerView(status, note = '') {
+  if (!status || status.state !== 'error') return '';
+  const low = /quota|space|full/i.test(String(status.error || '')) ? ' Your device may be low on storage.' : '';
+  return `<div class="save-banner" role="alert">
+<p>Your latest changes aren’t saved on this device yet. They’re still here, but will be lost if you close the app.${low}</p>
+<div class="sheet-actions"><button type="button" class="button" data-shell-action="retry">Try again</button><button type="button" class="button" data-shell-action="download-backup">Download a backup</button></div>
+${note ? `<p class="save-banner-note">${escapeHtml(note)}</p>` : ''}
+</div>`;
+}
+
+/** §4.8: another tab saved more recently. Blocking until reload. */
+export function conflictDialogView(note = '') {
+  return `<h2 id="conflict-title" class="sheet-title">Changed elsewhere</h2>
+<p>This app is open in another tab or window, and that one saved more recently. To avoid overwriting it, this tab can’t save.</p>
+<p>Reloading opens the latest saved data. Changes made in this tab since then will be lost, so download them first if you need them.</p>
+${note ? `<p class="save-banner-note" role="status">${escapeHtml(note)}</p>` : ''}
+<div class="sheet-actions"><button type="button" class="button" data-shell-action="download-conflict">Download this tab’s data</button><button type="button" class="button primary" data-shell-action="reload">Reload</button></div>`;
+}
+
+/**
+ * §13.1: recovery when stored data can't be opened. Download the stored record first; restore
+ * from a backup (validated, previewed and confirmed before anything is replaced); or start over
+ * (only after the download, behind a confirmation). Nothing happens automatically.
+ */
+export function renderRecovery(r) {
+  const busy = r.busy ? ' disabled' : '';
+  let step = '';
+  if (r.stage === 'preview') {
+    step = `<section class="recovery-step" aria-labelledby="recovery-step-title">
+<h2 id="recovery-step-title" class="section-title" tabindex="-1">Restore this backup?</h2>
+<p>Backup from ${escapeHtml(exportedAtText(r.exportedAt))}: ${escapeHtml(backupSummaryText(r.summary))}.</p>
+<p>Restoring replaces the stored data that couldn’t be opened. It can’t be undone.</p>
+<div class="sheet-actions"><button type="button" class="button" data-shell-action="recovery-cancel"${busy}>Cancel</button><button type="button" class="button danger" data-shell-action="recovery-restore"${busy}>Replace stored data</button></div>
+</section>`;
+  } else if (r.stage === 'confirm-fresh') {
+    step = `<section class="recovery-step" aria-labelledby="recovery-step-title">
+<h2 id="recovery-step-title" class="section-title" tabindex="-1">Start over with empty data?</h2>
+<p>The stored data that couldn’t be opened will be replaced by a fresh start: the standard targets and no logged days. Keep the file you downloaded; it can’t be undone.</p>
+<div class="sheet-actions"><button type="button" class="button" data-shell-action="recovery-cancel"${busy}>Cancel</button><button type="button" class="button danger" data-shell-action="recovery-fresh"${busy}>Start over</button></div>
+</section>`;
+  }
+  return `<section class="recovery" aria-labelledby="recovery-title">
+<h2 id="recovery-title" class="section-title">What you can do</h2>
+<ol class="recovery-options">
+<li><button type="button" class="button" data-shell-action="download-stored"${busy}>Download the stored data</button> <span class="hint">${r.downloaded ? 'Downloaded.' : 'Keeps a copy of it as a file, exactly as stored.'}</span></li>
+<li><button type="button" class="button" data-shell-action="choose-backup"${busy}>Restore from a backup</button><input type="file" accept=".json,application/json" data-shell-file hidden tabindex="-1" aria-hidden="true"></li>
+<li><button type="button" class="button" data-shell-action="start-fresh"${r.downloaded ? '' : ' disabled'}${busy} aria-describedby="fresh-hint">Start over with empty data</button> <span id="fresh-hint" class="hint">${r.downloaded ? 'Replaces the stored data with a fresh start.' : 'Available after you download the stored data.'}</span></li>
+</ol>
+${step}
+<div class="recovery-message" role="${r.tone === 'error' ? 'alert' : 'status'}">${r.message ? `<p>${escapeHtml(r.message)}</p>${detailsDisclosure(r.code, r.errors)}` : ''}</div>
+</section>`;
+}
+
+const freshRecovery = () => ({ downloaded: false, stage: 'idle', text: null, summary: null, exportedAt: null, message: '', tone: '', code: null, errors: [], busy: false });
+
 /* ---------------- rendering ---------------- */
 
 const ICONS = {
@@ -123,7 +216,7 @@ function renderMain(state) {
     return `<section class="startup-error" role="alert" aria-labelledby="screen-title">
 <h1 id="screen-title" class="screen-title" tabindex="-1">${escapeHtml(v.title)}</h1>
 <p>${escapeHtml(v.body)}</p>
-</section>`;
+</section>${state.recoveryAvailable && RECOVERABLE_CODES.includes(state.errorCode) ? `\n${renderRecovery(state.recovery || freshRecovery())}` : ''}`;
   }
   return renderPlaceholder(state.route);
 }
@@ -150,11 +243,13 @@ ${PRIMARY_DESTINATIONS.map((d) => `<li><a class="nav-link" href="${d.href}" data
 <span class="save-status" data-state="${status.state}" role="status" aria-live="polite"${status.hidden ? ' hidden' : ''}>${escapeHtml(status.text)}</span>
 ${settings}
 </header>
+<div class="save-banner-slot" data-shell-banner>${blocked ? '' : saveBannerView(state.status, state.bannerNote)}</div>
 ${nav}
 <main id="main" class="app-main" tabindex="-1"${state.startup === 'loading' ? ' aria-busy="true"' : ''}>
 ${renderMain(state)}
 </main>
-</div>`;
+</div>
+<dialog class="sheet conflict-dialog" data-conflict aria-labelledby="conflict-title"></dialog>`;
 }
 
 /* ---------------- controller ---------------- */
@@ -164,14 +259,21 @@ ${renderMain(state)}
  *   root     the element to render into
  *   win      the window (location.hash, history, events)
  *   doc      the document (title)
- *   screens  optional { [destinationId]: { mount(mainElement, { app, win, doc }), unmount() } }
+ *   screens  optional { [destinationId]: { mount(mainElement, { app, win, doc, services }), unmount() } }
  *            for destinations that are built; the rest show their placeholder. mount() may
  *            return true when it has placed focus itself (e.g. on a row it just highlighted),
  *            so the shell doesn't move focus to the heading over it.
+ *   services optional, from main.js (the shell imports nothing):
+ *            downloadBackup(app)          → offer the app's data as a backup file (throws if refused)
+ *            downloadStoredRecord(error)  → Promise; offer the unopenable stored record as a file
+ *            validateRecoveryBackup(text) → validateBackup result against the shipped app data
+ *            recover({ backup } | { startFresh: true }) → Promise<app>; replaces the stored record
+ *            reload()
  * Returns { start, setDataLayer, showStartupError, state }.
  */
-export function createShell({ root, win, doc, screens = {} }) {
-  const state = { route: DEFAULT_DESTINATION, startup: 'loading', errorCode: null, status: null };
+export function createShell({ root, win, doc, screens = {}, services = {} }) {
+  const state = { route: DEFAULT_DESTINATION, startup: 'loading', errorCode: null, status: null, recoveryAvailable: false, recovery: null, bannerNote: '' };
+  let startupError = null;
   let app = null;
   let unsubscribe = null;
   let mounted = null;
@@ -182,13 +284,25 @@ export function createShell({ root, win, doc, screens = {} }) {
     const screen = state.startup === 'ready' ? screens[state.route] : null;
     const main = screen ? root.querySelector('#main') : null;
     let focusPlaced = false;
-    if (screen && main) { focusPlaced = screen.mount(main, { app, win, doc }) === true; mounted = screen; }
+    if (screen && main) { focusPlaced = screen.mount(main, { app, win, doc, services }) === true; mounted = screen; }
     const label = state.startup === 'error' ? startupErrorView(state.errorCode).title : destination(state.route).label;
     doc.title = `${label} · ${APP_NAME}`;
     if (focusHeading && !focusPlaced) {
       const heading = root.querySelector('#screen-title');
       if (heading) heading.focus();
     }
+    syncConflict();
+  }
+
+  /** §4.8: the conflict dialog is modal while another tab owns the latest save. */
+  function syncConflict(note = '') {
+    const dialog = root.querySelector('[data-conflict]');
+    if (!dialog || typeof dialog.showModal !== 'function') return;
+    const conflict = state.startup === 'ready' && state.status && state.status.state === 'conflict';
+    if (conflict) {
+      dialog.innerHTML = conflictDialogView(note);
+      if (!dialog.open) dialog.showModal();
+    } else if (dialog.open) dialog.close();
   }
 
   function syncRoute({ focusHeading }) {
@@ -211,6 +325,82 @@ export function createShell({ root, win, doc, screens = {} }) {
     el.textContent = v.text;
     el.setAttribute('data-state', v.state);
     el.hidden = v.hidden;
+    if (!state.status || state.status.state !== 'error') state.bannerNote = '';
+    const banner = root.querySelector('[data-shell-banner]');
+    if (banner) banner.innerHTML = saveBannerView(state.status, state.bannerNote);
+    syncConflict();
+  }
+
+  /* ---- actions from the banner, the conflict dialog and the recovery screen ---- */
+  function setRecovery(patch, focusSelector) {
+    state.recovery = { ...(state.recovery || freshRecovery()), ...patch };
+    render();
+    const el = focusSelector && root.querySelector(focusSelector);
+    if (el) el.focus();
+  }
+  function backupNow(where) {
+    try {
+      services.downloadBackup(app);
+      return 'Backup downloaded.';
+    } catch {
+      return where === 'conflict'
+        ? 'The data couldn’t be downloaded. Nothing was changed. Try again, or check your browser’s download settings.'
+        : 'The backup couldn’t be downloaded. Nothing was changed. Try again, or check your browser’s download settings.';
+    }
+  }
+  async function onShellAction(action, el) {
+    switch (action) {
+      case 'retry': if (app) await app.retryPersistence(); break;
+      case 'download-backup': {
+        state.bannerNote = backupNow('banner');
+        const banner = root.querySelector('[data-shell-banner]');
+        if (banner) banner.innerHTML = saveBannerView(state.status, state.bannerNote);
+        break;
+      }
+      case 'download-conflict': syncConflict(backupNow('conflict')); break;
+      case 'reload': services.reload(); break;
+      case 'download-stored':
+        try {
+          await services.downloadStoredRecord(startupError);
+          setRecovery({ downloaded: true, message: 'The stored data was downloaded.', tone: 'status', code: null, errors: [] }, '[data-shell-action="start-fresh"]');
+        } catch (e) {
+          setRecovery({ message: 'The stored data couldn’t be downloaded. Nothing was changed.', tone: 'error', code: e && e.code, errors: [] });
+        }
+        break;
+      case 'choose-backup': { const input = root.querySelector('[data-shell-file]'); if (input) input.click(); break; }
+      case 'recovery-cancel': setRecovery({ stage: 'idle', text: null, summary: null, message: '' }, '[data-shell-action="choose-backup"]'); break;
+      case 'start-fresh': if (state.recovery && state.recovery.downloaded) setRecovery({ stage: 'confirm-fresh', message: '' }, '[data-shell-action="recovery-cancel"]'); break;
+      case 'recovery-restore':
+      case 'recovery-fresh': {
+        const options = action === 'recovery-fresh' ? { startFresh: true } : { backup: state.recovery.text };
+        setRecovery({ busy: true, message: action === 'recovery-fresh' ? 'Starting over…' : 'Restoring…', tone: 'status' });
+        try {
+          const next = await services.recover(options);
+          state.recovery = null;
+          state.recoveryAvailable = false;
+          startupError = null;
+          this.setDataLayer(next);
+        } catch (e) {
+          setRecovery({ busy: false, stage: 'idle', text: null, message: restoreErrorMessage(e && e.code), tone: 'error', code: e && e.code, errors: (e && e.details) || [] }, '[data-shell-action="choose-backup"]');
+        }
+        break;
+      }
+      default: break;
+    }
+    return el;
+  }
+  async function onBackupFile(input) {
+    const file = input.files && input.files[0];
+    if (!file) return;
+    let text;
+    try { text = await file.text(); } catch { setRecovery({ message: restoreErrorMessage('BACKUP_UNREADABLE'), tone: 'error', code: 'BACKUP_UNREADABLE', errors: [] }); return; }
+    const result = services.validateRecoveryBackup(text); // validated in full; nothing is written here
+    if (!result.valid) {
+      setRecovery({ stage: 'idle', message: restoreErrorMessage(result.code), tone: 'error', code: result.code, errors: result.errors }, '[data-shell-action="choose-backup"]');
+      return;
+    }
+    const parsed = JSON.parse(text);
+    setRecovery({ stage: 'preview', text, summary: result.summary, exportedAt: parsed.exportedAt, message: '', code: null, errors: [] }, '#recovery-step-title');
   }
 
   // "Saving…" only appears if a save takes longer than about a second (§4.8), to avoid flicker.
@@ -228,6 +418,14 @@ export function createShell({ root, win, doc, screens = {} }) {
   return {
     state,
     start() {
+      const shell = this;
+      root.addEventListener?.('click', (event) => {
+        const el = event.target.closest && event.target.closest('[data-shell-action]');
+        if (el && root.contains(el)) onShellAction.call(shell, el.dataset.shellAction, el);
+      });
+      root.addEventListener?.('change', (event) => { if (event.target.matches && event.target.matches('[data-shell-file]')) onBackupFile(event.target); });
+      // The conflict dialog can't be dismissed: editing stays blocked until the tab reloads.
+      root.addEventListener?.('cancel', (event) => { if (event.target.matches && event.target.matches('[data-conflict]')) event.preventDefault(); }, true);
       syncRoute({ focusHeading: false });
       win.addEventListener('hashchange', () => syncRoute({ focusHeading: true }));
       win.addEventListener('pagehide', flush);
@@ -246,6 +444,10 @@ export function createShell({ root, win, doc, screens = {} }) {
     showStartupError(error) {
       state.startup = 'error';
       state.errorCode = error && error.code ? error.code : null;
+      startupError = error || null;
+      // Recovery actions need the stored record and the recovery services (§13.1).
+      state.recoveryAvailable = !!(error && typeof error.readStoredRecord === 'function' && services.recover && services.validateRecoveryBackup);
+      state.recovery = freshRecovery();
       render({ focusHeading: true });
     }
   };

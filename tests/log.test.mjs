@@ -67,7 +67,7 @@ test('Log — renders through the existing shell and navigation', () => {
   assert.ok(!mounted.includes('heading-focus'));
 
   const mainSrc = fs.readFileSync(path.join(ROOT, 'app/main.js'), 'utf8');
-  assert.match(mainSrc, /screens: \{ today: todayScreen, log: logScreen, meals: mealsScreen, progress: progressScreen \}/);
+  assert.match(mainSrc, /screens: \{ today: todayScreen, log: logScreen, meals: mealsScreen, progress: progressScreen, settings: settingsScreen \}/);
   assert.equal(typeof logScreen.mount, 'function');
 });
 
