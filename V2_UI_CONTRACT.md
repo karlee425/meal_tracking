@@ -1,7 +1,7 @@
 # V2 UI / Product Contract
 
 **Repository:** `karlee425/meal_tracking` · **Branch:** `v2-data-architecture`
-**Status:** authoritative implementation contract for the V2 UI. Written against the commit that adds this file (on `f040b70`, `2046613`, `2cd7932`). Supersedes `V2_UI_CONTRACT_DRAFT.md` and the review drafts. Amended by "Reconcile V2 product decisions" (A-41–A-45, I-58–I-60) and "Resolve remaining V2 contract ambiguities" (A-46–A-48; A-44 extended).
+**Status:** authoritative implementation contract for the V2 UI. Written against the commit that adds this file (on `f040b70`, `2046613`, `2cd7932`). Supersedes `V2_UI_CONTRACT_DRAFT.md` and the review drafts. Amended by "Reconcile V2 product decisions" (A-41–A-45, I-58–I-60) and "Resolve remaining V2 contract ambiguities" (A-46–A-48; A-44 extended); A-46 and A-47 finalized by "Finalize Food picker detail contract".
 
 ---
 
@@ -508,15 +508,24 @@ Entry points [APPROVED A-42]: the Log quantity sheet's **Food details** action (
 
 Actions:
 
-- **Log this food**. Not shown when opened from Settings: Settings is a food-management context, not a logging context, and there is no Settings → Log flow. To log a Food, the user searches for it in Log. [APPROVED A-41] Not shown when opened from the Food picker either (below). [APPROVED A-46]
+- **Log this food**. Not shown when opened from Settings: Settings is a food-management context, not a logging context, and there is no Settings → Log flow. To log a Food, the user searches for it in Log. [APPROVED A-41] Not shown when opened from the Food picker either (below). [APPROVED A-46] Not shown when opened from a Coach top-up Food; the Coach keeps its own **Log** for top-ups (§8.4). [APPROVED A-47]
 - **Add to a meal** (builder tray, when opened from Log). It opens the quantity step first, since grams are required. [IMPLEMENTATION NOTE I-59]
-- ☆ **Favourite** (`setFavoriteFood`)
-- **Don't suggest this food** (`setDislikedFood`; affects only Coach suggestions [APPROVED A-32]; the Food still appears in search)
+- ☆ **Favourite** (`setFavoriteFood`). Not shown when opened from the Food picker. [APPROVED A-46]
+- **Don't suggest this food** (`setDislikedFood`; affects only Coach suggestions [APPROVED A-32]; the Food still appears in search). Not shown when opened from the Food picker. [APPROVED A-46]
 - Custom Foods only: **Edit** · **Delete**. Core Foods show "App food · can't be edited". [APPROVED A-17]
   - Opened from a Coach top-up Food: **Edit** and **Delete** are offered for Custom Foods as anywhere else. Deleting follows §7.6 (including the Saved Meal repair it can require), and Back returns to the Coach. There's no Coach-specific food management. [APPROVED A-47]
   - Opened from the Food picker: **Edit** and **Delete** are not offered. The picker runs inside an in-progress Saved Meal edit, and nothing done from it may invalidate that draft; the user manages the Food from Settings → My foods instead. [APPROVED A-46]
 
-**From the Food picker, Food detail is informational** [APPROVED A-46]: it has no **Log this food**, no **Edit** or **Delete**, and no action to choose the Food ("Select this food" or similar). Choosing a Food stays with the picker (§7.5); Food detail never becomes a second way to pick one. Back returns to the picker with its search text and the editor's draft kept.
+**From the Food picker, Food detail is information-only** [APPROVED A-46]: it exposes none of Food detail's logging or management actions (no **Log this food**, **Add to a meal**, **Favourite**, **Don't suggest this food**, **Edit** or **Delete**) and no action to choose the Food ("Select this food" or similar). Choosing a Food stays with the picker (§7.5); Food detail never becomes a second way to pick one. Back returns to the picker with its search text, the picker's state and the Saved Meal draft kept.
+
+Actions by where Food detail was opened [APPROVED A-41, A-46, A-47]. Core Foods are read-only in every context (A-17).
+
+| Opened from | Log this food | Add to a meal | Favourite | Don't suggest | Edit · Delete (Custom Foods) |
+|---|---|---|---|---|---|
+| Log (quantity sheet) | Yes | Yes | Yes | Yes | Yes |
+| Coach top-up Food | No | No | Yes | Yes | Yes |
+| Settings | No | No | Yes | Yes | Yes |
+| Food picker | No | No | No | No | No |
 
 Never shown: `yieldFactor`, `yieldKey`, `stateInferred`, `macroRole`, `swapFoodId`, `legacySwap`, `portionStep`. [IMPLEMENTATION NOTE I-30]
 
@@ -539,7 +548,7 @@ Never shown: `yieldFactor`, `yieldKey`, `stateInferred`, `macroRole`, `swapFoodI
 
 ### 7.5 Food picker (inside meal creation, replacement, and logged-meal edits)
 
-The Log Foods segment in "pick" mode: same search, favourites and recents. Choosing a Food returns it with a grams field to the calling editor; nothing is logged. [IMPLEMENTATION NOTE I-30] Food detail is reachable from the picker; Back returns to the picker with its search kept. [APPROVED A-42] There it's informational only (no Log this food, Edit, Delete or choose action; §7.3), and the editor's draft is kept. [APPROVED A-46]
+The Log Foods segment in "pick" mode: same search, favourites and recents. Choosing a Food returns it with a grams field to the calling editor; nothing is logged. [IMPLEMENTATION NOTE I-30] Food detail is reachable from the picker; Back returns to the picker with its search kept. [APPROVED A-42] There it's information-only (no Log this food, Add to a meal, Favourite, Don't suggest, Edit, Delete or choose action; §7.3), and the picker's state and the editor's draft are kept. [APPROVED A-46]
 
 ### 7.6 Deleting a Custom Food [APPROVED behaviour A-17 · UI IMPLEMENTATION NOTE I-31]
 
@@ -989,8 +998,8 @@ These are enforced by existing tests once the UI directory is classified as `run
 | A-43 | A Custom Food deleted while in the meal tray stays as a row marked "No longer available" (user-facing name, never an ID), with Remove; the tray can't be logged until it's removed; the rest of the tray is kept; nothing stored changes. | Approved; product decision D4 |
 | A-44 | The About app version comes from one authoritative repository version source, never a second hand-maintained constant. Until such a source exists, About shows "Version unavailable"; no version number is invented and the data format version is never shown as the app version. | Approved; product decision D2 (extended) |
 | A-45 | Disabled Save while invalid and submit-time validation are complementary: Save stays disabled while invalid; validation may run on blur; submit (including Enter or programmatic) re-validates, saves nothing if invalid, and focuses the first invalid field. | Approved; resolves the §7.4/§10.2 vs §14 inconsistency |
-| A-46 | Food detail opened from the Food picker is informational: no Log this food, no Edit or Delete, no choose action. Selection stays with the picker; Back returns to it with its search and the Saved Meal draft kept. | Approved; product decision |
-| A-47 | Food detail opened from a Coach top-up Food offers Custom Food Edit and Delete as elsewhere (Core Foods stay read-only); deletion follows §7.6; Back returns to the Coach. No Coach-specific food management. | Approved; product decision |
+| A-46 | Food detail opened from the Food picker is information-only: no Log this food, Add to a meal, Favourite, Don't suggest, Edit or Delete, and no choose action. Selection stays with the picker; Back returns to it with its search, picker state and the Saved Meal draft kept. | Approved; product decision (finalized) |
+| A-47 | Food detail opened from a Coach top-up Food offers Favourite, Don't suggest and Custom Food Edit and Delete as elsewhere, but not Log this food (the Coach has its own Log for top-ups). Core Foods stay read-only; deletion follows §7.6; Back returns to the Coach. No Coach-specific food management. | Approved; product decision (finalized) |
 | A-48 | A Custom Food edited from the Log flow returns to the Log quantity sheet for that Food after Save changes (not to a standalone Food detail), keeping the Log context where the session keeps it. | Approved; product decision |
 
 ---
