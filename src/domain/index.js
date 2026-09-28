@@ -29,6 +29,8 @@ import { localDate } from './util.js';
 import * as constants from './constants.js';
 
 export { DomainError } from './util.js';
+// Calendar-date stepping for screens that move between days (YYYY-MM-DD ± n, no time zones).
+export { addDays } from './util.js';
 export { createMemoryAdapter } from './memory-adapter.js';
 export * as macros from './macros.js';
 export { constants };

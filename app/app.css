@@ -285,6 +285,10 @@ body {
 .today-head .screen-title { margin: 0; flex-basis: 100%; }
 .today-date { margin: 0; color: var(--text-muted); }
 .today-head .day-menu { margin-left: auto; }
+/* ◀ ▶ (§4.1, I-03): the previous and next day, beside the date. */
+.date-nav { display: flex; gap: var(--space-2); }
+.future-note, .done-note { margin: 0 0 var(--space-3); }
+.adjust .add-ingredient { margin-top: var(--space-3); }
 
 .badge,
 .marker,

@@ -215,6 +215,20 @@ export function renderConfirmation(confirmation) {
   return `<p class="log-confirmation">${escapeHtml(confirmation.message)}${links}</p>`;
 }
 
+/**
+ * The Food picker (§7.5): the Log Foods list in "pick" mode — same search, favourites and
+ * recents; nothing is logged. One picker, used by the Meals editor and Today's logged-meal edit.
+ */
+export function renderPicker({ title, query, results }) {
+  return `${viewHead(title, 'Choose a food. Nothing is logged.')}
+<label class="visually-hidden" for="pick-query">Search foods</label>
+<input id="pick-query" class="search-input" type="search" autocomplete="off" data-pick-query value="${escapeHtml(query)}" placeholder="Search foods">
+<div class="picker-results" data-pick-results>${results}</div>`;
+}
+
+/** The picker's results for a query: the Foods segment as Log renders it. */
+export const pickerResults = (app, query) => renderResults({ segment: 'foods', meals: null, foods: foodResults(app, query), future: false });
+
 /* ---------------- meal builder tray (§5.5, I-22) ---------------- */
 
 /** The prefilled tray name: "{first food} + {n−1} more" (just the food's name for one). */

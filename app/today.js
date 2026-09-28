@@ -12,9 +12,11 @@
  * snapshot totals) and is only rounded for display with macros.roundMacros.
  */
 
-import { macros, constants } from '../src/domain/index.js';
+import { macros, constants, addDays } from '../src/domain/index.js';
 import { escapeHtml } from './shell.js';
 import { session, routeParams, isIsoDate } from './session.js';
+import { createViewHost, viewHead, syncInPlace } from './view-host.js';
+import { renderPicker, pickerResults, renderCustomFoodForm, customFoodInput } from './log.js';
 
 /* ---------------- labels and formatting ---------------- */
 
@@ -94,6 +96,9 @@ export function todayModel(app, date = app.getToday()) {
   return {
     date,
     isToday: date === today,
+    isFuture: date > today, // I-04: viewable, empty, never created or logged into
+    prevDate: addDays(date, -1),
+    nextDate: addDays(date, 1),
     summary,
     day,
     bySlot,
@@ -115,6 +120,34 @@ export function defaultSlot(day) {
   for (let k = slots.indexOf(latest.mealSlot); k < slots.length; k++) if (!used.has(slots[k])) return slots[k];
   return latest.mealSlot;
 }
+
+/** The date Today shows for a route: a real ?date= (past, today or future, I-03/I-04), else today. */
+export function todayViewDate(app, hash) {
+  const requested = routeParams(hash).get('date');
+  return requested && isIsoDate(requested) ? requested : app.getToday();
+}
+
+/** The route for a day on Today: plain #/today for the local date (so it follows midnight, §4.5.6). */
+export const dayHref = (date, today) => (date === today ? '#/today' : `#/today?date=${date}`);
+
+/** §4.4.2 / I-12 wording, shown once per day the first time a Done day is edited. */
+export const DONE_EDIT_NOTE = 'This day is marked done. Changes are saved and it stays done.';
+
+/**
+ * Whether an add, edit, move or delete on `date` should show the Done-day note: only while the
+ * day is (still) Done, and only the first time per day this session. Records it when it does.
+ * Marking a day done is not an edit, and nothing here changes any data.
+ */
+export function claimDoneEditNote(state, date, summary) {
+  if (!summary || summary.status !== 'complete' || state.doneNotes.includes(date)) return false;
+  state.doneNotes.push(date);
+  return true;
+}
+
+/** Surfaces presented as views (pushed · panel · pane, §2.3); the rest are short sheets. */
+export const TODAY_VIEW_TYPES = Object.freeze(['instance', 'edit', 'picker', 'custom-food']);
+/** Today's own sheets (Coach, day type, day menu…): short modal sheets at every width, as before. */
+export const TODAY_SHEET_TYPES = Object.freeze(['day-type', 'meal', 'quantity', 'coach', 'day-menu', 'clear-day']);
 
 /**
  * "Left today: P 42 g · C target reached · F 12 g." from getDaySummary, for the announcement
@@ -197,7 +230,7 @@ function sourceMarker(source) {
   return '';
 }
 
-function renderSlots(model, { enabled }) {
+function renderSlots(model, { enabled, addable = true }) {
   const slots = constants.MEAL_SLOTS.map((slot) => {
     const rows = model.bySlot[slot];
     const list = rows.length
@@ -209,7 +242,7 @@ function renderSlots(model, { enabled }) {
     return `<section class="slot" aria-labelledby="slot-${slot}">
 <div class="slot-head">
 <h3 id="slot-${slot}" class="slot-name">${SLOT_LABELS[slot]}</h3>
-<button type="button" class="icon-button" data-action="add" data-slot="${slot}" aria-label="Add to ${SLOT_LABELS[slot]}"${enabled ? '' : ' data-needs-day="true"'}><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 5v14M5 12h14"/></svg></button>
+${addable ? `<button type="button" class="icon-button" data-action="add" data-slot="${slot}" aria-label="Add to ${SLOT_LABELS[slot]}"${enabled ? '' : ' data-needs-day="true"'}><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 5v14M5 12h14"/></svg></button>` : ''}
 </div>
 ${list}
 </section>`;
@@ -235,18 +268,33 @@ ${options}
 </section>`;
 }
 
-/** The Today screen body for a model. */
-export function renderToday(model) {
+/** ◀ ▶ (§4.1, I-03): the previous and next calendar day. Future days can be viewed, never logged (I-04). */
+function renderDateNav(model) {
+  return `<div class="date-nav" role="group" aria-label="Change day">
+<button type="button" class="icon-button" data-action="prev-day" aria-label="Previous day, ${escapeHtml(formatDate(model.prevDate))}"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M15 5l-7 7 7 7"/></svg></button>
+<button type="button" class="icon-button" data-action="next-day" aria-label="Next day, ${escapeHtml(formatDate(model.nextDate))}"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 5l7 7-7 7"/></svg></button>
+</div>`;
+}
+
+/** The Today screen body for a model. doneNote: show the one-time Done-day note (§4.4.2). */
+export function renderToday(model, { doneNote = false } = {}) {
   const { summary } = model;
   const type = summary.exists ? DAY_TYPE_LABELS[summary.dayType] : null;
-  // §4.1 header: "Today · {date}" for today; a past day shows its date and a way back to today.
+  // §4.1 header: "Today · {date}" for today; another day shows its date and a way back to today.
   const head = `<div class="today-head">
 <h1 id="screen-title" class="screen-title" tabindex="-1">${model.isToday ? 'Today' : escapeHtml(formatDate(model.date))}</h1>
-<p class="today-date">${model.isToday ? escapeHtml(formatDate(model.date)) : 'Past day'}${summary.status === 'complete' ? ' <span class="badge">Done</span>' : ''}</p>
+${renderDateNav(model)}
+<p class="today-date">${model.isToday ? escapeHtml(formatDate(model.date)) : model.isFuture ? 'Future day' : 'Past day'}${summary.status === 'complete' ? ' <span class="badge">Done</span>' : ''}</p>
 ${model.isToday ? '' : '<a class="chip" href="#/today" aria-label="Go to today">Today</a>'}
 ${type ? `<button type="button" class="chip" data-action="day-type" aria-label="Day type: ${type}. Change day type">${type}</button>` : ''}
 ${summary.exists ? '<button type="button" class="icon-button day-menu" data-action="day-menu" aria-haspopup="dialog" aria-label="More actions for this day"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></svg></button>' : ''}
 </div>`;
+  if (model.isFuture) {
+    // I-04: viewable and empty; no chooser, no add actions, nothing is created by looking.
+    return `${head}
+<p class="note future-note">You can log this day when it arrives.</p>
+${renderSlots(model, { enabled: false, addable: false })}`;
+  }
   if (!summary.exists) {
     return `${head}
 ${renderChooser(model)}
@@ -255,6 +303,7 @@ ${renderSlots(model, { enabled: false })}`;
   return `${head}
 ${renderMacroPanel(summary)}
 <p class="day-status" data-day-status>${statusLine(summary)}</p>
+${doneNote && summary.status === 'complete' ? `<p class="note done-note" data-done-note>${DONE_EDIT_NOTE}</p>` : ''}
 ${renderActionBar(summary)}
 ${renderSlots(model, { enabled: true })}`;
 }
@@ -377,7 +426,7 @@ export function renderInstanceDialog({ instance, slot, date, source, sourceName 
   const sourceText = source === 'saved' ? `From Saved Meal “${escapeHtml(sourceName)}”`
     : source === 'library' ? `From Library Meal “${escapeHtml(sourceName)}”`
       : source === 'deleted' ? 'From a meal that’s since been deleted' : '';
-  return `${dialogHead(instance.mealName, `${SLOT_LABELS[slot]} · ${formatDate(date)} · Logged at ${formatTime(instance.loggedAt)}`)}
+  return `${viewHead(instance.mealName, `${SLOT_LABELS[slot]} · ${formatDate(date)} · Logged at ${formatTime(instance.loggedAt)}`)}
 ${sourceText ? `<p class="source-line">${sourceText}</p>` : ''}
 <div class="table-wrap"><table class="ingredients">
 <caption class="visually-hidden">Ingredients as logged</caption>
@@ -395,21 +444,25 @@ ${errorSlot}
 ${source === 'saved' && instance.sourceMealId ? `<p class="edit-source">Want to change the recipe for next time? <a class="link-button" href="#/meals?meal=${encodeURIComponent(instance.sourceMealId)}&edit=1">Edit Saved Meal “${escapeHtml(sourceName)}”</a></p>` : ''}`;
 }
 
-/** Edit one logged meal: name, slot, grams, remove (§4.3.4). The Saved Meal is untouched. */
+/**
+ * Edit one logged meal: name, slot, grams, remove, add an ingredient (§4.3.4). The Saved Meal
+ * is untouched. An added ingredient shows its Food's state chip (A-16); grams only.
+ */
 export function renderEditDialog({ instance, date, name, slot, rows, preview }) {
   const single = rows.length === 1;
-  return `${dialogHead('Edit logged meal', `${SLOT_LABELS[instance.mealSlot]} · ${formatDate(date)}`)}
+  return `${viewHead('Edit logged meal', `${SLOT_LABELS[instance.mealSlot]} · ${formatDate(date)}`)}
 <p class="note">You're editing the record for ${escapeHtml(formatDate(date))}. Your saved meal won't change.</p>
 <label class="field" for="edit-name">Name</label>
 <input id="edit-name" type="text" data-edit-name value="${escapeHtml(name)}" autocomplete="off">
 <p class="field-error" data-name-error hidden>Give it a name</p>
 ${slotRadios('edit-slot', slot)}
 <fieldset class="adjust"><legend>Ingredients</legend>
-${rows.map((row, i) => `<div class="adjust-row"><label for="edit-q-${i}">${escapeHtml(row.foodName)}</label>
+${rows.map((row, i) => `<div class="adjust-row"><label for="edit-q-${i}">${escapeHtml(row.foodName)}${row.state ? ` <span class="state-chip">${escapeHtml(row.state)}</span>` : ''}</label>
 <span class="grams-input"><input id="edit-q-${i}" type="text" inputmode="decimal" autocomplete="off" data-quantity-index="${i}" value="${escapeHtml(row.text)}"><span aria-hidden="true">g</span></span>
 ${single ? '' : `<button type="button" class="link-button" data-action="remove-ingredient" data-index="${i}" aria-label="Remove ${escapeHtml(row.foodName)}">Remove</button>`}</div>`).join('\n')}
 ${single ? '<p class="hint">A logged meal needs at least one ingredient. <button type="button" class="link-button" data-action="delete-instance">Delete this logged meal instead</button></p>' : ''}
 <p class="field-error" data-grams-error hidden>Enter a weight above 0 g</p>
+<button type="button" class="button add-ingredient" data-action="add-ingredient">Add an ingredient</button>
 </fieldset>
 <div class="preview" data-preview aria-live="polite">${preview ? `<p class="preview-totals">${macroLine(preview.instance.totals)}</p><p class="preview-after">${afterLine(preview.after)}</p>` : ''}</div>
 ${errorSlot}
@@ -621,21 +674,27 @@ function sameRecipe(a, b) {
 /** The Today screen, mounted by the shell into <main>. */
 export const todayScreen = {
   mount(main, { app, win, doc }) {
-    // The date comes from the route (#/today?date=YYYY-MM-DD, e.g. "View on Today" from Log);
-    // no date, an invalid one or a future one shows today. Past-day controls come later.
-    const requested = routeParams(win.location.hash).get('date');
-    let viewDate = requested && isIsoDate(requested) && requested <= app.getToday() ? requested : app.getToday();
+    // The date comes from the route (#/today?date=YYYY-MM-DD): ◀ ▶, Progress's day list and
+    // Log's "View on Today" all use it. A past or future date is shown as that day; a future
+    // day is viewable and empty (I-04). No date, or an invalid one, shows today.
+    let viewDate = todayViewDate(app, win.location.hash);
     const followsToday = viewDate === app.getToday();
     const actions = createTodayActions(app, () => viewDate);
     let model = todayModel(app, viewDate);
-    let ui = null; // the open dialog's state
-    let opener = null;
+    let ui = null; // the open surface's state
     let highlightId = null;
-    let pendingFocus = null; // an element to focus once the open dialog has closed
+    let doneNoteDate = null; // the day whose one-time Done-day note is showing (§4.4.2)
 
-    main.innerHTML = `<div data-today-body></div>
-<p class="today-message" role="status" aria-live="polite" data-message></p>
-<dialog class="sheet" aria-labelledby="sheet-title" data-sheet></dialog>`;
+    // One dialog, presented by the shared view host (§2.3, §3.1): the logged-meal detail, its
+    // editor and the Food picker are views — pushed full screen on phones, a side panel on
+    // tablets, a right-hand pane beside Today on wide screens. Today's own sheets (Coach, day
+    // type, day menu…) stay modal sheets at every width.
+    main.innerHTML = `<div class="today-page view-page" data-today-page>
+<div data-today-body></div>
+<dialog class="sheet" aria-labelledby="sheet-title" data-sheet></dialog>
+</div>
+<p class="today-message" role="status" aria-live="polite" data-message></p>`;
+    const page = main.querySelector('[data-today-page]');
     const body = main.querySelector('[data-today-body]');
     const dialog = main.querySelector('[data-sheet]');
     const messageEl = main.querySelector('[data-message]');
@@ -649,17 +708,26 @@ export const todayScreen = {
       messageTimer = setTimeout(() => { messageEl.textContent = ''; }, 6000);
     };
 
+    const host = createViewHost({
+      page, dialog, win, doc,
+      viewTypes: TODAY_VIEW_TYPES,
+      sheetTypes: TODAY_SHEET_TYPES,
+      fallbackFocus: () => body.querySelector('#screen-title'),
+      onClose: () => { ui = null; },
+      beforeLeave
+    });
+
     function refresh({ focusId } = {}) {
       model = todayModel(app, viewDate);
       session.todayDate = viewDate;
-      body.innerHTML = renderToday(model);
+      body.innerHTML = renderToday(model, { doneNote: doneNoteDate === model.date });
       if (focusId) {
         const row = body.querySelector(`[data-id="${CSS.escape(focusId)}"]`);
         if (row) {
           row.classList.add('is-new');
           row.focus();
           row.scrollIntoView({ block: 'center' });
-          if (dialog.open) pendingFocus = row;
+          if (dialog.open) host.returnFocusTo(row);
           highlightId = focusId;
           setTimeout(() => { if (highlightId === focusId) row.classList.remove('is-new'); }, 2000);
         }
@@ -673,27 +741,22 @@ export const todayScreen = {
     }
 
     function openDialog(next) {
-      if (!dialog.open) opener = doc.activeElement;
+      // A Today sheet (Coach, day type…) asked for while a detail pane is open beside Today on a
+      // wide screen: the pane closes first, then the sheet opens as it always has.
+      if (dialog.open && dialog.dataset.present === 'pane' && TODAY_SHEET_TYPES.includes(next.type)) {
+        const trigger = doc.activeElement;
+        dialog.addEventListener('close', () => win.setTimeout(() => {
+          openDialog(next);
+          if (trigger && trigger.isConnected) host.returnFocusTo(trigger);
+        }, 0), { once: true });
+        closeDialog();
+        return;
+      }
       ui = next;
-      drawDialog();
-      if (!dialog.open) dialog.showModal();
-      const auto = dialog.querySelector('[data-autofocus]') || dialog.querySelector('input:not([type=radio]), .sheet-actions .button.primary:not([disabled])') || dialog.querySelector('#sheet-title');
-      if (auto) { if (auto.id === 'sheet-title') auto.setAttribute('tabindex', '-1'); auto.focus(); }
+      host.open(next.type, drawDialog, { startAtTitle: next.type === 'instance' });
     }
 
-    function closeDialog() {
-      if (dialog.open) dialog.close();
-    }
-
-    dialog.addEventListener('close', () => {
-      ui = null;
-      dialog.innerHTML = '';
-      const target = pendingFocus && pendingFocus.isConnected ? pendingFocus
-        : opener && opener.isConnected ? opener : body.querySelector('#screen-title');
-      opener = null;
-      pendingFocus = null;
-      if (target) target.focus();
-    });
+    const closeDialog = () => host.close();
 
     function drawDialog() {
       if (!ui) return;
@@ -703,6 +766,8 @@ export const todayScreen = {
         case 'quantity': dialog.innerHTML = renderQuantityDialog(ui); break;
         case 'instance': dialog.innerHTML = renderInstanceDialog(ui); break;
         case 'edit': dialog.innerHTML = renderEditDialog(ui); break;
+        case 'picker': dialog.innerHTML = renderPicker({ title: 'Add an ingredient', query: ui.query, results: pickerResults(app, ui.query) }); break;
+        case 'custom-food': dialog.innerHTML = renderCustomFoodForm(ui); break;
         case 'move': dialog.innerHTML = renderMoveDialog(ui); break;
         case 'delete': dialog.innerHTML = renderDeleteDialog(ui); break;
         case 'followup': dialog.innerHTML = renderFollowUpDialog(ui); break;
@@ -711,6 +776,18 @@ export const todayScreen = {
         case 'coach': dialog.innerHTML = renderCoachDialog(ui); break;
         default: break;
       }
+    }
+
+    /**
+     * Escape, Back or Close on a sub-surface of the logged-meal editor steps back to what opened
+     * it: the Food picker back to the editor (its rows kept), a new-food form back to the picker.
+     * Everything else closes, as before.
+     */
+    function beforeLeave() {
+      if (!ui) return true;
+      if (ui.type === 'picker') { backToEdit(ui.edit, '[data-action="add-ingredient"]'); return false; }
+      if (ui.type === 'custom-food') { openDialog(ui.pickUi); return false; }
+      return true;
     }
 
     const checkedSlot = (name) => { const el = dialog.querySelector(`input[name="${name}"]:checked`); return el ? el.value : null; };
@@ -730,7 +807,9 @@ export const todayScreen = {
       openDialog({ type: 'instance', instance, slot: instance.mealSlot, date: model.date, source, sourceName: meal ? meal.name : '' });
     }
 
-    function afterChange(result, { focusId, followUp } = {}) {
+    /** After a write. dayEdit: an add, edit, move or delete on this day (for the Done-day note). */
+    function afterChange(result, { focusId, followUp, dayEdit = false } = {}) {
+      if (dayEdit && claimDoneEditNote(session.today, model.date, app.getDaySummary(model.date))) doneNoteDate = model.date;
       refresh({ focusId });
       say(result.message);
       if (followUp) openDialog(followUp); else closeDialog();
@@ -741,6 +820,28 @@ export const todayScreen = {
       const meal = app.getMeal(instance.sourceMealId);
       if (!meal || meal.source !== 'saved') return null; // Library meals are read-only: nothing to offer
       return { type: 'followup', mode: 'choice', savedId: meal.id, savedName: meal.name, mealType: meal.mealType, ingredients: instance.ingredients, newName: `${meal.name} (adjusted)` };
+    }
+
+    /* ---- the logged-meal editor and its Food picker (§4.3.4, §7.5) ---- */
+    function keepEditFields(edit) {
+      const name = dialog.querySelector('[data-edit-name]');
+      if (name) edit.name = name.value;
+      edit.slot = checkedSlot('edit-slot') || edit.slot;
+    }
+    function backToEdit(edit, focusSelector) {
+      ui = edit;
+      host.open('edit', drawDialog);
+      updateEditPreview();
+      const el = focusSelector ? dialog.querySelector(focusSelector) : null;
+      if (el) el.focus();
+    }
+    /** A Food chosen in the picker joins the edit as a new row with empty grams; nothing is saved yet. */
+    function pickIngredient(foodId, pickUi) {
+      const food = app.getFood(foodId);
+      if (!food) { showError({ code: 'FOOD_NOT_FOUND' }); return; }
+      const edit = pickUi.edit;
+      edit.rows.push({ foodId: food.id, unit: 'g', foodName: food.name, state: food.state, text: '' });
+      backToEdit(edit, `#edit-q-${edit.rows.length - 1}`);
     }
 
     /* ---- live previews on input ---- */
@@ -769,10 +870,23 @@ export const todayScreen = {
         updateEditPreview();
       } else if (ui.type === 'edit' && el.matches('[data-edit-name]')) {
         ui.name = el.value;
+      } else if (ui.type === 'picker' && el.matches('[data-pick-query]')) {
+        ui.query = el.value;
+        dialog.querySelector('[data-pick-results]').innerHTML = pickerResults(app, ui.query);
+      } else if (ui.type === 'custom-food' && el.matches('[data-cf]')) {
+        syncCustomFood(el);
       } else if (ui.type === 'followup' && el.matches('[data-new-name]')) {
         ui.newName = el.value;
       }
     });
+
+    /** The picker's new-food form: domain validation as fields change (§7.4). */
+    function syncCustomFood(el) {
+      ui.values[el.dataset.cf] = el.value;
+      ui.touched.add(el.dataset.cf);
+      ui.validation = app.validateCustomFood(customFoodInput(ui.values));
+      syncInPlace(dialog, renderCustomFoodForm(ui), doc);
+    }
 
     function editPatch() {
       const parsed = ui.rows.map((row) => parseGrams(row.text));
@@ -784,7 +898,7 @@ export const todayScreen = {
       const patch = editPatch();
       dialog.querySelector('[data-grams-error]').hidden = !!patch;
       dialog.querySelector('[data-action="save-instance"]').disabled = !patch;
-      if (!patch) return;
+      if (!patch) { ui.preview = null; dialog.querySelector('[data-preview]').innerHTML = ''; return; }
       try {
         ui.preview = app.previewMealInstanceUpdate(model.date, ui.instance.id, { ingredients: patch.ingredients });
         dialog.querySelector('[data-preview]').innerHTML = `<p class="preview-totals">${macroLine(ui.preview.instance.totals)}</p><p class="preview-after">${afterLine(ui.preview.after)}</p>`;
@@ -799,8 +913,16 @@ export const todayScreen = {
         drawDialog();
         const radio = dialog.querySelector(`input[name="day-type"][value="${type}"]`);
         if (radio) radio.focus();
+      } else if (ui && ui.type === 'custom-food' && event.target.matches('[data-cf]')) {
+        syncCustomFood(event.target);
       }
     });
+
+    /** ◀ / ▶: another day's Today, at its own URL; the same control keeps the focus. */
+    function goToDate(date, control) {
+      session.today.focus = control;
+      win.location.replace(dayHref(date, app.getToday()));
+    }
 
     main.addEventListener('click', (event) => {
       const el = event.target.closest('[data-action]');
@@ -808,7 +930,9 @@ export const todayScreen = {
       const action = el.dataset.action;
       try {
         switch (action) {
-          case 'close': closeDialog(); break;
+          case 'close': if (beforeLeave()) closeDialog(); break;
+          case 'prev-day': goToDate(model.prevDate, 'prev-day'); break;
+          case 'next-day': goToDate(model.nextDate, 'next-day'); break;
           case 'choose-day-type': afterChange(actions.chooseDayType(el.dataset.type)); break;
           case 'day-type': openDialog({ type: 'day-type', selected: model.summary.dayType, preview: null, applyPreview: model.isToday ? app.previewApplyCurrentTargetsToToday() : null }); break;
           case 'choose-day-type-confirm': afterChange(actions.chooseDayType(ui.selected)); break;
@@ -837,7 +961,7 @@ export const todayScreen = {
             }
             const changed = ingredients && !sameRecipe(ingredients, ui.original);
             const result = actions.logMeal({ mealId: ui.mealId, mealSlot, ingredients: changed ? ingredients : undefined });
-            afterChange(result, { focusId: result.instance.id, followUp: followUpFor(result.instance, changed) });
+            afterChange(result, { focusId: result.instance.id, followUp: followUpFor(result.instance, changed), dayEdit: true });
             break;
           }
           case 'coach': {
@@ -852,7 +976,7 @@ export const todayScreen = {
             const q = parseGrams(ui.text);
             if (q === null) { dialog.querySelector('[data-grams-error]').hidden = false; break; }
             const result = actions.logFood({ foodId: ui.food.id, quantity: q, mealSlot: checkedSlot('log-slot') });
-            afterChange(result, { focusId: result.instance.id });
+            afterChange(result, { focusId: result.instance.id, dayEdit: true });
             break;
           }
           case 'open-instance': openInstance(el.dataset.id); break;
@@ -862,11 +986,29 @@ export const todayScreen = {
             break;
           }
           case 'remove-ingredient': {
-            ui.name = dialog.querySelector('[data-edit-name]').value;
-            ui.slot = checkedSlot('edit-slot') || ui.slot;
+            keepEditFields(ui);
             ui.rows.splice(Number(el.dataset.index), 1);
             drawDialog();
             updateEditPreview();
+            break;
+          }
+          case 'add-ingredient': {
+            keepEditFields(ui);
+            openDialog({ type: 'picker', query: '', edit: ui });
+            break;
+          }
+          case 'food': if (ui && ui.type === 'picker') pickIngredient(el.dataset.food, ui); break;
+          case 'create-food': {
+            if (!ui || ui.type !== 'picker') break;
+            const values = { name: String(ui.query || '').trim(), category: '', state: '', brand: '', protein: '', carbs: '', fat: '', aliases: '' };
+            openDialog({ type: 'custom-food', values, touched: new Set(), validation: app.validateCustomFood(customFoodInput(values)), pickUi: ui });
+            break;
+          }
+          case 'cf-save': {
+            ui.validation = app.validateCustomFood(customFoodInput(ui.values));
+            if (!ui.validation.valid) { syncInPlace(dialog, renderCustomFoodForm(ui), doc); break; } // Save is disabled while invalid
+            const food = app.createCustomFood(customFoodInput(ui.values));
+            pickIngredient(food.id, ui.pickUi);
             break;
           }
           case 'save-instance': {
@@ -876,7 +1018,7 @@ export const todayScreen = {
             const before = recipeOf(ui.instance.ingredients);
             const result = actions.updateInstance(ui.instance.id, patch);
             const changed = !sameRecipe(recipeOf(result.instance.ingredients), before);
-            afterChange(result, { focusId: result.instance.id, followUp: followUpFor(result.instance, changed) });
+            afterChange(result, { focusId: result.instance.id, followUp: followUpFor(result.instance, changed), dayEdit: true });
             break;
           }
           case 'move-instance': openDialog({ type: 'move', instance: ui.instance, slot: ui.instance.mealSlot }); break;
@@ -884,11 +1026,11 @@ export const todayScreen = {
             const slot = checkedSlot('move-slot');
             if (slot === ui.instance.mealSlot) { closeDialog(); break; }
             const result = actions.moveInstance(ui.instance.id, slot);
-            afterChange(result, { focusId: result.instance.id });
+            afterChange(result, { focusId: result.instance.id, dayEdit: true });
             break;
           }
           case 'delete-instance': openDialog({ type: 'delete', instance: ui.instance, date: model.date }); break;
-          case 'confirm-delete': afterChange(actions.deleteInstance(ui.instance.id)); break;
+          case 'confirm-delete': afterChange(actions.deleteInstance(ui.instance.id), { dayEdit: true }); break;
           case 'day-menu': openDialog({ type: 'day-menu' }); break;
           case 'clear-day': openDialog({ type: 'clear-day', date: model.date, instanceCount: model.summary.instanceCount }); break;
           case 'confirm-clear-day': afterChange(actions.clearDay()); break;
@@ -915,12 +1057,21 @@ export const todayScreen = {
       if (followsToday && doc.visibilityState === 'visible' && app.getToday() !== model.date) { viewDate = app.getToday(); closeDialog(); refresh(); }
     };
     doc.addEventListener('visibilitychange', onVisible);
-    this._cleanup = () => { doc.removeEventListener('visibilitychange', onVisible); if (messageTimer) clearTimeout(messageTimer); };
+    this._cleanup = () => { host.destroy(); doc.removeEventListener('visibilitychange', onVisible); if (messageTimer) clearTimeout(messageTimer); };
 
     // A handoff from Log (§5.8): highlight the meal just logged, or open it for editing (§5.7).
     const handoff = session.handoff && session.handoff.date === viewDate ? session.handoff : null;
     session.handoff = null;
+    // Logging to a Done day from Log is an add on that day (§4.4.2): the one-time note applies.
+    if (handoff && handoff.highlightId && claimDoneEditNote(session.today, viewDate, app.getDaySummary(viewDate))) doneNoteDate = viewDate;
     refresh(handoff && handoff.highlightId ? { focusId: handoff.highlightId } : {});
+    // After ◀ / ▶ the same control keeps the focus (the screen re-renders for the new day).
+    const focusControl = session.today.focus;
+    session.today.focus = null;
+    if (focusControl && !handoff) {
+      const control = body.querySelector(`[data-action="${focusControl}"]`);
+      if (control) { control.focus(); return true; }
+    }
     if (!handoff) return false;
     if (handoff.message) say(handoff.message);
     if (handoff.openInstanceId && model.day && model.day.mealInstances.some((mi) => mi.id === handoff.openInstanceId)) {

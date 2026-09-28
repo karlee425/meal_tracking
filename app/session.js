@@ -10,6 +10,10 @@
 function fresh() {
   return {
     todayDate: null, // the date last viewed on Today (§5.2)
+    today: {
+      doneNotes: [], // dates whose one-time "This day is marked done…" note has been shown (§4.4.2, I-12)
+      focus: null // the ◀ / ▶ control to focus again after moving to another day
+    },
     log: {
       segment: null, // 'meals' | 'foods', remembered per session (§5.3)
       query: '',

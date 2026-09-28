@@ -65,10 +65,14 @@ export function syncInPlace(container, html, doc) {
  *   beforeLeave    optional () => boolean, asked before Escape or the browser's Back closes the
  *                  surface; false keeps it open (e.g. "Discard changes?", or a picker stepping
  *                  back to the editor that opened it). Screens ask it for their own Close too.
+ *   sheetTypes     optional surface types that stay short modal sheets at every width (never a
+ *                  pane), and keep everything opened on top of them a sheet until it closes.
+ *                  Empty by default, so screens without it behave exactly as before.
  * Returns { open(type, draw, { startAtTitle }), close(), returnFocusTo(el), leave(nav), destroy() }.
  */
-export function createViewHost({ page, dialog, win, doc, viewTypes, fallbackFocus, onClose, beforeLeave = null }) {
+export function createViewHost({ page, dialog, win, doc, viewTypes, fallbackFocus, onClose, beforeLeave = null, sheetTypes = [] }) {
   let width = 'medium';
+  let forcedSheet = false; // opened as one of sheetTypes: stays a modal sheet until it closes
   let modal = true;
   let opener = null;
   let pendingFocus = null;
@@ -101,6 +105,7 @@ export function createViewHost({ page, dialog, win, doc, viewTypes, fallbackFocu
   dialog.addEventListener('close', () => {
     closingWithEntry = viewEntry;
     viewEntry = false;
+    forcedSheet = false;
     page.classList.remove('has-view');
     delete dialog.dataset.present;
     dialog.innerHTML = '';
@@ -117,8 +122,8 @@ export function createViewHost({ page, dialog, win, doc, viewTypes, fallbackFocu
     /** Show a surface: draw() renders it into the dialog. A detail view can start at its title. */
     open(type, draw, { startAtTitle = false } = {}) {
       const wasOpen = dialog.open;
-      if (!wasOpen) { opener = doc.activeElement; width = widthClass(win); }
-      const present = presentationFor(type, width, viewTypes);
+      if (!wasOpen) { opener = doc.activeElement; width = widthClass(win); forcedSheet = sheetTypes.includes(type); }
+      const present = forcedSheet ? 'sheet' : presentationFor(type, width, viewTypes);
       dialog.dataset.present = present;
       draw();
       if (!wasOpen) {

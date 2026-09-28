@@ -14,8 +14,11 @@ import { createFileAdapter } from '../src/node/file-adapter.js';
 import {
   todayModel, renderToday, createTodayActions, renderDayTypeDialog, renderCoachDialog, renderInstanceDialog,
   renderMealConfirmDialog, defaultSlot, parseGrams, grams, macroLine, afterLine,
-  coachVisibleCount, SLOT_LABELS, DAY_TYPE_LABELS, statusLine, formatDate, weekdayName, renderClearDayDialog
+  coachVisibleCount, SLOT_LABELS, DAY_TYPE_LABELS, statusLine, formatDate, weekdayName, renderClearDayDialog,
+  renderEditDialog, todayViewDate, dayHref, claimDoneEditNote, DONE_EDIT_NOTE, TODAY_VIEW_TYPES, TODAY_SHEET_TYPES
 } from '../app/today.js';
+import { createViewHost, WIDE_QUERY, COMPACT_QUERY } from '../app/view-host.js';
+import { renderPicker, pickerResults } from '../app/log.js';
 
 const TODAY = '2026-09-27';
 const SEED = createFileAdapter(ROOT).load();
@@ -400,6 +403,190 @@ test('Today — no macro arithmetic, no forbidden terms, no second store, domain
     assert.deepEqual(domainImportsBypassingIndex(src), [], f);
   }
   const src = fs.readFileSync(path.join(ROOT, 'app/today.js'), 'utf8');
-  assert.deepEqual([...src.matchAll(/from '([^']+)'/g)].map((m) => m[1]).sort(), ['../src/domain/index.js', './session.js', './shell.js']);
+  assert.deepEqual([...src.matchAll(/from '([^']+)'/g)].map((m) => m[1]).sort(), ['../src/domain/index.js', './log.js', './session.js', './shell.js', './view-host.js']);
   assert.ok(!/localStorage|sessionStorage|indexedDB|\.mealInstances\s*\.push|targetSnapshot\s*=/.test(src), 'no second store; no direct record mutation');
+});
+
+/* ---------------- G1–G5: date controls, future days, the Done-day note, add ingredient, views ---------------- */
+
+const PAST = '2026-09-20';
+const FUTURE = '2026-09-28';
+
+test('Today G1 — ◀ ▶ step one calendar day through the domain’s date arithmetic; each day has its own URL', () => {
+  const { app } = setup();
+  const m = todayModel(app);
+  assert.deepEqual([m.prevDate, m.nextDate], ['2026-09-26', FUTURE], 'previous and next from today');
+  assert.deepEqual([todayModel(app, PAST).prevDate, todayModel(app, PAST).nextDate], ['2026-09-19', '2026-09-21'], 'next from a prior day');
+  assert.deepEqual([todayModel(app, '2026-03-01').prevDate, todayModel(app, '2024-02-28').nextDate], ['2026-02-28', '2024-02-29'], 'month and leap-year edges');
+  const html = renderToday(m);
+  assert.match(html, /<div class="date-nav" role="group" aria-label="Change day">/);
+  assert.match(html, new RegExp(`data-action="prev-day" aria-label="Previous day, ${formatDate('2026-09-26')}"`));
+  assert.match(html, new RegExp(`data-action="next-day" aria-label="Next day, ${formatDate(FUTURE)}"`));
+  assert.ok(html.indexOf('data-action="prev-day"') < html.indexOf('data-action="next-day"'), '◀ before ▶');
+  assert.equal(dayHref(TODAY, TODAY), '#/today', 'today keeps the plain route, so it follows midnight (§4.5.6)');
+  assert.equal(dayHref(PAST, TODAY), `#/today?date=${PAST}`);
+  const src = fs.readFileSync(path.join(ROOT, 'app/today.js'), 'utf8');
+  assert.match(src, /import \{ macros, constants, addDays \} from '\.\.\/src\/domain\/index\.js';/, 'date stepping is the domain’s addDays');
+  assert.match(src, /win\.location\.replace\(dayHref\(date, app\.getToday\(\)\)\)/, '◀ ▶ replace the entry, so Back still returns to where Today was opened from (§16)');
+  assert.ok(!/setDate\(|getTime\(\) \+|86400000/.test(src), 'no date arithmetic of its own');
+});
+
+test('Today G2 — a future day is viewable and empty (I-04): no chooser, no add actions, never created', () => {
+  const { app, writes } = setup();
+  assert.equal(todayViewDate(app, `#/today?date=${FUTURE}`), FUTURE, 'a future route shows that day');
+  assert.equal(todayViewDate(app, `#/today?date=${PAST}`), PAST);
+  assert.equal(todayViewDate(app, '#/today?date=2026-02-30'), TODAY, 'an invalid date shows today');
+  assert.equal(todayViewDate(app, '#/today'), TODAY);
+  const future = todayModel(app, todayModel(app).nextDate);
+  assert.equal(future.isFuture, true);
+  const html = renderToday(future);
+  assert.match(html, /<p class="note future-note">You can log this day when it arrives\.<\/p>/);
+  assert.match(html, /<p class="today-date">Future day<\/p>/);
+  assert.ok(!/What kind of day is|data-action="choose-day-type"|data-action="add"|data-action="coach"|data-action="done"|data-action="day-menu"/.test(html), 'nothing to create or log');
+  assert.equal((html.match(/<p class="slot-empty">Not logged<\/p>/g) || []).length, 5, 'the five slots, empty');
+  assert.match(html, /data-action="prev-day"/, 'and a way back');
+  assert.match(html, /<a class="chip" href="#\/today" aria-label="Go to today">Today<\/a>/);
+  assert.equal(app.getDay(FUTURE), null, 'viewing creates nothing');
+  assert.equal(writes.length, 0, 'nothing written');
+});
+
+test('Today G1/G2 — moving between days never changes a stored day', () => {
+  const { app } = setup();
+  app.createDay(PAST, 'rest');
+  app.logFood({ date: PAST, mealSlot: 'dinner', foodId: 'food_core_banana', quantity: 100 });
+  app.setDayLoggingComplete(PAST, true);
+  const before = JSON.stringify(app.exportUserData().data.days);
+  for (const d of [PAST, '2026-09-21', TODAY, FUTURE, PAST]) renderToday(todayModel(app, d));
+  assert.equal(JSON.stringify(app.exportUserData().data.days), before, 'type, targets, meals and Done state untouched');
+  const html = renderToday(todayModel(app, PAST));
+  assert.match(html, /<p class="today-date">Past day <span class="badge">Done<\/span><\/p>/);
+  assert.match(html, /data-action="day-type" aria-label="Day type: Rest\./);
+});
+
+test('Today G3 — the Done-day note appears once per day, on the first add/edit/move/delete, never on marking done', () => {
+  const { app, actions } = setup();
+  actions.chooseDayType('lift');
+  const { instance } = actions.logMeal({ mealId: 'meal_library_B1', mealSlot: 'breakfast' });
+  const state = { doneNotes: [] };
+  assert.equal(claimDoneEditNote(state, TODAY, app.getDaySummary(TODAY)), false, 'not while the day isn’t Done');
+  actions.setDone(true);
+  assert.ok(!renderToday(todayModel(app)).includes(DONE_EDIT_NOTE), 'marking done or rendering a Done day shows no note');
+  const src = fs.readFileSync(path.join(ROOT, 'app/today.js'), 'utf8');
+  assert.match(src, /case 'done': afterChange\(actions\.setDone\(true\)\); break;/, 'marking done is not a day edit');
+  const before = JSON.stringify(app.getDay(TODAY));
+  actions.moveInstance(instance.id, 'lunch'); // the first edit of a Done day
+  assert.equal(claimDoneEditNote(state, TODAY, app.getDaySummary(TODAY)), true);
+  assert.equal(DONE_EDIT_NOTE, 'This day is marked done. Changes are saved and it stays done.', '§4.4.2 wording');
+  const html = renderToday(todayModel(app), { doneNote: true });
+  assert.match(html, /<p class="note done-note" data-done-note>This day is marked done\. Changes are saved and it stays done\.<\/p>/);
+  assert.equal(app.getDaySummary(TODAY).status, 'complete', 'the day stays Done');
+  assert.equal(claimDoneEditNote(state, TODAY, app.getDaySummary(TODAY)), false, 'a second edit: no new note');
+  assert.equal(claimDoneEditNote(state, TODAY, app.getDaySummary(TODAY)), false, 'coming back to Today: still none');
+  const after = app.getDay(TODAY);
+  assert.deepEqual(after.mealInstances.map((mi) => [mi.totals, mi.ingredients]), JSON.parse(before).mealInstances.map((mi) => [mi.totals, mi.ingredients]), 'the note changes no food, macros or targets');
+  assert.deepEqual(after.targetSnapshot, JSON.parse(before).targetSnapshot);
+  app.createDay(PAST, 'rest');
+  app.logFood({ date: PAST, mealSlot: 'lunch', foodId: 'food_core_banana', quantity: 100 });
+  app.setDayLoggingComplete(PAST, true);
+  assert.equal(claimDoneEditNote(state, PAST, app.getDaySummary(PAST)), true, 'once per day: another Done day gets its own');
+  assert.match(fs.readFileSync(path.join(ROOT, 'app/session.js'), 'utf8'), /today: \{\n\s+doneNotes: \[\]/, 'remembered in the session (memory) only');
+  assert.match(src, /claimDoneEditNote\(session\.today, model\.date/, 'Today uses the session record, nothing stored');
+});
+
+test('Today G4 — editing a logged meal can add an ingredient through the shared Food picker; save updates Today; cancel changes nothing', () => {
+  const { app, actions } = setup();
+  actions.chooseDayType('lift');
+  const meal = savedYogurt(app);
+  const { instance } = actions.logMeal({ mealId: meal.id, mealSlot: 'snack_afternoon' });
+  const original = JSON.stringify(app.getDay(TODAY));
+  const edit = { instance, date: TODAY, name: instance.mealName, slot: instance.mealSlot, rows: instance.ingredients.map((i) => ({ foodId: i.foodId, unit: i.unit, foodName: i.foodName, text: String(i.quantity) })), preview: null };
+  const form = renderEditDialog(edit);
+  assert.match(form, /<button type="button" class="button add-ingredient" data-action="add-ingredient">Add an ingredient<\/button>/);
+  // The picker is the Log Foods list in pick mode (§7.5), the same one the Meals editor uses.
+  const picker = renderPicker({ title: 'Add an ingredient', query: 'banana', results: pickerResults(app, 'banana') });
+  assert.match(picker, /Choose a food\. Nothing is logged\./);
+  assert.match(picker, /data-action="food" data-food="food_core_banana"/);
+  const banana = app.getFood('food_core_banana');
+  edit.rows.push({ foodId: banana.id, unit: 'g', foodName: banana.name, state: banana.state, text: '' });
+  assert.match(renderEditDialog(edit), new RegExp(`<label for="edit-q-2">${banana.name} <span class="state-chip">${banana.state}</span></label>`), 'the new row shows its state; grams start empty');
+  assert.equal(JSON.stringify(app.getDay(TODAY)), original, 'picking changes nothing yet (cancel leaves the logged meal as it was)');
+  edit.rows[2].text = '120';
+  const patch = { ingredients: edit.rows.map((r) => ({ foodId: r.foodId, unit: r.unit, quantity: Number(r.text) })) };
+  const preview = app.previewMealInstanceUpdate(TODAY, instance.id, patch);
+  assert.equal(preview.instance.ingredients.length, 3);
+  assert.equal(JSON.stringify(app.getDay(TODAY)), original, 'a preview writes nothing');
+  const saved = actions.updateInstance(instance.id, { mealName: edit.name, mealSlot: edit.slot, ...patch });
+  assert.deepEqual(saved.instance.totals, preview.instance.totals, 'the domain calculated the totals');
+  assert.deepEqual(app.getDaySummary(TODAY).logged, saved.instance.totals, 'Today shows the updated macros');
+  assert.ok(renderToday(todayModel(app)).includes(macroLine(saved.instance.totals)));
+  assert.deepEqual(saved.instance.ingredients.slice(0, 2), JSON.parse(original).mealInstances[0].ingredients, 'existing ingredients keep their snapshot');
+  assert.equal(app.getMeal(meal.id).ingredients.length, 2, 'the Saved Meal is untouched (A-13)');
+  const src = fs.readFileSync(path.join(ROOT, 'app/today.js'), 'utf8');
+  assert.match(src, /import \{ renderPicker, pickerResults, renderCustomFoodForm, customFoodInput \} from '\.\/log\.js';/, 'the shared picker, not a second one');
+  assert.ok(!/function renderPicker/.test(src) && !/function renderPicker/.test(fs.readFileSync(path.join(ROOT, 'app/meals.js'), 'utf8')), 'one picker implementation (log.js)');
+});
+
+function fakeHost(width, em = 16) {
+  const w = { 1280: 1280, 800: 800, 375: 375 }[width];
+  const classes = new Set();
+  const dialog = {
+    open: false, modal: false, dataset: {}, innerHTML: '', listeners: {},
+    showModal() { this.open = true; this.modal = true; }, show() { this.open = true; this.modal = false; },
+    close() { this.open = false; (this.listeners.close || []).forEach((f) => f()); },
+    addEventListener(t, f) { (this.listeners[t] = this.listeners[t] || []).push(f); },
+    querySelector() { return null; }
+  };
+  const win = { matchMedia: (q) => ({ matches: q === WIDE_QUERY ? w / em >= 64 : q === COMPACT_QUERY ? w / em <= 37.49 : false }), addEventListener() {}, removeEventListener() {}, location: { href: '#/today' }, history: { pushState() {}, back() {} } };
+  const page = { classList: { add: (c) => classes.add(c), remove: (c) => classes.delete(c) } };
+  const host = createViewHost({ page, dialog, win, doc: { activeElement: null }, viewTypes: TODAY_VIEW_TYPES, sheetTypes: TODAY_SHEET_TYPES, fallbackFocus: () => null, onClose() {} });
+  return { host, dialog, classes };
+}
+
+test('Today G5 — logged-meal detail, edit and picker are views in the shared view host; Today’s sheets stay sheets', () => {
+  assert.deepEqual([...TODAY_VIEW_TYPES], ['instance', 'edit', 'picker', 'custom-food']);
+  assert.deepEqual([...TODAY_SHEET_TYPES], ['day-type', 'meal', 'quantity', 'coach', 'day-menu', 'clear-day']);
+  const draw = () => {};
+  for (const [width, present, modal, pane] of [[1280, 'pane', false, true], [800, 'panel', true, false], [375, 'pushed', true, false]]) {
+    const { host, dialog, classes } = fakeHost(width);
+    host.open('instance', draw);
+    assert.deepEqual([dialog.dataset.present, dialog.modal, classes.has('has-view')], [present, modal, pane], `detail at ${width}px`);
+    host.open('edit', draw);
+    assert.equal(dialog.dataset.present, present, `edit at ${width}px`);
+    host.open('picker', draw);
+    assert.equal(dialog.dataset.present, present, `picker at ${width}px`);
+    host.close();
+    assert.equal(classes.has('has-view'), false, 'closing returns to Today alone');
+  }
+  // 200 % text on a wide window: no room for two panes, so a side panel.
+  { const { host, dialog } = fakeHost(1280, 32); host.open('instance', draw); assert.equal(dialog.dataset.present, 'panel'); }
+  // Coach (and everything opened from it) stays a modal sheet at every width — G6 is a later slice.
+  for (const width of [1280, 800, 375]) {
+    const { host, dialog, classes } = fakeHost(width);
+    host.open('coach', draw);
+    assert.deepEqual([dialog.dataset.present, dialog.modal, classes.has('has-view')], ['sheet', true, false], `Coach at ${width}px`);
+    host.open('meal', draw);
+    host.open('followup', draw);
+    assert.equal(dialog.dataset.present, 'sheet', 'what the Coach opens stays a sheet');
+    host.close();
+    host.open('instance', draw);
+    assert.notEqual(dialog.dataset.present, 'sheet', 'the sheet rule ends when it closes');
+  }
+  // Screens without sheetTypes (Log, Meals, Settings) are unchanged: a non-view type is a pane on wide screens.
+  const plain = fakeHost(1280);
+  const { host: logLike, dialog: logDialog } = (() => {
+    const d = plain.dialog;
+    return { host: createViewHost({ page: { classList: { add() {}, remove() {} } }, dialog: d, win: { matchMedia: (q) => ({ matches: q === WIDE_QUERY }), addEventListener() {}, removeEventListener() {}, location: { href: '#/log' }, history: { pushState() {}, back() {} } }, doc: { activeElement: null }, viewTypes: ['x'], fallbackFocus: () => null, onClose() {} }), dialog: d };
+  })();
+  logLike.open('day-type', draw);
+  assert.equal(logDialog.dataset.present, 'pane');
+  const src = fs.readFileSync(path.join(ROOT, 'app/today.js'), 'utf8');
+  assert.match(src, /createViewHost\(\{[\s\S]*?viewTypes: TODAY_VIEW_TYPES,\s*sheetTypes: TODAY_SHEET_TYPES/, 'Today presents through the shared view host');
+  assert.ok(!/showModal\(/.test(src), 'no dialog handling of its own');
+  const { app, actions } = setup();
+  actions.chooseDayType('lift');
+  const { instance } = actions.logMeal({ mealId: 'meal_library_B1', mealSlot: 'breakfast' });
+  const detail = renderInstanceDialog({ instance, slot: 'breakfast', date: TODAY, source: 'library', sourceName: 'x' });
+  assert.match(detail, /class="link-button view-back" data-action="close"/, 'a Back control when pushed, Close otherwise');
+  assert.match(renderEditDialog({ instance, date: TODAY, name: instance.mealName, slot: 'breakfast', rows: [{ foodId: 'a', unit: 'g', foodName: 'A', text: '1' }], preview: null }), /class="link-button view-back"/);
+  assert.match(renderToday(todayModel(app)), /data-action="open-instance"/);
 });

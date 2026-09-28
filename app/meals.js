@@ -21,7 +21,7 @@ import { escapeHtml } from './shell.js';
 import { macroLine, parseGrams, errorMessage, dialogHead, errorSlot } from './today.js';
 import {
   MEAL_TYPE_LABELS, renderMealDetail, foodResults, renderResults, renderCustomFoodForm, customFoodInput,
-  renderConfirmation
+  renderConfirmation, renderPicker
 } from './log.js';
 import { session, routeParams } from './session.js';
 import { createViewHost, viewHead, syncInPlace } from './view-host.js';
@@ -254,13 +254,9 @@ ${errorSlot}
 
 /* ---------------- Food picker (§7.5) and replacement (§6.5) ---------------- */
 
-/** The Log Foods list in "pick" mode: same search, favourites and recents; nothing is logged. */
-export function renderPicker({ title, query, results }) {
-  return `${viewHead(title, 'Choose a food. Nothing is logged.')}
-<label class="visually-hidden" for="pick-query">Search foods</label>
-<input id="pick-query" class="search-input" type="search" autocomplete="off" data-pick-query value="${escapeHtml(query)}" placeholder="Search foods">
-<div class="picker-results" data-pick-results>${results}</div>`;
-}
+// The Food picker (the Log Foods list in "pick" mode) lives with that list in log.js, shared
+// by Meals and Today (§7.5); re-exported here for the Meals screen and its tests.
+export { renderPicker };
 
 /** "Replace {old} with {new} ({state})?" with grams prefilled and a live preview (§6.5). */
 export function renderReplace({ oldName, food, text, ingredientPreview, mealCalc }) {
