@@ -92,7 +92,7 @@ test('G16 — the other contexts keep their approved actions (§7.3 table)', () 
 test('G16 — Meals and Today open the one Food detail from the shared picker and step back to it', () => {
   assert.ok(MEALS_VIEW_TYPES.includes('food-detail'), 'a view, presented like the picker it came from');
   const meals = read('app/meals.js');
-  assert.match(meals, /import \{ foodDetailModel, renderFoodDetail \} from '\.\/foods\.js';/);
+  assert.match(meals, /import \{ foodDetailModel, renderFoodDetail, renderDiscardFood \} from '\.\/foods\.js';/);
   assert.match(meals, /case 'food-detail': dialog\.innerHTML = renderFoodDetail\(\{ \.\.\.ui, context: 'picker' \}\); break;/);
   assert.match(meals, /case 'picker-food-detail': openPickerFoodDetail\(el\.dataset\.food, ui\); break;/);
   assert.match(meals, /show\(\{ type: 'food-detail', \.\.\.detail, pickUi \}/, 'the picker object itself (search, mode, row) rides along');

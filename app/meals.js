@@ -21,9 +21,9 @@ import { escapeHtml } from './shell.js';
 import { macroLine, parseGrams, errorMessage, dialogHead, errorSlot } from './today.js';
 import {
   MEAL_TYPE_LABELS, renderMealDetail, renderCustomFoodForm, customFoodInput,
-  renderConfirmation, renderPicker, pickerResults
+  renderConfirmation, renderPicker, pickerResults, customFoodDirty
 } from './log.js';
-import { foodDetailModel, renderFoodDetail } from './foods.js';
+import { foodDetailModel, renderFoodDetail, renderDiscardFood } from './foods.js';
 import { session, routeParams } from './session.js';
 import { createViewHost, viewHead, syncInPlace } from './view-host.js';
 
@@ -64,9 +64,14 @@ export const needsFixCount = (app) => app.getSavedMeals().filter((m) => !app.cal
 export function mealsList(app, { segment, query = '', type = 'all', favorites = false, needsFix = false }) {
   const fav = new Set(app.getPreferences().favoriteMeals);
   const q = String(query).trim();
+  // I-24: retired Library Meals stay hidden from browsing, but a favourited one still shows
+  // under the Favourites chip, marked "Retired".
+  const library = () => (favorites
+    ? app.getLibraryMeals({ includeRetired: true }).filter((m) => !(m.metadata && m.metadata.retired) || fav.has(m.id))
+    : app.getLibraryMeals());
   const pool = q
     ? app.searchMeals(q, { source: segment, limit: 500 }).map((hit) => hit.meal)
-    : segment === 'saved' ? sortSavedMeals(app.getSavedMeals()) : app.getLibraryMeals();
+    : segment === 'saved' ? sortSavedMeals(app.getSavedMeals()) : library();
   const items = pool
     .filter((m) => (type === 'all' || m.mealType === type) && (!favorites || fav.has(m.id)))
     .map((meal) => ({ meal, isFavorite: fav.has(meal.id), calc: app.calculateMealMacros(meal.id), copyOf: copyOfName(app, meal) }))
@@ -116,7 +121,7 @@ ${seg === 'saved' ? `<button type="button" class="chip filter-chip" data-action=
 function mealCard(item) {
   const { meal, isFavorite, calc, copyOf } = item;
   const name = escapeHtml(meal.name);
-  const markers = `${isFavorite ? '<span class="marker" aria-label="Favourite">★</span>' : ''}${calc.valid ? '' : '<span class="marker marker-fix">Needs a fix</span>'}`;
+  const markers = `${meal.metadata && meal.metadata.retired ? '<span class="marker">Retired</span>' : ''}${isFavorite ? '<span class="marker" aria-label="Favourite">★</span>' : ''}${calc.valid ? '' : '<span class="marker marker-fix">Needs a fix</span>'}`;
   const action = calc.valid
     ? `<button type="button" class="button" data-action="log-meal" data-meal="${escapeHtml(meal.id)}" aria-label="Log ${name}">Log</button>`
     : `<button type="button" class="button" data-action="meal-detail" data-meal="${escapeHtml(meal.id)}" aria-label="Fix ${name}">Fix</button>`;
@@ -386,6 +391,7 @@ export const mealsScreen = {
     let draft = null; // the editor's draft, kept while the picker / form / discard prompt are on top
     let touched = new Set();
     let announcement = null;
+    let fromToday = null; // §16: opened by Today's "Edit Saved Meal"; when done, back to that logged meal
 
     main.innerHTML = `<div class="meals-page view-page" data-meals-page>
 <div class="meals-screen" data-meals-body>
@@ -426,7 +432,16 @@ export const mealsScreen = {
       page, dialog, win, doc,
       viewTypes: MEALS_VIEW_TYPES,
       fallbackFocus: () => searchInput() || main.querySelector('#screen-title'),
-      onClose: () => { ui = null; draft = null; },
+      onClose: () => {
+        ui = null;
+        draft = null;
+        if (fromToday) {
+          const f = fromToday;
+          fromToday = null;
+          session.handoff = { date: f.date, openInstanceId: f.instanceId };
+          host.leave({ method: 'back' });
+        }
+      },
       beforeLeave
     });
     this._cleanup = () => host.destroy();
@@ -452,6 +467,7 @@ export const mealsScreen = {
         case 'save-copy': dialog.innerHTML = renderSaveCopy({ meal: app.getMeal(ui.mealId), name: ui.name }); break;
         case 'remove-ingredient': dialog.innerHTML = renderRemoveIngredient({ meal: app.getMeal(ui.mealId), name: ui.name }); break;
         case 'discard': dialog.innerHTML = renderDiscard(); break;
+        case 'discard-food': dialog.innerHTML = renderDiscardFood({ created: true }); break;
         default: break;
       }
     }
@@ -496,7 +512,12 @@ export const mealsScreen = {
         case 'picker':
           if (ui.parent === 'editor') backToEditor('[data-action="add-ingredient"]'); else openDetail(ui.mealId);
           return false;
-        case 'custom-food': show(ui.pickUi); return false;
+        case 'custom-food':
+          // §7.4 / §3.2: a new food with unsaved values asks first; untouched, back to the picker.
+          if (customFoodDirty(ui)) { show({ type: 'discard-food', form: ui, proceed: null }); return false; }
+          show(ui.pickUi);
+          return false;
+        case 'discard-food': show(ui.form); return false;
         case 'food-detail': backToPicker(ui); return false;
         case 'replace': openDetail(ui.mealId); return false;
         case 'discard': backToEditor(); return false;
@@ -513,6 +534,25 @@ export const mealsScreen = {
       }
     }
     const requestLeave = () => { if (beforeLeave()) host.close(); };
+
+    /**
+     * Before Meals is left (another tab, a link, browser Back) or a Meals control replaces the
+     * open pane: true when nothing unsaved would be lost; otherwise "Discard changes?" asks and
+     * proceed() runs only after Discard (§3.2, I-01).
+     */
+    function guardLeave(proceed) {
+      if (!ui) return true;
+      if (ui.type === 'discard' || ui.type === 'discard-food') {
+        ui.proceed = proceed;
+        const keep = dialog.querySelector('[data-action="keep-editing"]');
+        if (keep) keep.focus();
+        return false;
+      }
+      if (draft && draftDirty(draft)) { show({ type: 'discard', proceed }); return false; }
+      if (ui.type === 'custom-food' && customFoodDirty(ui)) { show({ type: 'discard-food', form: ui, proceed }); return false; }
+      return true;
+    }
+    this._leaveGuard = guardLeave;
 
     /**
      * Food detail from the picker (§7.5, A-42, A-46): information only. The picker object itself
@@ -606,6 +646,8 @@ export const mealsScreen = {
     main.addEventListener('click', (event) => {
       const el = event.target.closest('[data-action]');
       if (!el || !main.contains(el)) return;
+      // A Meals control used beside an open pane (wide screens) would replace an unsaved editor: ask first.
+      if (dialog.open && !dialog.contains(el) && !guardLeave(() => { if (el.isConnected) el.click(); })) return;
       const mealId = el.dataset.meal || (ui && ui.mealId);
       try {
         switch (el.dataset.action) {
@@ -749,8 +791,17 @@ export const mealsScreen = {
             openDetail(r.meal.id);
             break;
           }
-          case 'keep-editing': backToEditor(); break;
+          case 'keep-editing': if (ui.type === 'discard-food') show(ui.form); else backToEditor(); break;
           case 'discard': {
+            if (ui.proceed) {
+              const proceed = ui.proceed;
+              draft = null;
+              fromToday = null; // going somewhere else instead
+              dialog.addEventListener('close', () => win.setTimeout(proceed, 0), { once: true });
+              host.close();
+              break;
+            }
+            if (ui.type === 'discard-food') { show(ui.form.pickUi); break; }
             const d = draft;
             draft = null;
             if (d && d.mode === 'edit' && d.returnTo === 'detail' && app.getMeal(d.id)) openDetail(d.id);
@@ -763,7 +814,7 @@ export const mealsScreen = {
           case 'picker-food-detail': openPickerFoodDetail(el.dataset.food, ui); break;
           case 'create-food': {
             const values = { name: String(ui.query || '').trim(), category: '', state: '', brand: '', protein: '', carbs: '', fat: '', aliases: '' };
-            show({ type: 'custom-food', values, touched: new Set(), validation: app.validateCustomFood(customFoodInput(values)), pickUi: ui });
+            show({ type: 'custom-food', values, initial: { ...values }, touched: new Set(), validation: app.validateCustomFood(customFoodInput(values)), pickUi: ui });
             break;
           }
           case 'cf-save': {
@@ -800,15 +851,28 @@ export const mealsScreen = {
     }
     const linked = params.get('meal') ? app.getMeal(params.get('meal')) : null;
     if (params.get('meal')) win.history.replaceState(null, '', '#/meals');
+    const handback = session.savedMealEdit;
+    session.savedMealEdit = null;
     if (linked) {
-      if (params.get('edit') === '1' && linked.source === 'saved') openEditor(draftFromMeal(linked), { returnTo: 'detail' });
+      if (params.get('edit') === '1' && linked.source === 'saved') {
+        // From Today's logged-meal detail: cancelling goes straight back there, and after saving,
+        // the Meal detail's Back does (§16).
+        fromToday = handback && handback.mealId === linked.id && handback.instanceId ? handback : null;
+        openEditor(draftFromMeal(linked), { returnTo: fromToday ? 'today' : 'detail' });
+      }
       else openDetail(linked.id);
       return true;
     }
     return false;
   },
 
+  /** Asked by the shell before a route change (§3.2): false keeps Meals while "Discard changes?" asks. */
+  leaveGuard(proceed) {
+    return this._leaveGuard ? this._leaveGuard(proceed) : true;
+  },
+
   unmount() {
+    this._leaveGuard = null;
     if (this._cleanup) { this._cleanup(); this._cleanup = null; }
   }
 };

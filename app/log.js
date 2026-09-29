@@ -885,6 +885,14 @@ export const logScreen = {
       if (ui.type === 'custom-food' && ui.mode === 'edit') { openFoodDetail(ui.foodId, '', ui.quantity); return false; }
       if (ui.type === 'discard-food') { reopenForm(ui.form); return false; }
       if (ui.type === 'food-delete') { openFoodDetail(ui.food.id, '', ui.quantity); return false; }
+      // A-42: Food detail opened from the quantity sheet goes back to that sheet, as it was left.
+      if (ui.type === 'food-detail' && ui.quantity) {
+        const q = ui.quantity;
+        openFood(q.foodId, q.text, q.intent, q.slot);
+        const link = dialog.querySelector('[data-action="food-detail"]');
+        if (link) link.focus();
+        return false;
+      }
       return true;
     }
     function reopenForm(form) {

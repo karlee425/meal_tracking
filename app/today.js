@@ -388,7 +388,9 @@ ${errorSlot}
   const primary = current
     ? `<button type="button" class="button primary" data-action="change-day-type"${!selected || selected === current ? ' disabled' : ''}>${selected && selected !== current ? `Change to ${DAY_TYPE_LABELS[selected]}` : 'Change day type'}</button>`
     : '<button type="button" class="button primary" data-action="choose-day-type-confirm"' + (selected ? '' : ' disabled') + '>Set day type</button>';
-  return `${dialogHead(current ? 'Day type' : `What kind of day is ${weekdayName(model.date)}?`, current ? 'Changing it never changes your logged food.' : (continueTo ? 'Choose a day type first, then add your meal.' : ''))}
+  // §4.5.2: a past day's sheet always shows its date, so a correction is obviously a past-day one.
+  const pastDate = model.isToday === false && model.date ? ` · ${formatDate(model.date)}` : '';
+  return `${dialogHead(current ? `Day type${pastDate}` : `What kind of day is ${weekdayName(model.date)}?`, current ? 'Changing it never changes your logged food.' : (continueTo ? 'Choose a day type first, then add your meal.' : ''))}
 <fieldset class="day-type-choice"><legend class="visually-hidden">Day type</legend>
 ${options}
 </fieldset>
@@ -470,7 +472,7 @@ ${errorSlot}
 <button type="button" class="button" data-action="move-instance">Move to another slot</button>
 <button type="button" class="button danger" data-action="delete-instance">Delete</button>
 </div>
-${source === 'saved' && instance.sourceMealId ? `<p class="edit-source">Want to change the recipe for next time? <a class="link-button" href="#/meals?meal=${encodeURIComponent(instance.sourceMealId)}&edit=1">Edit Saved Meal “${escapeHtml(sourceName)}”</a></p>` : ''}`;
+${source === 'saved' && instance.sourceMealId ? `<p class="edit-source">Want to change the recipe for next time? <a class="link-button" href="#/meals?meal=${encodeURIComponent(instance.sourceMealId)}&edit=1" data-action="edit-saved-meal" data-meal="${escapeHtml(instance.sourceMealId)}">Edit Saved Meal “${escapeHtml(sourceName)}”</a></p>` : ''}`;
 }
 
 /**
@@ -549,7 +551,7 @@ ${errorSlot}
 }
 
 /** After changing grams of a meal from a Saved Meal (§4.3.4, A-14). */
-export function renderFollowUpDialog({ savedName, mode, newName }) {
+export function renderFollowUpDialog({ savedName, mode, newName, library = false }) {
   if (mode === 'name') {
     return `${dialogHead('Save as a new saved meal')}
 <label class="field" for="new-meal-name">Name</label>
@@ -568,7 +570,7 @@ ${errorSlot}
 <div class="sheet-actions stacked">
 <button type="button" class="button primary" data-action="close" data-autofocus>Just this time</button>
 <button type="button" class="button" data-action="followup-name">Save as a new saved meal</button>
-<button type="button" class="button" data-action="followup-confirm-update">Also update “${escapeHtml(savedName)}”</button>
+${library ? '' : `<button type="button" class="button" data-action="followup-confirm-update">Also update “${escapeHtml(savedName)}”</button>`}
 </div>`;
 }
 
@@ -848,10 +850,15 @@ export const todayScreen = {
       // The logged-meal editor with unsaved edits asks first (§3.2, I-01); untouched, it just closes.
       if (ui.type === 'edit') {
         keepEditFields(ui);
-        if (!editDirty(ui)) return true;
+        // §16: cancelling an edit returns to the logged-meal detail; unsaved edits ask first.
+        if (!editDirty(ui)) { openInstance(ui.instance.id); return false; }
         openDialog({ type: 'discard-edit', back: ui, proceed: null });
         return false;
       }
+      // §16: a Log sheet opened from a Coach item (or a Meal detail) returns there on cancel.
+      if ((ui.type === 'meal' || ui.type === 'quantity') && ui.back) { stepBackTo(ui.back); return false; }
+      // After an edit, the follow-up returns to the logged-meal detail (§16).
+      if (ui.type === 'followup' && ui.instanceId && model.day && model.day.mealInstances.some((mi) => mi.id === ui.instanceId)) { openInstance(ui.instanceId); return false; }
       if (ui.type === 'discard-edit') { keepEditing(); return false; }
       if (ui.type === 'picker') { backToEdit(ui.edit, '[data-action="add-ingredient"]'); return false; }
       // Food detail from the picker (information-only, A-46): Back returns to the picker as it was.
@@ -923,7 +930,7 @@ export const todayScreen = {
         closeDialog();
         return;
       }
-      if (ui.type === 'discard-edit') { closeDialog(); return; }
+      if (ui.type === 'discard-edit') { openInstance(ui.back.instance.id); return; } // §16: back to the logged-meal detail, unchanged
       const form = ui.form;
       if (form.pickUi) openDialog(form.pickUi); else openFoodDetail(form.foodId, form.detail.back);
     }
@@ -944,6 +951,11 @@ export const todayScreen = {
       const detail = foodDetailModel(app, foodId);
       if (!detail) { returnTo(back); return; }
       openDialog({ type: 'food-detail', ...detail, note, back });
+    }
+    /** Where a Log sheet opened from the Coach or a Meal detail goes back to. */
+    function stepBackTo(back) {
+      if (back.type === 'meal-detail') openMealDetail(back.mealId, back.back);
+      else returnTo(back);
     }
     /** Back to the Coach (re-queried, so it reflects any change; groups stay expanded) or the logged meal. */
     function returnTo(back, from = null) {
@@ -971,11 +983,11 @@ export const todayScreen = {
 
     const checkedSlot = (name) => { const el = dialog.querySelector(`input[name="${name}"]:checked`); return el ? el.value : null; };
 
-    function openMeal(mealId, slot) {
+    function openMeal(mealId, slot, back = null) {
       const preview = app.previewMealInstance({ date: model.date, mealId });
       const foods = {};
       for (const ing of preview.ingredients) { const f = app.getFood(ing.foodId); if (f) foods[ing.foodId] = f; }
-      openDialog({ type: 'meal', mealId, preview, slot: slot || defaultSlot(model.day), adjusting: false, quantities: preview.ingredients.map((i) => String(i.quantity)), original: recipeOf(preview.ingredients), foods });
+      openDialog({ type: 'meal', mealId, preview, slot: slot || defaultSlot(model.day), adjusting: false, quantities: preview.ingredients.map((i) => String(i.quantity)), original: recipeOf(preview.ingredients), foods, back });
     }
 
     function openInstance(id) {
@@ -987,18 +999,32 @@ export const todayScreen = {
     }
 
     /** After a write. dayEdit: an add, edit, move or delete on this day (for the Done-day note). */
-    function afterChange(result, { focusId, followUp, dayEdit = false } = {}) {
+    /**
+     * After a write. dayEdit: an add, edit, move or delete on this day — its message also states
+     * the new remaining values, once (§4.3.6, I-53). reopen: a logged meal whose detail comes
+     * back afterwards (§16: an edit returns to the logged-meal detail).
+     */
+    function afterChange(result, { focusId, followUp, dayEdit = false, reopen = null } = {}) {
       if (dayEdit && claimDoneEditNote(session.today, model.date, app.getDaySummary(model.date))) doneNoteDate = model.date;
       refresh({ focusId });
-      say(result.message);
-      if (followUp) openDialog(followUp); else closeDialog();
+      const summary = app.getDaySummary(model.date);
+      say(dayEdit && summary.exists ? `${result.message} ${remainingSummary(summary, { isToday: model.isToday, date: model.date })}` : result.message);
+      if (followUp) openDialog(reopen ? { ...followUp, instanceId: reopen } : followUp);
+      else if (reopen && model.day && model.day.mealInstances.some((mi) => mi.id === reopen)) openInstance(reopen);
+      else closeDialog();
     }
 
-    function followUpFor(instance, changed) {
+    /**
+     * The follow-up after changing a logged meal's ingredients (A-14): for a Saved Meal source,
+     * Just this time · Save as a new Saved Meal · Also update it; after editing a logged meal from
+     * a Library source (read-only), the first two only (§4.3.4). Logging with adjusted grams
+     * offers it for Saved Meals only (§5.4).
+     */
+    function followUpFor(instance, changed, { editing = false } = {}) {
       if (!changed || !instance.sourceMealId) return null;
       const meal = app.getMeal(instance.sourceMealId);
-      if (!meal || meal.source !== 'saved') return null; // Library meals are read-only: nothing to offer
-      return { type: 'followup', mode: 'choice', savedId: meal.id, savedName: meal.name, mealType: meal.mealType, ingredients: instance.ingredients, newName: `${meal.name} (adjusted)` };
+      if (!meal || !(meal.source === 'saved' || (editing && meal.source === 'library'))) return null;
+      return { type: 'followup', mode: 'choice', savedId: meal.id, savedName: meal.name, mealType: meal.mealType, ingredients: instance.ingredients, newName: `${meal.name} (adjusted)`, library: meal.source === 'library' };
     }
 
     /* ---- the logged-meal editor and its Food picker (§4.3.4, §7.5) ---- */
@@ -1060,6 +1086,7 @@ export const todayScreen = {
         updateEditPreview();
       } else if (ui.type === 'edit' && el.matches('[data-edit-name]')) {
         ui.name = el.value;
+        updateEditPreview();
       } else if (ui.type === 'picker' && el.matches('[data-pick-query]')) {
         ui.query = el.value;
         dialog.querySelector('[data-pick-results]').innerHTML = pickerResults(app, ui.query);
@@ -1091,7 +1118,13 @@ export const todayScreen = {
       });
       const patch = editPatch();
       dialog.querySelector('[data-grams-error]').hidden = !!patch;
-      dialog.querySelector('[data-action="save-instance"]').disabled = !patch;
+      // A-45: Save stays disabled while the form is invalid — no usable grams, or no name.
+      const nameEl = dialog.querySelector('[data-edit-name]');
+      const noName = !String(ui.name || '').trim();
+      if (nameEl) { nameEl.toggleAttribute('data-invalid', noName); if (noName) nameEl.setAttribute('aria-invalid', 'true'); else nameEl.removeAttribute('aria-invalid'); }
+      const nameError = dialog.querySelector('[data-name-error]');
+      if (nameError) nameError.hidden = !noName;
+      dialog.querySelector('[data-action="save-instance"]').disabled = !patch || noName;
       if (!patch) { ui.preview = null; dialog.querySelector('[data-preview]').innerHTML = ''; return; }
       try {
         ui.preview = app.previewMealInstanceUpdate(model.date, ui.instance.id, { ingredients: patch.ingredients });
@@ -1166,8 +1199,8 @@ export const todayScreen = {
             break;
           }
           case 'coach-more': ui.expanded[el.dataset.tier] = true; drawDialog(); break;
-          case 'coach-log-meal': openMeal(el.dataset.meal, null); break;
-          case 'coach-log-food': openDialog({ type: 'quantity', food: app.getFood(el.dataset.food), slot: defaultSlot(model.day), text: '', preview: null }); break;
+          case 'coach-log-meal': openMeal(el.dataset.meal, null, ui); break;
+          case 'coach-log-food': openDialog({ type: 'quantity', food: app.getFood(el.dataset.food), slot: defaultSlot(model.day), text: '', preview: null, back: ui }); break;
           case 'log-food': {
             const q = parseGrams(ui.text);
             if (q === null) { dialog.querySelector('[data-grams-error]').hidden = false; break; }
@@ -1176,6 +1209,8 @@ export const todayScreen = {
             break;
           }
           case 'open-instance': openInstance(el.dataset.id); break;
+          // §16: the Saved Meal editor in Meals comes back to this logged meal's detail when done (the link itself navigates).
+          case 'edit-saved-meal': session.savedMealEdit = { mealId: el.dataset.meal, date: model.date, instanceId: ui && ui.instance ? ui.instance.id : null }; break;
           case 'edit-instance': {
             const instance = ui.instance;
             const edit = { type: 'edit', instance, date: model.date, name: instance.mealName, slot: instance.mealSlot, rows: instance.ingredients.map((i) => ({ foodId: i.foodId, unit: i.unit, foodName: i.foodName, text: String(i.quantity) })), preview: null };
@@ -1219,7 +1254,7 @@ export const todayScreen = {
           case 'coach-meal-detail': openMealDetail(el.dataset.meal, ui); break;
           case 'coach-food-detail': openFoodDetail(el.dataset.food, ui); break;
           case 'source-meal': openMealDetail(el.dataset.meal, ui); break;
-          case 'log-meal-start': openMeal(el.dataset.meal, null); break;
+          case 'log-meal-start': openMeal(el.dataset.meal, null, ui && ui.type === 'meal-detail' ? ui : null); break;
           case 'fd-favorite': refreshFoodDetail(foodActions.setFavorite(ui.food, !ui.isFavorite)); break;
           case 'fd-suggest': refreshFoodDetail(foodActions.setNotSuggested(ui.food, !ui.isDisliked)); break;
           case 'fd-edit': {
@@ -1258,7 +1293,7 @@ export const todayScreen = {
             const before = recipeOf(ui.instance.ingredients);
             const result = actions.updateInstance(ui.instance.id, patch);
             const changed = !sameRecipe(recipeOf(result.instance.ingredients), before);
-            afterChange(result, { focusId: result.instance.id, followUp: followUpFor(result.instance, changed), dayEdit: true });
+            afterChange(result, { focusId: result.instance.id, followUp: followUpFor(result.instance, changed, { editing: true }), dayEdit: true, reopen: result.instance.id });
             break;
           }
           case 'move-instance': openDialog({ type: 'move', instance: ui.instance, slot: ui.instance.mealSlot }); break;
@@ -1281,10 +1316,10 @@ export const todayScreen = {
           case 'followup-save-new': {
             const name = (ui.newName || '').trim();
             if (!name) { dialog.querySelector('[data-name-error]').hidden = false; break; }
-            afterChange(actions.saveAsNewSavedMeal({ name, mealType: ui.mealType, ingredients: ui.ingredients }));
+            afterChange(actions.saveAsNewSavedMeal({ name, mealType: ui.mealType, ingredients: ui.ingredients }), { reopen: ui.instanceId || null });
             break;
           }
-          case 'followup-update': afterChange(actions.updateSavedMeal(ui.savedId, ui.ingredients)); break;
+          case 'followup-update': afterChange(actions.updateSavedMeal(ui.savedId, ui.ingredients), { reopen: ui.instanceId || null }); break;
           default: break;
         }
       } catch (e) {
@@ -1293,11 +1328,14 @@ export const todayScreen = {
     });
 
     // The local date can roll over while the app is open (§4.5.6).
+    // "The next time the app gains focus" (§4.5.6): becoming visible or the window being focused.
+    // A form with unsaved edits is never closed for it; the move waits for the next focus.
     const onVisible = () => {
-      if (followsToday && doc.visibilityState === 'visible' && app.getToday() !== model.date) { viewDate = app.getToday(); closeDialog(); refresh(); }
+      if (followsToday && doc.visibilityState === 'visible' && app.getToday() !== model.date && !unsaved()) { viewDate = app.getToday(); closeDialog(); refresh(); }
     };
     doc.addEventListener('visibilitychange', onVisible);
-    this._cleanup = () => { host.destroy(); doc.removeEventListener('visibilitychange', onVisible); if (messageTimer) clearTimeout(messageTimer); };
+    win.addEventListener('focus', onVisible);
+    this._cleanup = () => { host.destroy(); doc.removeEventListener('visibilitychange', onVisible); win.removeEventListener('focus', onVisible); if (messageTimer) clearTimeout(messageTimer); };
 
     // A handoff from Log (§5.8): highlight the meal just logged, or open it for editing (§5.7).
     const handoff = session.handoff && session.handoff.date === viewDate ? session.handoff : null;

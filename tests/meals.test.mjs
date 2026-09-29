@@ -432,7 +432,7 @@ test('Meals — "Log this meal" uses Log’s one logging flow and returns to Mea
 
 test('Meals — Today’s logged-meal detail links to the Saved Meal editor (§4.3.3)', () => {
   const src = fs.readFileSync(path.join(ROOT, 'app/today.js'), 'utf8');
-  assert.match(src, /href="#\/meals\?meal=\$\{encodeURIComponent\(instance\.sourceMealId\)\}&edit=1">Edit Saved Meal “\$\{escapeHtml\(sourceName\)\}”<\/a>/);
+  assert.match(src, /href="#\/meals\?meal=\$\{encodeURIComponent\(instance\.sourceMealId\)\}&edit=1" data-action="edit-saved-meal" data-meal="\$\{escapeHtml\(instance\.sourceMealId\)\}">Edit Saved Meal “\$\{escapeHtml\(sourceName\)\}”<\/a>/, 'the link, which also tells Meals to come back (§16)');
   assert.match(src, /source === 'saved' && instance\.sourceMealId/, 'only for a Saved Meal that still exists');
 });
 

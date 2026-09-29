@@ -36,7 +36,8 @@ function fresh() {
       custom: null // { startDate, endDate } of the chosen Custom range
     },
     handoff: null, // { date, highlightId?, openInstanceId?, message? } for Today to pick up once
-    mealsHandoff: null // { confirmation } for Meals to show once, after "Log this meal"
+    mealsHandoff: null, // { confirmation } for Meals to show once, after "Log this meal"
+    savedMealEdit: null // { mealId, date, instanceId }: Today's "Edit Saved Meal", so Meals returns to that logged meal (§16)
   };
 }
 

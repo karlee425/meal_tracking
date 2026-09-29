@@ -171,7 +171,8 @@ function aboutSection() {
   return `<section class="settings-section" aria-labelledby="about-title">
 <h2 id="about-title" class="section-title">About</h2>
 <dl class="data-facts">
-<div><dt>App</dt><dd>Macro Tracker (V2)</dd></div>
+<div><dt>App</dt><dd>Macro Tracker</dd></div>
+<div><dt>App version</dt><dd>Version unavailable</dd></div>
 <div><dt>Data format version</dt><dd>${BACKUP_FORMAT_VERSION}</dd></div>
 </dl>
 <p class="section-note">Macros only: protein, carbs and fat, in grams.</p>
@@ -356,6 +357,25 @@ export const settingsScreen = {
       if (ui.type === 'food-delete') { openFoodDetail(ui.food.id); return false; }
       return true;
     }
+    /**
+     * Before Settings is left (another tab, a link, browser Back) or a Settings control replaces
+     * the open pane: true when no form holds unsaved changes; otherwise "Discard changes?" asks
+     * and proceed() runs only after Discard (§3.2, I-01).
+     */
+    function guardLeave(proceed) {
+      if (!ui) return true;
+      if (ui.type === 'discard' || ui.type === 'discard-food') {
+        ui.proceed = proceed;
+        const keep = dialog.querySelector('[data-action="keep-editing"]');
+        if (keep) keep.focus();
+        return false;
+      }
+      if (ui.type === 'target-edit' && formDirty(ui)) { show({ type: 'discard', form: ui, proceed }); return false; }
+      if (ui.type === 'target-confirm' && formDirty(ui.form)) { show({ type: 'discard', form: ui.form, proceed }); return false; }
+      if (ui.type === 'custom-food' && customFoodDirty(ui)) { show({ type: 'discard-food', form: ui, proceed }); return false; }
+      return true;
+    }
+    this._leaveGuard = guardLeave;
 
     /* ---- My foods, Favourites, Foods not suggested ---- */
     function openFoodDetail(foodId, note = '') {
@@ -463,6 +483,8 @@ export const settingsScreen = {
     main.addEventListener('click', (event) => {
       const el = event.target.closest('[data-action]');
       if (!el || !main.contains(el)) return;
+      // A Settings control used beside an open pane (wide screens) would replace an unsaved form: ask first.
+      if (dialog.open && !dialog.contains(el) && !guardLeave(() => { if (el.isConnected) el.click(); })) return;
       try {
         switch (el.dataset.action) {
           case 'close': if (beforeLeave()) host.close(); break;
@@ -503,7 +525,11 @@ export const settingsScreen = {
           }
           case 'keep-editing': backToForm(ui.form); break;
           case 'discard':
-            if (ui.type === 'discard-food' && ui.form.mode === 'edit') openFoodDetail(ui.form.foodId);
+            if (ui.proceed) {
+              const proceed = ui.proceed;
+              dialog.addEventListener('close', () => win.setTimeout(proceed, 0), { once: true });
+              host.close();
+            } else if (ui.type === 'discard-food' && ui.form.mode === 'edit') openFoodDetail(ui.form.foodId);
             else host.close();
             break;
 
@@ -616,7 +642,13 @@ export const settingsScreen = {
     return false;
   },
 
+  /** Asked by the shell before a route change (§3.2): false keeps Settings while "Discard changes?" asks. */
+  leaveGuard(proceed) {
+    return this._leaveGuard ? this._leaveGuard(proceed) : true;
+  },
+
   unmount() {
+    this._leaveGuard = null;
     if (this._cleanup) { this._cleanup(); this._cleanup = null; }
   }
 };

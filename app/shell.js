@@ -355,8 +355,9 @@ export function createShell({ root, win, doc, screens = {}, services = {} }) {
   let unsubscribe = null;
   let mounted = null;
   let shownHref = null; // the URL the mounted screen was rendered for
+  const scrollByRoute = new Map(); // §3.2: each tab's scroll position, for this session (memory only)
 
-  function render({ focusHeading = false } = {}) {
+  function render({ focusHeading = false, restoreScroll } = {}) {
     if (mounted) { mounted.unmount(); mounted = null; }
     root.innerHTML = renderApp(state);
     const screen = state.startup === 'ready' ? screens[state.route] : null;
@@ -366,10 +367,12 @@ export function createShell({ root, win, doc, screens = {}, services = {} }) {
     shownHref = win.location.href;
     const label = state.startup === 'error' ? startupErrorView(state.errorCode).title : destination(state.route).label;
     doc.title = `${label} · ${APP_NAME}`;
+    const restore = !focusPlaced && typeof restoreScroll === 'number' && restoreScroll > 0 && typeof win.scrollTo === 'function';
     if (focusHeading && !focusPlaced) {
       const heading = root.querySelector('#screen-title');
-      if (heading) heading.focus();
+      if (heading) heading.focus(restore ? { preventScroll: true } : undefined);
     }
+    if (restore) win.scrollTo(0, restoreScroll);
     syncConflict();
   }
 
@@ -401,8 +404,10 @@ export function createShell({ root, win, doc, screens = {}, services = {} }) {
     const { id, known } = resolveRoute(win.location.hash);
     if (!known) win.history.replaceState(null, '', destination(id).href); // unknown → Today, no reload, no extra history entry
     const changed = id !== state.route;
+    // §3.2: switching tabs keeps each tab's scroll position. A deep link (a query) starts at the top.
+    if (changed && typeof win.scrollY === 'number') scrollByRoute.set(state.route, win.scrollY);
     state.route = id;
-    render({ focusHeading: focusHeading && changed });
+    render({ focusHeading: focusHeading && changed, restoreScroll: changed && !win.location.hash.includes('?') ? scrollByRoute.get(id) : undefined });
   }
 
   function flush() {
