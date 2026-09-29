@@ -516,8 +516,17 @@ export function createShell({ root, win, doc, screens = {}, services = {} }) {
         if (el && root.contains(el)) onShellAction.call(shell, el.dataset.shellAction, el);
       });
       root.addEventListener?.('change', (event) => { if (event.target.matches && event.target.matches('[data-shell-file]')) onBackupFile(event.target); });
-      // The conflict dialog can't be dismissed: editing stays blocked until the tab reloads.
+      // The conflict dialog can't be dismissed: editing stays blocked until the tab reloads (§4.8).
+      // Escape is stopped before the browser's close watcher sees it (Chromium stops letting its
+      // `cancel` be prevented after a couple of Escapes), and if the dialog is closed anyway while
+      // the conflict stands, it is shown again at once.
       root.addEventListener?.('cancel', (event) => { if (event.target.matches && event.target.matches('[data-conflict]')) event.preventDefault(); }, true);
+      doc.addEventListener?.('keydown', (event) => {
+        if (event.key !== 'Escape') return;
+        const conflict = root.querySelector('[data-conflict]');
+        if (conflict && conflict.open) event.preventDefault();
+      }, true);
+      root.addEventListener?.('close', (event) => { if (event.target.matches && event.target.matches('[data-conflict]')) syncConflict(); }, true);
       syncRoute({ focusHeading: false });
       win.addEventListener('hashchange', () => syncRoute({ focusHeading: true }));
       doc.addEventListener?.('keydown', (event) => { if (state.startup === 'ready') handleShortcut(event, { route: state.route, doc, win }); });
