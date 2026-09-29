@@ -838,17 +838,23 @@ export const logScreen = {
       ui.slot = checkedSlot('log-slot') || ui.slot;
       drawDialog();
     }
-    function openFood(foodId, text = '', intent = 'log') {
+    function openFood(foodId, text = '', intent = 'log', slot = ctx.slot) {
       const food = app.getFood(foodId);
       if (!food) { foodGone(); return; }
       const q = parseGrams(text);
-      openDialog({ type: 'food', food, text, preview: q === null ? null : app.previewLogFood({ date: ctx.date, foodId, quantity: q }), slot: ctx.slot, intent });
+      openDialog({ type: 'food', food, text, preview: q === null ? null : app.previewLogFood({ date: ctx.date, foodId, quantity: q }), slot, intent });
     }
+    /**
+     * The quantity sheet as the user left it for Food detail (§5.5, I-58): its Food, grams, slot
+     * and whether it was logging or adding to the tray. The date and the rest of the Log context
+     * stay in ctx / the session. Carried through Food detail and its edit form (A-48).
+     */
+    const quantityState = (sheet) => ({ foodId: sheet.food.id, text: sheet.text || '', slot: checkedSlot('log-slot') || sheet.slot || null, intent: sheet.intent || 'log' });
     /* ---- Food detail (§7.3): from the quantity sheet; Edit / Delete for Custom Foods ---- */
-    function openFoodDetail(foodId, note = '') {
+    function openFoodDetail(foodId, note = '', quantity = null) {
       const detail = foodDetailModel(app, foodId);
       if (!detail) { foodGone(); return; }
-      ui = { type: 'food-detail', ...detail, note };
+      ui = { type: 'food-detail', ...detail, note, quantity };
       host.open(ui.type, drawDialog, { startAtTitle: true });
     }
     /** Favourite / Don't suggest changed: redraw the detail's controls in place (focus stays) and the lists. */
@@ -876,9 +882,9 @@ export const logScreen = {
     function beforeLeave() {
       if (!ui) return true;
       if (ui.type === 'custom-food' && customFoodDirty(ui)) { askDiscard(ui, null); return false; }
-      if (ui.type === 'custom-food' && ui.mode === 'edit') { openFoodDetail(ui.foodId); return false; }
+      if (ui.type === 'custom-food' && ui.mode === 'edit') { openFoodDetail(ui.foodId, '', ui.quantity); return false; }
       if (ui.type === 'discard-food') { reopenForm(ui.form); return false; }
-      if (ui.type === 'food-delete') { openFoodDetail(ui.food.id); return false; }
+      if (ui.type === 'food-delete') { openFoodDetail(ui.food.id, '', ui.quantity); return false; }
       return true;
     }
     function reopenForm(form) {
@@ -913,7 +919,7 @@ export const logScreen = {
         afterClose = () => win.setTimeout(proceed, 0);
         closeDialog();
       } else if (form.mode === 'edit') {
-        openFoodDetail(form.foodId);
+        openFoodDetail(form.foodId, '', form.quantity);
       } else {
         closeDialog();
       }
@@ -1185,7 +1191,11 @@ export const logScreen = {
             if (ui.mode === 'edit') {
               const food = foodActions.updateCustomFood(ui.foodId, customFoodPatch(ui.values));
               renderList();
-              openFoodDetail(food.id, 'Saved.'); // §7.4: back to the detail of the Food just saved
+              const q = ui.quantity;
+              // A-48: an edit from the Log flow returns to the quantity sheet for that Food, with the
+              // grams, slot and intent it had; the date and search stay in the Log context.
+              if (q && q.foodId === food.id) openFood(food.id, q.text, q.intent, q.slot);
+              else openFoodDetail(food.id, 'Saved.'); // §7.4: back to the detail of the Food just saved
               returnToFoodRow(food.id);
               break;
             }
@@ -1195,21 +1205,21 @@ export const logScreen = {
             break;
           }
           /* Food detail (§7.3) */
-          case 'food-detail': openFoodDetail(el.dataset.food); break;
+          case 'food-detail': openFoodDetail(el.dataset.food, '', ui && ui.type === 'food' ? quantityState(ui) : null); break;
           case 'fd-log': openFood(ui.food.id); break;
           case 'fd-add': openFood(ui.food.id, '', 'tray'); break;
           case 'fd-favorite': refreshFoodDetail(foodActions.setFavorite(ui.food, !ui.isFavorite)); break;
           case 'fd-suggest': refreshFoodDetail(foodActions.setNotSuggested(ui.food, !ui.isDisliked)); break;
           case 'fd-edit': {
             const food = app.getFood(ui.food.id);
-            if (!food) { openFoodDetail(ui.food.id); break; }
+            if (!food) { openFoodDetail(ui.food.id, '', ui.quantity); break; }
             const values = customFoodValues(food);
-            const form = { type: 'custom-food', mode: 'edit', foodId: food.id, initial: { ...values }, values, touched: new Set() };
+            const form = { type: 'custom-food', mode: 'edit', foodId: food.id, initial: { ...values }, values, touched: new Set(), quantity: ui.quantity };
             form.validation = validateCustomFoodForm(app, form);
             reopenForm(form);
             break;
           }
-          case 'fd-delete': ui = { type: 'food-delete', food: ui.food, meals: foodUsageMeals(app, ui.food.id) }; host.open(ui.type, drawDialog); break;
+          case 'fd-delete': ui = { type: 'food-delete', food: ui.food, meals: foodUsageMeals(app, ui.food.id), quantity: ui.quantity }; host.open(ui.type, drawDialog); break;
           case 'fd-delete-confirm': {
             confirmation = foodActions.deleteCustomFood(ui.food);
             renderList(); // §13.2: the results follow the current Foods; the search text is kept
