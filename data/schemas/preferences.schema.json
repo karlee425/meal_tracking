@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "macro-app/preferences.schema.json",
+  "title": "Preferences",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "favoriteFoods",
+    "favoriteMeals",
+    "dislikedFoods",
+    "mealPreferences",
+    "coachingPreferences",
+    "appPreferences"
+  ],
+  "properties": {
+    "favoriteFoods": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "favoriteMeals": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "dislikedFoods": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "mealPreferences": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "coachingPreferences": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "appPreferences": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  }
+}

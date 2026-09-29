@@ -1,0 +1,30 @@
+{
+  "requiredFiles": [
+    "data/foods/core-foods.json",
+    "data/meals/library-meals.json",
+    "data/targets.json",
+    "data/reference/yields.json",
+    "data/reference/portion-bounds.json",
+    "data/schemas/food.schema.json",
+    "data/schemas/meal.schema.json",
+    "data/schemas/meal-instance.schema.json",
+    "data/schemas/day.schema.json",
+    "data/schemas/targets.schema.json",
+    "data/schemas/preferences.schema.json",
+    "user-data/custom-foods.json",
+    "user-data/saved-meals.json",
+    "user-data/daily-logs.json",
+    "user-data/preferences.json",
+    "migration/migration-report.json",
+    "migration/food-id-map.json",
+    "migration/meal-id-map.json"
+  ],
+  "sourceGeneratedFiles": [
+    "data/foods/core-foods.json",
+    "data/meals/library-meals.json",
+    "data/reference/yields.json",
+    "data/reference/portion-bounds.json",
+    "migration/food-id-map.json",
+    "migration/meal-id-map.json"
+  ]
+}

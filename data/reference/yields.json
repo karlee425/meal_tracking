@@ -1,0 +1,263 @@
+{
+ "factors": [
+  [
+   "chicken breast",
+   0.72,
+   "cooked"
+  ],
+  [
+   "chicken thigh",
+   0.72,
+   "cooked"
+  ],
+  [
+   "ground turkey 93/7",
+   0.75,
+   "browned"
+  ],
+  [
+   "ground beef 90/10",
+   0.73,
+   "cooked"
+  ],
+  [
+   "sirloin steak",
+   0.73,
+   "cooked"
+  ],
+  [
+   "salmon",
+   0.79,
+   "cooked"
+  ],
+  [
+   "shrimp",
+   0.8,
+   "cooked"
+  ],
+  [
+   "turkey bacon",
+   0.7,
+   "cooked"
+  ],
+  [
+   "white rice dry",
+   3,
+   "cooked",
+   true
+  ],
+  [
+   "jasmine rice dry",
+   3,
+   "cooked",
+   true
+  ],
+  [
+   "wild rice dry",
+   3,
+   "cooked",
+   true
+  ],
+  [
+   "rigatoni dry",
+   2.4,
+   "cooked"
+  ],
+  [
+   "spaghetti dry",
+   2.4,
+   "cooked"
+  ],
+  [
+   "linguine dry",
+   2.4,
+   "cooked"
+  ],
+  [
+   "pasta dry",
+   2.4,
+   "cooked"
+  ],
+  [
+   "orzo dry",
+   2.4,
+   "cooked"
+  ],
+  [
+   "pearl couscous dry",
+   2.5,
+   "cooked"
+  ],
+  [
+   "rice noodles dry",
+   2.6,
+   "cooked"
+  ],
+  [
+   "potato gnocchi",
+   1,
+   "boiled"
+  ],
+  [
+   "farro dry",
+   2.6,
+   "cooked"
+  ],
+  [
+   "sweet potato",
+   0.75,
+   "roasted"
+  ],
+  [
+   "potato",
+   0.78,
+   "roasted"
+  ],
+  [
+   "butternut squash",
+   0.85,
+   "roasted"
+  ],
+  [
+   "broccolini",
+   0.88,
+   "roasted"
+  ],
+  [
+   "broccoli",
+   0.88,
+   "roasted"
+  ],
+  [
+   "green beans",
+   0.88,
+   "roasted"
+  ],
+  [
+   "sugar snap peas",
+   0.9,
+   "stir-fried"
+  ],
+  [
+   "zucchini",
+   0.8,
+   "roasted"
+  ],
+  [
+   "green bell pepper",
+   0.8,
+   "cooked"
+  ],
+  [
+   "bell pepper",
+   0.8,
+   "cooked"
+  ],
+  [
+   "roasted red pepper",
+   1,
+   "as weighed"
+  ],
+  [
+   "red onion",
+   0.75,
+   "cooked"
+  ],
+  [
+   "onion",
+   0.75,
+   "cooked"
+  ],
+  [
+   "corn frozen",
+   1,
+   "as weighed"
+  ],
+  [
+   "frozen hash browns",
+   0.85,
+   "griddled"
+  ],
+  [
+   "shelled edamame frozen",
+   1,
+   "as weighed"
+  ],
+  [
+   "edamame frozen",
+   1,
+   "as weighed"
+  ],
+  [
+   "air-popped popcorn",
+   4.5,
+   "popped"
+  ]
+ ],
+ "perRecipeOverrides": {
+  "D26|onion": [
+   0.33,
+   "deeply caramelised"
+  ],
+  "D4|potato": [
+   0.78,
+   "Greek lemon-roasted"
+  ],
+  "L12|potato": [
+   0.78,
+   "boiled"
+  ],
+  "D11|potato": [
+   0.78,
+   "baked"
+  ],
+  "D26|potato": [
+   0.91,
+   "boiled and mashed"
+  ],
+  "D22|potato": [
+   0.78,
+   "oven fries"
+  ],
+  "D25|potato": [
+   0.78,
+   "oven fries"
+  ],
+  "D2|potato": [
+   0.78,
+   "griddled wedges"
+  ],
+  "L18|ground turkey 93/7": [
+   0.75,
+   "browned"
+  ],
+  "B5|potato": [
+   0.78,
+   "griddled"
+  ],
+  "L2|ground turkey 93/7": [
+   1.125,
+   "as 6 baked meatballs, panko and egg included"
+  ],
+  "L19|chicken breast": [
+   0.72,
+   "roasted"
+  ],
+  "L1|chicken breast": [
+   0.72,
+   "roasted"
+  ],
+  "D5|egg": [
+   0.9,
+   "scrambled"
+  ],
+  "D5|liquid egg white": [
+   0.9,
+   "scrambled"
+  ],
+  "B5|egg": [
+   0.9,
+   "scrambled"
+  ]
+ }
+}

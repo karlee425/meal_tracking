@@ -1,0 +1,55 @@
+{
+  "version": "2.0.0",
+  "sourceRepository": "karlee425/meal_tracking",
+  "authoritativeSources": {
+    "coreFoods": "foods.json",
+    "libraryMeals": "meal-options.json",
+    "initialTargets": "targets.json",
+    "customFoods": "live-settings-doc.json#customFoods"
+  },
+  "discardedDuplicateSources": [
+    "live-settings-doc.json#bank.meals",
+    "meal-bank.html#M",
+    "meal-bank.html#CTC_FOOD"
+  ],
+  "counts": {
+    "coreFoodsSource": 182,
+    "libraryMealsSource": 84,
+    "duplicateLiveSettingsMeals": 82,
+    "customFoodsSource": 2
+  },
+  "targetValues": {
+    "lift": {
+      "protein": 150,
+      "carbs": 293,
+      "fat": 70
+    },
+    "long_run": {
+      "protein": 150,
+      "carbs": 343,
+      "fat": 70
+    },
+    "rest": {
+      "protein": 150,
+      "carbs": 218,
+      "fat": 70
+    }
+  },
+  "legacyTargetMapping": {
+    "lift": "daily.lift",
+    "long_run": "daily.long",
+    "rest": "daily.rest"
+  },
+  "legacyFieldsExcludedFromCanonicalTargets": [
+    "perSlot",
+    "nightSnack",
+    "carbShiftByDayType"
+  ],
+  "rules": {
+    "mealMacroTotals": "derived_only",
+    "historicalMealInstances": "snapshot_at_logging",
+    "historicalDayTargets": "snapshot_at_day_creation",
+    "stableIds": "required",
+    "silentFoodSubstitution": "forbidden"
+  }
+}
