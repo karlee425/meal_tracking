@@ -95,14 +95,39 @@ export function createViewHost({ page, dialog, win, doc, viewTypes, fallbackFocu
   };
   win.addEventListener('popstate', onPop);
 
-  // Escape closes the non-modal pane too (modal dialogs get it from the browser).
+  /*
+   * Escape is handled here, for modal dialogs as well as the pane (§3.2, G11). A modal
+   * <dialog>'s own Escape goes through the browser's close watcher, whose `cancel` event stops
+   * being cancelable after it has been prevented a couple of times in a row (Chromium: the third
+   * Escape arrives with cancelable = false and the dialog closes). Handling the keydown and
+   * preventing its default keeps Escape from ever reaching the close watcher, so the screen's
+   * beforeLeave ("Discard changes?") decides every time. Escape in a search field with text is
+   * left alone: it clears the search first, as before.
+   */
   dialog.addEventListener('keydown', (event) => {
-    if (event.key !== 'Escape' || !dialog.open || modal) return;
+    if (event.key !== 'Escape' || !dialog.open || event.defaultPrevented || event.isComposing) return;
+    const target = event.target;
+    if (target && target.matches && target.matches('input[type="search"]') && target.value) return;
     event.preventDefault();
     if (!beforeLeave || beforeLeave()) closeDialog();
   });
-  dialog.addEventListener('cancel', (event) => { if (beforeLeave && !beforeLeave()) event.preventDefault(); });
+  // Other close requests (a device's back gesture, a browser close request) arrive as `cancel`.
+  // When the browser won't let it be prevented, the dialog is shown again as the screen left it —
+  // beforeLeave has already put "Discard changes?" (or the step back) in it — so nothing is lost.
+  let reopen = false;
+  dialog.addEventListener('cancel', (event) => {
+    if (!beforeLeave || beforeLeave()) return;
+    if (event.cancelable) event.preventDefault();
+    else reopen = true;
+  });
   dialog.addEventListener('close', () => {
+    if (reopen) {
+      reopen = false;
+      if (modal) dialog.showModal(); else dialog.show();
+      const again = dialog.querySelector('[data-autofocus]') || dialog.querySelector('#sheet-title');
+      if (again) { if (again.id === 'sheet-title') again.setAttribute('tabindex', '-1'); again.focus(); }
+      return;
+    }
     closingWithEntry = viewEntry;
     viewEntry = false;
     forcedSheet = false;
