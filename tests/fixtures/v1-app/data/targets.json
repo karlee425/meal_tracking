@@ -1,0 +1,17 @@
+{
+  "lift": {
+    "protein": 105,
+    "carbs": 205,
+    "fat": 45
+  },
+  "long_run": {
+    "protein": 105,
+    "carbs": 255,
+    "fat": 45
+  },
+  "rest": {
+    "protein": 105,
+    "carbs": 155,
+    "fat": 45
+  }
+}

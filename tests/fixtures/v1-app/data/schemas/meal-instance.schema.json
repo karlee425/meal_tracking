@@ -1,0 +1,109 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "macro-app/meal-instance.schema.json",
+  "title": "Meal Instance",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "mealName",
+    "mealSlot",
+    "ingredients",
+    "totals",
+    "loggedAt"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "sourceMealId": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "mealName": {
+      "type": "string"
+    },
+    "mealSlot": {
+      "enum": [
+        "breakfast",
+        "lunch",
+        "snack_afternoon",
+        "dinner",
+        "snack_night"
+      ]
+    },
+    "ingredients": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "foodId",
+          "foodName",
+          "quantity",
+          "unit",
+          "protein",
+          "carbs",
+          "fat"
+        ],
+        "properties": {
+          "foodId": {
+            "type": "string"
+          },
+          "foodName": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "unit": {
+            "type": "string"
+          },
+          "protein": {
+            "type": "number",
+            "minimum": 0
+          },
+          "carbs": {
+            "type": "number",
+            "minimum": 0
+          },
+          "fat": {
+            "type": "number",
+            "minimum": 0
+          }
+        }
+      }
+    },
+    "totals": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "protein",
+        "carbs",
+        "fat"
+      ],
+      "properties": {
+        "protein": {
+          "type": "number",
+          "minimum": 0
+        },
+        "carbs": {
+          "type": "number",
+          "minimum": 0
+        },
+        "fat": {
+          "type": "number",
+          "minimum": 0
+        }
+      }
+    },
+    "loggedAt": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}

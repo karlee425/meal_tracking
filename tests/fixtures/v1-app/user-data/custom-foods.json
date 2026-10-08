@@ -1,0 +1,32 @@
+[
+  {
+    "id": "food_custom_synthetic_test_bar",
+    "name": "Synthetic Test Bar",
+    "source": "custom",
+    "category": "snack",
+    "brand": "Synthetic Brand",
+    "state": "prepared",
+    "nutrition": {
+      "basis": "100g",
+      "protein": 20,
+      "carbs": 40,
+      "fat": 10
+    },
+    "measurement": {
+      "canonicalUnit": "g",
+      "servingSize": 100,
+      "servingUnit": "g"
+    },
+    "tags": [
+      "synthetic"
+    ],
+    "aliases": [
+      "synthetic test bar"
+    ],
+    "metadata": {
+      "editable": true,
+      "active": true,
+      "synthetic": true
+    }
+  }
+]

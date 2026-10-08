@@ -1,0 +1,692 @@
+{
+  "format": "macro-tracker-v2-store",
+  "version": 1,
+  "revision": 24,
+  "savedAt": "2026-08-09T09:37:00.000Z",
+  "data": {
+    "targets": {
+      "lift": {
+        "protein": 115,
+        "carbs": 225,
+        "fat": 55
+      },
+      "long_run": {
+        "protein": 105,
+        "carbs": 255,
+        "fat": 45
+      },
+      "rest": {
+        "protein": 105,
+        "carbs": 155,
+        "fat": 45
+      }
+    },
+    "customFoods": [
+      {
+        "id": "food_custom_synthetic_test_bar",
+        "name": "Synthetic Test Bar",
+        "source": "custom",
+        "category": "snack",
+        "brand": "Synthetic Brand",
+        "state": "prepared",
+        "nutrition": {
+          "basis": "100g",
+          "protein": 20,
+          "carbs": 40,
+          "fat": 10
+        },
+        "measurement": {
+          "canonicalUnit": "g",
+          "servingSize": 100,
+          "servingUnit": "g"
+        },
+        "tags": [
+          "synthetic"
+        ],
+        "aliases": [
+          "synthetic test bar"
+        ],
+        "metadata": {
+          "editable": true,
+          "active": true,
+          "synthetic": true
+        }
+      },
+      {
+        "id": "food_custom_synthetic_fruit_cup",
+        "name": "Synthetic Fruit Cup",
+        "source": "custom",
+        "category": "fruit",
+        "brand": null,
+        "state": "prepared",
+        "nutrition": {
+          "basis": "100g",
+          "protein": 1,
+          "carbs": 14,
+          "fat": 0.5
+        },
+        "measurement": {
+          "canonicalUnit": "g",
+          "servingSize": 100,
+          "servingUnit": "g"
+        },
+        "tags": [
+          "synthetic"
+        ],
+        "aliases": [
+          "synthetic fruit cup"
+        ],
+        "metadata": {
+          "editable": true,
+          "active": true,
+          "createdAt": "2026-08-09T09:01:00.000Z",
+          "updatedAt": "2026-08-09T09:01:00.000Z"
+        }
+      }
+    ],
+    "savedMeals": [
+      {
+        "id": "meal_saved_syn001",
+        "name": "Synthetic Breakfast Bowl",
+        "source": "saved",
+        "mealType": "breakfast",
+        "ingredients": [
+          {
+            "foodId": "food_core_fage_0_greek_yogurt",
+            "quantity": 150,
+            "unit": "g"
+          },
+          {
+            "foodId": "food_custom_synthetic_fruit_cup",
+            "quantity": 100,
+            "unit": "g"
+          },
+          {
+            "foodId": "food_custom_synthetic_granola_mix",
+            "quantity": 40,
+            "unit": "g"
+          }
+        ],
+        "metadata": {
+          "createdAt": "2026-08-09T09:05:00.000Z",
+          "updatedAt": "2026-08-09T09:05:00.000Z",
+          "unresolvedFoods": {
+            "food_custom_synthetic_granola_mix": {
+              "name": "Synthetic Granola Mix",
+              "deletedAt": "2026-08-09T09:31:00.000Z"
+            }
+          }
+        }
+      },
+      {
+        "id": "meal_saved_syn002",
+        "name": "Synthetic Snack Plate",
+        "source": "saved",
+        "mealType": "snack",
+        "ingredients": [
+          {
+            "foodId": "food_custom_synthetic_test_bar",
+            "quantity": 50,
+            "unit": "g"
+          },
+          {
+            "foodId": "food_custom_synthetic_fruit_cup",
+            "quantity": 80,
+            "unit": "g"
+          }
+        ],
+        "metadata": {
+          "createdAt": "2026-08-09T09:07:00.000Z",
+          "updatedAt": "2026-08-09T09:07:00.000Z"
+        }
+      },
+      {
+        "id": "meal_saved_syn003",
+        "name": "Synthetic copy of a Library dinner",
+        "source": "saved",
+        "mealType": "dinner",
+        "ingredients": [
+          {
+            "foodId": "food_core_ground_turkey_93_7",
+            "quantity": 110,
+            "unit": "g"
+          },
+          {
+            "foodId": "food_core_tortilla_corn",
+            "quantity": 78,
+            "unit": "g"
+          },
+          {
+            "foodId": "food_core_american_cheese",
+            "quantity": 15,
+            "unit": "g"
+          },
+          {
+            "foodId": "food_core_white_rice_dry",
+            "quantity": 33,
+            "unit": "g"
+          },
+          {
+            "foodId": "food_core_corn",
+            "quantity": 60,
+            "unit": "g"
+          },
+          {
+            "foodId": "food_core_cotija",
+            "quantity": 12,
+            "unit": "g"
+          },
+          {
+            "foodId": "food_core_fage_0_greek_yogurt",
+            "quantity": 30,
+            "unit": "g"
+          },
+          {
+            "foodId": "food_core_mayonnaise",
+            "quantity": 4,
+            "unit": "g"
+          },
+          {
+            "foodId": "food_core_onion",
+            "quantity": 25,
+            "unit": "g"
+          },
+          {
+            "foodId": "food_core_lime_juice",
+            "quantity": 8,
+            "unit": "g"
+          }
+        ],
+        "metadata": {
+          "lane": "burgers × Mexican",
+          "nativeDayType": "lift",
+          "weightDescription": "3 tacos + rice",
+          "prepMinutes": 30,
+          "batchSize": 2,
+          "base": "78 g corn tortillas + 99 g cooked rice",
+          "steps": [
+            "Rice on. Fold through the corn, cotija, yogurt, a little mayo, chili powder and lime — this is elote in rice form and it is where a third of the carbohydrate lives.",
+            "Blackstone or a heavy pan on high. Press 40 g of turkey directly onto each tortilla in a thin layer, meat side down. 2 min until the edges brown and crisp.",
+            "Flip so the tortilla toasts, 1 min, cheese on, fold.",
+            "Diced onion, cilantro, lime."
+          ],
+          "storage": "Components hold 3 days; assemble fresh. The rice is a good bonus lunch base.",
+          "notes": "Burger night and taco night in one, on a lifting day.",
+          "ingredientLabels": {
+            "food_core_tortilla_corn": "corn tortillas",
+            "food_core_white_rice_dry": "white rice dry",
+            "food_core_corn": "corn frozen",
+            "food_core_fage_0_greek_yogurt": "greek yogurt nonfat"
+          },
+          "copiedFromMealId": "meal_library_D13",
+          "createdAt": "2026-08-09T09:09:00.000Z",
+          "updatedAt": "2026-08-09T09:09:00.000Z"
+        }
+      }
+    ],
+    "days": [
+      {
+        "id": "day_2026-08-03",
+        "date": "2026-08-03",
+        "dayType": "lift",
+        "targetSnapshot": {
+          "protein": 105,
+          "carbs": 205,
+          "fat": 45
+        },
+        "loggingComplete": true,
+        "mealInstances": [
+          {
+            "id": "mi_syn004",
+            "sourceMealId": "meal_saved_syn001",
+            "mealName": "Synthetic Breakfast Bowl",
+            "mealSlot": "breakfast",
+            "ingredients": [
+              {
+                "foodId": "food_core_fage_0_greek_yogurt",
+                "foodName": "Fage 0% Greek yogurt",
+                "quantity": 150,
+                "unit": "g",
+                "protein": 15.450000000000001,
+                "carbs": 5.4,
+                "fat": 0
+              },
+              {
+                "foodId": "food_custom_synthetic_fruit_cup",
+                "foodName": "Synthetic Fruit Cup",
+                "quantity": 100,
+                "unit": "g",
+                "protein": 1,
+                "carbs": 14,
+                "fat": 0.5
+              },
+              {
+                "foodId": "food_custom_synthetic_granola_mix",
+                "foodName": "Synthetic Granola Mix",
+                "quantity": 40,
+                "unit": "g",
+                "protein": 3.6,
+                "carbs": 24.8,
+                "fat": 5.6000000000000005
+              }
+            ],
+            "totals": {
+              "protein": 20.050000000000004,
+              "carbs": 44.2,
+              "fat": 6.1000000000000005
+            },
+            "loggedAt": "2026-08-09T09:11:00.000Z"
+          },
+          {
+            "id": "mi_syn005",
+            "sourceMealId": null,
+            "mealName": "Synthetic Test Bar",
+            "mealSlot": "snack_afternoon",
+            "ingredients": [
+              {
+                "foodId": "food_custom_synthetic_test_bar",
+                "foodName": "Synthetic Test Bar",
+                "quantity": 60,
+                "unit": "g",
+                "protein": 12,
+                "carbs": 24,
+                "fat": 6
+              }
+            ],
+            "totals": {
+              "protein": 12,
+              "carbs": 24,
+              "fat": 6
+            },
+            "loggedAt": "2026-08-09T09:13:00.000Z"
+          },
+          {
+            "id": "mi_syn006",
+            "sourceMealId": "meal_library_D13",
+            "mealName": "Turkey Smash Burger Tacos + Street-Corn Rice",
+            "mealSlot": "dinner",
+            "ingredients": [
+              {
+                "foodId": "food_core_ground_turkey_93_7",
+                "foodName": "Ground turkey 93/7",
+                "quantity": 110,
+                "unit": "g",
+                "protein": 21.67,
+                "carbs": 0,
+                "fat": 8.8
+              },
+              {
+                "foodId": "food_core_tortilla_corn",
+                "foodName": "Tortilla, corn",
+                "quantity": 78,
+                "unit": "g",
+                "protein": 4.446000000000001,
+                "carbs": 34.788000000000004,
+                "fat": 1.4040000000000001
+              },
+              {
+                "foodId": "food_core_american_cheese",
+                "foodName": "American cheese",
+                "quantity": 15,
+                "unit": "g",
+                "protein": 2.6999999999999997,
+                "carbs": 1.05,
+                "fat": 3.9
+              },
+              {
+                "foodId": "food_core_white_rice_dry",
+                "foodName": "White rice, dry",
+                "quantity": 33,
+                "unit": "g",
+                "protein": 2.145,
+                "carbs": 26.07,
+                "fat": 0.198
+              },
+              {
+                "foodId": "food_core_corn",
+                "foodName": "Corn",
+                "quantity": 60,
+                "unit": "g",
+                "protein": 1.9799999999999998,
+                "carbs": 11.4,
+                "fat": 0.72
+              },
+              {
+                "foodId": "food_core_cotija",
+                "foodName": "Cotija",
+                "quantity": 12,
+                "unit": "g",
+                "protein": 2.6399999999999997,
+                "carbs": 0.48,
+                "fat": 3.12
+              },
+              {
+                "foodId": "food_core_fage_0_greek_yogurt",
+                "foodName": "Fage 0% Greek yogurt",
+                "quantity": 30,
+                "unit": "g",
+                "protein": 3.0900000000000003,
+                "carbs": 1.08,
+                "fat": 0
+              },
+              {
+                "foodId": "food_core_mayonnaise",
+                "foodName": "Mayonnaise",
+                "quantity": 4,
+                "unit": "g",
+                "protein": 0.04,
+                "carbs": 0.024,
+                "fat": 3
+              },
+              {
+                "foodId": "food_core_onion",
+                "foodName": "Onion",
+                "quantity": 25,
+                "unit": "g",
+                "protein": 0.275,
+                "carbs": 2.325,
+                "fat": 0.025
+              },
+              {
+                "foodId": "food_core_lime_juice",
+                "foodName": "Lime juice",
+                "quantity": 8,
+                "unit": "g",
+                "protein": 0.032,
+                "carbs": 0.672,
+                "fat": 0.016
+              }
+            ],
+            "totals": {
+              "protein": 39.018,
+              "carbs": 77.88900000000001,
+              "fat": 21.183
+            },
+            "loggedAt": "2026-08-09T09:15:00.000Z"
+          }
+        ]
+      },
+      {
+        "id": "day_2026-08-04",
+        "date": "2026-08-04",
+        "dayType": "long_run",
+        "targetSnapshot": {
+          "protein": 105,
+          "carbs": 255,
+          "fat": 45
+        },
+        "loggingComplete": false,
+        "mealInstances": [
+          {
+            "id": "mi_syn007",
+            "sourceMealId": "meal_saved_syn002",
+            "mealName": "Synthetic Snack Plate",
+            "mealSlot": "snack_afternoon",
+            "ingredients": [
+              {
+                "foodId": "food_custom_synthetic_test_bar",
+                "foodName": "Synthetic Test Bar",
+                "quantity": 50,
+                "unit": "g",
+                "protein": 10,
+                "carbs": 20,
+                "fat": 5
+              },
+              {
+                "foodId": "food_custom_synthetic_fruit_cup",
+                "foodName": "Synthetic Fruit Cup",
+                "quantity": 80,
+                "unit": "g",
+                "protein": 0.8,
+                "carbs": 11.200000000000001,
+                "fat": 0.4
+              }
+            ],
+            "totals": {
+              "protein": 10.8,
+              "carbs": 31.200000000000003,
+              "fat": 5.4
+            },
+            "loggedAt": "2026-08-09T09:18:00.000Z"
+          }
+        ],
+        "priorTargetSnapshots": {
+          "rest": {
+            "protein": 105,
+            "carbs": 155,
+            "fat": 45
+          }
+        }
+      },
+      {
+        "id": "day_2026-08-05",
+        "date": "2026-08-05",
+        "dayType": "lift",
+        "targetSnapshot": {
+          "protein": 115,
+          "carbs": 225,
+          "fat": 55
+        },
+        "loggingComplete": true,
+        "mealInstances": [
+          {
+            "id": "mi_syn008",
+            "sourceMealId": null,
+            "mealName": "Synthetic Tray Meal (edited)",
+            "mealSlot": "lunch",
+            "ingredients": [
+              {
+                "foodId": "food_core_sourdough",
+                "foodName": "Sourdough",
+                "quantity": 100,
+                "unit": "g",
+                "protein": 9,
+                "carbs": 50,
+                "fat": 1.8000000000000003
+              },
+              {
+                "foodId": "food_custom_synthetic_fruit_cup",
+                "foodName": "Synthetic Fruit Cup",
+                "quantity": 100,
+                "unit": "g",
+                "protein": 1,
+                "carbs": 14,
+                "fat": 0.5
+              },
+              {
+                "foodId": "food_custom_synthetic_test_bar",
+                "foodName": "Synthetic Test Bar",
+                "quantity": 30,
+                "unit": "g",
+                "protein": 6,
+                "carbs": 12,
+                "fat": 3
+              }
+            ],
+            "totals": {
+              "protein": 16,
+              "carbs": 76,
+              "fat": 5.300000000000001
+            },
+            "loggedAt": "2026-08-09T09:22:00.000Z"
+          },
+          {
+            "id": "mi_syn009",
+            "sourceMealId": null,
+            "mealName": "Synthetic Granola Mix",
+            "mealSlot": "breakfast",
+            "ingredients": [
+              {
+                "foodId": "food_custom_synthetic_granola_mix",
+                "foodName": "Synthetic Granola Mix",
+                "quantity": 45,
+                "unit": "g",
+                "protein": 4.05,
+                "carbs": 27.900000000000002,
+                "fat": 6.3
+              }
+            ],
+            "totals": {
+              "protein": 4.05,
+              "carbs": 27.900000000000002,
+              "fat": 6.3
+            },
+            "loggedAt": "2026-08-09T09:24:00.000Z"
+          }
+        ]
+      },
+      {
+        "id": "day_2026-08-06",
+        "date": "2026-08-06",
+        "dayType": "long_run",
+        "targetSnapshot": {
+          "protein": 105,
+          "carbs": 255,
+          "fat": 45
+        },
+        "loggingComplete": false,
+        "mealInstances": [
+          {
+            "id": "mi_syn010",
+            "sourceMealId": "meal_library_D13",
+            "mealName": "Turkey Smash Burger Tacos + Street-Corn Rice",
+            "mealSlot": "dinner",
+            "ingredients": [
+              {
+                "foodId": "food_core_ground_turkey_93_7",
+                "foodName": "Ground turkey 93/7",
+                "quantity": 130,
+                "unit": "g",
+                "protein": 25.61,
+                "carbs": 0,
+                "fat": 10.4
+              },
+              {
+                "foodId": "food_core_tortilla_corn",
+                "foodName": "Tortilla, corn",
+                "quantity": 78,
+                "unit": "g",
+                "protein": 4.446000000000001,
+                "carbs": 34.788000000000004,
+                "fat": 1.4040000000000001
+              },
+              {
+                "foodId": "food_core_american_cheese",
+                "foodName": "American cheese",
+                "quantity": 15,
+                "unit": "g",
+                "protein": 2.6999999999999997,
+                "carbs": 1.05,
+                "fat": 3.9
+              },
+              {
+                "foodId": "food_core_white_rice_dry",
+                "foodName": "White rice, dry",
+                "quantity": 33,
+                "unit": "g",
+                "protein": 2.145,
+                "carbs": 26.07,
+                "fat": 0.198
+              },
+              {
+                "foodId": "food_core_corn",
+                "foodName": "Corn",
+                "quantity": 60,
+                "unit": "g",
+                "protein": 1.9799999999999998,
+                "carbs": 11.4,
+                "fat": 0.72
+              },
+              {
+                "foodId": "food_core_cotija",
+                "foodName": "Cotija",
+                "quantity": 12,
+                "unit": "g",
+                "protein": 2.6399999999999997,
+                "carbs": 0.48,
+                "fat": 3.12
+              },
+              {
+                "foodId": "food_core_fage_0_greek_yogurt",
+                "foodName": "Fage 0% Greek yogurt",
+                "quantity": 30,
+                "unit": "g",
+                "protein": 3.0900000000000003,
+                "carbs": 1.08,
+                "fat": 0
+              },
+              {
+                "foodId": "food_core_mayonnaise",
+                "foodName": "Mayonnaise",
+                "quantity": 4,
+                "unit": "g",
+                "protein": 0.04,
+                "carbs": 0.024,
+                "fat": 3
+              },
+              {
+                "foodId": "food_core_onion",
+                "foodName": "Onion",
+                "quantity": 25,
+                "unit": "g",
+                "protein": 0.275,
+                "carbs": 2.325,
+                "fat": 0.025
+              },
+              {
+                "foodId": "food_core_lime_juice",
+                "foodName": "Lime juice",
+                "quantity": 8,
+                "unit": "g",
+                "protein": 0.032,
+                "carbs": 0.672,
+                "fat": 0.016
+              }
+            ],
+            "totals": {
+              "protein": 42.958,
+              "carbs": 77.88900000000001,
+              "fat": 22.782999999999998
+            },
+            "loggedAt": "2026-08-09T09:28:00.000Z"
+          }
+        ]
+      },
+      {
+        "id": "day_2026-08-07",
+        "date": "2026-08-07",
+        "dayType": "rest",
+        "targetSnapshot": {
+          "protein": 105,
+          "carbs": 155,
+          "fat": 45
+        },
+        "loggingComplete": false,
+        "mealInstances": []
+      }
+    ],
+    "preferences": {
+      "favoriteFoods": [
+        "food_custom_synthetic_test_bar"
+      ],
+      "favoriteMeals": [
+        "meal_saved_syn002",
+        "meal_library_D13"
+      ],
+      "dislikedFoods": [
+        "food_core_onion"
+      ],
+      "mealPreferences": {
+        "preferredMealSize": "moderate",
+        "preferQuickMeals": false
+      },
+      "coachingPreferences": {
+        "recommendSavedMealsFirst": true,
+        "considerVariety": true
+      },
+      "appPreferences": {
+        "fixtureSource": "synthetic"
+      }
+    }
+  }
+}
