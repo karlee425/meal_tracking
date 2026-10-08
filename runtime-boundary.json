@@ -56,6 +56,14 @@
       "paths": [
         "tests/**"
       ]
+    },
+    "devTooling": {
+      "description": "Development-only npm tooling: the dev-dependency manifest, its lockfile and the ignore rule for node_modules/. Not part of the V2 runtime and never imported by it; node_modules/ itself is ignored by Git and by the file scan, so it is not classified.",
+      "paths": [
+        "package.json",
+        "package-lock.json",
+        ".gitignore"
+      ]
     }
   },
   "legacyReferenceBaseline": {
