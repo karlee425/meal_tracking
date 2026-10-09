@@ -1544,7 +1544,8 @@
       "user-data/custom-foods.json",
       "user-data/saved-meals.json",
       "user-data/daily-logs.json",
-      "user-data/preferences.json"
+      "user-data/preferences.json",
+      "user-data/user-food-data.json"
     ]
   },
   "notMigrated": [
@@ -1732,7 +1733,7 @@
     "gates": [
       {
         "id": "G01",
-        "description": "Every file in expected-output-manifest.json exists, and the six schemas are present",
+        "description": "Every file in expected-output-manifest.json exists, and the seven schemas are present",
         "passed": true,
         "errors": []
       },

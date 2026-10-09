@@ -13,9 +13,12 @@
  *   savedMeals    user-data/saved-meals.json
  *   days          user-data/daily-logs.json        Days with their Meal Instance snapshots
  *   preferences   user-data/preferences.json
+ *   userFoodData  user-data/user-food-data.json   named servings per Food (user data format 2)
  *
  * An adapter implements:
- *   load()                  -> { schemas, coreFoods, libraryMeals, targets, customFoods, savedMeals, days, preferences }
+ *   load()                  -> { schemas, coreFoods, libraryMeals, targets, customFoods, savedMeals, days, preferences, userFoodData }
+ *                              always in the CURRENT user-data format (src/domain/upgrade.js): an adapter
+ *                              that reads an older stored format upgrades it before handing it over
  *   save(collection, data)  persist one writable collection
  * and, optionally (all three shipped adapters do):
  *   saveMany(changes)       persist several collections as one all-or-nothing write
@@ -38,8 +41,21 @@ const COLLECTIONS = {
   customFoods: { schema: 'food.schema.json', list: true, writable: true },
   savedMeals: { schema: 'meal.schema.json', list: true, writable: true },
   days: { schema: 'day.schema.json', list: true, writable: true },
-  preferences: { schema: 'preferences.schema.json', list: false, writable: true }
+  preferences: { schema: 'preferences.schema.json', list: false, writable: true },
+  userFoodData: { schema: 'user-food-data.schema.json', list: false, writable: true }
 };
+
+// Serving rules the JSON schema cannot express (the validator has no `pattern`, and these
+// need normalisation or comparison across records). The schema covers the rest: required
+// fields, types, grams > 0, non-empty strings, ISO date-times, at least one serving.
+//   - A serving ID, live or retired, is "srv_" + a lowercase UUID, as crypto.randomUUID()
+//     produces it (8-4-4-4-12 lowercase hex).
+//   - Labels are compared after trimming surrounding whitespace and ignoring case: a label
+//     must not be blank, must not be g / gram / grams, and must be unique within its Food.
+// The label is stored as given; only the comparison is normalised.
+const SERVING_ID = /^srv_[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
+const RESERVED_SERVING_LABELS = new Set(['g', 'gram', 'grams']);
+const servingLabelKey = (label) => label.trim().toLowerCase();
 
 export const WRITABLE_COLLECTIONS = Object.keys(COLLECTIONS).filter((c) => COLLECTIONS[c].writable);
 
@@ -96,6 +112,33 @@ export function createStore(adapter) {
         for (const mi of d.mealInstances) instanceIds.push(mi.id);
       }
       dupes(instanceIds, 'Meal Instance id');
+    }
+    if (collection === 'userFoodData') {
+      // Structure and types are the schema's job; these are the cross-record rules.
+      // A record for a Food that does not exist is allowed (and ignored), so a later
+      // change to Core Foods can never stop the app from starting.
+      const wellFormed = data && Array.isArray(data.foods) && Array.isArray(data.retiredServingIds)
+        && data.retiredServingIds.every((id) => typeof id === 'string')
+        && data.foods.every((r) => r && Array.isArray(r.servings) && r.servings.every((sv) => sv && typeof sv.id === 'string' && typeof sv.label === 'string'));
+      if (!wellFormed) return errs; // the schema errors already say why
+      dupes(data.foods.map((r) => r.foodId), 'serving record for Food');
+      const live = [];
+      for (const r of data.foods) {
+        const labels = new Set();
+        for (const sv of r.servings) {
+          live.push(sv.id);
+          const label = servingLabelKey(sv.label);
+          if (label === '') errs.push(`${r.foodId}: a serving label must not be blank`);
+          else if (RESERVED_SERVING_LABELS.has(label)) errs.push(`${r.foodId}: serving label "${sv.label}" is reserved for grams`);
+          if (label !== '' && labels.has(label)) errs.push(`${r.foodId}: duplicate serving label "${sv.label}" (labels are compared ignoring case and surrounding spaces)`);
+          labels.add(label);
+        }
+      }
+      for (const id of [...live, ...data.retiredServingIds]) if (!SERVING_ID.test(id)) errs.push(`serving id ${JSON.stringify(id)} is not srv_<uuid>`);
+      dupes(live, 'serving id');
+      dupes(data.retiredServingIds, 'retired serving id');
+      const retired = new Set(data.retiredServingIds);
+      for (const id of new Set(live)) if (retired.has(id)) errs.push(`serving id ${id} is both live and retired`);
     }
     return errs;
   }

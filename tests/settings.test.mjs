@@ -348,7 +348,7 @@ test('Errors — STORAGE_UNAVAILABLE, STORED_DATA_UNRECOGNIZED and DATA_INVALID 
   await assert.rejects(openBrowserDataLayer({ snapshotStore: unreadable }), (e) => e.code === 'STORAGE_UNAVAILABLE');
   const odd = { format: 'another-app', version: 3, data: {} };
   await assert.rejects(openBrowserDataLayer({ snapshotStore: createMemorySnapshotStore(odd) }), (e) => e.code === 'STORED_DATA_UNRECOGNIZED' && typeof e.readStoredRecord === 'function');
-  const invalid = { format: 'macro-tracker-v2-store', version: 1, revision: 2, savedAt: '2026-09-01T00:00:00Z', data: { ...APP_DATA.seed, targets: { lift: { protein: 'lots' } } } };
+  const invalid = { format: 'macro-tracker-v2-store', version: 2, revision: 2, savedAt: '2026-09-01T00:00:00Z', data: { ...APP_DATA.seed, targets: { lift: { protein: 'lots' } } } };
   const invalidError = await openBrowserDataLayer({ snapshotStore: createMemorySnapshotStore(invalid) }).then(() => null, (e) => e);
   assert.equal(invalidError?.code, 'DATA_INVALID');
   assert.deepEqual(await invalidError.readStoredRecord(), invalid, 'the stored record is offered for download unchanged');

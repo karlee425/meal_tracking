@@ -453,7 +453,11 @@ function run() {
     'user-data/custom-foods.json': customFoods,
     'user-data/saved-meals.json': [],
     'user-data/daily-logs.json': [],
-    'user-data/preferences.json': DEFAULT_PREFERENCES
+    'user-data/preferences.json': DEFAULT_PREFERENCES,
+    // User-data format 2 (V3): named servings per Food, empty at first. Seeded so that a clean
+    // migration produces a complete current-format checkout; the Node file adapter reads the
+    // current format only and never infers an older one from a missing file.
+    'user-data/user-food-data.json': { foods: [], retiredServingIds: [] }
   };
 
   /* ---------------- ID maps ---------------- */

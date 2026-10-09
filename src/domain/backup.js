@@ -6,7 +6,7 @@
  *
  *   {
  *     "format": "macro-tracker-v2-backup",
- *     "formatVersion": 1,
+ *     "formatVersion": 2,
  *     "exportedAt": "2026-09-25T20:00:00.000Z",
  *     "data": {
  *       "targets":     current targets (lift / long_run / rest),
@@ -14,52 +14,79 @@
  *       "savedMeals":  Saved Meals (ingredients only; totals are always derived),
  *       "days":        Days, each with its target snapshot, completeness and its
  *                      Meal Instances (the historical snapshots — the record itself),
- *       "preferences": favourites, dislikes and settings
+ *       "preferences": favourites, dislikes and settings,
+ *       "userFoodData": named servings per Food and retired serving IDs (format 2)
  *     }
  *   }
+ *
+ * Versions: a backup's formatVersion names its user-data format (src/domain/upgrade.js),
+ * through the explicit map BACKUP_USER_DATA_VERSION. Exports are always the current version.
+ * A version 1 backup (the five collections, no userFoodData) is upgraded in memory before it
+ * is validated or restored; a newer or unknown version is refused (BACKUP_INCOMPATIBLE).
+ * The domain upgrade's own errors never leave this module: USER_DATA_VERSION_UNSUPPORTED
+ * becomes BACKUP_INCOMPATIBLE and USER_DATA_INVALID becomes BACKUP_INVALID.
  *
  * Core Foods and Library Meals are app data shipped with the app, so they are not in a
  * backup; a backup's references to them are checked against the running app's copy.
  *
- * Restore is all-or-nothing: parse → check format/version → validate every record against
- * the schemas and cross-record invariants → check references → one atomic write. If any
- * step fails nothing is changed.
+ * Restore is all-or-nothing: parse → check format/version → upgrade an older version →
+ * validate every record against the schemas and cross-record invariants → check references
+ * → one atomic write. If any step fails nothing is changed.
  */
 
 import { DomainError, clone } from './util.js';
+import { USER_DATA_FORMAT_VERSION, USER_DATA_COLLECTIONS, upgradeUserData } from './upgrade.js';
 
+/** The format name stays "v2": it names the app generation, not the format version. */
 export const BACKUP_FORMAT = 'macro-tracker-v2-backup';
-export const BACKUP_FORMAT_VERSION = 1;
+export const BACKUP_FORMAT_VERSION = USER_DATA_FORMAT_VERSION;
 
-/** The user-owned persisted collections, in backup order. */
-export const USER_COLLECTIONS = Object.freeze(['targets', 'customFoods', 'savedMeals', 'days', 'preferences']);
+/** Backup formatVersion → the user-data format version its `data` is in. Explicit, never inferred. */
+export const BACKUP_USER_DATA_VERSION = Object.freeze({ 1: 1, 2: 2 });
+
+/** The user-owned persisted collections of the current format, in backup order. */
+export const USER_COLLECTIONS = USER_DATA_COLLECTIONS[USER_DATA_FORMAT_VERSION];
+
+/**
+ * Parse and shape-check a backup (object or JSON text), upgrading an older version in memory.
+ * Pure: never changes its input. Returns { doc, data } — `data` in the current format — or
+ * { code, errors } with code BACKUP_UNREADABLE | BACKUP_INCOMPATIBLE | BACKUP_INVALID.
+ * Record-level validation (schemas, invariants, references) is validateBackup's job.
+ */
+export function readBackup(input) {
+  let doc = input;
+  if (typeof input === 'string') {
+    try { doc = JSON.parse(input); } catch (e) { return { code: 'BACKUP_UNREADABLE', errors: [`not valid JSON: ${e.message}`] }; }
+  }
+  if (!doc || typeof doc !== 'object' || Array.isArray(doc)) return { code: 'BACKUP_UNREADABLE', errors: ['a backup is a JSON object'] };
+  if (doc.format !== BACKUP_FORMAT) return { code: 'BACKUP_INCOMPATIBLE', errors: [`not a V2 backup (format is ${JSON.stringify(doc.format)})`] };
+  if (!Number.isInteger(doc.formatVersion) || doc.formatVersion < 1) return { code: 'BACKUP_INCOMPATIBLE', errors: [`formatVersion ${JSON.stringify(doc.formatVersion)} is not valid`] };
+  if (doc.formatVersion > BACKUP_FORMAT_VERSION) {
+    return { code: 'BACKUP_INCOMPATIBLE', errors: [`this backup is format version ${doc.formatVersion}; this app reads versions 1 to ${BACKUP_FORMAT_VERSION}`] };
+  }
+  const fromVersion = BACKUP_USER_DATA_VERSION[doc.formatVersion];
+  if (fromVersion === undefined) return { code: 'BACKUP_INCOMPATIBLE', errors: [`formatVersion ${doc.formatVersion} is not supported`] };
+  const expected = USER_DATA_COLLECTIONS[fromVersion];
+  const errors = [];
+  for (const k of Object.keys(doc)) if (!['format', 'formatVersion', 'exportedAt', 'data'].includes(k)) errors.push(`unexpected top-level field "${k}"`);
+  const data = doc.data;
+  if (!data || typeof data !== 'object' || Array.isArray(data)) errors.push('data is missing');
+  else {
+    for (const c of expected) if (!(c in data)) errors.push(`data.${c} is missing`);
+    for (const k of Object.keys(data)) if (!expected.includes(k)) errors.push(`data.${k} is not part of a format version ${doc.formatVersion} backup`);
+  }
+  if (errors.length) return { code: 'BACKUP_INVALID', errors };
+  try {
+    return { doc, data: upgradeUserData(data, fromVersion) };
+  } catch (e) {
+    if (e instanceof DomainError && e.code === 'USER_DATA_VERSION_UNSUPPORTED') return { code: 'BACKUP_INCOMPATIBLE', errors: [e.message] };
+    if (e instanceof DomainError && e.code === 'USER_DATA_INVALID') return { code: 'BACKUP_INVALID', errors: e.details && e.details.length ? e.details : [e.message] };
+    throw e;
+  }
+}
 
 export function createBackupApi(ctx) {
   const { store } = ctx;
-
-  /** Parse and shape-check a backup. Returns { doc } or { code, errors }. */
-  function readBackup(input) {
-    let doc = input;
-    if (typeof input === 'string') {
-      try { doc = JSON.parse(input); } catch (e) { return { code: 'BACKUP_UNREADABLE', errors: [`not valid JSON: ${e.message}`] }; }
-    }
-    if (!doc || typeof doc !== 'object' || Array.isArray(doc)) return { code: 'BACKUP_UNREADABLE', errors: ['a backup is a JSON object'] };
-    if (doc.format !== BACKUP_FORMAT) return { code: 'BACKUP_INCOMPATIBLE', errors: [`not a V2 backup (format is ${JSON.stringify(doc.format)})`] };
-    if (!Number.isInteger(doc.formatVersion) || doc.formatVersion < 1) return { code: 'BACKUP_INCOMPATIBLE', errors: [`formatVersion ${JSON.stringify(doc.formatVersion)} is not valid`] };
-    if (doc.formatVersion > BACKUP_FORMAT_VERSION) {
-      return { code: 'BACKUP_INCOMPATIBLE', errors: [`this backup is format version ${doc.formatVersion}; this app reads version ${BACKUP_FORMAT_VERSION}`] };
-    }
-    const errors = [];
-    for (const k of Object.keys(doc)) if (!['format', 'formatVersion', 'exportedAt', 'data'].includes(k)) errors.push(`unexpected top-level field "${k}"`);
-    const data = doc.data;
-    if (!data || typeof data !== 'object' || Array.isArray(data)) errors.push('data is missing');
-    else {
-      for (const c of USER_COLLECTIONS) if (!(c in data)) errors.push(`data.${c} is missing`);
-      for (const k of Object.keys(data)) if (!USER_COLLECTIONS.includes(k)) errors.push(`data.${k} is not part of a V2 backup`);
-    }
-    if (errors.length) return { code: 'BACKUP_INVALID', errors };
-    return { doc };
-  }
 
   /** References the schemas cannot express, checked against the backup + the app's own data. */
   function referenceErrors(data) {
@@ -108,7 +135,7 @@ export function createBackupApi(ctx) {
     validateBackup(input) {
       const read = readBackup(input);
       if (read.code) return { valid: false, code: read.code, errors: read.errors, formatVersion: null, summary: null };
-      const data = read.doc.data;
+      const data = read.data;
       let errors;
       try {
         errors = store.check(clone(data));
@@ -135,7 +162,7 @@ export function createBackupApi(ctx) {
       if (!result.valid) throw new DomainError(result.code, `backup not restored: ${result.errors.slice(0, 3).join('; ')}`, result.errors);
       const read = readBackup(input);
       const changes = {};
-      for (const c of USER_COLLECTIONS) changes[c] = clone(read.doc.data[c]);
+      for (const c of USER_COLLECTIONS) changes[c] = clone(read.data[c]);
       store.commit(changes);
       return { restored: result.summary };
     }

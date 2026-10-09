@@ -59,9 +59,10 @@ test('C2 — the current user-data format is version 2 and each version declares
   assert.deepEqual([...USER_DATA_COLLECTIONS[1]], V1_KEYS);
   assert.deepEqual([...USER_DATA_COLLECTIONS[2]], V2_KEYS);
   assert.deepEqual(Object.keys(USER_DATA_COLLECTIONS), ['1', '2'], 'one entry per supported version, no gaps');
-  assert.deepEqual([...USER_DATA_COLLECTIONS[1]], [...USER_COLLECTIONS], 'version 1 is exactly the collections the current backup carries');
-  assert.deepEqual([...USER_DATA_COLLECTIONS[1]], [...WRITABLE_COLLECTIONS], 'version 1 is exactly the store\'s writable collections, in the same order');
-  assert.deepEqual([...USER_DATA_COLLECTIONS[1]], [...USER_COLLECTION_NAMES], 'version 1 is exactly what the browser store record holds');
+  // C3 wired format 2 in: the current (version 2) list is what backups, the store and the browser record carry.
+  assert.deepEqual([...USER_DATA_COLLECTIONS[2]], [...USER_COLLECTIONS], 'version 2 is exactly the collections the current backup carries');
+  assert.deepEqual([...USER_DATA_COLLECTIONS[2]], [...WRITABLE_COLLECTIONS], 'version 2 is exactly the store\'s writable collections, in the same order');
+  assert.deepEqual([...USER_DATA_COLLECTIONS[2]], [...USER_COLLECTION_NAMES], 'version 2 is exactly what the browser store record holds');
   assert.deepEqual(Object.keys(V1_BACKUP.data), V1_KEYS, 'the C1 backup fixture holds the version 1 collections');
   assert.deepEqual(Object.keys(V1_STORE.data), V1_KEYS, 'the C1 store-record fixture holds the version 1 collections');
   assert.ok(Object.isFrozen(USER_DATA_COLLECTIONS) && Object.isFrozen(USER_DATA_COLLECTIONS[1]) && Object.isFrozen(USER_DATA_COLLECTIONS[2]));

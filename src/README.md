@@ -27,7 +27,7 @@ await requestPersistentStorage();                // optional: ask the browser no
 **Browser data-loading contract**
 
 - *Source:* `src/browser/app-data.js` imports the canonical files statically as JSON modules
-  (`import … with { type: 'json' }`): the six schemas, `data/foods/core-foods.json`,
+  (`import … with { type: 'json' }`): the seven schemas, `data/foods/core-foods.json`,
   `data/meals/library-meals.json`, and the first-run seed (`data/targets.json`, `user-data/*.json`).
   No fetch, no dynamic import, no build step. Serve the repository root as the web root (so
   `src/` and `data/` resolve at their on-disk relative paths), with `.json` as `application/json`.

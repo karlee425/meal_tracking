@@ -43,7 +43,7 @@ test('A-44 — About shows "Version unavailable" and invents no version', () => 
   const app = setup();
   const html = renderSettings({ targets: app.getAllCurrentTargets(), status: null, lastBackupAt: null, restore: null, foods: settingsFoodsModel(app) });
   const about = text(html.slice(html.indexOf('id="about-title"')));
-  assert.match(about, /App Macro Tracker App version Version unavailable Data format version 1/);
+  assert.match(about, /App Macro Tracker App version Version unavailable Data format version 2/);
   assert.ok(!/\(V2\)|v\d+\.\d/.test(about), 'no app version number of any kind');
 });
 

@@ -16,8 +16,8 @@
  *                                      the browser; a new app version brings new values
  *   seed.targets, seed.customFoods,    FIRST-RUN contents only (data/targets.json and
  *   seed.savedMeals, seed.days,        user-data/*.json as committed). After the first
- *   seed.preferences                   save, the browser's stored record is the user's data
- *                                      and the seed is never read again.
+ *   seed.preferences,                  save, the browser's stored record is the user's data
+ *   seed.userFoodData                  and the seed is never read again.
  *
  * This list mirrors src/node/file-adapter.js FILES; tests/pre-ui.test.mjs checks that the
  * two load identical data and that every schema in data/schemas/ is imported here.
@@ -29,6 +29,7 @@ import mealInstanceSchema from '../../data/schemas/meal-instance.schema.json' wi
 import mealSchema from '../../data/schemas/meal.schema.json' with { type: 'json' };
 import preferencesSchema from '../../data/schemas/preferences.schema.json' with { type: 'json' };
 import targetsSchema from '../../data/schemas/targets.schema.json' with { type: 'json' };
+import userFoodDataSchema from '../../data/schemas/user-food-data.schema.json' with { type: 'json' };
 import coreFoods from '../../data/foods/core-foods.json' with { type: 'json' };
 import libraryMeals from '../../data/meals/library-meals.json' with { type: 'json' };
 import seedTargets from '../../data/targets.json' with { type: 'json' };
@@ -36,8 +37,9 @@ import seedCustomFoods from '../../user-data/custom-foods.json' with { type: 'js
 import seedSavedMeals from '../../user-data/saved-meals.json' with { type: 'json' };
 import seedDays from '../../user-data/daily-logs.json' with { type: 'json' };
 import seedPreferences from '../../user-data/preferences.json' with { type: 'json' };
+import seedUserFoodData from '../../user-data/user-food-data.json' with { type: 'json' };
 
-import { createDataLayer, createMemoryAdapter, DomainError } from '../domain/index.js';
+import { createDataLayer, createMemoryAdapter, DomainError, readBackup } from '../domain/index.js';
 import { createBrowserAdapter, replaceStoredUserData } from './browser-adapter.js';
 import { createIndexedDbSnapshotStore } from './indexeddb-snapshot-store.js';
 
@@ -49,7 +51,8 @@ export const APP_DATA = Object.freeze({
     'meal-instance.schema.json': mealInstanceSchema,
     'meal.schema.json': mealSchema,
     'preferences.schema.json': preferencesSchema,
-    'targets.schema.json': targetsSchema
+    'targets.schema.json': targetsSchema,
+    'user-food-data.schema.json': userFoodDataSchema
   }),
   coreFoods,
   libraryMeals,
@@ -58,7 +61,8 @@ export const APP_DATA = Object.freeze({
     customFoods: seedCustomFoods,
     savedMeals: seedSavedMeals,
     days: seedDays,
-    preferences: seedPreferences
+    preferences: seedPreferences,
+    userFoodData: seedUserFoodData
   })
 });
 
@@ -68,7 +72,9 @@ export const APP_DATA = Object.freeze({
  *   appData        canonical data (default: APP_DATA) — tests may pass their own
  *   clock, today, newId, now   passed through (tests)
  * First run (nothing stored): user data starts from appData.seed; the first change
- * writes the full record. Later runs: the stored record is used and the seed is ignored.
+ * writes the full record. Later runs: the stored record is used and the seed is ignored;
+ * an older-format record is upgraded in memory (nothing is written by opening) and its
+ * first save keeps the old record as an archive (see browser-adapter.js).
  * If the stored data fails validation, the DomainError DATA_INVALID is rethrown with
  * error.readStoredRecord() attached, so the app can offer the raw record as a download
  * instead of losing it. Nothing is overwritten in that case.
@@ -87,9 +93,10 @@ export async function openBrowserDataLayer({ snapshotStore, appData = APP_DATA, 
 /**
  * Explicit recovery when stored data can't be opened (DATA_INVALID or
  * STORED_DATA_UNRECOGNIZED). Exactly one of:
- *   backup       a backup document (object or JSON text): validated in full against the
- *                shipped app data first — on any problem a DomainError (BACKUP_UNREADABLE |
- *                BACKUP_INCOMPATIBLE | BACKUP_INVALID) is thrown and storage is untouched
+ *   backup       a backup document (object or JSON text), any supported format version:
+ *                validated in full against the shipped app data first — on any problem a
+ *                DomainError (BACKUP_UNREADABLE | BACKUP_INCOMPATIBLE | BACKUP_INVALID) is
+ *                thrown and storage is untouched; an older version is stored upgraded
  *   startFresh   true: the shipped first-run seed
  * Then the stored record is replaced (one write) and the app is opened normally.
  * Never called automatically: stored data is only replaced on this explicit request.
@@ -114,7 +121,7 @@ export async function recoverStoredData({ snapshotStore, appData = APP_DATA, bac
   if (backup !== undefined) {
     const result = validateRecoveryBackup(backup, { appData }); // validated in full before any write
     if (!result.valid) throw new DomainError(result.code, `backup not restored: ${result.errors.slice(0, 3).join('; ')}`, result.errors);
-    data = (typeof backup === 'string' ? JSON.parse(backup) : backup).data;
+    data = readBackup(backup).data; // the validated backup, in the current format
   } else {
     data = appData.seed;
   }

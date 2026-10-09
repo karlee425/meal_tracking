@@ -56,7 +56,7 @@ const appData = () => ({
   schemas: SEED.schemas,
   coreFoods: SEED.coreFoods,
   libraryMeals: SEED.libraryMeals,
-  seed: { targets: SEED.targets, customFoods: SEED.customFoods, savedMeals: SEED.savedMeals, days: SEED.days, preferences: SEED.preferences }
+  seed: { targets: SEED.targets, customFoods: SEED.customFoods, savedMeals: SEED.savedMeals, days: SEED.days, preferences: SEED.preferences, userFoodData: SEED.userFoodData }
 });
 
 const userState = (app) => app.exportUserData().data;
@@ -801,7 +801,7 @@ test('W1 — APP_DATA is the canonical files, loaded by static JSON import', () 
   for (const c of USER_COLLECTIONS) assert.deepEqual(APP_DATA.seed[c], SEED[c], `seed.${c}`);
   const src = fs.readFileSync(path.join(ROOT, 'src/browser/app-data.js'), 'utf8');
   assert.ok(!/\bfetch\s*\(|\bimport\s*\(/.test(src), 'no fetch, no dynamic import');
-  assert.equal((src.match(/^import \w+ from '[^']+\.json' with \{ type: 'json' \};$/gm) || []).length, 13, 'six schemas, Core Foods, Library Meals, five seed files');
+  assert.equal((src.match(/^import \w+ from '[^']+\.json' with \{ type: 'json' \};$/gm) || []).length, 15, 'seven schemas, Core Foods, Library Meals, six seed files');
 });
 
 test('W2 — first run starts from the seed and stores only user data', async () => {
