@@ -37,6 +37,7 @@ export { constants };
 
 export { BACKUP_FORMAT, BACKUP_FORMAT_VERSION, BACKUP_USER_DATA_VERSION, USER_COLLECTIONS, readBackup, olderFormatBackup } from './backup.js';
 export { USER_DATA_FORMAT_VERSION, USER_DATA_COLLECTIONS, upgradeUserData } from './upgrade.js';
+export { carryForwardServingIds } from './serving-ids.js';
 
 export function createDataLayer({ adapter, clock = () => new Date(), today, newId } = {}) {
   if (!adapter) throw new Error('createDataLayer: adapter is required');

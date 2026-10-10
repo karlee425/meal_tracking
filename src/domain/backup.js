@@ -36,6 +36,7 @@
 
 import { DomainError, clone } from './util.js';
 import { USER_DATA_FORMAT_VERSION, USER_DATA_COLLECTIONS, upgradeUserData } from './upgrade.js';
+import { carryForwardServingIds } from './serving-ids.js';
 
 /** The format name stays "v2": it names the app generation, not the format version. */
 export const BACKUP_FORMAT = 'macro-tracker-v2-backup';
@@ -151,8 +152,11 @@ export function createBackupApi(ctx) {
 
     /**
      * Check a backup (object or JSON text) without restoring it.
-     * Returns { valid, code, errors, formatVersion, summary }. code is null when valid, else
-     * BACKUP_UNREADABLE | BACKUP_INCOMPATIBLE | BACKUP_INVALID.
+     * Returns { valid, code, errors, formatVersion, summary, servingIds }. code is null when
+     * valid, else BACKUP_UNREADABLE | BACKUP_INCOMPATIBLE | BACKUP_INVALID. servingIds is what a
+     * restore would do to reserved serving IDs now ({ carriedForward, revived }, counts;
+     * serving-ids.js), computed only for a valid backup and against the current data; null
+     * otherwise. Nothing is written or changed.
      */
     validateBackup(input) {
       const read = readBackup(input);
@@ -165,19 +169,28 @@ export function createBackupApi(ctx) {
         errors = [e.message];
       }
       if (!errors.length) errors = referenceErrors(data);
+      let servingIds = null;
+      if (!errors.length) {
+        // Only for a valid backup: the carry-forward is never computed from rejected data.
+        const carried = carryForwardServingIds(data.userFoodData, store.get('userFoodData'));
+        servingIds = { carriedForward: carried.carriedForward, revived: carried.revived };
+      }
       return {
         valid: errors.length === 0,
         code: errors.length ? 'BACKUP_INVALID' : null,
         errors,
         formatVersion: read.doc.formatVersion,
-        summary: errors.length ? null : summaryOf(data)
+        summary: errors.length ? null : summaryOf(data),
+        servingIds
       };
     },
 
     /**
      * Replace ALL of the user's data with a backup. Validated in full first; on any problem
-     * a DomainError (code as validateBackup) is thrown and nothing changes. The replacement
-     * is one atomic write of every user collection. Returns { restored: summary }.
+     * a DomainError (code as validateBackup) is thrown and nothing changes. Serving IDs this
+     * device had reserved are carried forward (serving-ids.js), against the data as it is at
+     * this moment. The replacement is one atomic write of every user collection, validated
+     * again by the store. Returns { restored: summary, servingIds: { carriedForward, revived } }.
      */
     restoreUserData(input) {
       const result = api.validateBackup(input);
@@ -185,8 +198,10 @@ export function createBackupApi(ctx) {
       const read = readBackup(input);
       const changes = {};
       for (const c of USER_COLLECTIONS) changes[c] = clone(read.data[c]);
+      const carried = carryForwardServingIds(read.data.userFoodData, store.get('userFoodData'));
+      changes.userFoodData = carried.userFoodData;
       store.commit(changes);
-      return { restored: result.summary };
+      return { restored: result.summary, servingIds: { carriedForward: carried.carriedForward, revived: carried.revived } };
     }
   };
   return api;

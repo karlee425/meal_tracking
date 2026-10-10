@@ -722,11 +722,13 @@ The UI may keep its own small settings in `preferences.appPreferences` via `upda
 | | `BACKUP_UNREADABLE`: "This file isn't a backup this app can read." |
 | | `BACKUP_INCOMPATIBLE`: "This backup is from a different or newer version of the app and can't be restored here." A raw migration archive (§11.3) is refused the same way, and named: "This file is a raw migration archive, not a backup, so it can't be restored. Choose a backup file instead." |
 | | `BACKUP_INVALID`: "This backup has problems, so it wasn't restored. Your current data is untouched." Details disclosure lists the first few problems in plain language. |
-| 3b Valid → preview | "Backup from {exportedAt, local}: {n} logged days · {n} logged meals · {n} saved meals · {n} of your foods" (`summary`) vs the same counts for current data. Warning: "Restoring **replaces everything** in the app on this device: targets, your foods, saved meals, every logged day and your preferences. It can't be undone." |
+| 3b Valid → preview | "Backup from {exportedAt, local}: {n} logged days · {n} logged meals · {n} saved meals · {n} of your foods" (`summary`) vs the same counts for current data. When the restore affects reserved serving IDs (`servingIds` from `validateBackup`), one more line: "Servings: {n} on this device aren't in the backup and will be removed; their IDs stay reserved so they're never reused; {n} deleted on this device will come back from the backup." (only the parts that apply). Warning: "Restoring **replaces everything** in the app on this device: targets, your foods, saved meals, every logged day and your preferences. It can't be undone." |
 | 4 Protect current data | A prominent secondary button **Download current data first** (`exportUserData`), recommended before continuing |
 | 5 Confirm | **Replace my data** (destructive style; Cancel is the default focus) → `restoreUserData(text)`: validated again, then one atomic write |
-| 6 Success | "Restored. {summary}." Save status goes saving → saved. Today and every tab re-read. |
+| 6 Success | "Restored. {summary}." — plus, when it applies, "Servings: {n} removed, their IDs kept reserved; {n} deleted servings brought back from the backup." (`servingIds` from `restoreUserData`). Save status goes saving → saved. Today and every tab re-read. |
 | 6 Failure | A validation failure at this step shows the same messages as 3a, with current data untouched [APPROVED A-26]. If the durable save then fails, the normal save-error banner applies (the restored data is in the app; Try again / Download). |
+
+**Reserved serving IDs [V3 Slice 1 · C5].** A restore keeps every serving ID this device has used: servings here that aren't in the backup are removed but their IDs stay reserved, and a serving deleted here that the backup still has comes back with the backup's definition (same ID). Recovery from stored data that can't be opened, and Start over (§13.1), don't carry reserved IDs forward: there is no readable data to carry them from.
 
 ### 11.3 Earlier-format copies [V3 Slice 1 · C4]
 

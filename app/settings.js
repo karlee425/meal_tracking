@@ -378,11 +378,35 @@ ${note ? `<p class="field-error" role="alert">${escapeHtml(note)}</p>` : ''}
 <div class="sheet-actions"><button type="button" class="button primary" data-action="backup-download">Download</button><button type="button" class="button" data-action="close">Cancel</button></div>`;
 }
 
+const countOf = (n, one, many) => `${n} ${n === 1 ? one : many}`;
+/**
+ * What a restore does to reserved serving IDs (C5), from validateBackup's or restoreUserData's
+ * servingIds ({ carriedForward, revived }), for the preview ('preview') or the result ('result').
+ * Empty when neither applies, so ordinary restores read exactly as before.
+ */
+export function servingIdsText(servingIds, when = 'preview') {
+  if (!servingIds || (!servingIds.carriedForward && !servingIds.revived)) return '';
+  const { carriedForward: kept, revived } = servingIds;
+  const parts = [];
+  if (kept) {
+    parts.push(when === 'preview'
+      ? `${countOf(kept, 'serving', 'servings')} on this device ${kept === 1 ? 'isn’t' : 'aren’t'} in the backup and will be removed; ${kept === 1 ? 'its ID stays' : 'their IDs stay'} reserved so ${kept === 1 ? 'it’s' : 'they’re'} never reused`
+      : `${countOf(kept, 'serving', 'servings')} removed, ${kept === 1 ? 'its ID' : 'their IDs'} kept reserved`);
+  }
+  if (revived) {
+    parts.push(when === 'preview'
+      ? `${countOf(revived, 'serving', 'servings')} deleted on this device will come back from the backup`
+      : `${countOf(revived, 'deleted serving', 'deleted servings')} brought back from the backup`);
+  }
+  return `Servings: ${parts.join('; ')}.`;
+}
+
 /** The preview and confirmation before anything is replaced. Cancel has the focus. */
-export function renderRestorePreview({ summary, current, exportedAt, note }) {
+export function renderRestorePreview({ summary, current, exportedAt, note, servingIds = null }) {
+  const servings = servingIdsText(servingIds, 'preview');
   return `${dialogHead('Restore this backup?')}
 <p>Backup from ${escapeHtml(exportedAtText(exportedAt))}: ${escapeHtml(backupSummaryText(summary))}.</p>
-<p class="hint">On this device now: ${escapeHtml(backupSummaryText(current))}.</p>
+<p class="hint">On this device now: ${escapeHtml(backupSummaryText(current))}.</p>${servings ? `\n<p class="hint">${escapeHtml(servings)}</p>` : ''}
 <div class="banner" role="note"><p>Restoring <strong>replaces everything</strong> in the app on this device: targets, your foods, saved meals, every logged day and your preferences. It can’t be undone.</p></div>
 <button type="button" class="button restore-keep" data-action="download-current">Download current data first</button>
 ${note ? `<p class="hint" role="status">${escapeHtml(note)}</p>` : ''}
@@ -594,7 +618,7 @@ export const settingsScreen = {
         return;
       }
       setRestore(null);
-      show({ type: 'restore-preview', text, summary: result.summary, current: app.validateBackup(app.exportUserData()).summary, exportedAt: JSON.parse(text).exportedAt, note: '' });
+      show({ type: 'restore-preview', text, summary: result.summary, servingIds: result.servingIds, current: app.validateBackup(app.exportUserData()).summary, exportedAt: JSON.parse(text).exportedAt, note: '' });
     }
 
     main.addEventListener('input', (event) => {
@@ -783,10 +807,11 @@ export const settingsScreen = {
           case 'restore-confirm': {
             const { text } = ui;
             try {
-              const { restored } = app.restoreUserData(text); // validated again, then one atomic replacement
+              const { restored, servingIds } = app.restoreUserData(text); // validated again, then one atomic replacement
               resetSession(); // no pre-restore screen state (search text, meal tray, handoffs) survives
               foodsNote = null; // nor a message about foods from before the restore
-              restore = { tone: 'status', message: `Restored. ${backupSummaryText(restored)}.` };
+              const servings = servingIdsText(servingIds, 'result');
+              restore = { tone: 'status', message: `Restored. ${backupSummaryText(restored)}.${servings ? ` ${servings}` : ''}` };
             } catch (e) {
               restore = { tone: 'error', message: restoreErrorMessage(e && e.code), code: e && e.code, errors: (e && e.details) || [] };
             }
