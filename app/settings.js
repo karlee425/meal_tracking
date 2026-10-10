@@ -10,11 +10,14 @@
  *   backup    exportUserData → validateBackup (the text to be saved) → a local file
  *   restore   validateBackup (nothing changes) → preview → explicit confirm → restoreUserData
  *             (validated again, then one atomic replacement; any failure changes nothing)
+ *   earlier-format copies (§11.3)  services.formatCopies.list() (read-only) → olderFormatBackup +
+ *             validateBackup → "Download older-format backup" / "Download raw migration archive";
+ *             neither download writes anything or updates lastBackupAt
  * There is no automatic backup, no sync and no reset here.
  */
 
-import { BACKUP_FORMAT_VERSION, constants } from '../src/domain/index.js';
-import { escapeHtml, restoreErrorMessage, backupSummaryText, exportedAtText, detailsDisclosure } from './shell.js';
+import { BACKUP_FORMAT_VERSION, constants, olderFormatBackup } from '../src/domain/index.js';
+import { escapeHtml, restoreErrorMessage, restoreFileErrorMessage, isArchiveConflict, backupSummaryText, exportedAtText, detailsDisclosure } from './shell.js';
 import { DAY_TYPE_LABELS, dialogHead, errorSlot } from './today.js';
 import { createViewHost, viewHead, syncInPlace } from './view-host.js';
 import { resetSession } from './session.js';
@@ -46,7 +49,9 @@ export function saveStatusText(status) {
   switch (status.state) {
     case 'saving': return 'Saving…';
     case 'error': return 'Your latest changes aren’t saved on this device yet.';
-    case 'conflict': return 'Changed in another tab or window. Reload to continue.';
+    case 'conflict': return isArchiveConflict(status)
+      ? 'Saving is paused to protect your earlier data. Reloading won’t resolve this.'
+      : 'Changed in another tab or window. Reload to continue.';
     default: return status.lastSavedAt ? `All changes saved · ${exportedAtText(status.lastSavedAt)}` : 'Nothing has needed saving yet.';
   }
 }
@@ -149,7 +154,122 @@ export function restoreMessage(r) {
 /** §10.1: the browser's answer to requestPersistentStorage() — "Yes" only when it granted protection. */
 export const protectionText = (state) => (state === 'granted' ? 'Yes' : 'Not granted');
 
-function dataSection({ status, lastBackupAt, restore, protection }) {
+/* ---------------- earlier-format copies (§11.3) ---------------- */
+
+/**
+ * The earlier-format copies for "Data on this device", from services.formatCopies.list():
+ *   load = { state: 'loading' } | { state: 'error', code, errors } | { state: 'ready', copies }
+ * For each copy whose original record is a well-formed version-1 record (no inspection problems,
+ * pending or archived alike), the older-format backup is built (olderFormatBackup: the pre-upgrade
+ * data, copied exactly) and validated through the domain (validateBackup). Only a valid one is
+ * offered. Nothing is written here.
+ */
+export function formatCopiesModel(app, load) {
+  if (!load || load.state !== 'ready') return load || null;
+  return {
+    state: 'ready',
+    copies: load.copies.map((copy) => {
+      let older;
+      if (!copy.original || (copy.problems && copy.problems.length)) {
+        older = { valid: false, code: null, errors: copy.problems && copy.problems.length ? copy.problems : ['the original record can’t be read'] };
+      } else {
+        try {
+          const backup = olderFormatBackup(copy.original);
+          const check = app.validateBackup(backup);
+          older = check.valid && check.formatVersion === 1
+            ? { valid: true, backup, summary: check.summary }
+            : { valid: false, code: check.code || 'BACKUP_INVALID', errors: check.errors || [] };
+        } catch (e) {
+          older = { valid: false, code: (e && e.code) || 'BACKUP_INVALID', errors: (e && e.details) || [] };
+        }
+      }
+      return { ...copy, older };
+    })
+  };
+}
+
+/**
+ * Loads the copies list for Settings, read-only. Each load gets a generation number and only the
+ * newest load's answer is kept, so an older response never replaces a newer one. After a save,
+ * the list is read again while it is still loading or still shows a pending copy (the first
+ * save stores that copy as a migration archive). onChange(model) gets every state, starting
+ * with { state: 'loading' }.
+ */
+export function createCopiesLoader(app, list, onChange) {
+  let generation = 0;
+  let current = { state: 'loading' };
+  let stopped = false;
+  function load() {
+    const mine = ++generation;
+    current = { state: 'loading' };
+    onChange(current);
+    return Promise.resolve()
+      .then(() => list())
+      .then((copies) => formatCopiesModel(app, { state: 'ready', copies }),
+        (e) => ({ state: 'error', code: (e && e.code) || null, errors: e && e.message ? [e.message] : [] }))
+      .then((next) => {
+        if (stopped || mine !== generation) return;
+        current = next;
+        onChange(current);
+      });
+  }
+  function onStatus(status) {
+    if (stopped || !status || status.state !== 'saved') return;
+    if (current.state === 'loading' || (current.state === 'ready' && current.copies.some((c) => c.kind === 'pending'))) load();
+  }
+  return { load, onStatus, current: () => current, stop() { stopped = true; } };
+}
+
+function formatCopyItem(c, i) {
+  const when = c.savedAt ? exportedAtText(c.savedAt) : 'an unknown date';
+  const rev = c.revision ? ` (revision ${c.revision})` : '';
+  const malformed = !!(c.problems && c.problems.length > 0) || !c.original;
+  const label = c.kind === 'pending' ? 'Pre-upgrade copy' : 'Migration archive';
+  const what = malformed
+    ? `<p><strong>${label}:</strong> it isn’t in the expected form, so an older-format backup can’t be made from it.</p>${detailsDisclosure(null, c.problems || [])}`
+    : c.kind === 'pending'
+      ? `<p><strong>Pre-upgrade copy:</strong> your data as the earlier version saved it on ${escapeHtml(when)}${rev}. It hasn’t been stored as a migration archive yet. Your next change upgrades the data on this device and keeps this copy as one.</p>`
+      : `<p><strong>Migration archive:</strong> your data as the earlier version saved it on ${escapeHtml(when)}${rev}, kept when this app upgraded it.</p>`;
+  let older = '';
+  if (c.older && c.older.valid) {
+    older = `<button type="button" class="button" data-action="download-older-backup" data-copy="${i}">Download older-format backup</button> <span class="hint">A backup the earlier version of the app can restore.</span>`;
+  } else if (!malformed) {
+    older = `<p>An older-format backup can’t be made from this copy.</p>${detailsDisclosure(c.older && c.older.code, (c.older && c.older.errors) || [])}`;
+  }
+  let raw = '';
+  if (c.kind === 'archive') {
+    raw = c.exactJson
+      ? `<button type="button" class="button" data-action="download-raw-archive" data-copy="${i}">Download raw migration archive</button> <span class="hint">Not a backup; it can’t be restored.</span>`
+      : '<p>This archive can’t be saved exactly as a file, so it isn’t offered for download.</p>';
+  }
+  return `<li class="format-copy">
+${what}
+${older ? `<div>${older}</div>` : ''}
+${raw ? `<div>${raw}</div>` : ''}
+</li>`;
+}
+
+/** The inside of the earlier-format copies block: loading, can't be read, none, or one item per copy. */
+export function renderFormatCopiesBody(model) {
+  if (!model) return '';
+  if (model.state === 'loading') return '<p class="hint" role="status">Checking for an earlier-format copy…</p>';
+  if (model.state === 'error') return `<div role="alert"><p>Earlier-format copies couldn’t be read. Nothing was changed.</p>${detailsDisclosure(model.code, model.errors || [])}</div>`;
+  if (!model.copies.length) return '<p class="hint">No earlier-format copy on this device. One is kept only when this app upgrades data saved by an earlier version.</p>';
+  return `<ul class="format-copies">
+${model.copies.map(formatCopyItem).join('\n')}
+</ul>`;
+}
+
+function formatCopiesBlock(model) {
+  if (!model) return '';
+  return `<div class="format-copies-block" aria-labelledby="format-copies-title">
+<h3 id="format-copies-title">Earlier-format copies</h3>
+<div data-format-copies>${renderFormatCopiesBody(model)}</div>
+<p class="hint" role="status" data-format-copies-note></p>
+</div>`;
+}
+
+function dataSection({ status, lastBackupAt, restore, protection, formatCopies = null }) {
   return `<section class="settings-section" aria-labelledby="data-title">
 <h2 id="data-title" class="section-title">Data on this device</h2>
 <dl class="data-facts">
@@ -164,6 +284,7 @@ function dataSection({ status, lastBackupAt, restore, protection }) {
 <input type="file" accept=".json,application/json" data-restore-file hidden tabindex="-1" aria-hidden="true">
 </div>
 <div class="restore-message${restore && restore.tone === 'error' ? ' is-error' : ''}" data-restore-message role="${restore && restore.tone === 'error' ? 'alert' : 'status'}">${restoreMessage(restore)}</div>
+${formatCopiesBlock(formatCopies)}
 </section>`;
 }
 
@@ -179,13 +300,13 @@ function aboutSection() {
 </section>`;
 }
 
-export function renderSettings({ targets, status, lastBackupAt, restore, foods, foodsNote = null, protection = null }) {
+export function renderSettings({ targets, status, lastBackupAt, restore, foods, foodsNote = null, protection = null, formatCopies = null }) {
   return `<h1 id="screen-title" class="screen-title" tabindex="-1">Settings</h1>
 ${targetsSection(targets)}
 ${myFoodsSection(foods, foodsNote)}
 ${favouritesSection(foods)}
 ${notSuggestedSection(foods)}
-${dataSection({ status, lastBackupAt, restore, protection })}
+${dataSection({ status, lastBackupAt, restore, protection, formatCopies })}
 ${aboutSection()}`;
 }
 
@@ -279,6 +400,11 @@ export const settingsScreen = {
     let foodsNote = null; // the last Custom Food delete outcome, shown in "My foods"
     let foodOrigin = null; // the list Food detail was opened from, so focus can go back to that row
     const foodActions = createFoodActions(app);
+    // Earlier-format copies (§11.3): read asynchronously, never blocking the screen; read-only.
+    let copies = services.formatCopies ? { state: 'loading' } : null;
+    const copiesLoader = services.formatCopies
+      ? createCopiesLoader(app, () => services.formatCopies.list(), (next) => { copies = next; drawCopies(); })
+      : null;
 
     main.innerHTML = `<div class="settings-page view-page" data-settings-page>
 <div class="settings-screen" data-settings-body></div>
@@ -299,13 +425,27 @@ export const settingsScreen = {
         restore,
         foods: settingsFoodsModel(app),
         foodsNote,
-        protection: services.storageProtection ? services.storageProtection.state() : null
+        protection: services.storageProtection ? services.storageProtection.state() : null,
+        formatCopies: copies
       });
+    }
+    function drawCopies() {
+      const el = body.querySelector('[data-format-copies]');
+      if (el) el.innerHTML = renderFormatCopiesBody(copies);
+    }
+    function copiesNote(text) {
+      const el = body.querySelector('[data-format-copies-note]');
+      if (el) { el.textContent = ''; el.textContent = text; }
+    }
+    function loadCopies() {
+      if (copiesLoader) copiesLoader.load();
     }
     // Keep the save-status line current without re-rendering (or moving focus).
     const unsubscribe = app.onPersistenceChange((status) => {
       const el = body.querySelector('[data-save-status]');
       if (el) el.textContent = saveStatusText(status);
+      // The first save after an upgrade stores the pending copy as a migration archive: re-read.
+      if (copiesLoader) copiesLoader.onStatus(status);
     });
     // The browser's answer can arrive while Settings is open (it's asked after the first save).
     const unsubscribeProtection = services.storageProtection
@@ -322,7 +462,7 @@ export const settingsScreen = {
       onClose: () => { ui = null; },
       beforeLeave
     });
-    this._cleanup = () => { host.destroy(); if (typeof unsubscribe === 'function') unsubscribe(); if (unsubscribeProtection) unsubscribeProtection(); };
+    this._cleanup = () => { if (copiesLoader) copiesLoader.stop(); host.destroy(); if (typeof unsubscribe === 'function') unsubscribe(); if (unsubscribeProtection) unsubscribeProtection(); };
 
     function draw() {
       if (!ui) return;
@@ -449,7 +589,8 @@ export const settingsScreen = {
       }
       const result = app.validateBackup(text); // the file's own format decides, not its extension
       if (!result.valid) {
-        setRestore({ tone: 'error', message: restoreErrorMessage(result.code), code: result.code, errors: result.errors });
+        // A raw migration archive is never a backup: it stays refused, and the message says what it is.
+        setRestore({ tone: 'error', message: restoreFileErrorMessage(result.code, text), code: result.code, errors: result.errors });
         return;
       }
       setRestore(null);
@@ -608,6 +749,30 @@ export const settingsScreen = {
             }
             break;
 
+          /* earlier-format copies (§11.3): read-only downloads, no lastBackupAt */
+          case 'download-older-backup': {
+            const c = copies && copies.copies && copies.copies[Number(el.dataset.copy)];
+            try {
+              if (!c || !c.older || !c.older.valid) throw new Error('no valid older-format backup');
+              services.downloadOlderFormatBackup(app, c.older.backup);
+              copiesNote('Older-format backup downloaded.');
+            } catch {
+              copiesNote('The older-format backup couldn’t be downloaded. Nothing was changed.');
+            }
+            break;
+          }
+          case 'download-raw-archive': {
+            const c = copies && copies.copies && copies.copies[Number(el.dataset.copy)];
+            try {
+              if (!c || c.kind !== 'archive') throw new Error('no stored archive');
+              services.downloadRawArchive(c);
+              copiesNote('Raw migration archive downloaded.');
+            } catch {
+              copiesNote('The raw migration archive couldn’t be downloaded. Nothing was changed.');
+            }
+            break;
+          }
+
           /* restore */
           case 'restore': { const input = body.querySelector('[data-restore-file]'); if (input) input.click(); break; }
           case 'download-current':
@@ -639,6 +804,7 @@ export const settingsScreen = {
     });
 
     render();
+    loadCopies();
     return false;
   },
 

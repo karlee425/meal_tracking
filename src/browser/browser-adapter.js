@@ -83,6 +83,73 @@ export function sameStoreArchive(existing, candidate) {
 
 const ARCHIVE_CONFLICT_MESSAGE = 'A saved copy of your older data does not match the data being upgraded, so nothing was saved and nothing was overwritten. Download a backup and stop using the app until this is resolved.';
 
+/* ---------------- earlier-format copies (read-only) ---------------- */
+
+const isPlainObject = (v) => v !== null && typeof v === 'object' && !Array.isArray(v)
+  && (Object.getPrototypeOf(v) === Object.prototype || Object.getPrototypeOf(v) === null);
+const isRevision = (r) => Number.isInteger(r) && r >= 1;
+
+/**
+ * True when `value` is made only of what JSON carries unchanged (strings, finite numbers other
+ * than -0, booleans, null, dense arrays, plain objects), so the downloadable JSON represents the
+ * stored object faithfully — nothing dropped (undefined, functions), nothing turned into null
+ * (NaN, Infinity), into text (Date) or into 0 (-0). This is about that JSON representation;
+ * it says nothing about the bytes IndexedDB keeps.
+ */
+export function isExactJson(value) {
+  if (value === null || typeof value === 'string' || typeof value === 'boolean') return true;
+  if (typeof value === 'number') return Number.isFinite(value) && !Object.is(value, -0);
+  if (Array.isArray(value)) {
+    for (let i = 0; i < value.length; i += 1) if (!(i in value) || !isExactJson(value[i])) return false;
+    return true;
+  }
+  if (isPlainObject(value)) return Object.values(value).every(isExactJson);
+  return false;
+}
+
+/**
+ * Problems with a pre-upgrade original record: it must be a genuine version-1 store record —
+ * this app's record format, version 1 (the version-1 user-data format), a revision of 1 or
+ * more, a savedAt and a data object. The data itself is checked by validateBackup.
+ */
+export function inspectOriginalRecord(record) {
+  if (!isPlainObject(record)) return ['the original record is not an object'];
+  const problems = [];
+  if (record.format !== STORE_RECORD_FORMAT) problems.push(`the original record's format is ${JSON.stringify(record.format)}`);
+  if (record.version !== 1 || STORE_RECORD_USER_DATA_VERSION[record.version] !== 1) problems.push(`the original record is version ${JSON.stringify(record.version)}, not version 1`);
+  if (!isRevision(record.revision)) problems.push(`the original record's revision ${JSON.stringify(record.revision)} is not valid`);
+  if (typeof record.savedAt !== 'string') problems.push('the original record has no savedAt');
+  if (!isPlainObject(record.data)) problems.push('the original record holds no data');
+  return problems;
+}
+
+/**
+ * Problems with an archive as stored under `key`: the archive wrapper (format, archive version,
+ * archivedAt, reason, replacedByRevision), its original record (inspectOriginalRecord), and that
+ * the key and replacedByRevision agree with that original. An empty list means well-formed.
+ */
+export function inspectStoreArchive(archive, key) {
+  if (!isPlainObject(archive)) return ['the archive is not an object'];
+  const problems = [];
+  if (archive.format !== STORE_ARCHIVE_FORMAT) problems.push(`the archive's format is ${JSON.stringify(archive.format)}`);
+  if (archive.archiveVersion !== STORE_ARCHIVE_VERSION) problems.push(`the archive version is ${JSON.stringify(archive.archiveVersion)}`);
+  if (typeof archive.archivedAt !== 'string') problems.push('the archive has no archivedAt');
+  if (typeof archive.reason !== 'string' || !archive.reason) problems.push('the archive has no reason');
+  if (!isRevision(archive.replacedByRevision)) problems.push(`replacedByRevision ${JSON.stringify(archive.replacedByRevision)} is not valid`);
+  const originalProblems = inspectOriginalRecord(archive.original);
+  problems.push(...originalProblems);
+  if (!originalProblems.length) {
+    if (key !== storeArchiveKey(archive.original.version, archive.original.revision)) problems.push(`the key ${key} does not match the original record (version ${archive.original.version}, revision ${archive.original.revision})`);
+    if (isRevision(archive.replacedByRevision) && archive.replacedByRevision !== archive.original.revision + 1) problems.push(`replacedByRevision ${archive.replacedByRevision} does not follow the original revision ${archive.original.revision}`);
+  }
+  return problems;
+}
+
+/** A copy's facts, taken from its original record only when that record is well-formed. */
+function copyFacts(original, ok) {
+  return ok ? { recordVersion: original.version, revision: original.revision, savedAt: original.savedAt } : { recordVersion: null, revision: null, savedAt: null };
+}
+
 /**
  * createBrowserAdapter({ appData, snapshotStore, now? }) -> Promise<adapter>
  *   appData: { schemas, coreFoods, libraryMeals, seed: { targets, customFoods, savedMeals, days, preferences } }
@@ -242,7 +309,58 @@ export async function createBrowserAdapter({ appData, snapshotStore, now = () =>
     },
 
     /** The stored record exactly as it is, for a raw download if the data ever fails to load. */
-    readStoredRecord: () => snapshotStore.read()
+    readStoredRecord: () => snapshotStore.read(),
+
+    /**
+     * Read-only: the pre-upgrade (version-1) copies this device holds, for Settings. Never writes,
+     * retries or changes anything. Resolves to a list (empty when there are none):
+     *   { kind: 'pending', key: null, original, archive: null, problems, exactJson, ...facts }
+     *       the version-1 record this tab opened and upgraded in memory, before the first save
+     *       has stored it as an archive (it is still the record in storage); `original` is that
+     *       record when it is well-formed (problems empty), otherwise null — the same rule as
+     *       for an archive;
+     *   { kind: 'archive', key, archive, original, problems, exactJson, ...facts }
+     *       a stored migration archive, `archive` exactly as read; `original` is its original
+     *       record when the archive is well-formed (problems empty), otherwise null.
+     * facts: recordVersion, revision, savedAt (null when not readable). exactJson: whether the
+     * archive (or the pending original) can be written to a file exactly as it is.
+     * Rejects with DomainError STORAGE_UNAVAILABLE if storage can't be read.
+     */
+    async listFormatCopies() {
+      const copies = [];
+      if (pendingArchive) {
+        const record = copy(pendingArchive.original);
+        const problems = inspectOriginalRecord(record);
+        const original = problems.length ? null : record;
+        copies.push({ kind: 'pending', key: null, original, archive: null, problems, exactJson: isExactJson(record), ...copyFacts(original, !problems.length) });
+      }
+      if (snapshotStore.archives === true && typeof snapshotStore.listArchives === 'function') {
+        try {
+          for (const key of await snapshotStore.listArchives()) {
+            if (!isStoreArchiveKey(key)) continue;
+            const archive = await snapshotStore.readArchive(key);
+            if (archive === null || archive === undefined) continue; // gone since it was listed
+            const problems = inspectStoreArchive(archive, key);
+            const original = problems.length ? null : archive.original;
+            copies.push({ kind: 'archive', key, archive, original, problems, exactJson: isExactJson(archive), ...copyFacts(original, !problems.length) });
+          }
+        } catch (e) {
+          throw e instanceof DomainError ? e : new DomainError('STORAGE_UNAVAILABLE', `the stored copies could not be read: ${e && e.message}`);
+        }
+      }
+      return copies;
+    },
+
+    /** Read-only: one stored migration archive exactly as stored, or null. Archive keys only. */
+    async readArchive(key) {
+      if (!isStoreArchiveKey(key)) throw new DomainError('INVALID_ARGUMENT', 'not a migration archive key');
+      if (snapshotStore.archives !== true || typeof snapshotStore.readArchive !== 'function') return null;
+      try {
+        return await snapshotStore.readArchive(key);
+      } catch (e) {
+        throw e instanceof DomainError ? e : new DomainError('STORAGE_UNAVAILABLE', `the archive could not be read: ${e && e.message}`);
+      }
+    }
   };
   return adapter;
 }

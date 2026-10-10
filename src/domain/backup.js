@@ -85,6 +85,28 @@ export function readBackup(input) {
   }
 }
 
+/**
+ * The older-format backup of a pre-upgrade snapshot (V3 Slice 1 · C4): the version-1 data the
+ * app held immediately before it upgraded it, as a format-1 backup the earlier app can restore.
+ *   { format: BACKUP_FORMAT, formatVersion: 1, exportedAt: original.savedAt, data }
+ * `original` is a version-1 record's { data, savedAt } (the caller checks the record wrapper).
+ * The data must already be exactly the five version-1 collections in plain JSON values; it is
+ * then copied unchanged — never converted, never trimmed, and current data is never used.
+ * Pure: nothing is read or written. Throws DomainError BACKUP_INVALID (details: the problems)
+ * if the data could not be carried exactly. The caller still runs validateBackup on the result
+ * (schemas, store rules and references) before offering it.
+ */
+export function olderFormatBackup(original) {
+  if (!original || typeof original !== 'object') throw new DomainError('BACKUP_INVALID', 'no original record to build an older-format backup from');
+  try {
+    upgradeUserData(original.data, 1); // shape check only: exactly the version-1 collections, JSON values only
+  } catch (e) {
+    if (e instanceof DomainError && e.code.startsWith('USER_DATA_')) throw new DomainError('BACKUP_INVALID', `the original data can't be carried exactly: ${e.message}`, e.details || [e.message]);
+    throw e;
+  }
+  return { format: BACKUP_FORMAT, formatVersion: 1, exportedAt: original.savedAt, data: clone(original.data) };
+}
+
 export function createBackupApi(ctx) {
   const { store } = ctx;
 

@@ -12,8 +12,8 @@ import { todayScreen } from './today.js';
 import { logScreen } from './log.js';
 import { mealsScreen } from './meals.js';
 import { progressScreen } from './progress.js';
-import { settingsScreen } from './settings.js';
-import { downloadBackup, downloadText, localStamp } from './download.js';
+import { settingsScreen, formatCopiesModel } from './settings.js';
+import { downloadBackup, downloadText, localStamp, downloadOlderFormatBackup, downloadRawArchive, downloadRawArchives } from './download.js';
 
 // What the shell and screens may ask of the platform. Every data change still goes through
 // the data layer; these only hand files to the user and run the explicit §13.1 recovery.
@@ -24,9 +24,18 @@ const services = {
     downloadText(document, `macro-tracker-stored-data-${localStamp()}.json`, JSON.stringify(record, null, 2));
   },
   validateRecoveryBackup: (text) => validateRecoveryBackup(text),
-  recover: (options) => recoverStoredData(options).then(({ app }) => protect(app)),
-  reload: () => window.location.reload()
+  recover: (options) => recoverStoredData(options).then(opened),
+  reload: () => window.location.reload(),
+  // Earlier-format copies (§11.3): read-only, through the open adapter. Listing and the
+  // downloads never write, never retry and never update lastBackupAt.
+  formatCopies: { list: () => (openAdapter ? openAdapter.listFormatCopies() : Promise.resolve([])) },
+  // The same copies, checked (older-format backups built and validated), for the archive-conflict dialog.
+  earlierCopies: async (app) => formatCopiesModel(app, { state: 'ready', copies: await services.formatCopies.list() }),
+  downloadOlderFormatBackup: (app, backup) => downloadOlderFormatBackup(document, app, backup),
+  downloadRawArchive: (copy) => downloadRawArchive(document, copy),
+  downloadRawArchives: (copies) => downloadRawArchives(document, copies)
 };
+let openAdapter = null;
 
 /**
  * §12 step 3 / I-51: ask the browser to protect the stored data, once, after the first save;
@@ -36,6 +45,12 @@ function protect(app) {
   services.storageProtection = createStorageProtection({ app });
   services.storageProtection.start();
   return app;
+}
+
+/** The data layer opened (at start-up or after recovery): keep its adapter for the read-only copy services. */
+function opened({ app, adapter }) {
+  openAdapter = adapter;
+  return protect(app);
 }
 
 const shell = createShell({
@@ -48,5 +63,5 @@ const shell = createShell({
 shell.start();
 
 openBrowserDataLayer()
-  .then(({ app }) => shell.setDataLayer(protect(app)))
+  .then((result) => shell.setDataLayer(opened(result)))
   .catch((error) => shell.showStartupError(error));

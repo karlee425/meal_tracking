@@ -35,7 +35,7 @@ export { createMemoryAdapter } from './memory-adapter.js';
 export * as macros from './macros.js';
 export { constants };
 
-export { BACKUP_FORMAT, BACKUP_FORMAT_VERSION, BACKUP_USER_DATA_VERSION, USER_COLLECTIONS, readBackup } from './backup.js';
+export { BACKUP_FORMAT, BACKUP_FORMAT_VERSION, BACKUP_USER_DATA_VERSION, USER_COLLECTIONS, readBackup, olderFormatBackup } from './backup.js';
 export { USER_DATA_FORMAT_VERSION, USER_DATA_COLLECTIONS, upgradeUserData } from './upgrade.js';
 
 export function createDataLayer({ adapter, clock = () => new Date(), today, newId } = {}) {

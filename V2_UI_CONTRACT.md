@@ -297,6 +297,7 @@ Read from `getPersistenceStatus()` and `onPersistenceChange(listener)`:
 | `saving` | "Saving…" (only shown if it lasts > ~1 s, to avoid flicker) | — |
 | `error` | Warning icon + "Not saved" | Persistent banner under the header: "Your latest changes aren't saved on this device yet. They're still here, but will be lost if you close the app." Actions: **Try again** (`retryPersistence()`) · **Download a backup** (`exportUserData`). The banner stays until the status returns to `saved`. |
 | `conflict` | Warning icon + "Changed elsewhere" | Blocking dialog: "This app is open in another tab or window, and that one saved more recently. To avoid overwriting it, this tab can't save." Actions: **Download this tab's data** (`exportUserData`) · **Reload** (reopens from storage; unsaved changes in this tab are lost, and the dialog says so). Editing is disabled until reload. |
+| `conflict` with `code: STORAGE_ARCHIVE_CONFLICT` | Warning icon + "Saving paused" | Blocking dialog "Saving is paused": "Saving is paused to protect your earlier data. The original pre-upgrade copy differs from the copy now stored on this device. Nothing has been overwritten, and your changes in this tab are not being saved. Download this tab's current data, the pre-upgrade copy and the stored migration archive for safekeeping. Downloading them doesn't resolve the conflict, and reloading will not resolve it either." Three separate downloads, each with its own availability and result: **Download the tab's current data** (`exportUserData`, unsaved changes included) · **Download the pre-upgrade copy (older-format backup)** (this tab's pre-upgrade copy, only when it validates) · **Download the stored migration archive** (exactly as stored, only when it can be saved exactly; not a backup) (§11.3). No Reload, no automatic retry; neither copy is overwritten or deleted. [V3 Slice 1 · C4] |
 
 Storage unavailable and invalid stored data are start-up conditions; see §13.
 
@@ -676,6 +677,7 @@ Energy figures, scores, grades, rankings, compliance or adherence scores, good/b
    - "Protected from automatic clean-up: Yes / Not granted" (the result of `requestPersistentStorage()`)
    - Last backup date
    - **Download backup**, **Restore from backup** (§11)
+   - **Earlier-format copies** (§11.3): always shown; "No earlier-format copy on this device" when there is none
 6. **About:** app version, data format version (`BACKUP_FORMAT_VERSION`), "Macros only: protein, carbs and fat, in grams." The app version comes from the repository's single authoritative version source; the UI never keeps a second, hand-maintained version constant. The repository has no application-version source yet, so About shows **Version unavailable** until one is introduced by a later, explicit decision. The data format version is never presented as the app version. [APPROVED A-44]
 
 Not in V2 Settings: `mealPreferences` and `coachingPreferences` toggles (no domain behaviour reads them), themes beyond following the system, units, accounts, notifications. [IMPLEMENTATION NOTE I-43]
@@ -703,7 +705,7 @@ The UI may keep its own small settings in `preferences.appPreferences` via `upda
 | Step | Behaviour |
 |---|---|
 | Start | Settings → Data → **Download backup** |
-| What's exported | `exportUserData()`: targets, Custom Foods, Saved Meals, Days with their logged meals, preferences. Format `macro-tracker-v2-backup`, version 1, `exportedAt`. Not included: Core Foods, Library Meals, schemas (shipped with the app) or anything derived. |
+| What's exported | `exportUserData()`: targets, Custom Foods, Saved Meals, Days with their logged meals, preferences, and named servings (`userFoodData`). Format `macro-tracker-v2-backup`, version 2 (`BACKUP_FORMAT_VERSION`), `exportedAt`. Not included: Core Foods, Library Meals, schemas (shipped with the app) or anything derived. |
 | File | JSON, named `macro-tracker-backup-YYYY-MM-DD.json` (local date) |
 | Before download | A short sheet: "Backup of everything you've entered on this device: {n} logged days, {n} saved meals, {n} of your foods." **Download**. (Counts from `validateBackup(exportUserData()).summary`.) |
 | Success | "Backup downloaded." `appPreferences.lastBackupAt` updated. |
@@ -718,13 +720,28 @@ The UI may keep its own small settings in `preferences.appPreferences` via `upda
 | 2 Validate | Read as text → `validateBackup(text)`. Nothing changes during validation. |
 | 3a Invalid | Message by `code`, and **nothing is changed**: |
 | | `BACKUP_UNREADABLE`: "This file isn't a backup this app can read." |
-| | `BACKUP_INCOMPATIBLE`: "This backup is from a different or newer version of the app and can't be restored here." |
+| | `BACKUP_INCOMPATIBLE`: "This backup is from a different or newer version of the app and can't be restored here." A raw migration archive (§11.3) is refused the same way, and named: "This file is a raw migration archive, not a backup, so it can't be restored. Choose a backup file instead." |
 | | `BACKUP_INVALID`: "This backup has problems, so it wasn't restored. Your current data is untouched." Details disclosure lists the first few problems in plain language. |
 | 3b Valid → preview | "Backup from {exportedAt, local}: {n} logged days · {n} logged meals · {n} saved meals · {n} of your foods" (`summary`) vs the same counts for current data. Warning: "Restoring **replaces everything** in the app on this device: targets, your foods, saved meals, every logged day and your preferences. It can't be undone." |
 | 4 Protect current data | A prominent secondary button **Download current data first** (`exportUserData`), recommended before continuing |
 | 5 Confirm | **Replace my data** (destructive style; Cancel is the default focus) → `restoreUserData(text)`: validated again, then one atomic write |
 | 6 Success | "Restored. {summary}." Save status goes saving → saved. Today and every tab re-read. |
 | 6 Failure | A validation failure at this step shows the same messages as 3a, with current data untouched [APPROVED A-26]. If the durable save then fails, the normal save-error banner applies (the restored data is in the app; Try again / Download). |
+
+### 11.3 Earlier-format copies [V3 Slice 1 · C4]
+
+When the app opens data saved by an earlier version (format 1), it upgrades it in memory; the first save keeps the original record as a **migration archive**. Settings → Data on this device → **Earlier-format copies** lists them, read-only:
+
+| Copy | Shown as | Actions |
+|---|---|---|
+| Pre-upgrade copy (before the first save) | "Your data as the earlier version saved it on {date} (revision {r}). It hasn't been stored as a migration archive yet…" | **Download older-format backup** |
+| Migration archive | "Your data as the earlier version saved it on {date} (revision {r}), kept when this app upgraded it." | **Download older-format backup** · **Download raw migration archive** ("Not a backup; it can't be restored.") |
+| Archive not in the expected form | "…an older-format backup can't be made from it." + Details | **Download raw migration archive** |
+
+- **Older-format backup:** `{ format: macro-tracker-v2-backup, formatVersion: 1, exportedAt: <original savedAt>, data }`, the pre-upgrade data copied exactly (never current data converted down). Offered only when it validates (`validateBackup`); restorable in the earlier version of the app. File `macro-tracker-older-format-backup-YYYY-MM-DD.json` (the original's date).
+- **Raw migration archive:** the stored archive object exactly as stored, wrapper included; never restorable (§11.2 3a). File `macro-tracker-raw-migration-archive-format-1-r{n}-YYYY-MM-DD.json`.
+- Neither download writes anything or updates **Last backup**. States: checking, none, couldn't be read (with Details), and per copy as above.
+- Not offered on the start-up recovery screen (§13.1).
 
 ---
 
@@ -777,6 +794,7 @@ The UI explains what happened and what to do in plain language. Error codes, IDs
 | **Save failure** | Save-error banner (§4.8), change kept in the app; Try again (`retryPersistence()`); Download a backup | APPROVED A-24 · IMPLEMENTATION NOTE I-17 |
 | **Storage full** | Surfaces as a save failure; banner adds "Your device may be low on storage." | IMPLEMENTATION NOTE I-17 |
 | **Another tab saved more recently** | `conflict` dialog (§4.8): download this tab's data or reload; editing blocked until reload | APPROVED A-24 · IMPLEMENTATION NOTE I-17 |
+| **A different migration archive is already stored** | `conflict` with `STORAGE_ARCHIVE_CONFLICT` (§4.8): saving paused, downloads only, reloading doesn't resolve it | V3 Slice 1 · C4 |
 | **Changing today's day type** | §4.5.2; preview of old → new targets; food unchanged | APPROVED A-10 |
 | **Changing a past day's type** | Same sheet, date prominent; "restored" vs "current targets" sentence | APPROVED A-10 · IMPLEMENTATION NOTE I-15 |
 | **Same type chosen** | Sheet closes; nothing written | APPROVED A-10 |
