@@ -731,3 +731,18 @@ test('Today G10 — the source line opens the current recipe while it exists; hi
   const src = fs.readFileSync(path.join(ROOT, 'app/today.js'), 'utf8');
   assert.match(src, /case 'source-meal': openMealDetail\(el\.dataset\.meal, ui\); break;/, 'opened as a view on top of the logged meal; Back returns to it');
 });
+
+/* ---------------- V3 Slice 1 · C6: the Coach top-up stays grams only (§8.4, F-17) ---------------- */
+
+test('V3 C6 — the Coach top-up sheet stays grams only, even for a Food with named servings; Coach logic untouched', async () => {
+  const { renderQuantityDialog } = await import('../app/today.js');
+  const { app } = setup();
+  const food = app.getFood('food_core_fage_0_greek_yogurt');
+  app.createServing(food.id, { label: 'Tub', grams: 170 });
+  const html = renderQuantityDialog({ food, slot: 'snack_afternoon', text: '', preview: null });
+  assert.match(html, /<input id="qty-grams" type="text" inputmode="decimal" autocomplete="off" data-grams value="" placeholder="grams">/, 'empty: the Coach never proposes an amount (I-38)');
+  for (const marker of ['amount-mode', 'data-serving', 'data-count', 'count-pick', 'add-serving', 'Tub', '≈', 'estimate']) assert.ok(!html.includes(marker), marker);
+  const src = fs.readFileSync(path.join(ROOT, 'app/today.js'), 'utf8');
+  assert.ok(!/getServings|createServing|resolveAmount|amount\.js/.test(src), 'today.js does not use servings');
+  assert.match(src, /case 'coach-log-food': openDialog\(\{ type: 'quantity', food: app\.getFood\(el\.dataset\.food\), slot: defaultSlot\(model\.day\), text: '', preview: null, back: ui \}\); break;/);
+});

@@ -12,6 +12,8 @@
  *   clock     () => Date          (default: real time)   — injectable for tests
  *   today     () => 'YYYY-MM-DD'  (default: the clock's date in the device's local time zone)
  *   newId     () => string        (default: crypto.randomUUID) — injectable for tests
+ *   newUuid   () => string        (default: crypto.randomUUID) — the UUID in a serving ID
+ *                                 ("srv_" + a lowercase UUID); injectable for tests
  *
  * No UI, no network, no AI dependency. Browser-safe (the Node file adapter lives in src/node/).
  */
@@ -25,6 +27,7 @@ import { createProgressApi } from './progress.js';
 import { createCoachApi } from './coach.js';
 import { createPreferencesApi } from './preferences.js';
 import { createBackupApi } from './backup.js';
+import { createServingsApi } from './servings.js';
 import { localDate } from './util.js';
 import * as constants from './constants.js';
 
@@ -38,11 +41,13 @@ export { constants };
 export { BACKUP_FORMAT, BACKUP_FORMAT_VERSION, BACKUP_USER_DATA_VERSION, USER_COLLECTIONS, readBackup, olderFormatBackup } from './backup.js';
 export { USER_DATA_FORMAT_VERSION, USER_DATA_COLLECTIONS, upgradeUserData } from './upgrade.js';
 export { carryForwardServingIds } from './serving-ids.js';
+export { SERVING_COUNT_QUICK_PICKS, SERVING_GRAMS_MAX_DECIMALS, parseServingCount, isUnfinishedServingCount, parseServingGrams } from './servings.js';
 
-export function createDataLayer({ adapter, clock = () => new Date(), today, newId } = {}) {
+export function createDataLayer({ adapter, clock = () => new Date(), today, newId, newUuid } = {}) {
   if (!adapter) throw new Error('createDataLayer: adapter is required');
   const store = createStore(adapter);
   const makeId = newId || (() => globalThis.crypto.randomUUID());
+  const makeUuid = newUuid || (() => globalThis.crypto.randomUUID());
 
   // Food lookup by ID, cached per version of the two Food collections.
   let cacheKey = null;
@@ -67,6 +72,7 @@ export function createDataLayer({ adapter, clock = () => new Date(), today, newI
     now: () => clock().toISOString(),
     today: today || (() => localDate(clock())),
     newId: makeId,
+    newUuid: makeUuid,
     lookupFood,
     instancesNewestFirst,
     findMeal: null
@@ -81,6 +87,7 @@ export function createDataLayer({ adapter, clock = () => new Date(), today, newI
   const preferences = createPreferencesApi(ctx);
   const coach = createCoachApi(ctx, { foods, meals, days, targets, preferences });
   const backup = createBackupApi(ctx);
+  const servings = createServingsApi(ctx);
 
   // Persistence status, the same shape for every adapter. File and memory adapters write
   // synchronously and always report 'saved'; the browser adapter reports its queue.
@@ -102,6 +109,7 @@ export function createDataLayer({ adapter, clock = () => new Date(), today, newI
     ...publicOf(preferences),
     ...publicOf(coach),
     ...publicOf(backup),
+    ...publicOf(servings),
     ...persistence,
     constants
   });

@@ -593,6 +593,13 @@ legend { font-weight: 600; margin-bottom: var(--space-2); padding: 0; }
 .grams-input input[type="text"] { width: 7rem; text-align: right; }
 .adjust-row { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-1) var(--space-3); padding: var(--space-2) 0; border-bottom: 1px solid var(--border); }
 .adjust-row label { flex: 1 1 12rem; overflow-wrap: anywhere; }
+/* Amount control (§5.5.1, V3 C6): Servings / Grams, quick picks, the grams a serving logs as. */
+.quick-picks { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-top: var(--space-2); }
+.quick-picks .chip { min-width: 44px; padding: 0 var(--space-3); }
+.quick-picks .chip[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); }
+.serving-grams { margin: var(--space-2) 0 0; }
+.sheet .actions-hint { margin: var(--space-4) 0 0; }
+.estimate-label { display: inline-block; margin-left: var(--space-1); padding: 0 var(--space-2); border: 1px solid var(--border); border-radius: 999px; font-size: 0.75rem; font-weight: 600; }
 
 .option-group { margin-top: var(--space-4); }
 .group-title { font-size: 1rem; margin: 0 0 var(--space-2); cursor: default; }

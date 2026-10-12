@@ -133,7 +133,7 @@ test('§3.2 / §7.4 — Meals and Settings guard route changes and controls besi
 
 test('A-42 — Log: Food detail opened from the quantity sheet goes back to that sheet as it was left', () => {
   const src = read('app/log.js');
-  assert.match(src, /if \(ui\.type === 'food-detail' && ui\.quantity\) \{\n\s*const q = ui\.quantity;\n\s*openFood\(q\.foodId, q\.text, q\.intent, q\.slot\);/);
+  assert.match(src, /if \(ui\.type === 'food-detail' && ui\.quantity\) \{\n\s*const q = ui\.quantity;\n\s*openFood\(q\.foodId, q\.text, q\.intent, q\.slot, q\.amount\);/);
 });
 
 test('final audit — no macro arithmetic, forbidden terms, domain bypass or second store in the changed files', () => {

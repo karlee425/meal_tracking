@@ -353,3 +353,23 @@ test('Foods — no macro arithmetic, no forbidden terms, no second store, domain
   for (const call of ['setFavoriteMeal(', 'setFavoriteFood(', 'setDislikedFood(', 'getCustomFoods(']) assert.ok(settings.includes(call) || src.includes(call), call);
   assert.ok(!/\.sort\(/.test(settings), 'Settings lists keep the domain order');
 });
+
+/* ---------------- V3 Slice 1 · C6: deleting a Custom Food retires its serving IDs (§7.6) ---------------- */
+
+test('V3 C6 — deleting a Custom Food with servings: same dialog outcome, history untouched, serving IDs retired in the same write', () => {
+  const { app, writes } = setup();
+  withHistory(app);
+  const history = historyText(app);
+  const serving = app.createServing(OATS, { label: 'Pouch', grams: 60 });
+  const coreServing = app.createServing(CORE, { label: 'Tub', grams: 170 });
+  writes.length = 0;
+  const note = createFoodActions(app).deleteCustomFood(app.getFood(OATS));
+  assert.match(note.message, /^Deleted Oats overnight\./, 'the same confirmation as before');
+  assert.equal(writes.length, 1, 'one write');
+  assert.ok(writes[0].includes('userFoodData') && writes[0].includes('customFoods'));
+  const ufd = app.exportUserData().data.userFoodData;
+  assert.deepEqual(ufd.retiredServingIds, [serving.id]);
+  assert.deepEqual(ufd.foods.map((r) => r.foodId), [CORE], 'other Foods keep their servings');
+  assert.deepEqual(app.getServings(CORE), [coreServing]);
+  assert.equal(historyText(app), history, 'logged meals are records');
+});

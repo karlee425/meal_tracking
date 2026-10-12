@@ -18,7 +18,8 @@ import {
   resolveLogContext, logModel, mealResults, foodResults, renderResults, renderLogTop, renderConfirmation,
   renderMealDetail, renderLogMealSheet, renderFoodSheet, renderTraySheet, renderTrayBar, renderDateSheet,
   renderCustomFoodForm, customFoodInput, parseAmount, trayMealName, trayIngredients, createLogActions,
-  afterLogging, returnToToday, logSegment, logScreen, presentationFor, widthClass, LOG_VIEW_TYPES, LOG_WIDE_QUERY, LOG_COMPACT_QUERY
+  afterLogging, returnToToday, logSegment, logScreen, presentationFor, widthClass, LOG_VIEW_TYPES, LOG_WIDE_QUERY, LOG_COMPACT_QUERY,
+  logErrorMessage
 } from '../app/log.js';
 
 const TODAY = '2026-09-27';
@@ -489,7 +490,7 @@ test('Log — no macro arithmetic, no forbidden terms, no second store, domain v
     assert.deepEqual(domainImportsBypassingIndex(src), [], f);
   }
   const src = fs.readFileSync(path.join(ROOT, 'app/log.js'), 'utf8');
-  assert.deepEqual([...src.matchAll(/from '([^']+)'/g)].map((m) => m[1]).sort(), ['../src/domain/index.js', './foods.js', './session.js', './shell.js', './today.js', './view-host.js']);
+  assert.deepEqual([...src.matchAll(/from '([^']+)'/g)].map((m) => m[1]).sort(), ['../src/domain/index.js', './amount.js', './foods.js', './session.js', './shell.js', './today.js', './view-host.js']);
   assert.ok(!/localStorage|sessionStorage|indexedDB|\bfetch\(|import\(/.test(src), 'no second persistence mechanism');
   assert.ok(!/\.sort\(|getMacroCoachSuggestions|score\s*[<>]/.test(src), 'no re-ranking; the Coach is not used here');
   assert.ok(!/\bunit\s*:\s*'(?!g')/.test(src), 'grams only');
@@ -504,7 +505,7 @@ test('Log — detail and editing views are pushed full screen (compact), a side 
   assert.deepEqual([320, 375, 599, 600, 800, 1023, 1024, 1280].map((w) => widthClass(mm(w))), ['compact', 'compact', 'compact', 'medium', 'medium', 'medium', 'wide', 'wide']);
   assert.equal(widthClass(mm(1280, 32)), 'medium', '200 % text: no room for two panes, so a side panel');
   assert.equal(widthClass(mm(375, 32)), 'compact');
-  assert.deepEqual([...LOG_VIEW_TYPES], ['meal-detail', 'meal', 'food', 'tray', 'custom-food', 'food-detail'], 'Meal detail, the confirm/adjust and quantity views, the tray, the Custom Food form and Food detail');
+  assert.deepEqual([...LOG_VIEW_TYPES], ['meal-detail', 'meal', 'food', 'tray', 'custom-food', 'food-detail', 'add-serving'], 'Meal detail, the confirm/adjust and quantity views, the tray, the Custom Food form, Food detail and Add a serving (V3 C6)');
   for (const type of LOG_VIEW_TYPES) {
     assert.equal(presentationFor(type, 'compact'), 'pushed', `${type}: full screen on phones, not a bottom sheet`);
     assert.equal(presentationFor(type, 'medium'), 'panel', `${type}: side panel`);
@@ -574,4 +575,27 @@ test('Log — Back and browser history: leaving from a pushed view unwinds its h
   const ctx = resolveLogContext(app, fromToday(TODAY, 'lunch'));
   assert.deepEqual(returnToToday({ launchedFromToday: true }, ctx, TODAY), { method: 'back' });
   assert.deepEqual(returnToToday({ launchedFromToday: false }, ctx, TODAY), { method: 'replace', href: `#/today?date=${TODAY}` });
+});
+
+/* ---------------- V3 Slice 1 · C6: the amount control on the quantity sheet (§5.5.1–5.5.2) ---------------- */
+
+test('V3 C6 — every quantity sheet offers Add a serving; a Food with servings opens on the first × 1; new error codes read plainly', () => {
+  const { app } = setup();
+  const model = logModel(app, resolveLogContext(app, '#/log'));
+  const food = app.getFood('food_core_fage_0_greek_yogurt');
+  const plain = renderFoodSheet({ model, food, text: '', preview: null, slot: null });
+  assert.match(plain, /data-action="add-serving" data-food="food_core_fage_0_greek_yogurt" aria-label="Add a serving for [^"]+">Add a serving</);
+  assert.match(plain, /id="qty-grams"[^>]*value=""/, 'still grams, empty by default');
+  assert.ok(!plain.includes('amount-mode'));
+  const s = app.createServing(food.id, { label: 'Tub', grams: 170 });
+  const draft = { mode: 'serving', servingId: s.id, countText: '1', lastText: null };
+  const resolved = app.resolveAmount(food.id, { servingId: s.id, count: '1' });
+  const sheet = renderFoodSheet({ model, food, text: '', preview: app.previewLogFood({ date: model.date, foodId: food.id, quantity: resolved.quantity }), slot: null, servings: app.getServings(food.id), amount: draft, resolved });
+  assert.match(sheet, /value="serving" data-amount-mode checked/);
+  assert.match(sheet, /Logs as 170 g/);
+  assert.match(sheet, /data-action="add-to-tray">Add to a meal</);
+  assert.equal(logErrorMessage({ code: 'SERVING_ID_UNAVAILABLE' }), 'That serving couldn’t be saved. Nothing was changed. Try again.');
+  assert.equal(logErrorMessage({ code: 'SERVING_NOT_FOUND' }), 'That serving no longer exists.');
+  assert.equal(logErrorMessage({ code: 'INVALID_SERVING' }), 'Check the fields above.');
+  assert.equal(presentationFor('add-serving', 'compact'), 'pushed', 'Add a serving is a pushed view on compact screens, like the Custom Food form');
 });
