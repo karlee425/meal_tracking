@@ -259,7 +259,7 @@ test('Add a serving — Cancel / Back / Escape return to the sheet exactly; anyt
   assert.match(fn('function guardLeave('), /if \(ui\.type === 'add-serving' && servingFormDirty\(ui\)\) \{ askDiscard\(ui, proceed\); return false; \}/, 'leaving Log asks too');
   assert.match(fn('function discardChanges()'), /\} else if \(form\.type === 'add-serving'\) \{\n\s*returnToSheet\(form\.quantity\);/);
   assert.match(fn('function returnToSheet('), /openFood\(q\.foodId, q\.text, q\.intent, q\.slot, q\.amount\);/);
-  assert.match(logSrc, /case 'discard-food': dialog\.innerHTML = renderDiscardFood\(\{ created: ui\.form\.mode !== 'edit', serving: ui\.form\.type === 'add-serving' \}\); break;/);
+  assert.match(logSrc, /case 'discard-food': dialog\.innerHTML = renderDiscardFood\(\{\n\s*created: ui\.form\.mode !== 'edit',\n\s*serving: ui\.form\.type === 'add-serving' \|\| \(ui\.form\.type === 'serving-form' && ui\.form\.mode === 'add'\),\n\s*editedServing: ui\.form\.type === 'serving-form' && ui\.form\.mode === 'edit'\n\s*\}\); break;/, 'the new-serving wording for Add a serving (C6), and for the Food detail serving form (C7)');
   for (const f of ['function beforeLeave()', 'function discardChanges()', 'function guardLeave(', 'function returnToSheet(', 'function openServingForm(']) {
     assert.ok(!/app\.(create|update|set|delete|log)|actions\./.test(fn(f)), `${f} saves nothing`);
   }
@@ -271,7 +271,7 @@ test('round trips — Food detail and the Custom Food edit carry the whole draft
   const open = fn('function openFood(');
   assert.match(open, /if \(!food\) \{ foodGone\(\); return; \}/);
   assert.match(open, /const start = amount \? restoreAmount\(app, foodId, \{ \.\.\.amount, gramsText: text \}\) : \{ draft: startAmount\(app, foodId, text\), notice: '' \};/);
-  assert.match(logSrc, /const foodSurface = \(\) => !ui \|\| \['food', 'food-detail', 'tray', 'add-serving'\]\.includes\(ui\.type\)/, 'a Food deleted under Add a serving reads as "That food no longer exists."');
+  assert.match(logSrc, /const foodSurface = \(\) => !ui \|\| \['food', 'food-detail', 'tray', 'add-serving', 'serving-form', 'serving-delete'\]\.includes\(ui\.type\)/, 'a Food deleted under Add a serving (or a C7 serving form / dialog) reads as "That food no longer exists."');
   assert.match(logSrc, /else if \(ui\.type === 'food' && el\.matches\('\[data-amount-mode\]'\)\) \{\n\s*\/\/[^\n]*\n\s*ui\.slot = checkedSlot\('log-slot'\) \|\| ui\.slot;/, 'switching mode keeps the slot chosen');
 });
 

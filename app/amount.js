@@ -177,12 +177,28 @@ export const servingFormDirty = (form) => form.values.label !== form.initial.lab
  */
 export const servingInput = (values) => ({ label: values.label, grams: parseServingGrams(values.grams), approximate: values.approximate === true });
 
-/** The Add a serving form. errors: the domain's details [{ field, code }] after a Save that failed. */
-export function renderServingForm({ food, values, errors = [] }) {
+/**
+ * Edit serving's values → updateServing's patch (C7). The weight is only sent when its text was
+ * changed: left as it opened, the stored number stays exactly as it is (a restored weight with
+ * more than 2 decimal places included), and the domain checks a changed one.
+ */
+export function servingPatch(values, initial) {
+  const patch = { label: values.label, approximate: values.approximate === true };
+  if (values.grams !== initial.grams) patch.grams = parseServingGrams(values.grams);
+  return patch;
+}
+
+/**
+ * The serving form: Add a serving (C6, from the quantity sheet or Food detail) or, with
+ * mode 'edit', Edit serving (C7, from Food detail). errors: the domain's details
+ * [{ field, code }] after a Save that failed.
+ */
+export function renderServingForm({ food, values, errors = [], mode = 'add' }) {
+  const edit = mode === 'edit';
   const errorFor = (field) => { const e = errors.find((x) => x.field === field); return e ? SERVING_FORM_MESSAGES[e.code] || 'Check this value.' : ''; };
   const fieldError = (field) => { const t = errorFor(field); return `<p id="srv-${field}-error" class="field-error"${t ? '' : ' hidden'}>${escapeHtml(t)}</p>`; };
-  return `${viewHead('Add a serving', food.name)}
-<p class="hint">A name for an amount of this food, and what it weighs. Logging still records grams.</p>
+  return `${viewHead(edit ? 'Edit serving' : 'Add a serving', food.name)}
+<p class="hint">A name for an amount of this food, and what it weighs. Logging still records grams.</p>${edit ? '\n<p class="hint">Changing the weight doesn’t change meals you’ve already logged.</p>' : ''}
 <label class="field" for="srv-label">Name</label>
 <input id="srv-label" type="text" data-srv="label" value="${escapeHtml(values.label)}" autocomplete="off" placeholder="for example scoop" aria-describedby="srv-label-error"${errorFor('label') ? ' aria-invalid="true"' : ''}>
 ${fieldError('label')}
@@ -192,7 +208,7 @@ ${fieldError('grams')}
 <label class="radio-row"><input type="checkbox" data-srv="approximate"${values.approximate ? ' checked' : ''}><span class="radio-text"><span>This weight is an estimate</span><span class="hint">It shows ≈ and “estimate” wherever this serving is used.</span></span></label>
 ${errorSlot}
 <div class="sheet-actions">
-<button type="button" class="button primary" data-action="srv-save">Save serving</button>
+<button type="button" class="button primary" data-action="srv-save">${edit ? 'Save changes' : 'Save serving'}</button>
 <button type="button" class="button" data-action="close">Cancel</button>
 </div>`;
 }

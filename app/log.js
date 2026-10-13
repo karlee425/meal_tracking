@@ -22,10 +22,13 @@ import {
 } from './today.js';
 import { session, routeParams, isIsoDate } from './session.js';
 import { WIDE_QUERY, COMPACT_QUERY, widthClass, presentationFor as present, viewHead, syncInPlace, createViewHost } from './view-host.js';
-import { foodDetailModel, renderFoodDetail, renderDeleteFood, renderDiscardFood, foodUsageMeals, renderLinkedMessage, createFoodActions } from './foods.js';
+import {
+  foodDetailModel, renderFoodDetail, renderDeleteFood, renderDiscardFood, foodUsageMeals, renderLinkedMessage, createFoodActions,
+  renderDeleteServing, servingFormValues
+} from './foods.js';
 import {
   startAmount, restoreAmount, resolveDraft, switchAmount, renderAmountControl, renderGramsField, renderServingGrams,
-  renderServingForm, emptyServingValues, servingFormDirty, servingInput, AMOUNT_MESSAGES, renderActionsHint, servingActionsBlocked
+  renderServingForm, emptyServingValues, servingFormDirty, servingInput, servingPatch, AMOUNT_MESSAGES, renderActionsHint, servingActionsBlocked
 } from './amount.js';
 
 export const MEAL_TYPE_LABELS = Object.freeze({ breakfast: 'Breakfast', lunch: 'Lunch', snack: 'Snack', dinner: 'Dinner', other: 'Other' });
@@ -294,7 +297,7 @@ export function renderTrayBar(tray, preview, { unavailable = 0 } = {}) {
 /* ---------------- presentation by width (§3.1, I-05; shared with Meals in view-host.js) ---------------- */
 
 /** Detail and editing surfaces; everything else in Log is a short choice (day type, date, slot, follow-up). */
-export const LOG_VIEW_TYPES = Object.freeze(['meal-detail', 'meal', 'food', 'tray', 'custom-food', 'food-detail', 'add-serving']);
+export const LOG_VIEW_TYPES = Object.freeze(['meal-detail', 'meal', 'food', 'tray', 'custom-food', 'food-detail', 'add-serving', 'serving-form']);
 export const LOG_WIDE_QUERY = WIDE_QUERY;
 export const LOG_COMPACT_QUERY = COMPACT_QUERY;
 export { widthClass, viewHead };
@@ -799,7 +802,13 @@ export const logScreen = {
         case 'food-detail': dialog.innerHTML = renderFoodDetail({ ...ui, context: 'log', future: model.future }); break;
         case 'food-delete': dialog.innerHTML = renderDeleteFood(ui); break;
         case 'add-serving': dialog.innerHTML = renderServingForm(ui); break;
-        case 'discard-food': dialog.innerHTML = renderDiscardFood({ created: ui.form.mode !== 'edit', serving: ui.form.type === 'add-serving' }); break;
+        case 'serving-form': dialog.innerHTML = renderServingForm(ui); break;
+        case 'serving-delete': dialog.innerHTML = renderDeleteServing(ui); break;
+        case 'discard-food': dialog.innerHTML = renderDiscardFood({
+          created: ui.form.mode !== 'edit',
+          serving: ui.form.type === 'add-serving' || (ui.form.type === 'serving-form' && ui.form.mode === 'add'),
+          editedServing: ui.form.type === 'serving-form' && ui.form.mode === 'edit'
+        }); break;
         case 'followup': dialog.innerHTML = renderFollowUpDialog(ui); break;
         default: break;
       }
@@ -849,7 +858,7 @@ export const logScreen = {
       if (dialog.open) { host.returnFocusTo(top.querySelector('[data-query]')); ui = null; closeDialog(); }
     }
     /** Whether what's open is about a Food (quantity sheet, Food detail, tray, or the day-type step before logging one). */
-    const foodSurface = () => !ui || ['food', 'food-detail', 'tray', 'add-serving'].includes(ui.type)
+    const foodSurface = () => !ui || ['food', 'food-detail', 'tray', 'add-serving', 'serving-form', 'serving-delete'].includes(ui.type)
       || (ui.type === 'day-type' && !!ui.continueTo && ui.continueTo.kind !== 'meal');
     /** Redraw the open tray sheet against the current Foods, keeping the name, slot and tick-box. */
     function refreshTraySheet() {
@@ -949,6 +958,7 @@ export const logScreen = {
     }
     /** Save: one domain call. Field problems stay on the form; anything else goes to the click handler's error path. */
     function saveServing() {
+      if (ui.type === 'serving-form') { saveServingFromDetail(); return; } // C7: Add / Edit serving from Food detail
       const form = ui;
       let serving;
       try {
@@ -988,6 +998,59 @@ export const logScreen = {
     function returnToFoodRow(foodId) {
       host.returnFocusTo(results.querySelector(`[data-action="food"][data-food="${foodId}"]`) || top.querySelector('[data-query]'));
     }
+    /* ---- servings on Food detail (C7, §7.3): Add · Edit · Delete · Make default ---- */
+    /** The serving a Food detail control names, as stored now — never another one (null: it's gone). */
+    const currentServing = (foodId, servingId) => app.getServings(foodId).find((s) => s.id === servingId) || null;
+    /** Food detail again, from the domain as it is now, with the sheet it came from kept; then focus and say what happened. */
+    function backToDetail(foodId, quantity, focusSelector, message = '') {
+      openFoodDetail(foodId, '', quantity);
+      if (!ui || ui.type !== 'food-detail') return;
+      const target = (focusSelector && dialog.querySelector(focusSelector)) || dialog.querySelector('[data-action="fd-serving-add"]');
+      if (target) target.focus();
+      if (message) announceInDialog(message);
+    }
+    /** A serving that no longer exists (deleted elsewhere): Food detail as it is now, and say so. Nothing is changed. */
+    function servingGone(foodId, quantity) {
+      backToDetail(foodId, quantity, null, 'That serving no longer exists.');
+    }
+    function openDetailServingForm(mode, serving = null) {
+      const values = serving ? servingFormValues(serving) : emptyServingValues();
+      ui = { type: 'serving-form', mode, food: ui.food, foodId: ui.food.id, servingId: serving ? serving.id : null, values, initial: { ...values }, errors: [], quantity: ui.quantity };
+      host.open(ui.type, drawDialog);
+    }
+    /** Save Add / Edit serving: one domain call; field problems stay on the form; success returns to Food detail. */
+    function saveServingFromDetail() {
+      const form = ui;
+      let result;
+      try {
+        result = form.mode === 'edit'
+          ? foodActions.updateServing(form.food, form.servingId, servingPatch(form.values, form.initial))
+          : foodActions.addServing(form.food, servingInput(form.values));
+      } catch (e) {
+        if (!e || e.code !== 'INVALID_SERVING') throw e;
+        form.errors = e.details || [];
+        drawDialog();
+        const first = form.errors.find((x) => x.field === 'label' || x.field === 'grams');
+        const field = dialog.querySelector(`#srv-${first ? first.field : 'label'}`);
+        if (field) field.focus();
+        return;
+      }
+      backToDetail(form.food.id, form.quantity, `[data-action="fd-serving-edit"][data-serving="${result.serving.id}"]`, result.message);
+    }
+    /** Delete confirmed: the serving named by the dialog, by ID. Focus the next row, else Add a serving. */
+    function deleteServingConfirmed() {
+      const { food, serving, quantity } = ui;
+      const index = app.getServings(food.id).findIndex((s) => s.id === serving.id);
+      const result = foodActions.deleteServing(food, serving);
+      const next = result.remaining[Math.min(Math.max(index, 0), result.remaining.length - 1)];
+      backToDetail(food.id, quantity, next ? `[data-action="fd-serving-edit"][data-serving="${next.id}"]` : null, result.message);
+    }
+    function makeDefaultServing(serving) {
+      const result = foodActions.makeDefaultServing(ui.food, serving);
+      refreshFoodDetail(result.message);
+      const target = dialog.querySelector(`[data-action="fd-serving-edit"][data-serving="${serving.id}"]`);
+      if (target) target.focus();
+    }
     function announceInDialog(message) {
       const el = dialog.querySelector('[data-food-status]');
       if (el) { el.textContent = ''; el.textContent = message; }
@@ -1003,6 +1066,9 @@ export const logScreen = {
       if (ui.type === 'custom-food' && ui.mode === 'edit') { openFoodDetail(ui.foodId, '', ui.quantity); return false; }
       if (ui.type === 'add-serving' && servingFormDirty(ui)) { askDiscard(ui, null); return false; }
       if (ui.type === 'add-serving') { returnToSheet(ui.quantity); return false; }
+      if (ui.type === 'serving-form' && servingFormDirty(ui)) { askDiscard(ui, null); return false; }
+      if (ui.type === 'serving-form') { backToDetail(ui.food.id, ui.quantity, ui.servingId ? `[data-action="fd-serving-edit"][data-serving="${ui.servingId}"]` : null); return false; }
+      if (ui.type === 'serving-delete') { backToDetail(ui.food.id, ui.quantity, `[data-action="fd-serving-delete"][data-serving="${ui.serving.id}"]`); return false; }
       if (ui.type === 'discard-food') { reopenForm(ui.form); return false; }
       if (ui.type === 'food-delete') { openFoodDetail(ui.food.id, '', ui.quantity); return false; }
       // A-42: Food detail opened from the quantity sheet goes back to that sheet, as it was left.
@@ -1038,6 +1104,7 @@ export const logScreen = {
       }
       if (ui.type === 'custom-food' && customFoodDirty(ui)) { askDiscard(ui, proceed); return false; }
       if (ui.type === 'add-serving' && servingFormDirty(ui)) { askDiscard(ui, proceed); return false; }
+      if (ui.type === 'serving-form' && servingFormDirty(ui)) { askDiscard(ui, proceed); return false; }
       return true;
     }
     this._leaveGuard = guardLeave;
@@ -1052,6 +1119,8 @@ export const logScreen = {
         closeDialog();
       } else if (form.type === 'add-serving') {
         returnToSheet(form.quantity);
+      } else if (form.type === 'serving-form') {
+        backToDetail(form.food.id, form.quantity, form.servingId ? `[data-action="fd-serving-edit"][data-serving="${form.servingId}"]` : null);
       } else if (form.mode === 'edit') {
         openFoodDetail(form.foodId, '', form.quantity);
       } else {
@@ -1147,7 +1216,7 @@ export const logScreen = {
       } else if (ui.type === 'food' && el.matches('[data-count]')) {
         ui.amount.countText = el.value;
         syncFoodSheet();
-      } else if (ui.type === 'add-serving' && el.matches('[data-srv="label"], [data-srv="grams"]')) {
+      } else if ((ui.type === 'add-serving' || ui.type === 'serving-form') && el.matches('[data-srv="label"], [data-srv="grams"]')) {
         ui.values[el.dataset.srv] = el.value;
         const err = dialog.querySelector(`#srv-${el.dataset.srv}-error`);
         if (err) err.hidden = true;
@@ -1202,7 +1271,7 @@ export const logScreen = {
       } else if (ui.type === 'food' && el.matches('[data-serving]')) {
         ui.amount.servingId = el.value;
         syncFoodSheet();
-      } else if (ui.type === 'add-serving' && el.matches('[data-srv="approximate"]')) {
+      } else if ((ui.type === 'add-serving' || ui.type === 'serving-form') && el.matches('[data-srv="approximate"]')) {
         ui.values.approximate = el.checked;
       } else if (ui.type === 'custom-food' && el.matches('[data-cf]')) {
         ui.values[el.dataset.cf] = el.value;
@@ -1389,7 +1458,29 @@ export const logScreen = {
             reopenForm(form);
             break;
           }
-          case 'fd-delete': ui = { type: 'food-delete', food: ui.food, meals: foodUsageMeals(app, ui.food.id), quantity: ui.quantity }; host.open(ui.type, drawDialog); break;
+          case 'fd-delete': ui = { type: 'food-delete', food: ui.food, meals: foodUsageMeals(app, ui.food.id), servingCount: app.getServings(ui.food.id).length, quantity: ui.quantity }; host.open(ui.type, drawDialog); break;
+          /* Servings on Food detail (C7): each control names its serving by ID; one that's gone changes nothing. */
+          case 'fd-serving-add': openDetailServingForm('add'); break;
+          case 'fd-serving-edit': {
+            const serving = currentServing(ui.food.id, el.dataset.serving);
+            if (!serving) { servingGone(ui.food.id, ui.quantity); break; }
+            openDetailServingForm('edit', serving);
+            break;
+          }
+          case 'fd-serving-default': {
+            const serving = currentServing(ui.food.id, el.dataset.serving);
+            if (!serving) { servingGone(ui.food.id, ui.quantity); break; }
+            makeDefaultServing(serving);
+            break;
+          }
+          case 'fd-serving-delete': {
+            const serving = currentServing(ui.food.id, el.dataset.serving);
+            if (!serving) { servingGone(ui.food.id, ui.quantity); break; }
+            ui = { type: 'serving-delete', food: ui.food, serving, servings: app.getServings(ui.food.id), quantity: ui.quantity };
+            host.open(ui.type, drawDialog);
+            break;
+          }
+          case 'fd-serving-delete-confirm': deleteServingConfirmed(); break;
           case 'fd-delete-confirm': {
             confirmation = foodActions.deleteCustomFood(ui.food);
             renderList(); // §13.2: the results follow the current Foods; the search text is kept
@@ -1417,6 +1508,8 @@ export const logScreen = {
           default: break;
         }
       } catch (e) {
+        // A serving deleted elsewhere while its form or dialog was open: Food detail as it is now (C7).
+        if (e && e.code === 'SERVING_NOT_FOUND' && ui && ['food-detail', 'serving-form', 'serving-delete'].includes(ui.type)) { servingGone(ui.food.id, ui.quantity); return; }
         // A tray the domain can't log because a Food is gone reads as the same case (A-43).
         if (e && (e.code === 'FOOD_NOT_FOUND' || (e.code === 'MEAL_NEEDS_REPLACEMENT' && ui && ui.type === 'tray')) && foodSurface()) foodGone();
         else { if (e && e.code === 'FOOD_NOT_FOUND') renderList(); showError(e); }

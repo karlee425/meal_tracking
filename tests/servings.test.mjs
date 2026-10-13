@@ -19,7 +19,7 @@ const SRV = (n) => `srv_${uuid(n)}`;
 const SERVING_ID = /^srv_[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 
 /** A data layer over a copy of the seed. uuids: the UUIDs newUuid hands out, in order (then 1001, 1002 …). */
-function setup({ userFoodData, uuids = [], failWrites = () => false } = {}) {
+function setup({ userFoodData, uuids = [], failWrites = () => false, clock = null } = {}) {
   const seed = userFoodData ? { ...SEED, userFoodData } : SEED;
   const inner = createMemoryAdapter(seed);
   const writes = [];
@@ -33,7 +33,7 @@ function setup({ userFoodData, uuids = [], failWrites = () => false } = {}) {
   const queue = [...uuids];
   const calls = { uuid: 0 };
   const app = createDataLayer({
-    adapter, today: () => TODAY, clock: () => new Date((t += 60000)),
+    adapter, today: () => TODAY, clock: clock || (() => new Date((t += 60000))),
     newUuid: () => { calls.uuid += 1; return queue.length ? queue.shift() : uuid(++next); }
   });
   return { app, writes, calls };
@@ -343,4 +343,208 @@ test('parseServingGrams — plain digits with one decimal point or comma; unfini
   const { app } = setup({ uuids: [uuid(1)] });
   for (const t of ['45.', '1e2', '0x10', '0', '12.345']) assert.throws(() => app.createServing(CORE, { label: 'Tub', grams: parseServingGrams(t) }), detail('INVALID_SERVING_GRAMS'), t);
   assert.deepEqual(app.getServings(CORE), [], 'none saved');
+});
+
+/* ================= C7: updating, deleting and choosing the default serving ================= */
+
+/** A clock the test sets by hand: every domain timestamp is the time it was last set to. */
+function handClock(iso) {
+  let now = new Date(iso);
+  return { clock: () => new Date(now), set: (next) => { now = new Date(next); } };
+}
+const T0 = '2026-10-01T08:00:00.000Z';
+const T1 = '2026-10-02T09:30:00.000Z';
+
+test('updateServing — same ID, place and createdAt; updatedAt from the injected clock; one write; Food records untouched', () => {
+  const time = handClock(T0);
+  const { app, writes } = setup({ uuids: [uuid(1), uuid(2), uuid(3)], clock: time.clock });
+  const a = app.createServing(CORE, { label: 'Tub', grams: 170 });
+  const b = app.createServing(CORE, { label: 'Scoop', grams: 30, approximate: true });
+  const c = app.createServing(CORE, { label: 'Cup', grams: 245 });
+  const before = foods(app);
+  writes.length = 0;
+  time.set(T1);
+  const updated = app.updateServing(CORE, b.id, { label: ' Big scoop ', grams: 35.5, approximate: false });
+  assert.deepEqual(updated, { id: b.id, label: 'Big scoop', grams: 35.5, approximate: false, createdAt: T0, updatedAt: T1 });
+  assert.deepEqual(Object.keys(updated), ['id', 'label', 'grams', 'approximate', 'createdAt', 'updatedAt'], 'the stored shape');
+  assert.deepEqual(app.getServings(CORE).map((s) => s.id), [a.id, b.id, c.id], 'its place is kept');
+  assert.deepEqual(app.getServings(CORE)[0], a, 'the others are untouched');
+  assert.deepEqual(app.getServings(CORE)[2], c);
+  assert.deepEqual(writes, [['userFoodData']], 'one write, userFoodData only');
+  assert.equal(foods(app), before, 'no Core or Custom Food record changes');
+  assert.deepEqual(ufd(app).retiredServingIds, [], 'nothing is retired by an edit');
+});
+
+test('updateServing — fields left out keep their values; a case-only rename of itself is fine', () => {
+  const time = handClock(T0);
+  const { app } = setup({ uuids: [uuid(1), uuid(2)], clock: time.clock });
+  const a = app.createServing(OATS, { label: 'Pouch', grams: 60, approximate: true });
+  app.createServing(OATS, { label: 'Half pouch', grams: 30 });
+  time.set(T1);
+  assert.deepEqual(app.updateServing(OATS, a.id, { label: 'POUCH' }), { ...a, label: 'POUCH', updatedAt: T1 }, 'case-only rename');
+  assert.deepEqual(app.updateServing(OATS, a.id, { grams: 61 }), { ...a, label: 'POUCH', grams: 61, updatedAt: T1 });
+  assert.deepEqual(app.updateServing(OATS, a.id, { approximate: false }), { ...a, label: 'POUCH', grams: 61, approximate: false, updatedAt: T1 });
+  assert.deepEqual(app.updateServing(OATS, a.id, { label: undefined, grams: undefined, approximate: undefined }), { ...a, label: 'POUCH', grams: 61, approximate: false, updatedAt: T1 }, 'undefined means left out');
+  assert.deepEqual(app.updateServing(OATS, a.id, { id: a.id, label: ' Pouch ' }).label, 'Pouch', 'its own id in the patch is fine');
+});
+
+test('updateServing — duplicate, reserved and invalid values, unknown IDs: refused, nothing written', () => {
+  const { app, writes } = setup({ uuids: [uuid(1), uuid(2)] });
+  const a = app.createServing(CORE, { label: 'Tub', grams: 170 });
+  const b = app.createServing(CORE, { label: 'Scoop', grams: 30 });
+  const stored = JSON.stringify(ufd(app));
+  writes.length = 0;
+  const cases = [
+    [{ label: ' tub ' }, 'SERVING_LABEL_DUPLICATE'],
+    [{ label: 'TUB' }, 'SERVING_LABEL_DUPLICATE'],
+    [{ label: '' }, 'SERVING_LABEL_REQUIRED'],
+    [{ label: '   ' }, 'SERVING_LABEL_REQUIRED'],
+    [{ label: 'Grams' }, 'SERVING_LABEL_RESERVED'],
+    [{ label: 'g' }, 'SERVING_LABEL_RESERVED'],
+    [{ grams: 0 }, 'INVALID_SERVING_GRAMS'],
+    [{ grams: -1 }, 'INVALID_SERVING_GRAMS'],
+    [{ grams: NaN }, 'INVALID_SERVING_GRAMS'],
+    [{ grams: Infinity }, 'INVALID_SERVING_GRAMS'],
+    [{ grams: '30' }, 'INVALID_SERVING_GRAMS'],
+    [{ grams: null }, 'INVALID_SERVING_GRAMS'],
+    [{ grams: 30.125 }, 'INVALID_SERVING_GRAMS'],
+    [{ approximate: 'yes' }, 'INVALID_ARGUMENT']
+  ];
+  for (const [patch, c] of cases) assert.throws(() => app.updateServing(CORE, b.id, patch), detail(c), JSON.stringify(patch));
+  assert.throws(() => app.updateServing(CORE, b.id, { label: '', grams: 0 }), (e) => e.details.length === 2, 'every problem, by field');
+  assert.throws(() => app.updateServing(CORE, 'srv_gone', { label: 'X' }), code('SERVING_NOT_FOUND'));
+  assert.throws(() => app.updateServing(OATS, a.id, { label: 'X' }), code('SERVING_NOT_FOUND'), 'another Food’s serving');
+  assert.throws(() => app.updateServing('food_nope', a.id, { label: 'X' }), code('FOOD_NOT_FOUND'));
+  assert.throws(() => app.updateServing(CORE, a.id, { id: b.id }), code('IMMUTABLE_ID'));
+  assert.equal(JSON.stringify(ufd(app)), stored, 'nothing changed');
+  assert.deepEqual(writes, [], 'nothing written');
+});
+
+test('updateServing — a restored weight with more than 2 decimal places stays as it is for label / estimate edits; changing it enforces the limit', () => {
+  const time = handClock(T1);
+  const { app, writes } = setup({ userFoodData: restored([[7, 'Pinch', 1.005], [8, 'Dash', 0.0625, true]]), clock: time.clock });
+  const renamed = app.updateServing(CORE, SRV(7), { label: 'Big pinch' });
+  assert.equal(renamed.grams, 1.005, 'kept exactly');
+  assert.equal(renamed.createdAt, '2026-09-01T00:00:00.000Z');
+  assert.equal(renamed.updatedAt, T1);
+  assert.equal(app.updateServing(CORE, SRV(8), { approximate: false }).grams, 0.0625);
+  assert.equal(app.updateServing(CORE, SRV(7), { label: 'Pinch', grams: 1.005 }).grams, 1.005, 'the same weight passed back is unchanged');
+  const stored = JSON.stringify(ufd(app));
+  const n = writes.length;
+  for (const grams of [1.006, 1.0051, 0.0626]) assert.throws(() => app.updateServing(CORE, SRV(7), { grams }), detail('INVALID_SERVING_GRAMS'), String(grams));
+  assert.equal(JSON.stringify(ufd(app)), stored);
+  assert.equal(writes.length, n, 'nothing written');
+  assert.equal(app.updateServing(CORE, SRV(7), { grams: 1.01 }).grams, 1.01, 'a changed weight with 2 places is fine');
+});
+
+test('updateServing — a failed write changes nothing', () => {
+  let fail = false;
+  const { app } = setup({ uuids: [uuid(1)], failWrites: () => fail });
+  const a = app.createServing(CORE, { label: 'Tub', grams: 170 });
+  fail = true;
+  assert.throws(() => app.updateServing(CORE, a.id, { label: 'Pot' }), code('PERSIST_FAILED'));
+  assert.deepEqual(app.getServings(CORE), [a]);
+});
+
+test('deleteServing — removed and its ID retired in one commit; the rest keep their order; the ID is never reused', () => {
+  const { app, writes } = setup({ uuids: [uuid(1), uuid(2), uuid(3), uuid(2), uuid(4)] });
+  const a = app.createServing(CORE, { label: 'Tub', grams: 170 });
+  const b = app.createServing(CORE, { label: 'Scoop', grams: 30 });
+  const c = app.createServing(CORE, { label: 'Cup', grams: 245 });
+  const before = foods(app);
+  writes.length = 0;
+  const result = app.deleteServing(CORE, b.id);
+  assert.deepEqual(result, { deletedServingId: b.id, remaining: [a, c] });
+  assert.deepEqual(writes, [['userFoodData']], 'one write');
+  assert.deepEqual(app.getServings(CORE), [a, c]);
+  assert.deepEqual(ufd(app).retiredServingIds, [b.id]);
+  assert.equal(foods(app), before, 'the Food is untouched');
+  assert.equal(app.createServing(CORE, { label: 'Spoon', grams: 15 }).id, SRV(4), 'the retired ID is skipped, not reused');
+  // Deleting the default makes the next one the default.
+  app.deleteServing(CORE, a.id);
+  assert.equal(app.getServings(CORE)[0].id, c.id);
+});
+
+test('deleteServing — the last serving: the Food’s whole record goes in the same commit; the Food stays', () => {
+  const { app, writes } = setup({ uuids: [uuid(1), uuid(2)] });
+  const a = app.createServing(OATS, { label: 'Pouch', grams: 60 });
+  const b = app.createServing(CORE, { label: 'Tub', grams: 170 });
+  const before = foods(app);
+  writes.length = 0;
+  assert.deepEqual(app.deleteServing(OATS, a.id), { deletedServingId: a.id, remaining: [] });
+  assert.deepEqual(writes, [['userFoodData']]);
+  assert.deepEqual(ufd(app).foods.map((r) => r.foodId), [CORE], 'its record is gone; other Foods keep theirs');
+  assert.deepEqual(ufd(app).retiredServingIds, [a.id]);
+  assert.deepEqual(app.getServings(OATS), []);
+  assert.ok(app.getFood(OATS), 'the Food itself still exists');
+  assert.equal(foods(app), before, 'and is unchanged');
+  assert.deepEqual(app.getServings(CORE), [b]);
+  // A restore of a backup without it keeps the ID reserved (C5).
+  const carried = carryForwardServingIds({ foods: [], retiredServingIds: [] }, ufd(app));
+  assert.ok(carried.userFoodData.retiredServingIds.includes(a.id) && carried.userFoodData.retiredServingIds.includes(b.id));
+});
+
+test('deleteServing — unknown serving or Food: refused, nothing written; a failed write deletes nothing', () => {
+  let fail = false;
+  const { app, writes } = setup({ uuids: [uuid(1)], failWrites: () => fail });
+  const a = app.createServing(CORE, { label: 'Tub', grams: 170 });
+  writes.length = 0;
+  assert.throws(() => app.deleteServing(CORE, 'srv_gone'), code('SERVING_NOT_FOUND'));
+  assert.throws(() => app.deleteServing(OATS, a.id), code('SERVING_NOT_FOUND'), 'another Food’s serving');
+  assert.throws(() => app.deleteServing('food_nope', a.id), code('FOOD_NOT_FOUND'));
+  assert.deepEqual(writes, []);
+  fail = true;
+  assert.throws(() => app.deleteServing(CORE, a.id), code('PERSIST_FAILED'));
+  assert.deepEqual(app.getServings(CORE), [a]);
+  assert.deepEqual(ufd(app).retiredServingIds, []);
+});
+
+test('setDefaultServing — moves it to the front; IDs, definitions, timestamps and the others’ order unchanged; one write', () => {
+  const time = handClock(T0);
+  const { app, writes } = setup({ uuids: [uuid(1), uuid(2), uuid(3), uuid(4)], clock: time.clock });
+  const s = ['Tub', 'Scoop', 'Cup', 'Spoon'].map((label, i) => app.createServing(CORE, { label, grams: 10 * (i + 1), approximate: i === 2 }));
+  const before = foods(app);
+  writes.length = 0;
+  time.set(T1);
+  const result = app.setDefaultServing(CORE, s[2].id);
+  assert.deepEqual(result, { changed: true, servings: [s[2], s[0], s[1], s[3]] });
+  assert.deepEqual(app.getServings(CORE), [s[2], s[0], s[1], s[3]], 'definitions and timestamps exactly as they were');
+  assert.ok(app.getServings(CORE).every((x) => x.updatedAt === T0), 'no timestamp moved');
+  assert.deepEqual(writes, [['userFoodData']]);
+  assert.equal(foods(app), before);
+  assert.deepEqual(ufd(app).retiredServingIds, []);
+  assert.equal(app.resolveAmount(CORE, { servingId: s[2].id, count: '1' }).quantity, 30, 'the same serving resolves as before');
+});
+
+test('setDefaultServing — already first: no write; unknown serving or Food: refused, nothing written', () => {
+  let fail = false;
+  const { app, writes } = setup({ uuids: [uuid(1), uuid(2)], failWrites: () => fail });
+  const a = app.createServing(CORE, { label: 'Tub', grams: 170 });
+  const b = app.createServing(CORE, { label: 'Scoop', grams: 30 });
+  writes.length = 0;
+  assert.deepEqual(app.setDefaultServing(CORE, a.id), { changed: false, servings: [a, b] });
+  assert.deepEqual(writes, [], 'already the default: nothing written');
+  assert.throws(() => app.setDefaultServing(CORE, 'srv_gone'), code('SERVING_NOT_FOUND'));
+  assert.throws(() => app.setDefaultServing(OATS, b.id), code('SERVING_NOT_FOUND'));
+  assert.throws(() => app.setDefaultServing('food_nope', b.id), code('FOOD_NOT_FOUND'));
+  assert.deepEqual(writes, []);
+  fail = true;
+  assert.throws(() => app.setDefaultServing(CORE, b.id), code('PERSIST_FAILED'));
+  assert.deepEqual(app.getServings(CORE), [a, b], 'a failed write moves nothing');
+});
+
+test('C7 operations keep the store’s serving-ID rules: live and retired never overlap, no duplicates', () => {
+  const { app } = setup({ uuids: [uuid(1), uuid(2), uuid(3)] });
+  const a = app.createServing(CORE, { label: 'Tub', grams: 170 });
+  const b = app.createServing(CORE, { label: 'Scoop', grams: 30 });
+  app.updateServing(CORE, a.id, { label: 'Pot' });
+  app.setDefaultServing(CORE, b.id);
+  app.deleteServing(CORE, a.id);
+  app.createServing(CORE, { label: 'Cup', grams: 245 });
+  const data = ufd(app);
+  const live = data.foods.flatMap((r) => r.servings.map((s) => s.id));
+  assert.equal(new Set(live).size, live.length);
+  assert.ok(live.every((id) => !data.retiredServingIds.includes(id)));
+  assert.ok(live.every((id) => SERVING_ID.test(id)));
+  assert.deepEqual(data.retiredServingIds, [a.id]);
 });

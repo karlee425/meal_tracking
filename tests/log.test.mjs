@@ -505,7 +505,7 @@ test('Log — detail and editing views are pushed full screen (compact), a side 
   assert.deepEqual([320, 375, 599, 600, 800, 1023, 1024, 1280].map((w) => widthClass(mm(w))), ['compact', 'compact', 'compact', 'medium', 'medium', 'medium', 'wide', 'wide']);
   assert.equal(widthClass(mm(1280, 32)), 'medium', '200 % text: no room for two panes, so a side panel');
   assert.equal(widthClass(mm(375, 32)), 'compact');
-  assert.deepEqual([...LOG_VIEW_TYPES], ['meal-detail', 'meal', 'food', 'tray', 'custom-food', 'food-detail', 'add-serving'], 'Meal detail, the confirm/adjust and quantity views, the tray, the Custom Food form, Food detail and Add a serving (V3 C6)');
+  assert.deepEqual([...LOG_VIEW_TYPES], ['meal-detail', 'meal', 'food', 'tray', 'custom-food', 'food-detail', 'add-serving', 'serving-form'], 'Meal detail, the confirm/adjust and quantity views, the tray, the Custom Food form, Food detail, Add a serving (V3 C6) and the Food detail serving form (C7)');
   for (const type of LOG_VIEW_TYPES) {
     assert.equal(presentationFor(type, 'compact'), 'pushed', `${type}: full screen on phones, not a bottom sheet`);
     assert.equal(presentationFor(type, 'medium'), 'panel', `${type}: side panel`);

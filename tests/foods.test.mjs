@@ -61,7 +61,7 @@ test('Food detail — a Core Food: name, state, category, brand, "App food · ca
   const html = detail(app, CORE, { context: 'settings' });
   const t = text(html);
   assert.match(html, /<h2 id="sheet-title" class="sheet-title">Fage 0% Greek yogurt<\/h2>/);
-  assert.match(html, /<p class="sheet-subtitle">App food · can’t be edited<\/p>/, 'A-17');
+  assert.match(html, /<p class="sheet-subtitle">App food · nutrition can’t be edited<\/p>/, 'A-17 (C7 subtitle)');
   assert.match(t, /State prepared Category/);
   assert.match(t, /Category dairy/);
   assert.match(t, /Brand Fage/);
@@ -281,7 +281,7 @@ test('Delete — with no Saved Meal using it, the dialog and outcome say only th
 
 test('Settings — My foods lists Custom Foods (domain order) with New food; an empty list says so', () => {
   const { app } = setup();
-  assert.deepEqual([...SETTINGS_VIEW_TYPES], ['target-edit', 'food-detail', 'custom-food']);
+  assert.deepEqual([...SETTINGS_VIEW_TYPES], ['target-edit', 'food-detail', 'custom-food', 'serving-form'], 'the serving form (C7) is a view like the Custom Food form');
   const html = settingsHtml(app);
   const mine = html.slice(html.indexOf('id="my-foods-title"'), html.indexOf('id="favourites-title"'));
   assert.deepEqual([...mine.matchAll(/data-action="food-detail" data-food="([^"]+)"/g)].map((m) => m[1]), app.getCustomFoods().map((f) => f.id), 'getCustomFoods order (A-36)');

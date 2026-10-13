@@ -396,7 +396,7 @@ Grams stay canonical. A named serving (a label and its weight in grams, e.g. "sc
 
 **What is logged.** Grams only, through the existing `previewLogFood` / `logFood`. The logged meal carries no serving information yet. **Release blocker:** serving-aware logging must not ship until logged-meal snapshots carry serving metadata (C8) and the reserved-ID carry-forward (§11.2) includes serving IDs referenced by logged meals.
 
-**Not in this slice.** Renaming, deleting or reordering servings and Food detail serving management (C7); serving rows in the meal tray and serving-aware logged-meal editing (C8); the Coach top-up (§8.4, F-17).
+**Not in this slice.** Serving rows in the meal tray and serving-aware logged-meal editing (C8); the Coach top-up (§8.4, F-17). Managing servings (add, edit, delete, default) from Food detail is §7.3.1 [V3 Slice 1 · C7].
 
 #### 5.5.2 Add a serving [V3 Slice 1 · C6]
 
@@ -407,6 +407,7 @@ From the quantity sheet's **Add a serving** link. A form: **Name** (required; no
 - **Cancel / Back / Escape** return to the sheet exactly as it was left. With anything typed, "Discard changes?" asks first (§3.2): "This new serving hasn't been saved." Keep editing / Discard.
 - The in-progress sheet is kept in memory only (as for Food detail, A-42 / A-48); nothing about it is stored.
 - Coming back to a sheet whose selected serving no longer exists: grams with the last canonical quantity, and "That serving no longer exists, so this is in grams now."
+- This is the **sheet shortcut**. Adding a serving from **Food detail** (§7.3.1) is a different path: it returns to Food detail, and the quantity sheet behind it keeps its draft — returning to the sheet does **not** select the new serving or reset the count. [V3 Slice 1 · C7]
 
 ### 5.6 Custom Foods from Log
 
@@ -545,7 +546,8 @@ Actions:
 - **Add to a meal** (builder tray, when opened from Log). It opens the quantity step first, since grams are required. [IMPLEMENTATION NOTE I-59]
 - ☆ **Favourite** (`setFavoriteFood`). Not shown when opened from the Food picker. [APPROVED A-46]
 - **Don't suggest this food** (`setDislikedFood`; affects only Coach suggestions [APPROVED A-32]; the Food still appears in search). Not shown when opened from the Food picker. [APPROVED A-46]
-- Custom Foods only: **Edit** · **Delete**. Core Foods show "App food · can't be edited". [APPROVED A-17]
+- Custom Foods only: **Edit** · **Delete**. Core Foods show "App food · nutrition can't be edited". [APPROVED A-17; subtitle V3 Slice 1 · C7]
+- **Servings** (§7.3.1): listed in every context; managed (Add, Edit, Delete, Make default) for Core and Custom Foods only when opened from Log or Settings. [V3 Slice 1 · C7]
   - Opened from a Coach top-up Food: **Edit** and **Delete** are offered for Custom Foods as anywhere else. Deleting follows §7.6 (including the Saved Meal repair it can require), and Back returns to the Coach. There's no Coach-specific food management. [APPROVED A-47]
   - Opened from the Food picker: **Edit** and **Delete** are not offered. The picker runs inside an in-progress Saved Meal edit, and nothing done from it may invalidate that draft; the user manages the Food from Settings → My foods instead. [APPROVED A-46]
 
@@ -553,14 +555,42 @@ Actions:
 
 Actions by where Food detail was opened [APPROVED A-41, A-46, A-47]. Core Foods are read-only in every context (A-17).
 
-| Opened from | Log this food | Add to a meal | Favourite | Don't suggest | Edit · Delete (Custom Foods) |
-|---|---|---|---|---|---|
-| Log (quantity sheet) | Yes | Yes | Yes | Yes | Yes |
-| Coach top-up Food | No | No | Yes | Yes | Yes |
-| Settings | No | No | Yes | Yes | Yes |
-| Food picker | No | No | No | No | No |
+| Opened from | Log this food | Add to a meal | Favourite | Don't suggest | Edit · Delete (Custom Foods) | Servings (§7.3.1) |
+|---|---|---|---|---|---|---|
+| Log (quantity sheet) | Yes | Yes | Yes | Yes | Yes | Managed |
+| Coach top-up Food | No | No | Yes | Yes | Yes | Read-only |
+| Settings | No | No | Yes | Yes | Yes | Managed |
+| Food picker | No | No | No | No | No | Read-only |
 
 Never shown: `yieldFactor`, `yieldKey`, `stateInferred`, `macroRole`, `swapFoodId`, `legacySwap`, `portionStep`. [IMPLEMENTATION NOTE I-30]
+
+#### 7.3.1 Servings on Food detail [V3 Slice 1 · C7]
+
+A **Servings** section after the Per 100 g table. Servings are user data (`userFoodData`, by `foodId`) for Core and Custom Foods alike; managing them never changes the Food record, and Core Food nutrition stays read-only (subtitle "App food · nutrition can't be edited").
+
+| Element | Rule |
+|---|---|
+| Rows | Stored order. "{label} · {grams} g", the weight shown as stored (a restored `1.005` shows as `1.005`). The first is the **default** (marked "Default"): the serving the quantity sheet opens on (§5.5.1). |
+| Approximate | "≈ {grams} g" with an **estimate** label; screen readers hear "approximately {grams} g estimate". Exact servings have neither. |
+| Managed (Log, Settings) | Per row **Edit** · **Make default** (not on the default) · **Delete**, each named for its serving ("Edit Tub", "Make Scoop the default", "Delete Tub"); **Add a serving** below the list. |
+| Read-only (Coach top-up Food, Food picker) | The same list, no actions. The Coach is a deliberate exception to A-47's "as anywhere else"; the Food picker stays information-only (A-46, Close only). |
+| Empty | Managed: "No servings yet. Add one to log this food by serving as well as by weight." and **Add a serving**. Read-only: "No servings." |
+
+**Add / Edit.** The §5.5.2 form. Add opens blank ("Add a serving", **Save serving**) → `createServing`. Edit opens with the stored values ("Edit serving", **Save changes**, and "Changing the weight doesn't change meals you've already logged.") → `updateServing(foodId, servingId, patch)`: same ID, same place in the list, same `createdAt`, new `updatedAt`. Validation is the domain's (§5.5.2 rules; an Edit may keep its own name with different capitals). A weight that's left as it opened isn't sent, so a restored weight with more than 2 decimal places stays exactly as stored when only the name or the estimate tick-box changes; a changed weight must meet the 2-decimal rule. Field problems show next to the field after Save; nothing is written.
+
+**Make default** → `setDefaultServing`: that serving moves to the front; every serving keeps its ID, definition and timestamps, and the others keep their order. No arbitrary reordering.
+
+**Delete** asks first: "Delete serving? Delete {label} from {food}? Meals you've already logged aren't affected." — with "{next} becomes the default." when it's the default and others remain. Cancel has the focus and changes nothing. **Delete serving** → `deleteServing`: the serving goes and its ID is retired (never reused; kept across restores, §11.2), in one write. Deleting the last serving removes the Food's serving record in that write and shows the empty state; the Food stays. Logged meals hold grams, so none changes.
+
+**After each change** Food detail is redrawn from the domain: focus goes to the saved serving's **Edit** (Add, Edit, Make default), or after a delete to the next serving's **Edit**, else **Add a serving**; the polite status line says "Saved {label}.", "{label} is now the default serving." or "Deleted {label}."
+
+**Leaving.** Cancel, Back, Escape and the browser's Back on the form return to Food detail with focus on the control that opened it; with anything changed, "Discard changes?" asks first ("This new serving hasn't been saved." / "Your changes to this serving haven't been saved."). Leaving the screen or using a control beside the pane asks the same way (§3.2).
+
+**From Log.** Food detail opened from the quantity sheet keeps the sheet's draft (Food, date, slot, log or add-to-meal, amount mode, grams, serving, count) through the form and the delete confirmation; Back returns to the sheet as it was left (A-42). A serving added here does **not** become the sheet's selection, and the count isn't reset — unlike the sheet's own shortcut (§5.5.2). A renamed or newly default serving keeps the sheet's selection and count; if the sheet's selected serving was deleted, the sheet falls back to grams with its last canonical quantity and "That serving no longer exists, so this is in grams now."
+
+**Stale or failed.** Every control names its serving by ID and is checked against what's stored now: a serving that's gone (e.g. deleted in another tab) changes nothing, and Food detail is redrawn with "That serving no longer exists." A change the domain or store rejects is never announced as saved: "That didn't save. Nothing was changed." (§13.3), and nothing changes. As for every other change in the app, the write to browser storage then happens in the background (§4.8, A-24): if that later fails, the "Saved {label}." line has already been shown and the header's save status turns to "Not saved", with its retry.
+
+**Not here.** Serving-aware logging. Logged meals still store grams only. **Release blocker (C8):** serving-aware logging must not ship until logged-meal snapshots carry serving metadata and the reserved-ID carry-forward (§11.2) also protects serving IDs that logged meals refer to.
 
 ### 7.4 Custom Food form [APPROVED rules A-27 · UI IMPLEMENTATION NOTE I-31]
 
@@ -589,7 +619,7 @@ The Log Foods segment in "pick" mode: same search, favourites and recents. Choos
 - Dialog: "Delete *{name}*? {n} Saved Meal(s) use it and will need a replacement before you can log them: {list}. Meals you've already logged aren't affected."
 - → `deleteCustomFood(id)`. Afterwards: "Deleted. {n} Saved Meal(s) need a fix" with links from `affectedSavedMealIds`.
 - History: logged meals that used it keep showing its snapshot name and values.
-- Its named servings go with it, in the same write, and their IDs are retired so they are never reused (§5.5.1). [V3 Slice 1 · C6]
+- Its named servings go with it, in the same write, and their IDs are retired so they are never reused (§5.5.1). [V3 Slice 1 · C6] When it has any, the dialog says so before "Meals you've already logged aren't affected.": "Its serving will be deleted too." / "Its {n} servings will be deleted too." [V3 Slice 1 · C7]
 
 ### 7.7 Units and basis [APPROVED A-16]
 
@@ -853,8 +883,10 @@ The UI explains what happened and what to do in plain language. Error codes, IDs
 | `MEAL_INVALID` | copy/duplicate an invalid meal; bad ingredient | "This meal uses a food that's been deleted. Replace it first." |
 | `INVALID_QUANTITY` / `UNSUPPORTED_UNIT` | gram fields | "Enter a weight above 0 g" |
 | `INVALID_SERVING_COUNT`, `AMOUNT_TOO_SMALL`, `SERVING_NOT_FOUND` | amount control (§5.5.1) | next to the count; Log and Add to a meal disabled |
-| `INVALID_SERVING` (with `details[].field`) | Add a serving (§5.5.2) | per-field messages |
+| `INVALID_SERVING` (with `details[].field`) | Add a serving (§5.5.2), Add / Edit serving on Food detail (§7.3.1) | per-field messages |
 | `SERVING_ID_UNAVAILABLE` | Add a serving | "That serving couldn't be saved. Nothing was changed. Try again." |
+| `SERVING_NOT_FOUND` | Food detail servings (§7.3.1) | Food detail redrawn as stored now: "That serving no longer exists." Nothing changed |
+| `VALIDATION_FAILED`, `PERSIST_FAILED` on a serving change | Food detail servings (§7.3.1) | "That didn't save. Nothing was changed." — never a "Saved" / "Deleted" message. A later background write failure shows in the save status (§4.8) |
 | `INVALID_FOOD` (with `details[].field`) | Custom Food form | per-field messages (§7.4) |
 | `INVALID_MEAL`, `INVALID_MEAL_INSTANCE` | editors | per-field ("Give it a name", "Add at least one ingredient") |
 | `INVALID_TARGETS` (with details) | target form | "Targets need to be whole grams, 0 or more" |
@@ -994,12 +1026,12 @@ These are enforced by existing tests once the UI directory is classified as `run
 | **App start** | `openBrowserDataLayer()` → `{ app, adapter }` · `requestPersistentStorage()` · on `DATA_INVALID`: `error.readStoredRecord()` |
 | **Global** | `getPersistenceStatus()` · `onPersistenceChange()` · `flushPersistence()` · `retryPersistence()` · `getToday()` |
 | **Today** | `getDaySummary` · `getDay` · `createDay` · `getAllCurrentTargets` · `getCurrentTargets` · `previewDayTypeChange` · `updateDayType` · `applyCurrentTargetsToToday` · `setDayLoggingComplete` · `updateMealInstance` · `previewMealInstanceUpdate` · `deleteMealInstance` · `deleteDay` · `getMeal` · `createSavedMeal` · `updateSavedMeal` · `macros.roundMacros` |
-| **Log** | `searchFoods` · `getRecentFoods` · `getFood` · `getPreferences` · `getSavedMeals` · `getLibraryMeals` · `getRecentMeals` · `calculateMealMacros` · `previewLogFood` · `previewMealInstance` · `logFood` · `createMealInstance` · `createSavedMeal` · `setFavoriteFood` · `setFavoriteMeal` · `searchMeals` · `getServings` · `createServing` · `resolveAmount` · `SERVING_COUNT_QUICK_PICKS` (V3 C6) |
+| **Log** | `searchFoods` · `getRecentFoods` · `getFood` · `getPreferences` · `getSavedMeals` · `getLibraryMeals` · `getRecentMeals` · `calculateMealMacros` · `previewLogFood` · `previewMealInstance` · `logFood` · `createMealInstance` · `createSavedMeal` · `setFavoriteFood` · `setFavoriteMeal` · `searchMeals` · `getServings` · `createServing` · `resolveAmount` · `SERVING_COUNT_QUICK_PICKS` (V3 C6) · `updateServing` · `deleteServing` · `setDefaultServing` (V3 C7) |
 | **Meals** | `getSavedMeals` · `getLibraryMeals` · `getMeal` · `calculateMealMacros` · `createSavedMeal` · `updateSavedMeal` · `replaceSavedMealIngredient` · `duplicateSavedMeal` · `deleteSavedMeal` · `setFavoriteMeal` · `previewMealInstance` · `createMealInstance` · `searchMeals` |
 | **Foods** | `searchFoods` · `getFood` · `validateCustomFood` · `createCustomFood` · `updateCustomFood` · `deleteCustomFood` · `setFavoriteFood` · `setDislikedFood` · `constants.FOOD_STATES` · `getCustomFoods` · `getFoodUsage` |
 | **Coach** | `getMacroCoachSuggestions` · `previewMealInstance` · `previewLogFood` · `createMealInstance` · `logFood` |
 | **Progress** | `getProgress` · `getToday` |
-| **Settings** | `getAllCurrentTargets` · `updateCurrentTargets` · `applyCurrentTargetsToToday` · `getDaySummary` · `getPreferences` · `updatePreferences` · `setFavoriteMeal` · `setFavoriteFood` · `setDislikedFood` · `getMeal` · `getFood` · `getCustomFoods` |
+| **Settings** | `getAllCurrentTargets` · `updateCurrentTargets` · `applyCurrentTargetsToToday` · `getDaySummary` · `getPreferences` · `updatePreferences` · `setFavoriteMeal` · `setFavoriteFood` · `setDislikedFood` · `getMeal` · `getFood` · `getCustomFoods` · `getServings` · `createServing` · `updateServing` · `deleteServing` · `setDefaultServing` (V3 C7) |
 | **Backup / Restore** | `exportUserData` · `validateBackup` · `restoreUserData` · `BACKUP_FORMAT_VERSION` · `recoverStoredData` (start-up recovery) |
 | **Enums** | `constants.DAY_TYPES`, `MEAL_SLOTS`, `MEAL_TYPES`, `FOOD_STATES`: pickers read these, never hard-coded lists |
 
@@ -1025,7 +1057,7 @@ These are enforced by existing tests once the UI directory is classified as `run
 | A-14 | After editing a logged meal: log the change only / save as a new Saved Meal / update the Saved Meal after confirmation. | `schema.md` |
 | A-15 | Library Meals are app-managed, read-only, loggable; Save a copy makes an independent Saved Meal; Library favourites are allowed, stay in Library, and don't carry over to copies. | Locked; `f040b70` |
 | A-16 | Food state explicit and never converted; nutrition per 100 g; quantities in grams (canonical). V3 Slice 1 · C6: a named serving is an alternate way to enter grams, resolved by the domain (§5.5.1); what is logged is still grams. | Locked; domain |
-| A-17 | Core Foods read-only; Custom Foods create/edit/delete; deleting one makes dependent Saved Meals need a replacement; similar Foods never merged; no automatic substitution. | Domain |
+| A-17 | Core Foods read-only; Custom Foods create/edit/delete; deleting one makes dependent Saved Meals need a replacement; similar Foods never merged; no automatic substitution. V3 Slice 1 · C7: a Core Food's named servings are user data and can be managed (§7.3.1); its nutrition stays read-only. | Domain |
 | A-18 | Invalid Saved Meal: `totals: null`, no partial totals, can't be logged or duplicated, repaired by replace/remove. | Domain |
 | A-19 | Meal P/C/F totals are always derived from ingredients; never stored or typed. | Locked; domain |
 | A-20 | Coach: deterministic tiers — 1 favourite Saved Meals → 2 recently logged Saved Meals → 3 other Saved Meals → 4 Library starter meals (non-retired, shipped order) — with individual Foods as a separate top-up path. Tiers 1–3 are Saved Meals only: favouriting or logging a Library Meal never moves it out of tier 4. No score, fit ranking, "best meal", inferred preference, AI or chat; the Coach may show totals and what would remain. Fewer than 3 personal meals → `insufficientHistory` (starters and starter Foods, labelled as not personal). | Approved; domain `getMacroCoachSuggestions` |
@@ -1054,8 +1086,8 @@ These are enforced by existing tests once the UI directory is classified as `run
 | A-43 | A Custom Food deleted while in the meal tray stays as a row marked "No longer available" (user-facing name, never an ID), with Remove; the tray can't be logged until it's removed; the rest of the tray is kept; nothing stored changes. | Approved; product decision D4 |
 | A-44 | The About app version comes from one authoritative repository version source, never a second hand-maintained constant. Until such a source exists, About shows "Version unavailable"; no version number is invented and the data format version is never shown as the app version. | Approved; product decision D2 (extended) |
 | A-45 | Disabled Save while invalid and submit-time validation are complementary: Save stays disabled while invalid; validation may run on blur; submit (including Enter or programmatic) re-validates, saves nothing if invalid, and focuses the first invalid field. | Approved; resolves the §7.4/§10.2 vs §14 inconsistency |
-| A-46 | Food detail opened from the Food picker is information-only: no Log this food, Add to a meal, Favourite, Don't suggest, Edit or Delete, and no choose action. Selection stays with the picker; Back returns to it with its search, picker state and the Saved Meal draft kept. | Approved; product decision (finalized) |
-| A-47 | Food detail opened from a Coach top-up Food offers Favourite, Don't suggest and Custom Food Edit and Delete as elsewhere, but not Log this food (the Coach has its own Log for top-ups). Core Foods stay read-only; deletion follows §7.6; Back returns to the Coach. No Coach-specific food management. | Approved; product decision (finalized) |
+| A-46 | Food detail opened from the Food picker is information-only: no Log this food, Add to a meal, Favourite, Don't suggest, Edit or Delete, and no choose action. Selection stays with the picker; Back returns to it with its search, picker state and the Saved Meal draft kept. V3 Slice 1 · C7: the Food's servings are listed read-only (§7.3.1). | Approved; product decision (finalized) |
+| A-47 | Food detail opened from a Coach top-up Food offers Favourite, Don't suggest and Custom Food Edit and Delete as elsewhere, but not Log this food (the Coach has its own Log for top-ups). Core Foods stay read-only; deletion follows §7.6; Back returns to the Coach. No Coach-specific food management. V3 Slice 1 · C7 exception: servings are listed read-only there, not managed (§7.3.1). | Approved; product decision (finalized) |
 | A-48 | A Custom Food edited from the Log flow returns to the Log quantity sheet for that Food after Save changes (not to a standalone Food detail), keeping the Log context where the session keeps it. | Approved; product decision |
 
 ---

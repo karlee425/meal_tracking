@@ -16,10 +16,13 @@
  *   parseServingCount(text)                    { n, d } (positive BigInts, lowest terms) or null
  *   isUnfinishedServingCount(text)             true while a count is still being typed ("1.", "1/", "1 1/", "0")
  *   parseServingGrams(text)                    a serving weight typed as text → a number, or null
+ *   updateServing(foodId, servingId, patch)    change label / grams / approximate; same ID, place, createdAt
+ *   deleteServing(foodId, servingId)           remove it and retire its ID, in one commit
+ *   setDefaultServing(foodId, servingId)       move it to the front (the default); nothing else changes
  *
- * Renaming, deleting and reordering servings are not here (C7). Deleting a Custom Food
- * retires its serving IDs (foods.js deleteCustomFood). Serving IDs, live and retired, are
- * never reused: a new ID is drawn until it is unused, a bounded number of times.
+ * Deleting a Custom Food retires its serving IDs (foods.js deleteCustomFood). Serving IDs, live
+ * and retired, are never reused: a new ID is drawn until it is unused, a bounded number of
+ * times, and an ID never changes. Every change is one commit; a rejected one writes nothing.
  */
 
 import { DomainError, clone } from './util.js';
@@ -116,19 +119,24 @@ export function createServingsApi(ctx) {
     return food;
   }
 
-  /** Every problem with a new serving for this Food: [{ field, code, message }]. */
-  function servingProblems(foodId, input) {
+  /**
+   * Every problem with a serving as it would be stored for this Food: [{ field, code, message }].
+   *   selfId       the serving being edited (its own label is not a duplicate of itself)
+   *   storedGrams  its weight as stored: kept unchanged, it isn't re-checked against the 2-decimal
+   *                limit (a restored weight may have more places); a changed weight always is
+   */
+  function servingProblems(foodId, input, { selfId = null, storedGrams } = {}) {
     const errors = [];
     const label = typeof input.label === 'string' ? input.label.trim() : '';
     if (!label) errors.push({ field: 'label', code: 'SERVING_LABEL_REQUIRED', message: 'a serving needs a name' });
     else if (RESERVED_LABELS.has(labelKey(label))) errors.push({ field: 'label', code: 'SERVING_LABEL_RESERVED', message: `"${label}" is reserved for grams` });
     else {
       const record = recordFor(foodId);
-      if (record && record.servings.some((s) => labelKey(s.label) === labelKey(label))) {
+      if (record && record.servings.some((s) => s.id !== selfId && labelKey(s.label) === labelKey(label))) {
         errors.push({ field: 'label', code: 'SERVING_LABEL_DUPLICATE', message: `this Food already has a serving named "${label}"` });
       }
     }
-    const places = decimalPlaces(input.grams);
+    const places = selfId !== null && input.grams === storedGrams ? 0 : decimalPlaces(input.grams);
     if (places === null) errors.push({ field: 'grams', code: 'INVALID_SERVING_GRAMS', message: 'grams must be a number above 0' });
     else if (places > SERVING_GRAMS_MAX_DECIMALS) errors.push({ field: 'grams', code: 'INVALID_SERVING_GRAMS', message: `grams may have at most ${SERVING_GRAMS_MAX_DECIMALS} decimal places` });
     if (input.approximate !== undefined && typeof input.approximate !== 'boolean') {
@@ -147,6 +155,15 @@ export function createServingsApi(ctx) {
       if (SERVING_ID.test(id) && !taken.has(id)) return id;
     }
     throw new DomainError('SERVING_ID_UNAVAILABLE', `no unused serving ID after ${SERVING_ID_ATTEMPTS} attempts`);
+  }
+
+  /** The Food's serving record and the serving, or the domain error for whichever is missing. */
+  function servingOrThrow(foodId, servingId) {
+    foodOrThrow(foodId);
+    const record = recordFor(foodId);
+    const serving = record ? record.servings.find((s) => s.id === servingId) : null;
+    if (!serving) throw new DomainError('SERVING_NOT_FOUND', `no serving ${servingId} for ${foodId}`);
+    return { record, serving };
   }
 
   return {
@@ -177,6 +194,71 @@ export function createServingsApi(ctx) {
       else next.foods.push({ foodId, servings: [serving] });
       store.commit({ userFoodData: next });
       return clone(serving);
+    },
+
+    /**
+     * Change a serving's label, grams and/or approximate flag. A field left out (or undefined)
+     * keeps its value. The ID, its place in the list and createdAt never change; updatedAt is
+     * now (the injected clock). The same rules as createServing, except that its own label is
+     * not a duplicate (a case-only rename is fine) and an unchanged stored weight isn't held to
+     * the 2-decimal limit. Throws FOOD_NOT_FOUND, SERVING_NOT_FOUND, IMMUTABLE_ID (an id in the
+     * patch that isn't this one) or INVALID_SERVING (details as for createServing); nothing is
+     * written unless the change is valid. Returns the stored serving.
+     */
+    updateServing(foodId, servingId, patch = {}) {
+      const { serving } = servingOrThrow(foodId, servingId);
+      const p = patch || {};
+      if (p.id !== undefined && p.id !== servingId) throw new DomainError('IMMUTABLE_ID', 'serving IDs never change');
+      const merged = {
+        label: p.label !== undefined ? p.label : serving.label,
+        grams: p.grams !== undefined ? p.grams : serving.grams,
+        approximate: p.approximate !== undefined ? p.approximate : serving.approximate
+      };
+      const errors = servingProblems(foodId, merged, { selfId: servingId, storedGrams: serving.grams });
+      if (errors.length) throw new DomainError('INVALID_SERVING', errors.map((e) => e.message).join('; '), errors);
+      const updated = { id: serving.id, label: merged.label.trim(), grams: merged.grams, approximate: merged.approximate === true, createdAt: serving.createdAt, updatedAt: ctx.now() };
+      const next = clone(userFoodData());
+      const record = next.foods.find((r) => r.foodId === foodId);
+      record.servings = record.servings.map((s) => (s.id === servingId ? updated : s));
+      store.commit({ userFoodData: next });
+      return clone(updated);
+    },
+
+    /**
+     * Delete a serving: it leaves the Food's list and its ID is retired (never reused), in one
+     * commit. Deleting the Food's last serving removes the Food's whole serving record in that
+     * same commit. The Food itself is never touched, and meals already logged are unaffected
+     * (they hold grams). Throws FOOD_NOT_FOUND or SERVING_NOT_FOUND without writing.
+     * Returns { deletedServingId, remaining } — remaining: the Food's servings now, in order.
+     */
+    deleteServing(foodId, servingId) {
+      servingOrThrow(foodId, servingId);
+      const next = clone(userFoodData());
+      const record = next.foods.find((r) => r.foodId === foodId);
+      const remaining = record.servings.filter((s) => s.id !== servingId);
+      next.foods = remaining.length
+        ? next.foods.map((r) => (r.foodId === foodId ? { ...r, servings: remaining } : r))
+        : next.foods.filter((r) => r.foodId !== foodId);
+      if (!next.retiredServingIds.includes(servingId)) next.retiredServingIds.push(servingId);
+      store.commit({ userFoodData: next });
+      return { deletedServingId: servingId, remaining: clone(remaining) };
+    },
+
+    /**
+     * Make a serving the Food's default by moving it to the front. Every serving keeps its ID,
+     * definition and timestamps; the others keep their order. Already first: nothing is
+     * written. Throws FOOD_NOT_FOUND or SERVING_NOT_FOUND without writing.
+     * Returns { changed, servings } — servings: the Food's servings now, in order.
+     */
+    setDefaultServing(foodId, servingId) {
+      const { record } = servingOrThrow(foodId, servingId);
+      if (record.servings[0].id === servingId) return { changed: false, servings: clone(record.servings) };
+      const next = clone(userFoodData());
+      const target = next.foods.find((r) => r.foodId === foodId);
+      const chosen = target.servings.find((s) => s.id === servingId);
+      target.servings = [chosen, ...target.servings.filter((s) => s.id !== servingId)];
+      store.commit({ userFoodData: next });
+      return { changed: true, servings: clone(target.servings) };
     },
 
     /**

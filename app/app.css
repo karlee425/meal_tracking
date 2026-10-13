@@ -970,6 +970,13 @@ details.option-group > summary.group-title { cursor: pointer; min-height: 44px; 
 .per-100-table { margin-bottom: var(--space-3); }
 .per-100-table caption { text-align: left; padding: var(--space-2) 0; font-weight: 600; }
 .per-100-table th, .per-100-table td { text-align: left; }
+/* Servings on Food detail (C7) */
+.food-servings { margin-top: var(--space-4); }
+.serving-list { list-style: none; margin: 0 0 var(--space-2); padding: 0; }
+.serving-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0 var(--space-3); padding: var(--space-1) 0; border-bottom: 1px solid var(--border); }
+.serving-main { flex: 1 1 12rem; min-width: 0; overflow-wrap: anywhere; }
+.serving-label { font-weight: 600; }
+.serving-actions { display: flex; flex-wrap: wrap; gap: 0 var(--space-2); }
 .food-prefs { margin-top: var(--space-4); }
 .food-prefs .group-title { margin: 0 0 var(--space-2); }
 .food-pref-actions { display: flex; flex-wrap: wrap; gap: var(--space-2); }

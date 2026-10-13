@@ -640,7 +640,7 @@ test('Today G7 — every Coach item opens its Meal or Food detail; Log stays on 
   assert.match(custom, /data-action="fd-edit">Edit</);
   assert.match(custom, /data-action="fd-delete">Delete</);
   const core = renderFoodDetail({ ...foodDetailModel(app, 'food_core_banana'), context: 'coach' });
-  assert.match(core, /<p class="sheet-subtitle">App food · can’t be edited<\/p>/, 'Core Foods stay read-only');
+  assert.match(core, /<p class="sheet-subtitle">App food · nutrition can’t be edited<\/p>/, 'Core Foods stay read-only (C7 subtitle)');
   assert.ok(!/data-action="fd-(log|add|edit|delete)"/.test(core));
   const src = fs.readFileSync(path.join(ROOT, 'app/today.js'), 'utf8');
   assert.match(src, /case 'coach-meal-detail': openMealDetail\(el\.dataset\.meal, ui\); break;/);
