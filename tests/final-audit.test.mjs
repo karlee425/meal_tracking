@@ -43,7 +43,7 @@ test('A-44 — About shows "Version unavailable" and invents no version', () => 
   const app = setup();
   const html = renderSettings({ targets: app.getAllCurrentTargets(), status: null, lastBackupAt: null, restore: null, foods: settingsFoodsModel(app) });
   const about = text(html.slice(html.indexOf('id="about-title"')));
-  assert.match(about, /App Macro Tracker App version Version unavailable Data format version 1/);
+  assert.match(about, /App Macro Tracker App version Version unavailable Data format version 2/);
   assert.ok(!/\(V2\)|v\d+\.\d/.test(about), 'no app version number of any kind');
 });
 
@@ -133,7 +133,7 @@ test('§3.2 / §7.4 — Meals and Settings guard route changes and controls besi
 
 test('A-42 — Log: Food detail opened from the quantity sheet goes back to that sheet as it was left', () => {
   const src = read('app/log.js');
-  assert.match(src, /if \(ui\.type === 'food-detail' && ui\.quantity\) \{\n\s*const q = ui\.quantity;\n\s*openFood\(q\.foodId, q\.text, q\.intent, q\.slot\);/);
+  assert.match(src, /if \(ui\.type === 'food-detail' && ui\.quantity\) \{\n\s*const q = ui\.quantity;\n\s*openFood\(q\.foodId, q\.text, q\.intent, q\.slot, q\.amount\);/);
 });
 
 test('final audit — no macro arithmetic, forbidden terms, domain bypass or second store in the changed files', () => {

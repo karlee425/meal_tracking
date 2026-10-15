@@ -31,8 +31,8 @@ function setup() {
 }
 
 test('A-48 — Food details from the quantity sheet carries that sheet (Food, grams, slot, intent) through Food detail and Edit', () => {
-  assert.match(src, /const quantityState = \(sheet\) => \(\{ foodId: sheet\.food\.id, text: sheet\.text \|\| '', slot: checkedSlot\('log-slot'\) \|\| sheet\.slot \|\| null, intent: sheet\.intent \|\| 'log' \}\);/,
-    'the grams typed, the slot chosen on the sheet (or the Log context’s), and log vs add-to-meal');
+  assert.match(src, /const quantityState = \(sheet\) => \(\{ foodId: sheet\.food\.id, text: sheet\.text \|\| '', slot: checkedSlot\('log-slot'\) \|\| sheet\.slot \|\| null, intent: sheet\.intent \|\| 'log', date: ctx\.date, amount: \{ \.\.\.sheet\.amount \} \}\);/,
+    'the grams typed, the slot chosen on the sheet (or the Log context’s), log vs add-to-meal, the date, and the amount draft (V3 C6)');
   assert.match(src, /openFoodDetail\(el\.dataset\.food, '', ui && ui\.type === 'food' \? quantityState\(ui\) : null\)/);
   assert.match(fn('function openFoodDetail('), /ui = \{ type: 'food-detail', \.\.\.detail, note, quantity \};/);
   assert.match(caseBody('fd-edit'), /quantity: ui\.quantity \};/, 'the edit form knows where it came from');
@@ -42,11 +42,12 @@ test('A-48 — Food details from the quantity sheet carries that sheet (Food, gr
 test('A-48 — Save changes returns to the quantity sheet for the same Food with its grams, slot and intent', () => {
   const save = caseBody('cf-save');
   assert.match(save, /const food = foodActions\.updateCustomFood\(ui\.foodId, customFoodPatch\(ui\.values\)\);/, 'saved once, through the one Custom Food path');
-  assert.match(save, /if \(q && q\.foodId === food\.id\) openFood\(food\.id, q\.text, q\.intent, q\.slot\);/);
+  assert.match(save, /if \(q && q\.foodId === food\.id\) openFood\(food\.id, q\.text, q\.intent, q\.slot, q\.amount\);/);
   assert.match(save, /else openFoodDetail\(food\.id, 'Saved\.'\);/, 'without a quantity sheet behind it, §7.4’s Food detail as before');
   assert.ok(save.indexOf('openFood(food.id, q.text') < save.indexOf("openFoodDetail(food.id, 'Saved.')"));
-  assert.match(fn('function openFood('), /function openFood\(foodId, text = '', intent = 'log', slot = ctx\.slot\) \{/, 'the date stays ctx.date; the slot defaults to the Log context');
-  assert.match(fn('function openFood('), /previewLogFood\(\{ date: ctx\.date, foodId, quantity: q \}\)/, 'the preview reads the Food as just saved');
+  assert.match(fn('function openFood('), /function openFood\(foodId, text = '', intent = 'log', slot = ctx\.slot, amount = null\) \{/, 'the date stays ctx.date; the slot defaults to the Log context; the amount draft comes back with it (V3 C6)');
+  assert.match(fn('function openFood('), /resolveSheet\(sheet\);/);
+  assert.match(fn('function resolveSheet('), /previewLogFood\(\{ date: ctx\.date, foodId: sheet\.food\.id, quantity: amount\.quantity \}\)/, 'the preview reads the Food as just saved');
 });
 
 test('A-48 — the sheet it returns to shows the saved Food, the kept grams and slot, ready to Log', () => {

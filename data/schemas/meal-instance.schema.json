@@ -74,6 +74,52 @@
           "fat": {
             "type": "number",
             "minimum": 0
+          },
+          "serving": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "label",
+              "grams",
+              "approximate",
+              "count"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "label": {
+                "type": "string",
+                "minLength": 1
+              },
+              "grams": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
+              "approximate": {
+                "type": "boolean"
+              },
+              "count": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "numerator",
+                  "denominator"
+                ],
+                "properties": {
+                  "numerator": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "denominator": {
+                    "type": "integer",
+                    "minimum": 1
+                  }
+                }
+              }
+            }
           }
         }
       }

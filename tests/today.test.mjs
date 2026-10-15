@@ -427,7 +427,7 @@ test('Today G1 — ◀ ▶ step one calendar day through the domain’s date ari
   assert.equal(dayHref(TODAY, TODAY), '#/today', 'today keeps the plain route, so it follows midnight (§4.5.6)');
   assert.equal(dayHref(PAST, TODAY), `#/today?date=${PAST}`);
   const src = fs.readFileSync(path.join(ROOT, 'app/today.js'), 'utf8');
-  assert.match(src, /import \{ macros, constants, addDays \} from '\.\.\/src\/domain\/index\.js';/, 'date stepping is the domain’s addDays');
+  assert.match(src, /import \{ macros, constants, addDays, formatServingCount \} from '\.\.\/src\/domain\/index\.js';/, 'date stepping is the domain’s addDays');
   assert.match(src, /win\.location\.replace\(dayHref\(date, app\.getToday\(\)\)\)/, '◀ ▶ replace the entry, so Back still returns to where Today was opened from (§16)');
   assert.ok(!/setDate\(|getTime\(\) \+|86400000/.test(src), 'no date arithmetic of its own');
 });
@@ -640,7 +640,7 @@ test('Today G7 — every Coach item opens its Meal or Food detail; Log stays on 
   assert.match(custom, /data-action="fd-edit">Edit</);
   assert.match(custom, /data-action="fd-delete">Delete</);
   const core = renderFoodDetail({ ...foodDetailModel(app, 'food_core_banana'), context: 'coach' });
-  assert.match(core, /<p class="sheet-subtitle">App food · can’t be edited<\/p>/, 'Core Foods stay read-only');
+  assert.match(core, /<p class="sheet-subtitle">App food · nutrition can’t be edited<\/p>/, 'Core Foods stay read-only (C7 subtitle)');
   assert.ok(!/data-action="fd-(log|add|edit|delete)"/.test(core));
   const src = fs.readFileSync(path.join(ROOT, 'app/today.js'), 'utf8');
   assert.match(src, /case 'coach-meal-detail': openMealDetail\(el\.dataset\.meal, ui\); break;/);
@@ -730,4 +730,19 @@ test('Today G10 — the source line opens the current recipe while it exists; hi
   assert.equal(JSON.stringify(app.getDay(TODAY)), snapshot, 'historical macros unchanged');
   const src = fs.readFileSync(path.join(ROOT, 'app/today.js'), 'utf8');
   assert.match(src, /case 'source-meal': openMealDetail\(el\.dataset\.meal, ui\); break;/, 'opened as a view on top of the logged meal; Back returns to it');
+});
+
+/* ---------------- V3 Slice 1 · C6: the Coach top-up stays grams only (§8.4, F-17) ---------------- */
+
+test('V3 C6 — the Coach top-up sheet stays grams only, even for a Food with named servings; Coach logic untouched', async () => {
+  const { renderQuantityDialog } = await import('../app/today.js');
+  const { app } = setup();
+  const food = app.getFood('food_core_fage_0_greek_yogurt');
+  app.createServing(food.id, { label: 'Tub', grams: 170 });
+  const html = renderQuantityDialog({ food, slot: 'snack_afternoon', text: '', preview: null });
+  assert.match(html, /<input id="qty-grams" type="text" inputmode="decimal" autocomplete="off" data-grams value="" placeholder="grams">/, 'empty: the Coach never proposes an amount (I-38)');
+  for (const marker of ['amount-mode', 'data-serving', 'data-count', 'count-pick', 'add-serving', 'Tub', '≈', 'estimate']) assert.ok(!html.includes(marker), marker);
+  const src = fs.readFileSync(path.join(ROOT, 'app/today.js'), 'utf8');
+  assert.ok(!/getServings|createServing|resolveAmount|amount\.js/.test(src), 'today.js does not use servings');
+  assert.match(src, /case 'coach-log-food': openDialog\(\{ type: 'quantity', food: app\.getFood\(el\.dataset\.food\), slot: defaultSlot\(model\.day\), text: '', preview: null, back: ui \}\); break;/);
 });

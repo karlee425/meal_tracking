@@ -22,7 +22,14 @@ import {
 } from './today.js';
 import { session, routeParams, isIsoDate } from './session.js';
 import { WIDE_QUERY, COMPACT_QUERY, widthClass, presentationFor as present, viewHead, syncInPlace, createViewHost } from './view-host.js';
-import { foodDetailModel, renderFoodDetail, renderDeleteFood, renderDiscardFood, foodUsageMeals, renderLinkedMessage, createFoodActions } from './foods.js';
+import {
+  foodDetailModel, renderFoodDetail, renderDeleteFood, renderDiscardFood, foodUsageMeals, renderLinkedMessage, createFoodActions,
+  renderDeleteServing, servingFormValues
+} from './foods.js';
+import {
+  startAmount, restoreAmount, resolveDraft, switchAmount, renderAmountControl, renderGramsField, renderServingGrams,
+  renderServingForm, emptyServingValues, servingFormDirty, servingInput, servingPatch, AMOUNT_MESSAGES, renderActionsHint, servingActionsBlocked
+} from './amount.js';
 
 export const MEAL_TYPE_LABELS = Object.freeze({ breakfast: 'Breakfast', lunch: 'Lunch', snack: 'Snack', dinner: 'Dinner', other: 'Other' });
 const oneDecimal = (values) => macros.roundMacros(values, 1);
@@ -290,7 +297,7 @@ export function renderTrayBar(tray, preview, { unavailable = 0 } = {}) {
 /* ---------------- presentation by width (§3.1, I-05; shared with Meals in view-host.js) ---------------- */
 
 /** Detail and editing surfaces; everything else in Log is a short choice (day type, date, slot, follow-up). */
-export const LOG_VIEW_TYPES = Object.freeze(['meal-detail', 'meal', 'food', 'tray', 'custom-food', 'food-detail']);
+export const LOG_VIEW_TYPES = Object.freeze(['meal-detail', 'meal', 'food', 'tray', 'custom-food', 'food-detail', 'add-serving', 'serving-form']);
 export const LOG_WIDE_QUERY = WIDE_QUERY;
 export const LOG_COMPACT_QUERY = COMPACT_QUERY;
 export { widthClass, viewHead };
@@ -387,24 +394,37 @@ ${adjusting ? '' : '<button type="button" class="button" data-action="adjust">Ad
 </div>`;
 }
 
-/** Log a Food by weight (§5.5): state always shown, grams only, never converted. */
-export function renderFoodSheet({ model, food, text, preview, slot, intent = 'log' }) {
+/**
+ * Log a Food (§5.5): state always shown, never converted. Grams, or — for a Food with named
+ * servings — a serving × a count that the domain resolves to canonical grams (§5.5.1,
+ * amount.js). A Food without servings has the grams field exactly as before; every Food has
+ * Add a serving (§5.5.2).
+ *   servings · amount (the draft) · resolved · amountError   from getServings / resolveDraft
+ *   notice   a line for the status region (e.g. a serving that no longer exists)
+ */
+export function renderFoodSheet({ model, food, text, preview, slot, intent = 'log', servings = [], amount = null, resolved = null, amountError = null, notice = '' }) {
   const valid = !!(preview && preview.valid);
   const tray = intent === 'tray'; // opened with "Add to a meal" from Food detail: that's the main action
+  const control = servings.length && amount
+    ? renderAmountControl({ servings, draft: { ...amount, gramsText: text || '' }, amount: resolved, error: amountError })
+    : renderGramsField(text);
+  const status = servings.length || notice ? `\n<p class="hint" data-amount-status role="status" aria-live="polite">${escapeHtml(notice)}</p>` : '';
+  // A Food with servings: why the actions are off while the count gives no amount (§5.5.1).
+  const hint = servings.length && amount ? `${renderActionsHint({ draft: amount, resolved })}\n` : '';
+  const why = servings.length && amount && servingActionsBlocked(amount, resolved) ? ' aria-describedby="qty-actions-hint"' : '';
   return `${viewHead(food.name, dateText(model))}
 <p><span class="state-chip">${escapeHtml(food.state)}</span>${food.brand ? ` <span class="hint">${escapeHtml(food.brand)}</span>` : ''} Weigh it ${escapeHtml(food.state)}.</p>
 <p><button type="button" class="link-button" data-action="food-detail" data-food="${escapeHtml(food.id)}" aria-label="Details for ${escapeHtml(food.name)}">Food details</button></p>
-<label class="field" for="qty-grams">Grams</label>
-<span class="grams-input"><input id="qty-grams" type="text" inputmode="decimal" autocomplete="off" data-grams value="${escapeHtml(text || '')}" placeholder="grams" aria-describedby="qty-error"><span aria-hidden="true">g</span></span>
-<p id="qty-error" class="field-error" data-grams-error hidden>Enter a weight above 0 g</p>
+<p><button type="button" class="link-button" data-action="add-serving" data-food="${escapeHtml(food.id)}" aria-label="Add a serving for ${escapeHtml(food.name)}">Add a serving</button></p>
+${control}${status}
 <div class="preview" data-preview aria-live="polite">${previewBlock(preview)}</div>
 ${slotRadios('log-slot', slot)}
 ${slotError}
 ${futureNote(model)}
 ${errorSlot}
-<div class="sheet-actions">
-<button type="button" class="button${tray ? '' : ' primary'}" data-action="log-food"${valid && !model.future ? '' : ' disabled'}>Log</button>
-<button type="button" class="button${tray ? ' primary' : ''}" data-action="add-to-tray"${valid ? '' : ' disabled'}>Add to a meal</button>
+${hint}<div class="sheet-actions">
+<button type="button" class="button${tray ? '' : ' primary'}" data-action="log-food"${valid && !model.future ? '' : ' disabled'}${why}>Log</button>
+<button type="button" class="button${tray ? ' primary' : ''}" data-action="add-to-tray"${valid ? '' : ' disabled'}${why}>Add to a meal</button>
 <button type="button" class="button" data-action="close">Cancel</button>
 </div>`;
 }
@@ -595,6 +615,11 @@ export function logErrorMessage(e) {
     case 'DAY_TYPE_REQUIRED': return 'Choose a day type first.';
     case 'DAY_EXISTS': return 'This day already has a day type.';
     case 'INVALID_FOOD': return 'Check the fields above.';
+    case 'INVALID_SERVING': return 'Check the fields above.';
+    case 'SERVING_ID_UNAVAILABLE': return 'That serving couldn’t be saved. Nothing was changed. Try again.';
+    case 'SERVING_NOT_FOUND': return 'That serving no longer exists.';
+    case 'INVALID_SERVING_COUNT': return AMOUNT_MESSAGES.INVALID_SERVING_COUNT;
+    case 'AMOUNT_TOO_SMALL': return AMOUNT_MESSAGES.AMOUNT_TOO_SMALL;
     default: return errorMessage(e);
   }
 }
@@ -619,8 +644,18 @@ export function createLogActions(app) {
     logMeal({ date, mealSlot, mealId, ingredients, dayType }) {
       return logged(app.createMealInstance({ date, mealSlot, mealId, ...(ingredients ? { ingredients } : {}), ...withType(dayType) }), date);
     },
-    logFood({ date, mealSlot, foodId, quantity, dayType }) {
-      return logged(app.logFood({ date, mealSlot, foodId, quantity, ...withType(dayType) }), date);
+    /**
+     * One Food, by grams ({ quantity }) or by a serving ({ servingId, count } — the count as typed).
+     * A serving goes to the domain as chosen: it resolves the grams and keeps the serving's snapshot
+     * (C8). Nothing about the serving is built or checked here.
+     */
+    logFood({ date, mealSlot, foodId, quantity, servingId, count, dayType }) {
+      // Each part of the amount is passed on only if given, so the domain sees exactly what was asked
+      // for and refuses anything ambiguous or incomplete (AMOUNT_AMBIGUOUS, INVALID_SERVING_COUNT …).
+      const amount = servingId === undefined && count === undefined
+        ? { quantity }
+        : { ...(quantity !== undefined ? { quantity } : {}), ...(servingId !== undefined ? { servingId } : {}), ...(count !== undefined ? { count } : {}) };
+      return logged(app.logFood({ date, mealSlot, foodId, ...amount, ...withType(dayType) }), date);
     },
     /** The tray as one logged meal; optionally also a new Saved Meal with the same ingredients. */
     logTray({ date, mealSlot, ingredients, mealName, dayType, alsoSave }) {
@@ -778,7 +813,14 @@ export const logScreen = {
         case 'custom-food': dialog.innerHTML = renderCustomFoodForm(ui); break;
         case 'food-detail': dialog.innerHTML = renderFoodDetail({ ...ui, context: 'log', future: model.future }); break;
         case 'food-delete': dialog.innerHTML = renderDeleteFood(ui); break;
-        case 'discard-food': dialog.innerHTML = renderDiscardFood({ created: ui.form.mode !== 'edit' }); break;
+        case 'add-serving': dialog.innerHTML = renderServingForm(ui); break;
+        case 'serving-form': dialog.innerHTML = renderServingForm(ui); break;
+        case 'serving-delete': dialog.innerHTML = renderDeleteServing(ui); break;
+        case 'discard-food': dialog.innerHTML = renderDiscardFood({
+          created: ui.form.mode !== 'edit',
+          serving: ui.form.type === 'add-serving' || (ui.form.type === 'serving-form' && ui.form.mode === 'add'),
+          editedServing: ui.form.type === 'serving-form' && ui.form.mode === 'edit'
+        }); break;
         case 'followup': dialog.innerHTML = renderFollowUpDialog(ui); break;
         default: break;
       }
@@ -828,7 +870,7 @@ export const logScreen = {
       if (dialog.open) { host.returnFocusTo(top.querySelector('[data-query]')); ui = null; closeDialog(); }
     }
     /** Whether what's open is about a Food (quantity sheet, Food detail, tray, or the day-type step before logging one). */
-    const foodSurface = () => !ui || ['food', 'food-detail', 'tray'].includes(ui.type)
+    const foodSurface = () => !ui || ['food', 'food-detail', 'tray', 'add-serving', 'serving-form', 'serving-delete'].includes(ui.type)
       || (ui.type === 'day-type' && !!ui.continueTo && ui.continueTo.kind !== 'meal');
     /** Redraw the open tray sheet against the current Foods, keeping the name, slot and tick-box. */
     function refreshTraySheet() {
@@ -838,18 +880,116 @@ export const logScreen = {
       ui.slot = checkedSlot('log-slot') || ui.slot;
       drawDialog();
     }
-    function openFood(foodId, text = '', intent = 'log', slot = ctx.slot) {
+    /**
+     * The quantity sheet for a Food. amount: a draft carried back to it (quantityState), restored
+     * as left — or, if its serving no longer exists, grams with the last canonical quantity and
+     * a notice. Without one: the first serving × 1 when the Food has servings, else grams (§5.5.1).
+     */
+    function openFood(foodId, text = '', intent = 'log', slot = ctx.slot, amount = null) {
       const food = app.getFood(foodId);
       if (!food) { foodGone(); return; }
-      const q = parseGrams(text);
-      openDialog({ type: 'food', food, text, preview: q === null ? null : app.previewLogFood({ date: ctx.date, foodId, quantity: q }), slot, intent });
+      const start = amount ? restoreAmount(app, foodId, { ...amount, gramsText: text }) : { draft: startAmount(app, foodId, text), notice: '' };
+      const { gramsText, ...draft } = start.draft;
+      const sheet = { type: 'food', food, text: gramsText, slot, intent, servings: app.getServings(foodId), amount: draft, notice: start.notice };
+      resolveSheet(sheet);
+      openDialog(sheet);
+      if (sheet.notice) announceAmount(sheet.notice);
+    }
+    /** The sheet's draft, grams text included (amount.js). */
+    const draftOf = (sheet) => ({ ...sheet.amount, gramsText: sheet.text || '' });
+    /**
+     * The draft → the domain's canonical grams → the preview. The quantity previewed is the one
+     * Log and Add to a meal use (sheet.resolved.quantity); nothing here converts or rounds.
+     */
+    function resolveSheet(sheet) {
+      const { amount, error } = resolveDraft(app, sheet.food.id, draftOf(sheet));
+      sheet.resolved = amount;
+      sheet.amountError = error;
+      if (amount && amount.serving) sheet.amount.lastText = amount.text;
+      sheet.preview = amount ? app.previewLogFood({ date: ctx.date, foodId: sheet.food.id, quantity: amount.quantity }) : null;
+    }
+    /** The open quantity sheet after its draft changed: amount line, errors, quick picks, preview, buttons (fields keep focus). */
+    function syncFoodSheet() {
+      resolveSheet(ui);
+      const gramsError = dialog.querySelector('[data-grams-error]');
+      if (gramsError) gramsError.hidden = ui.amountError !== 'INVALID_QUANTITY';
+      const countError = dialog.querySelector('[data-count-error]');
+      if (countError) {
+        const message = ui.amountError ? AMOUNT_MESSAGES[ui.amountError] || AMOUNT_MESSAGES.INVALID_SERVING_COUNT : '';
+        countError.textContent = message;
+        countError.hidden = !message;
+      }
+      const servingGrams = dialog.querySelector('[data-serving-grams]');
+      if (servingGrams) servingGrams.innerHTML = renderServingGrams(ui.resolved);
+      dialog.querySelectorAll('[data-count-pick]').forEach((b) => b.setAttribute('aria-pressed', String(String(ui.amount.countText).trim() === b.dataset.countPick)));
+      dialog.querySelector('[data-preview]').innerHTML = previewBlock(ui.preview);
+      const valid = !!(ui.preview && ui.preview.valid);
+      dialog.querySelector('[data-action="log-food"]').disabled = !valid || model.future;
+      dialog.querySelector('[data-action="add-to-tray"]').disabled = !valid;
+      // Serving mode with no amount from the domain: the hint by the actions, tied to them and to the count.
+      const hint = dialog.querySelector('[data-actions-hint]');
+      if (hint) {
+        const blocked = servingActionsBlocked(ui.amount, ui.resolved);
+        hint.hidden = !blocked;
+        dialog.querySelectorAll('[data-action="log-food"], [data-action="add-to-tray"]').forEach((b) => (blocked ? b.setAttribute('aria-describedby', 'qty-actions-hint') : b.removeAttribute('aria-describedby')));
+        const count = dialog.querySelector('#qty-count');
+        if (count) count.setAttribute('aria-describedby', `qty-count-error qty-serving-grams${blocked && !ui.amountError ? ' qty-actions-hint' : ''}`);
+      }
+    }
+    /** Log / Add to a meal pressed with no usable amount: say why, next to the field in use. */
+    function showAmountError() {
+      if (ui.amount.mode === 'serving') {
+        const countError = dialog.querySelector('[data-count-error]');
+        if (countError) { countError.textContent = AMOUNT_MESSAGES[ui.amountError] || AMOUNT_MESSAGES.INVALID_SERVING_COUNT; countError.hidden = false; }
+      } else {
+        dialog.querySelector('[data-grams-error]').hidden = false;
+      }
+    }
+    function announceAmount(message) {
+      const el = dialog.querySelector('[data-amount-status]');
+      if (el) { el.textContent = ''; el.textContent = message; }
     }
     /**
-     * The quantity sheet as the user left it for Food detail (§5.5, I-58): its Food, grams, slot
-     * and whether it was logging or adding to the tray. The date and the rest of the Log context
-     * stay in ctx / the session. Carried through Food detail and its edit form (A-48).
+     * The quantity sheet as the user left it for Food detail or Add a serving (§5.5, I-58,
+     * §5.5.2): its Food, grams, slot, whether it was logging or adding to the tray, the date, and
+     * the amount draft (mode, serving, count). In memory only; the search stays in the session.
+     * Carried through Food detail and its edit form (A-48) and back.
      */
-    const quantityState = (sheet) => ({ foodId: sheet.food.id, text: sheet.text || '', slot: checkedSlot('log-slot') || sheet.slot || null, intent: sheet.intent || 'log' });
+    const quantityState = (sheet) => ({ foodId: sheet.food.id, text: sheet.text || '', slot: checkedSlot('log-slot') || sheet.slot || null, intent: sheet.intent || 'log', date: ctx.date, amount: { ...sheet.amount } });
+    /** Back to the quantity sheet as it was left (Add a serving's Cancel / Back / Discard). */
+    function returnToSheet(q) {
+      openFood(q.foodId, q.text, q.intent, q.slot, q.amount);
+      const link = dialog.querySelector('[data-action="add-serving"]');
+      if (link) link.focus();
+    }
+    /* ---- Add a serving (§5.5.2): from the quantity sheet; Save or Cancel returns to it ---- */
+    function openServingForm() {
+      const values = emptyServingValues();
+      ui = { type: 'add-serving', food: ui.food, values, initial: { ...values }, errors: [], quantity: quantityState(ui) };
+      host.open(ui.type, drawDialog);
+    }
+    /** Save: one domain call. Field problems stay on the form; anything else goes to the click handler's error path. */
+    function saveServing() {
+      if (ui.type === 'serving-form') { saveServingFromDetail(); return; } // C7: Add / Edit serving from Food detail
+      const form = ui;
+      let serving;
+      try {
+        serving = app.createServing(form.food.id, servingInput(form.values));
+      } catch (e) {
+        if (!e || e.code !== 'INVALID_SERVING') throw e;
+        form.errors = e.details || [];
+        drawDialog();
+        const first = form.errors.find((x) => x.field === 'label' || x.field === 'grams');
+        const field = dialog.querySelector(`#srv-${first ? first.field : 'label'}`);
+        if (field) field.focus();
+        return;
+      }
+      const q = form.quantity;
+      openFood(q.foodId, q.text, q.intent, q.slot, { ...q.amount, mode: 'serving', servingId: serving.id, countText: '1' });
+      const select = dialog.querySelector('[data-serving]');
+      if (select) select.focus();
+      announceAmount(`Serving added: ${serving.label}.`);
+    }
     /* ---- Food detail (§7.3): from the quantity sheet; Edit / Delete for Custom Foods ---- */
     function openFoodDetail(foodId, note = '', quantity = null) {
       const detail = foodDetailModel(app, foodId);
@@ -870,6 +1010,59 @@ export const logScreen = {
     function returnToFoodRow(foodId) {
       host.returnFocusTo(results.querySelector(`[data-action="food"][data-food="${foodId}"]`) || top.querySelector('[data-query]'));
     }
+    /* ---- servings on Food detail (C7, §7.3): Add · Edit · Delete · Make default ---- */
+    /** The serving a Food detail control names, as stored now — never another one (null: it's gone). */
+    const currentServing = (foodId, servingId) => app.getServings(foodId).find((s) => s.id === servingId) || null;
+    /** Food detail again, from the domain as it is now, with the sheet it came from kept; then focus and say what happened. */
+    function backToDetail(foodId, quantity, focusSelector, message = '') {
+      openFoodDetail(foodId, '', quantity);
+      if (!ui || ui.type !== 'food-detail') return;
+      const target = (focusSelector && dialog.querySelector(focusSelector)) || dialog.querySelector('[data-action="fd-serving-add"]');
+      if (target) target.focus();
+      if (message) announceInDialog(message);
+    }
+    /** A serving that no longer exists (deleted elsewhere): Food detail as it is now, and say so. Nothing is changed. */
+    function servingGone(foodId, quantity) {
+      backToDetail(foodId, quantity, null, 'That serving no longer exists.');
+    }
+    function openDetailServingForm(mode, serving = null) {
+      const values = serving ? servingFormValues(serving) : emptyServingValues();
+      ui = { type: 'serving-form', mode, food: ui.food, foodId: ui.food.id, servingId: serving ? serving.id : null, values, initial: { ...values }, errors: [], quantity: ui.quantity };
+      host.open(ui.type, drawDialog);
+    }
+    /** Save Add / Edit serving: one domain call; field problems stay on the form; success returns to Food detail. */
+    function saveServingFromDetail() {
+      const form = ui;
+      let result;
+      try {
+        result = form.mode === 'edit'
+          ? foodActions.updateServing(form.food, form.servingId, servingPatch(form.values, form.initial))
+          : foodActions.addServing(form.food, servingInput(form.values));
+      } catch (e) {
+        if (!e || e.code !== 'INVALID_SERVING') throw e;
+        form.errors = e.details || [];
+        drawDialog();
+        const first = form.errors.find((x) => x.field === 'label' || x.field === 'grams');
+        const field = dialog.querySelector(`#srv-${first ? first.field : 'label'}`);
+        if (field) field.focus();
+        return;
+      }
+      backToDetail(form.food.id, form.quantity, `[data-action="fd-serving-edit"][data-serving="${result.serving.id}"]`, result.message);
+    }
+    /** Delete confirmed: the serving named by the dialog, by ID. Focus the next row, else Add a serving. */
+    function deleteServingConfirmed() {
+      const { food, serving, quantity } = ui;
+      const index = app.getServings(food.id).findIndex((s) => s.id === serving.id);
+      const result = foodActions.deleteServing(food, serving);
+      const next = result.remaining[Math.min(Math.max(index, 0), result.remaining.length - 1)];
+      backToDetail(food.id, quantity, next ? `[data-action="fd-serving-edit"][data-serving="${next.id}"]` : null, result.message);
+    }
+    function makeDefaultServing(serving) {
+      const result = foodActions.makeDefaultServing(ui.food, serving);
+      refreshFoodDetail(result.message);
+      const target = dialog.querySelector(`[data-action="fd-serving-edit"][data-serving="${serving.id}"]`);
+      if (target) target.focus();
+    }
     function announceInDialog(message) {
       const el = dialog.querySelector('[data-food-status]');
       if (el) { el.textContent = ''; el.textContent = message; }
@@ -883,12 +1076,17 @@ export const logScreen = {
       if (!ui) return true;
       if (ui.type === 'custom-food' && customFoodDirty(ui)) { askDiscard(ui, null); return false; }
       if (ui.type === 'custom-food' && ui.mode === 'edit') { openFoodDetail(ui.foodId, '', ui.quantity); return false; }
+      if (ui.type === 'add-serving' && servingFormDirty(ui)) { askDiscard(ui, null); return false; }
+      if (ui.type === 'add-serving') { returnToSheet(ui.quantity); return false; }
+      if (ui.type === 'serving-form' && servingFormDirty(ui)) { askDiscard(ui, null); return false; }
+      if (ui.type === 'serving-form') { backToDetail(ui.food.id, ui.quantity, ui.servingId ? `[data-action="fd-serving-edit"][data-serving="${ui.servingId}"]` : null); return false; }
+      if (ui.type === 'serving-delete') { backToDetail(ui.food.id, ui.quantity, `[data-action="fd-serving-delete"][data-serving="${ui.serving.id}"]`); return false; }
       if (ui.type === 'discard-food') { reopenForm(ui.form); return false; }
       if (ui.type === 'food-delete') { openFoodDetail(ui.food.id, '', ui.quantity); return false; }
       // A-42: Food detail opened from the quantity sheet goes back to that sheet, as it was left.
       if (ui.type === 'food-detail' && ui.quantity) {
         const q = ui.quantity;
-        openFood(q.foodId, q.text, q.intent, q.slot);
+        openFood(q.foodId, q.text, q.intent, q.slot, q.amount);
         const link = dialog.querySelector('[data-action="food-detail"]');
         if (link) link.focus();
         return false;
@@ -917,15 +1115,24 @@ export const logScreen = {
         return false;
       }
       if (ui.type === 'custom-food' && customFoodDirty(ui)) { askDiscard(ui, proceed); return false; }
+      if (ui.type === 'add-serving' && servingFormDirty(ui)) { askDiscard(ui, proceed); return false; }
+      if (ui.type === 'serving-form' && servingFormDirty(ui)) { askDiscard(ui, proceed); return false; }
       return true;
     }
     this._leaveGuard = guardLeave;
-    /** Discard: nothing is saved. Then where the user was going, back to Food detail (an edit), or closed (a new food). */
+    /**
+     * Discard: nothing is saved. Then where the user was going, back to the quantity sheet (a
+     * new serving), back to Food detail (an edit), or closed (a new food).
+     */
     function discardChanges() {
       const { form, proceed } = ui;
       if (proceed) {
         afterClose = () => win.setTimeout(proceed, 0);
         closeDialog();
+      } else if (form.type === 'add-serving') {
+        returnToSheet(form.quantity);
+      } else if (form.type === 'serving-form') {
+        backToDetail(form.food.id, form.quantity, form.servingId ? `[data-action="fd-serving-edit"][data-serving="${form.servingId}"]` : null);
       } else if (form.mode === 'edit') {
         openFoodDetail(form.foodId, '', form.quantity);
       } else {
@@ -945,7 +1152,7 @@ export const logScreen = {
     function run(spec, dayType) {
       let result;
       if (spec.kind === 'meal') result = actions.logMeal({ date: ctx.date, mealSlot: spec.slot, mealId: spec.mealId, ingredients: spec.ingredients, dayType });
-      else if (spec.kind === 'food') result = actions.logFood({ date: ctx.date, mealSlot: spec.slot, foodId: spec.foodId, quantity: spec.quantity, dayType });
+      else if (spec.kind === 'food') result = actions.logFood({ date: ctx.date, mealSlot: spec.slot, foodId: spec.foodId, ...spec.amount, dayType });
       else {
         result = actions.logTray({ date: ctx.date, mealSlot: spec.slot, ingredients: spec.ingredients, mealName: spec.mealName, alsoSave: spec.alsoSave, dayType });
         state.tray = [];
@@ -1017,13 +1224,15 @@ export const logScreen = {
         button.disabled = !ui.preview.valid || model.future;
       } else if (ui.type === 'food' && el.matches('[data-grams]')) {
         ui.text = el.value;
-        const q = parseGrams(el.value);
-        dialog.querySelector('[data-grams-error]').hidden = q !== null || el.value.trim() === '';
-        ui.preview = q === null ? null : app.previewLogFood({ date: ctx.date, foodId: ui.food.id, quantity: q });
-        dialog.querySelector('[data-preview]').innerHTML = previewBlock(ui.preview);
-        const valid = !!(ui.preview && ui.preview.valid);
-        dialog.querySelector('[data-action="log-food"]').disabled = !valid || model.future;
-        dialog.querySelector('[data-action="add-to-tray"]').disabled = !valid;
+        syncFoodSheet();
+      } else if (ui.type === 'food' && el.matches('[data-count]')) {
+        ui.amount.countText = el.value;
+        syncFoodSheet();
+      } else if ((ui.type === 'add-serving' || ui.type === 'serving-form') && el.matches('[data-srv="label"], [data-srv="grams"]')) {
+        ui.values[el.dataset.srv] = el.value;
+        const err = dialog.querySelector(`#srv-${el.dataset.srv}-error`);
+        if (err) err.hidden = true;
+        el.removeAttribute('aria-invalid');
       } else if (ui.type === 'tray' && el.matches('[data-tray-index]')) {
         const i = Number(el.dataset.trayIndex);
         state.tray[i].text = el.value;
@@ -1060,6 +1269,22 @@ export const logScreen = {
         if (err) err.hidden = true;
       } else if (ui.type === 'tray' && el.matches('[data-also-save]')) {
         ui.alsoSave = el.checked;
+      } else if (ui.type === 'food' && el.matches('[data-amount-mode]')) {
+        // Servings ⇄ Grams (D9): the redraw keeps the slot chosen and focus on the choice.
+        ui.slot = checkedSlot('log-slot') || ui.slot;
+        const { gramsText, ...draft } = switchAmount(app, ui.food.id, draftOf(ui), el.value, ui.resolved);
+        ui.text = gramsText;
+        ui.amount = draft;
+        ui.servings = app.getServings(ui.food.id);
+        resolveSheet(ui);
+        drawDialog();
+        const radio = dialog.querySelector(`input[name="amount-mode"][value="${ui.amount.mode}"]`);
+        if (radio) radio.focus();
+      } else if (ui.type === 'food' && el.matches('[data-serving]')) {
+        ui.amount.servingId = el.value;
+        syncFoodSheet();
+      } else if ((ui.type === 'add-serving' || ui.type === 'serving-form') && el.matches('[data-srv="approximate"]')) {
+        ui.values.approximate = el.checked;
       } else if (ui.type === 'custom-food' && el.matches('[data-cf]')) {
         ui.values[el.dataset.cf] = el.value;
         ui.touched.add(el.dataset.cf);
@@ -1147,22 +1372,43 @@ export const logScreen = {
           }
           case 'food': openFood(el.dataset.food); break;
           case 'log-food': {
-            const q = parseGrams(ui.text);
-            if (q === null) { dialog.querySelector('[data-grams-error]').hidden = false; break; }
+            resolveSheet(ui); // the same canonical grams the preview showed
+            if (!ui.resolved) { showAmountError(); break; }
             const slot = requireSlot();
             if (!slot) break;
-            commit({ kind: 'food', slot, foodId: ui.food.id, quantity: q });
+            // A serving is logged as the serving and count chosen (the domain keeps its snapshot, C8);
+            // grams as the grams. The tray stays grams only (Add to a meal, below).
+            const amount = ui.resolved.serving ? { servingId: ui.resolved.serving.id, count: ui.amount.countText } : { quantity: ui.resolved.quantity };
+            commit({ kind: 'food', slot, foodId: ui.food.id, amount });
             break;
           }
           case 'add-to-tray': {
-            const q = parseGrams(ui.text);
-            if (q === null) { dialog.querySelector('[data-grams-error]').hidden = false; break; }
+            resolveSheet(ui);
+            if (!ui.resolved) { showAmountError(); break; }
             if (!app.getFood(ui.food.id)) { foodGone(); break; }
-            state.tray.push({ foodId: ui.food.id, foodName: ui.food.name, text: String(q) });
+            const added = ui.resolved;
+            if (added.serving) {
+              // The tray holds grams only (no serving rows yet): a serving goes in as its canonical grams, and says so.
+              state.tray.push({ foodId: ui.food.id, foodName: ui.food.name, text: added.text });
+              confirmation = { message: `Added ${ui.food.name} as ${added.text} g.` };
+              renderConfirm();
+            } else {
+              const q = added.quantity; // grams as typed, exactly as before
+              state.tray.push({ foodId: ui.food.id, foodName: ui.food.name, text: String(q) });
+            }
             closeDialog();
             renderTray();
             break;
           }
+          case 'count-pick': {
+            ui.amount.countText = el.dataset.countPick;
+            const count = dialog.querySelector('[data-count]');
+            if (count) count.value = ui.amount.countText;
+            syncFoodSheet();
+            break;
+          }
+          case 'add-serving': openServingForm(); break;
+          case 'srv-save': saveServing(); break;
           case 'tray-open': openTray(); break;
           case 'tray-remove': {
             state.tray.splice(Number(el.dataset.index), 1);
@@ -1202,7 +1448,7 @@ export const logScreen = {
               const q = ui.quantity;
               // A-48: an edit from the Log flow returns to the quantity sheet for that Food, with the
               // grams, slot and intent it had; the date and search stay in the Log context.
-              if (q && q.foodId === food.id) openFood(food.id, q.text, q.intent, q.slot);
+              if (q && q.foodId === food.id) openFood(food.id, q.text, q.intent, q.slot, q.amount);
               else openFoodDetail(food.id, 'Saved.'); // §7.4: back to the detail of the Food just saved
               returnToFoodRow(food.id);
               break;
@@ -1227,7 +1473,29 @@ export const logScreen = {
             reopenForm(form);
             break;
           }
-          case 'fd-delete': ui = { type: 'food-delete', food: ui.food, meals: foodUsageMeals(app, ui.food.id), quantity: ui.quantity }; host.open(ui.type, drawDialog); break;
+          case 'fd-delete': ui = { type: 'food-delete', food: ui.food, meals: foodUsageMeals(app, ui.food.id), servingCount: app.getServings(ui.food.id).length, quantity: ui.quantity }; host.open(ui.type, drawDialog); break;
+          /* Servings on Food detail (C7): each control names its serving by ID; one that's gone changes nothing. */
+          case 'fd-serving-add': openDetailServingForm('add'); break;
+          case 'fd-serving-edit': {
+            const serving = currentServing(ui.food.id, el.dataset.serving);
+            if (!serving) { servingGone(ui.food.id, ui.quantity); break; }
+            openDetailServingForm('edit', serving);
+            break;
+          }
+          case 'fd-serving-default': {
+            const serving = currentServing(ui.food.id, el.dataset.serving);
+            if (!serving) { servingGone(ui.food.id, ui.quantity); break; }
+            makeDefaultServing(serving);
+            break;
+          }
+          case 'fd-serving-delete': {
+            const serving = currentServing(ui.food.id, el.dataset.serving);
+            if (!serving) { servingGone(ui.food.id, ui.quantity); break; }
+            ui = { type: 'serving-delete', food: ui.food, serving, servings: app.getServings(ui.food.id), quantity: ui.quantity };
+            host.open(ui.type, drawDialog);
+            break;
+          }
+          case 'fd-serving-delete-confirm': deleteServingConfirmed(); break;
           case 'fd-delete-confirm': {
             confirmation = foodActions.deleteCustomFood(ui.food);
             renderList(); // §13.2: the results follow the current Foods; the search text is kept
@@ -1255,6 +1523,8 @@ export const logScreen = {
           default: break;
         }
       } catch (e) {
+        // A serving deleted elsewhere while its form or dialog was open: Food detail as it is now (C7).
+        if (e && e.code === 'SERVING_NOT_FOUND' && ui && ['food-detail', 'serving-form', 'serving-delete'].includes(ui.type)) { servingGone(ui.food.id, ui.quantity); return; }
         // A tray the domain can't log because a Food is gone reads as the same case (A-43).
         if (e && (e.code === 'FOOD_NOT_FOUND' || (e.code === 'MEAL_NEEDS_REPLACEMENT' && ui && ui.type === 'tray')) && foodSurface()) foodGone();
         else { if (e && e.code === 'FOOD_NOT_FOUND') renderList(); showError(e); }

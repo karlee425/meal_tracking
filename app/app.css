@@ -593,6 +593,16 @@ legend { font-weight: 600; margin-bottom: var(--space-2); padding: 0; }
 .grams-input input[type="text"] { width: 7rem; text-align: right; }
 .adjust-row { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-1) var(--space-3); padding: var(--space-2) 0; border-bottom: 1px solid var(--border); }
 .adjust-row label { flex: 1 1 12rem; overflow-wrap: anywhere; }
+/* Amount control (§5.5.1, V3 C6): Servings / Grams, quick picks, the grams a serving logs as. */
+.quick-picks { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-top: var(--space-2); }
+.quick-picks .chip { min-width: 44px; padding: 0 var(--space-3); }
+.quick-picks .chip[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); }
+.serving-grams { margin: var(--space-2) 0 0; }
+.sheet .actions-hint { margin: var(--space-4) 0 0; }
+.estimate-label { display: inline-block; margin-left: var(--space-1); padding: 0 var(--space-2); border: 1px solid var(--border); border-radius: 999px; font-size: 0.75rem; font-weight: 600; }
+/* A logged ingredient's serving, from its snapshot (V3 C8): under the food name in the logged-meal detail and editor. */
+.serving-context { display: block; margin: var(--space-1) 0 0; font-weight: 400; }
+.adjust-row .serving-context { flex-basis: 100%; margin: 0; }
 
 .option-group { margin-top: var(--space-4); }
 .group-title { font-size: 1rem; margin: 0 0 var(--space-2); cursor: default; }
@@ -623,6 +633,7 @@ details.option-group > summary.group-title { cursor: pointer; min-height: 44px; 
 .ingredients { width: 100%; border-collapse: collapse; font-size: 0.9375rem; }
 .ingredients th, .ingredients td { padding: var(--space-2); border-bottom: 1px solid var(--border); text-align: right; }
 .ingredients th[scope="row"], .ingredients thead th:first-child { text-align: left; font-weight: 500; overflow-wrap: anywhere; }
+.ingredients tbody td:first-of-type { white-space: nowrap; } /* the grams column: "18.75 g" stays on one line */
 .ingredients tfoot th, .ingredients tfoot td { font-weight: 700; }
 
 /* §4.1: on compact screens the action bar comes after the slot list and stays in reach just
@@ -963,6 +974,13 @@ details.option-group > summary.group-title { cursor: pointer; min-height: 44px; 
 .per-100-table { margin-bottom: var(--space-3); }
 .per-100-table caption { text-align: left; padding: var(--space-2) 0; font-weight: 600; }
 .per-100-table th, .per-100-table td { text-align: left; }
+/* Servings on Food detail (C7) */
+.food-servings { margin-top: var(--space-4); }
+.serving-list { list-style: none; margin: 0 0 var(--space-2); padding: 0; }
+.serving-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0 var(--space-3); padding: var(--space-1) 0; border-bottom: 1px solid var(--border); }
+.serving-main { flex: 1 1 12rem; min-width: 0; overflow-wrap: anywhere; }
+.serving-label { font-weight: 600; }
+.serving-actions { display: flex; flex-wrap: wrap; gap: 0 var(--space-2); }
 .food-prefs { margin-top: var(--space-4); }
 .food-prefs .group-title { margin: 0 0 var(--space-2); }
 .food-pref-actions { display: flex; flex-wrap: wrap; gap: var(--space-2); }

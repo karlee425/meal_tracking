@@ -12,7 +12,7 @@
  * snapshot totals) and is only rounded for display with macros.roundMacros.
  */
 
-import { macros, constants, addDays } from '../src/domain/index.js';
+import { macros, constants, addDays, formatServingCount } from '../src/domain/index.js';
 import { escapeHtml } from './shell.js';
 import { session, routeParams, isIsoDate } from './session.js';
 import { createViewHost, viewHead, syncInPlace } from './view-host.js';
@@ -444,11 +444,27 @@ ${errorSlot}
 </div>`;
 }
 
+/**
+ * The serving a logged ingredient was logged with (C8), from its own snapshot — never the Food's
+ * servings now: "1 1/3 × Scoop · 30 g each". The count is the domain's text (formatServingCount);
+ * the weight is the snapshot's, as stored; an approximate one reads "≈ … estimate" (screen readers:
+ * "approximately"). '' for an ingredient logged in grams.
+ */
+export function loggedServingContext(serving) {
+  if (!serving) return '';
+  const each = `${escapeHtml(String(serving.grams))} g each`;
+  const weight = serving.approximate
+    ? `<span aria-hidden="true">≈ </span><span class="visually-hidden">approximately </span>${each} <span class="estimate-label">estimate</span>`
+    : each;
+  return `${escapeHtml(formatServingCount(serving.count))} × ${escapeHtml(serving.label)} · ${weight}`;
+}
+
 /** A logged meal as the historical record it is (§4.3.3). */
 export function renderInstanceDialog({ instance, slot, date, source, sourceName }) {
   const rows = instance.ingredients.map((ing) => {
     const r = oneDecimal(ing);
-    return `<tr><th scope="row">${escapeHtml(ing.foodName)}</th><td>${ing.quantity} g</td><td>${r.protein}</td><td>${r.carbs}</td><td>${r.fat}</td></tr>`;
+    const context = ing.serving ? `<span class="hint serving-context">${loggedServingContext(ing.serving)}</span>` : '';
+    return `<tr><th scope="row">${escapeHtml(ing.foodName)}${context}</th><td>${ing.quantity} g</td><td>${r.protein}</td><td>${r.carbs}</td><td>${r.fat}</td></tr>`;
   }).join('\n');
   const t = whole(instance.totals);
   // §13.2 / §2.2: the source line opens the current recipe (read-only Meal detail) while that
@@ -478,6 +494,8 @@ ${source === 'saved' && instance.sourceMealId ? `<p class="edit-source">Want to 
 /**
  * Edit one logged meal: name, slot, grams, remove, add an ingredient (§4.3.4). The Saved Meal
  * is untouched. An added ingredient shows its Food's state chip (A-16); grams only.
+ * A row logged as a serving (C8) shows "Logged as …" from its snapshot, and — once the domain's
+ * preview says the snapshot won't be kept (its grams changed) — that it will save as grams.
  */
 export function renderEditDialog({ instance, date, name, slot, rows, preview }) {
   const single = rows.length === 1;
@@ -488,9 +506,15 @@ export function renderEditDialog({ instance, date, name, slot, rows, preview }) 
 <p class="field-error" data-name-error hidden>Give it a name</p>
 ${slotRadios('edit-slot', slot)}
 <fieldset class="adjust"><legend>Ingredients</legend>
-${rows.map((row, i) => `<div class="adjust-row"><label for="edit-q-${i}">${escapeHtml(row.foodName)}${row.state ? ` <span class="state-chip">${escapeHtml(row.state)}</span>` : ''}</label>
-<span class="grams-input"><input id="edit-q-${i}" type="text" inputmode="decimal" autocomplete="off" data-quantity-index="${i}" value="${escapeHtml(row.text)}"><span aria-hidden="true">g</span></span>
-${single ? '' : `<button type="button" class="link-button" data-action="remove-ingredient" data-index="${i}" aria-label="Remove ${escapeHtml(row.foodName)}">Remove</button>`}</div>`).join('\n')}
+${rows.map((row, i) => {
+    const asGrams = servingDropped(row, preview, i);
+    const describedBy = row.serving ? ` aria-describedby="edit-srv-${i}${asGrams ? ` edit-srv-note-${i}` : ''}"` : '';
+    const context = row.serving ? `<p class="hint serving-context" id="edit-srv-${i}">Logged as ${loggedServingContext(row.serving)}</p>
+<p class="hint serving-context" id="edit-srv-note-${i}" data-serving-note="${i}"${asGrams ? '' : ' hidden'}>${SERVING_TO_GRAMS_NOTE}</p>` : '';
+    return `<div class="adjust-row"><label for="edit-q-${i}">${escapeHtml(row.foodName)}${row.state ? ` <span class="state-chip">${escapeHtml(row.state)}</span>` : ''}</label>
+<span class="grams-input"><input id="edit-q-${i}" type="text" inputmode="decimal" autocomplete="off" data-quantity-index="${i}"${describedBy} value="${escapeHtml(row.text)}"><span aria-hidden="true">g</span></span>
+${single ? '' : `<button type="button" class="link-button" data-action="remove-ingredient" data-index="${i}" aria-label="Remove ${escapeHtml(row.foodName)}">Remove</button>`}${context ? `\n${context}` : ''}</div>`;
+  }).join('\n')}
 ${single ? '<p class="hint">A logged meal needs at least one ingredient. <button type="button" class="link-button" data-action="delete-instance">Delete this logged meal instead</button></p>' : ''}
 <p class="field-error" data-grams-error hidden>Enter a weight above 0 g</p>
 <button type="button" class="button add-ingredient" data-action="add-ingredient">Add an ingredient</button>
@@ -499,6 +523,33 @@ ${single ? '<p class="hint">A logged meal needs at least one ingredient. <button
 ${errorSlot}
 <div class="sheet-actions"><button type="button" class="button primary" data-action="save-instance">Save</button><button type="button" class="button" data-action="close">Cancel</button></div>`;
 }
+
+/** What a serving-logged row says once its grams change (C8). */
+export const SERVING_TO_GRAMS_NOTE = 'Grams changed: this will save as a grams entry.';
+
+/**
+ * Whether row i was logged as a serving and the domain's preview of the edit no longer keeps its
+ * snapshot (its grams changed). The domain decides; this only reads the preview.
+ */
+export function servingDropped(row, preview, i) {
+  if (!row.serving || !preview || !preview.instance) return false;
+  const ing = preview.instance.ingredients[i];
+  return !(ing && ing.serving);
+}
+
+/**
+ * The rows of the logged-meal editor for an instance: each existing ingredient keeps its index in
+ * the logged meal (snapshotIndex, so the domain pairs it with exactly that row, C8) and its serving
+ * snapshot, for display only. Added ingredients have neither.
+ */
+export const editRowsOf = (instance) => instance.ingredients.map((i, k) => ({
+  foodId: i.foodId, unit: i.unit, foodName: i.foodName, text: String(i.quantity), snapshotIndex: k, ...(i.serving ? { serving: i.serving } : {})
+}));
+
+/** The edit as the domain's patch ingredients: an existing row says which logged row it is (snapshotIndex). */
+export const editIngredients = (rows, quantities) => rows.map((row, i) => ({
+  foodId: row.foodId, unit: row.unit, quantity: quantities[i], ...(row.snapshotIndex !== undefined ? { snapshotIndex: row.snapshotIndex } : {})
+}));
 
 /**
  * The editor's fields as they stand (name, slot, each row's Food and grams text), for
@@ -1108,7 +1159,7 @@ export const todayScreen = {
     function editPatch() {
       const parsed = ui.rows.map((row) => parseGrams(row.text));
       if (parsed.some((q) => q === null)) return null;
-      return { mealName: ui.name.trim(), mealSlot: checkedSlot('edit-slot') || ui.slot, ingredients: ui.rows.map((row, i) => ({ foodId: row.foodId, unit: row.unit, quantity: parsed[i] })) };
+      return { mealName: ui.name.trim(), mealSlot: checkedSlot('edit-slot') || ui.slot, ingredients: editIngredients(ui.rows, parsed) };
     }
 
     function updateEditPreview() {
@@ -1125,11 +1176,26 @@ export const todayScreen = {
       const nameError = dialog.querySelector('[data-name-error]');
       if (nameError) nameError.hidden = !noName;
       dialog.querySelector('[data-action="save-instance"]').disabled = !patch || noName;
-      if (!patch) { ui.preview = null; dialog.querySelector('[data-preview]').innerHTML = ''; return; }
+      if (!patch) { ui.preview = null; dialog.querySelector('[data-preview]').innerHTML = ''; syncServingNotes(); return; }
       try {
         ui.preview = app.previewMealInstanceUpdate(model.date, ui.instance.id, { ingredients: patch.ingredients });
         dialog.querySelector('[data-preview]').innerHTML = `<p class="preview-totals">${macroLine(ui.preview.instance.totals)}</p><p class="preview-after">${afterLine(ui.preview.after)}</p>`;
       } catch (e) { showError(e); }
+      syncServingNotes();
+    }
+    /**
+     * A serving-logged row whose grams changed says it will save as grams (C8). Not a live region:
+     * read in place and as part of the grams field's description, never announced per keystroke.
+     */
+    function syncServingNotes() {
+      ui.rows.forEach((row, i) => {
+        const note = dialog.querySelector(`[data-serving-note="${i}"]`);
+        if (!note) return;
+        const shown = servingDropped(row, ui.preview, i);
+        note.hidden = !shown;
+        const input = dialog.querySelector(`#edit-q-${i}`);
+        if (input) input.setAttribute('aria-describedby', `edit-srv-${i}${shown ? ` edit-srv-note-${i}` : ''}`);
+      });
     }
 
     main.addEventListener('change', (event) => {
@@ -1213,7 +1279,7 @@ export const todayScreen = {
           case 'edit-saved-meal': session.savedMealEdit = { mealId: el.dataset.meal, date: model.date, instanceId: ui && ui.instance ? ui.instance.id : null }; break;
           case 'edit-instance': {
             const instance = ui.instance;
-            const edit = { type: 'edit', instance, date: model.date, name: instance.mealName, slot: instance.mealSlot, rows: instance.ingredients.map((i) => ({ foodId: i.foodId, unit: i.unit, foodName: i.foodName, text: String(i.quantity) })), preview: null };
+            const edit = { type: 'edit', instance, date: model.date, name: instance.mealName, slot: instance.mealSlot, rows: editRowsOf(instance), preview: null };
             edit.original = editKey(edit);
             openDialog(edit);
             break;
@@ -1223,6 +1289,8 @@ export const todayScreen = {
             ui.rows.splice(Number(el.dataset.index), 1);
             drawDialog();
             updateEditPreview();
+            // Focus stays in the editor: the grams field now in that place (or the last one), not the page.
+            dialog.querySelector(`#edit-q-${Math.min(Number(el.dataset.index), ui.rows.length - 1)}`)?.focus();
             break;
           }
           case 'add-ingredient': {

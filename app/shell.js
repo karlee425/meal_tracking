@@ -63,7 +63,7 @@ export function persistenceView(status) {
   switch (status.state) {
     case 'saving': return { state: 'saving', text: 'Saving…', hidden: false };
     case 'error': return { state: 'error', text: 'Not saved', hidden: false };
-    case 'conflict': return { state: 'conflict', text: 'Changed elsewhere', hidden: false };
+    case 'conflict': return { state: 'conflict', text: isArchiveConflict(status) ? 'Saving paused' : 'Changed elsewhere', hidden: false };
     case 'saved': return { state: 'saved', text: 'Saved', hidden: !status.lastSavedAt };
     default: return { state: 'none', text: '', hidden: true };
   }
@@ -97,6 +97,29 @@ export function startupErrorView(code) {
 
 /** Start-up errors the user can recover from here: the stored record exists but can't be opened. */
 export const RECOVERABLE_CODES = Object.freeze(['DATA_INVALID', 'STORED_DATA_UNRECOGNIZED']);
+
+/**
+ * The save was refused because a different pre-upgrade copy is already stored (C3/C4): a
+ * blocking conflict, but not "another tab saved" — reloading doesn't resolve it.
+ */
+export const isArchiveConflict = (status) => !!status && status.state === 'conflict' && status.code === 'STORAGE_ARCHIVE_CONFLICT';
+
+/** The format of a raw migration archive (browser-adapter.js STORE_ARCHIVE_FORMAT). The shell imports nothing, so it is named here. */
+const RAW_ARCHIVE_FORMAT = 'macro-tracker-store-archive';
+/** Whether a chosen file's text is a raw migration archive (so restore can say so). Reads only. */
+export function isRawMigrationArchiveText(text) {
+  try {
+    const doc = JSON.parse(text);
+    return !!doc && typeof doc === 'object' && doc.format === RAW_ARCHIVE_FORMAT;
+  } catch {
+    return false;
+  }
+}
+export const RAW_ARCHIVE_RESTORE_MESSAGE = 'This file is a raw migration archive, not a backup, so it can’t be restored. Choose a backup file instead.';
+/** The restore error message for a chosen file: a raw migration archive is named as such; otherwise by code. */
+export function restoreFileErrorMessage(code, text) {
+  return code === 'BACKUP_INCOMPATIBLE' && isRawMigrationArchiveText(text) ? RAW_ARCHIVE_RESTORE_MESSAGE : restoreErrorMessage(code);
+}
 
 /** §11.2 / §13.3: what a failed restore or recovery means, by domain code. Nothing is changed in any of them. */
 export function restoreErrorMessage(code) {
@@ -141,8 +164,84 @@ ${note ? `<p class="save-banner-note">${escapeHtml(note)}</p>` : ''}
 </div>`;
 }
 
-/** §4.8: another tab saved more recently. Blocking until reload. */
-export function conflictDialogView(note = '') {
+/* ---------------- archive conflict (C4): saving paused, three separate downloads ---------------- */
+
+/**
+ * The pre-upgrade copy the archive-conflict dialog can offer, from the earlier-format copies
+ * model (formatCopiesModel: loading | error | ready). This tab's pending pre-upgrade copy is the
+ * one meant; it is offered only when its older-format backup validated. The differing stored
+ * archive is never offered in its place. Without a pending copy, a valid archived original is.
+ */
+export function preUpgradeOffer(copies) {
+  if (!copies || copies.state === 'loading') return { available: false, hint: 'Checking for the pre-upgrade copy…', copy: null, details: '' };
+  if (copies.state === 'error') return { available: false, hint: 'The earlier copies couldn’t be read, so the pre-upgrade copy can’t be offered.', copy: null, details: detailsDisclosure(copies.code, copies.errors || []) };
+  const pending = copies.copies.find((c) => c.kind === 'pending');
+  const candidate = pending || copies.copies.find((c) => c.kind === 'archive' && c.older && c.older.valid) || null;
+  if (candidate && candidate.older && candidate.older.valid) return { available: true, hint: 'A backup the earlier version of the app can restore.', copy: candidate, details: '' };
+  if (!candidate) return { available: false, hint: 'No pre-upgrade copy is available on this device.', copy: null, details: '' };
+  return { available: false, hint: 'An older-format backup can’t be made from the pre-upgrade copy.', copy: null, details: detailsDisclosure(candidate.older && candidate.older.code, (candidate.older && candidate.older.errors) || candidate.problems || []) };
+}
+
+/** The stored migration archive(s) the dialog can offer: present, and savable exactly as a file. */
+export function storedArchiveOffer(copies) {
+  if (!copies || copies.state === 'loading') return { available: false, hint: 'Checking for the stored migration archive…' };
+  if (copies.state === 'error') return { available: false, hint: 'The stored migration archive couldn’t be read.' };
+  const archives = copies.copies.filter((c) => c.kind === 'archive');
+  if (!archives.length) return { available: false, hint: 'No stored migration archive on this device.' };
+  const exact = archives.filter((c) => c.exactJson).length;
+  if (!exact) return { available: false, hint: 'The stored migration archive can’t be saved exactly as a file, so it isn’t offered.' };
+  return { available: true, hint: exact === archives.length ? 'Not a backup; it can’t be restored.' : `Not a backup; it can’t be restored. ${archives.length - exact} of ${archives.length} can’t be saved exactly as a file and won’t be downloaded.` };
+}
+
+/**
+ * The note for "Download the stored migration archive", from downloadRawArchives' per-archive
+ * results. A refused download is reported as a download problem (never as a read failure), and
+ * a partial result as partial.
+ */
+export function archiveDownloadMessage(result) {
+  const found = (result && result.found) || 0;
+  const results = (result && result.results) || [];
+  if (!found) return 'There’s no stored migration archive on this device. Nothing was changed.';
+  const count = (o) => results.filter((r) => r.outcome === o).length;
+  const done = count('downloaded');
+  const refused = count('refused');
+  const notExact = count('not-exact');
+  if (done === found) return found === 1 ? 'Stored migration archive downloaded. Saving is still paused.' : `All ${found} stored migration archives downloaded. Saving is still paused.`;
+  if (found === 1 && refused === 1) return 'The stored migration archive couldn’t be downloaded: the browser didn’t start the download. Nothing was changed. Try again, or check your browser’s download settings.';
+  if (found === 1 && notExact === 1) return 'The stored migration archive can’t be saved exactly as a file, so it wasn’t downloaded. Nothing was changed.';
+  const parts = [`${done} of ${found} downloaded`];
+  if (refused) parts.push(`${refused} couldn’t be downloaded (the browser didn’t start the download)`);
+  if (notExact) parts.push(`${notExact} can’t be saved exactly as a file, so ${notExact === 1 ? 'it wasn’t' : 'they weren’t'} offered`);
+  return `Stored migration archives: ${parts.join('; ')}. Nothing was changed.`;
+}
+
+const statusNote = (text) => (text ? `<p class="save-banner-note" role="status">${escapeHtml(text)}</p>` : '');
+
+/**
+ * §4.8 / §11.3: the archive-conflict dialog. Saving is paused; three separate downloads, each
+ * with its own availability and its own result. No Reload, no retry; downloading doesn't
+ * resolve the conflict. copies: the earlier-format copies model; notes: { current, preUpgrade, archive }.
+ */
+export function archiveConflictView({ copies = null, notes = {} } = {}) {
+  const pre = preUpgradeOffer(copies);
+  const raw = storedArchiveOffer(copies);
+  return `<h2 id="conflict-title" class="sheet-title">Saving is paused</h2>
+<p>Saving is paused to protect your earlier data. The original pre-upgrade copy differs from the copy now stored on this device. Nothing has been overwritten, and your changes in this tab are not being saved.</p>
+<p>Download this tab’s current data, the pre-upgrade copy and the stored migration archive for safekeeping. Downloading them doesn’t resolve the conflict, and reloading will not resolve it either.</p>
+<ul class="conflict-downloads">
+<li><button type="button" class="button" data-shell-action="download-conflict">Download the tab’s current data</button> <span class="hint">Everything in this tab now, including changes that weren’t saved.</span>${statusNote(notes.current)}</li>
+<li><button type="button" class="button" data-shell-action="download-preupgrade"${pre.available ? '' : ' disabled'} aria-describedby="conflict-pre-hint">Download the pre-upgrade copy (older-format backup)</button> <span id="conflict-pre-hint" class="hint">${escapeHtml(pre.hint)}</span>${pre.details}${statusNote(notes.preUpgrade)}</li>
+<li><button type="button" class="button" data-shell-action="download-archive"${raw.available ? '' : ' disabled'} aria-describedby="conflict-archive-hint">Download the stored migration archive</button> <span id="conflict-archive-hint" class="hint">${escapeHtml(raw.hint)}</span>${statusNote(notes.archive)}</li>
+</ul>`;
+}
+
+/**
+ * §4.8: another tab saved more recently. Blocking until reload. An archive conflict (the
+ * pre-upgrade copy already stored differs) gets archiveConflictView instead: saving is paused
+ * to protect the earlier data, reloading won't resolve it, and it offers downloads only.
+ */
+export function conflictDialogView(note = '', status = null, archive = {}) {
+  if (isArchiveConflict(status)) return archiveConflictView(archive);
   return `<h2 id="conflict-title" class="sheet-title">Changed elsewhere</h2>
 <p>This app is open in another tab or window, and that one saved more recently. To avoid overwriting it, this tab can’t save.</p>
 <p>Reloading opens the latest saved data. Changes made in this tab since then will be lost, so download them first if you need them.</p>
@@ -350,6 +449,9 @@ export function handleShortcut(event, { route, doc, win }) {
  */
 export function createShell({ root, win, doc, screens = {}, services = {} }) {
   const state = { route: DEFAULT_DESTINATION, startup: 'loading', errorCode: null, status: null, recoveryAvailable: false, recovery: null, bannerNote: '' };
+  // Archive conflict only: the earlier-format copies (read once, read-only) and each download's own result.
+  let conflictCopies = null;
+  const archiveNotes = { current: '', preUpgrade: '', archive: '' };
   let startupError = null;
   let app = null;
   let unsubscribe = null;
@@ -382,7 +484,8 @@ export function createShell({ root, win, doc, screens = {}, services = {} }) {
     if (!dialog || typeof dialog.showModal !== 'function') return;
     const conflict = state.startup === 'ready' && state.status && state.status.state === 'conflict';
     if (conflict) {
-      dialog.innerHTML = conflictDialogView(note);
+      if (isArchiveConflict(state.status) && !conflictCopies) loadConflictCopies();
+      dialog.innerHTML = conflictDialogView(note, state.status, { copies: conflictCopies, notes: archiveNotes });
       if (!dialog.open) dialog.showModal();
     } else if (dialog.open) dialog.close();
   }
@@ -445,6 +548,46 @@ export function createShell({ root, win, doc, screens = {}, services = {} }) {
         : 'The backup couldn’t be downloaded. Nothing was changed. Try again, or check your browser’s download settings.';
     }
   }
+  /*
+   * Archive conflict: the earlier-format copies are read once, read-only, when the dialog opens
+   * (stage 1: read). Each download then checks its own source (stage 2: can it be saved
+   * exactly), starts the download (stage 3) and reports its own result (stage 4).
+   */
+  function loadConflictCopies() {
+    if (typeof services.earlierCopies !== 'function') {
+      conflictCopies = { state: 'error', code: null, errors: ['the earlier copies aren’t available here'] };
+      return;
+    }
+    conflictCopies = { state: 'loading' };
+    Promise.resolve()
+      .then(() => services.earlierCopies(app))
+      .then((model) => model, (e) => ({ state: 'error', code: (e && e.code) || null, errors: e && e.message ? [e.message] : [] }))
+      .then((model) => { conflictCopies = model; syncConflict(); });
+  }
+  function currentDataNow() {
+    try {
+      services.downloadBackup(app);
+      return 'This tab’s current data was downloaded. Saving is still paused.';
+    } catch {
+      return 'This tab’s current data couldn’t be downloaded. Nothing was changed. Try again, or check your browser’s download settings.';
+    }
+  }
+  function preUpgradeNow() {
+    const offer = preUpgradeOffer(conflictCopies);
+    if (!offer.available) return offer.hint;
+    try {
+      services.downloadOlderFormatBackup(app, offer.copy.older.backup);
+      return 'Pre-upgrade copy (older-format backup) downloaded. Saving is still paused.';
+    } catch {
+      return 'The pre-upgrade copy couldn’t be downloaded. Nothing was changed. Try again, or check your browser’s download settings.';
+    }
+  }
+  function storedArchiveNow() {
+    if (!conflictCopies || conflictCopies.state === 'loading') return 'Still checking for the stored migration archive. Nothing was downloaded.';
+    if (conflictCopies.state === 'error') return 'The stored migration archive couldn’t be read, so nothing was downloaded. Nothing was changed.';
+    if (typeof services.downloadRawArchives !== 'function') return 'The stored migration archive can’t be downloaded here. Nothing was changed.';
+    return archiveDownloadMessage(services.downloadRawArchives(conflictCopies.copies));
+  }
   async function onShellAction(action, el) {
     switch (action) {
       case 'retry': if (app) await app.retryPersistence(); break;
@@ -454,7 +597,11 @@ export function createShell({ root, win, doc, screens = {}, services = {} }) {
         if (banner) banner.innerHTML = saveBannerView(state.status, state.bannerNote);
         break;
       }
-      case 'download-conflict': syncConflict(backupNow('conflict')); break;
+      case 'download-conflict':
+        if (isArchiveConflict(state.status)) { archiveNotes.current = currentDataNow(); syncConflict(); } else syncConflict(backupNow('conflict'));
+        break;
+      case 'download-preupgrade': archiveNotes.preUpgrade = preUpgradeNow(); syncConflict(); break;
+      case 'download-archive': archiveNotes.archive = storedArchiveNow(); syncConflict(); break;
       case 'reload': services.reload(); break;
       case 'download-stored':
         try {
@@ -493,7 +640,7 @@ export function createShell({ root, win, doc, screens = {}, services = {} }) {
     try { text = await file.text(); } catch { setRecovery({ message: restoreErrorMessage('BACKUP_UNREADABLE'), tone: 'error', code: 'BACKUP_UNREADABLE', errors: [] }); return; }
     const result = services.validateRecoveryBackup(text); // validated in full; nothing is written here
     if (!result.valid) {
-      setRecovery({ stage: 'idle', message: restoreErrorMessage(result.code), tone: 'error', code: result.code, errors: result.errors }, '[data-shell-action="choose-backup"]');
+      setRecovery({ stage: 'idle', message: restoreFileErrorMessage(result.code, text), tone: 'error', code: result.code, errors: result.errors }, '[data-shell-action="choose-backup"]');
       return;
     }
     const parsed = JSON.parse(text);

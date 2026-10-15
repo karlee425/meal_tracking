@@ -27,7 +27,7 @@ await requestPersistentStorage();                // optional: ask the browser no
 **Browser data-loading contract**
 
 - *Source:* `src/browser/app-data.js` imports the canonical files statically as JSON modules
-  (`import … with { type: 'json' }`): the six schemas, `data/foods/core-foods.json`,
+  (`import … with { type: 'json' }`): the seven schemas, `data/foods/core-foods.json`,
   `data/meals/library-meals.json`, and the first-run seed (`data/targets.json`, `user-data/*.json`).
   No fetch, no dynamic import, no build step. Serve the repository root as the web root (so
   `src/` and `data/` resolve at their on-disk relative paths), with `.json` as `application/json`.
@@ -95,7 +95,8 @@ descriptive only: no raw↔cooked conversion and no yield factors at runtime.
 | `progress.js` | `getProgress({ period: 7 \| 14 \| 30, endDate })` or `({ startDate, endDate })` |
 | `coach.js` | `getMacroCoachContext({ date, mealSlot, dayType? })`, `getMacroCoachSuggestions({ date, mealSlot, dayType?, limitPerTier? })` — tiers `favoriteSaved` → `recent` → `saved` → `library`, plus `topUpFoods`; tiers 1–3 are Saved Meals only (a favourited or logged Library Meal stays in the Library tier, in Library order; retired ones never appear); deterministic, no scoring, no AI |
 | `preferences.js` | `getPreferences`, `updatePreferences`, `setFavoriteFood`, `setDislikedFood`, `setFavoriteMeal` |
-| `backup.js` | `exportUserData`, `validateBackup`, `restoreUserData` |
+| `servings.js` | named servings (V3 Slice 1): `getServings`, `createServing`, `updateServing`, `deleteServing`, `setDefaultServing`, `resolveAmount` (grams, or a serving × a typed count → canonical grams and, for a serving, the exact count); `parseServingCount`, `isUnfinishedServingCount`, `parseServingGrams`, `formatServingCount` (a logged count as text) |
+| `backup.js` | `exportUserData`, `validateBackup`, `restoreUserData` (serving IDs carried forward by `serving-ids.js`, logged-meal references included) |
 | `store.js` | state + persistence; validates every write (schemas, invariants, finite numbers) before one atomic `saveMany`; `getPersistenceStatus`, `onPersistenceChange`, `flushPersistence`, `retryPersistence` |
 | `macros.js` | the calculator (also `targetStatus` → `remaining`, `reached`, `overBy`, `progress`; `checkNutritionValues`) |
 | `schema-validator.js` | the JSON Schema subset validator (shared with `migration/validate.js`); rejects NaN / ±Infinity |
@@ -113,6 +114,7 @@ field-level `details` where a field is identifiable. Reads never throw for data 
 
 - **Saved Meal edited:** future use changes; logged Meal Instances do not.
 - **Meal Instance edited:** only that instance changes. An ingredient already in the snapshot is re-scaled from the snapshot's own values, so it works even if the Food was later changed or deleted.
+- **Logged servings (C8):** `logFood({ servingId, count })` stores a snapshot of the serving on the ingredient; grams stay authoritative. Editing that ingredient's grams drops the snapshot; name, slot or the same grams keep it. Existing ingredients can be paired explicitly with `snapshotIndex`. Every serving ID a logged meal refers to stays live or retired for the same Food, across deletes and restores (see `schema.md`).
 - **Food nutrition edited:** Saved Meals recalculate (they are derived); history does not change.
 - **Custom Food deleted:** Saved Meals using it keep the ingredient and become invalid (`calculateMealMacros(...).needsReplacement: true`, with `problems[].foodId` and `lastKnownName`). They show `totals: null` rather than a misleading partial total, and logging them is refused (`MEAL_NEEDS_REPLACEMENT`) until `replaceSavedMealIngredient` fixes them. A new Food never reuses an ID that anything still refers to.
 - **Saved Meal deleted:** the recipe goes; logged instances stay.

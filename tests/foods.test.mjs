@@ -61,7 +61,7 @@ test('Food detail — a Core Food: name, state, category, brand, "App food · ca
   const html = detail(app, CORE, { context: 'settings' });
   const t = text(html);
   assert.match(html, /<h2 id="sheet-title" class="sheet-title">Fage 0% Greek yogurt<\/h2>/);
-  assert.match(html, /<p class="sheet-subtitle">App food · can’t be edited<\/p>/, 'A-17');
+  assert.match(html, /<p class="sheet-subtitle">App food · nutrition can’t be edited<\/p>/, 'A-17 (C7 subtitle)');
   assert.match(t, /State prepared Category/);
   assert.match(t, /Category dairy/);
   assert.match(t, /Brand Fage/);
@@ -281,7 +281,7 @@ test('Delete — with no Saved Meal using it, the dialog and outcome say only th
 
 test('Settings — My foods lists Custom Foods (domain order) with New food; an empty list says so', () => {
   const { app } = setup();
-  assert.deepEqual([...SETTINGS_VIEW_TYPES], ['target-edit', 'food-detail', 'custom-food']);
+  assert.deepEqual([...SETTINGS_VIEW_TYPES], ['target-edit', 'food-detail', 'custom-food', 'serving-form'], 'the serving form (C7) is a view like the Custom Food form');
   const html = settingsHtml(app);
   const mine = html.slice(html.indexOf('id="my-foods-title"'), html.indexOf('id="favourites-title"'));
   assert.deepEqual([...mine.matchAll(/data-action="food-detail" data-food="([^"]+)"/g)].map((m) => m[1]), app.getCustomFoods().map((f) => f.id), 'getCustomFoods order (A-36)');
@@ -352,4 +352,24 @@ test('Foods — no macro arithmetic, no forbidden terms, no second store, domain
   const settings = fs.readFileSync(path.join(ROOT, 'app/settings.js'), 'utf8');
   for (const call of ['setFavoriteMeal(', 'setFavoriteFood(', 'setDislikedFood(', 'getCustomFoods(']) assert.ok(settings.includes(call) || src.includes(call), call);
   assert.ok(!/\.sort\(/.test(settings), 'Settings lists keep the domain order');
+});
+
+/* ---------------- V3 Slice 1 · C6: deleting a Custom Food retires its serving IDs (§7.6) ---------------- */
+
+test('V3 C6 — deleting a Custom Food with servings: same dialog outcome, history untouched, serving IDs retired in the same write', () => {
+  const { app, writes } = setup();
+  withHistory(app);
+  const history = historyText(app);
+  const serving = app.createServing(OATS, { label: 'Pouch', grams: 60 });
+  const coreServing = app.createServing(CORE, { label: 'Tub', grams: 170 });
+  writes.length = 0;
+  const note = createFoodActions(app).deleteCustomFood(app.getFood(OATS));
+  assert.match(note.message, /^Deleted Oats overnight\./, 'the same confirmation as before');
+  assert.equal(writes.length, 1, 'one write');
+  assert.ok(writes[0].includes('userFoodData') && writes[0].includes('customFoods'));
+  const ufd = app.exportUserData().data.userFoodData;
+  assert.deepEqual(ufd.retiredServingIds, [serving.id]);
+  assert.deepEqual(ufd.foods.map((r) => r.foodId), [CORE], 'other Foods keep their servings');
+  assert.deepEqual(app.getServings(CORE), [coreServing]);
+  assert.equal(historyText(app), history, 'logged meals are records');
 });

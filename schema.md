@@ -123,8 +123,26 @@ It stores:
 - historical P/C/F contribution for each ingredient
 - historical totals
 - timestamp
+- for an ingredient logged by a named serving: a snapshot of that serving (V3 Slice 1 · C8)
 
 The ingredient snapshot is mandatory because source Foods can later be edited, retired, or deleted.
+
+**Logged servings (V3 Slice 1 · C8).** An ingredient logged with `logFood({ servingId, count })` carries an optional `serving`:
+
+```json
+{
+  "foodId": "food_core_fage_0_greek_yogurt", "foodName": "Fage 0% Greek yogurt",
+  "quantity": 40, "unit": "g", "protein": 4.12, "carbs": 1.44, "fat": 0,
+  "serving": { "id": "srv_<uuid>", "label": "Scoop", "grams": 30, "approximate": false,
+               "count": { "numerator": 4, "denominator": 3 } }
+}
+```
+
+- Grams stay canonical: `quantity` (grams) is authoritative, and P/C/F are calculated from it exactly as for any ingredient. The snapshot only explains it: `quantity` must equal the serving's `grams` × the count, rounded half-up to 0.01 g (`macros.servingQuantity`), or the store refuses the write.
+- Only the domain writes a snapshot, from the serving as stored at that moment; `createMealInstance` drops any `serving` its caller passes. An ingredient logged in grams has no `serving` key (never `null`).
+- `count` is the exact count in lowest terms, positive safe integers; the text typed is not stored. `label` must not be blank, but is not re-checked against today's label rules (it's a record). `unit` must be `g`.
+- It never changes: editing or deleting the serving or the Food leaves it as it is. Editing the logged meal keeps it for a name or slot change or the same grams, and drops it when that ingredient's grams change (the ingredient becomes a grams entry). `updateMealInstance` pairs existing ingredients by an optional `snapshotIndex`; an ingredient without one never takes over a snapshot once any ingredient gives one.
+- Reserved IDs: every `serving.id` in any Day is a live serving or in `userFoodData.retiredServingIds`, and always for the same Food (checked on every write that changes `days` or `userFoodData`, and on load).
 
 Logging slots (`mealSlot`) are exactly:
 - `breakfast`
@@ -323,7 +341,7 @@ Deleting a Day's logged data removes its Meal Instances and target snapshot for 
 The domain talks to storage only through an adapter (`src/domain/store.js` documents the interface). The file adapter (Node), memory adapter and browser adapter (`src/browser/`) are interchangeable; the data layer's API is identical for all of them.
 
 - Every commit is validated in full (schemas, cross-record invariants, finite numbers) and written with one `saveMany` call; nothing in memory changes unless the adapter accepts the write.
-- The browser adapter stores the five user-owned collections — `targets`, `customFoods`, `savedMeals`, `days` (with their Meal Instances) and `preferences` — as one IndexedDB record in its own database (`meal-tracking-v2`), written in one transaction per commit. Core Foods, Library Meals and schemas are app data and are never stored. It does not read or write the retired pages' storage.
+- The browser adapter stores the user-owned collections — `targets`, `customFoods`, `savedMeals`, `days` (with their Meal Instances), `preferences` and, from user-data format 2 (V3 Slice 1), `userFoodData` (named servings and retired serving IDs) — as one IndexedDB record in its own database (`meal-tracking-v2`), written in one transaction per commit. Core Foods, Library Meals and schemas are app data and are never stored. It does not read or write the retired pages' storage.
 - Status (`saved` · `saving` · `error` · `conflict`, last saved time) is exposed as `getPersistenceStatus()` / `onPersistenceChange()` for every adapter.
 - Start-up failures have stable codes: `STORAGE_UNAVAILABLE`, `STORED_DATA_UNRECOGNIZED`, `DATA_INVALID`. Stored data is never discarded automatically; `recoverStoredData` replaces it only on an explicit choice (a fully validated backup, or the shipped seed).
 - In the browser, canonical data arrives through static JSON-module imports in `src/browser/app-data.js` (no fetch, no build step). The first-run seed is `data/targets.json` + `user-data/*.json`; once a record is stored, it is the user's data and the seed is ignored. See `src/README.md` for the full loading contract.
@@ -344,15 +362,17 @@ Nothing here builds sync; these are the properties a later sync layer can rely o
 ```json
 {
   "format": "macro-tracker-v2-backup",
-  "formatVersion": 1,
+  "formatVersion": 2,
   "exportedAt": "2026-09-25T20:00:00.000Z",
-  "data": { "targets": {}, "customFoods": [], "savedMeals": [], "days": [], "preferences": {} }
+  "data": { "targets": {}, "customFoods": [], "savedMeals": [], "days": [], "preferences": {}, "userFoodData": { "foods": [], "retiredServingIds": [] } }
 }
 ```
 
+Format 1 (the five collections, no `userFoodData`) is still accepted and upgraded in memory before validation (`src/domain/upgrade.js`); a newer version is refused. Logged-serving snapshots (C8) are an optional field within format 2, not a new version.
+
 Only user-owned persisted data is included; nothing derived (meal totals, remaining, Progress) is exported as a competing source of truth. Meal Instance snapshots are the historical record itself and are included as stored.
 
-Restore order: parse → format and version check (a newer `formatVersion` is refused) → every record validated against the schemas, cross-record invariants and finite-number rule → references checked (Saved Meal ingredients must resolve to a Food unless recorded as unresolved; favourites and dislikes must resolve; Meal Instances may name deleted Foods and Meals) → one atomic write of all five collections. Any failure leaves current data untouched.
+Restore order: parse → format and version check (a newer `formatVersion` is refused) → every record validated against the schemas, cross-record invariants and finite-number rule → references checked (Saved Meal ingredients must resolve to a Food unless recorded as unresolved; favourites and dislikes must resolve; Meal Instances may name deleted Foods and Meals) → serving IDs this device had reserved — live, retired, or referred to by its logged meals — are carried forward as retired (`src/domain/serving-ids.js`), and the restore is refused if the restored logged meals would refer to an unreserved serving ID → one atomic write of every user collection. Any failure leaves current data untouched. (Start-up recovery and Start over have no readable device data to carry IDs forward from.)
 
 ## Search and units
 
@@ -384,6 +404,8 @@ Do not add:
 - permanent Macro Coach tab
 
 ## Change log
+
+- 2026-10 (V3 Slice 1 · C8, logged servings): Meal Instance ingredients gained the optional `serving` snapshot (`data/schemas/meal-instance.schema.json`), with store rules for it and for reserved logged-serving IDs; restore carries logged-serving IDs forward. User-data format 2 extended in place before release; no new format version or migration. Also brought the Persistence and Backup sections up to format 2 (`userFoodData`, from V3 Slice 1 · C2–C5).
 
 - 2026-09-26 (finalized foundations): no schema change. Added `searchMeals`, `getCustomFoods`, `getFoodUsage`, `retryPersistence`, `recoverStoredData`, stable start-up storage codes, and `progress` in target status. The Coach `recent` tier is Saved Meals only. `V2_UI_CONTRACT.md` is the UI contract.
 - 2026-09-25 (pre-UI foundations): Day gained required `loggingComplete` (explicit day completeness; slot coverage no longer decides `complete`) and optional `priorTargetSnapshots` (day-type corrections keep and restore target context). All stored numbers must be finite (NaN / ±Infinity rejected before persistence). Added the Persistence and Backup sections. No existing data needed migrating: `user-data/daily-logs.json` was empty.

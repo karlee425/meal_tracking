@@ -13,9 +13,12 @@
  *   savedMeals    user-data/saved-meals.json
  *   days          user-data/daily-logs.json        Days with their Meal Instance snapshots
  *   preferences   user-data/preferences.json
+ *   userFoodData  user-data/user-food-data.json   named servings per Food (user data format 2)
  *
  * An adapter implements:
- *   load()                  -> { schemas, coreFoods, libraryMeals, targets, customFoods, savedMeals, days, preferences }
+ *   load()                  -> { schemas, coreFoods, libraryMeals, targets, customFoods, savedMeals, days, preferences, userFoodData }
+ *                              always in the CURRENT user-data format (src/domain/upgrade.js): an adapter
+ *                              that reads an older stored format upgrades it before handing it over
  *   save(collection, data)  persist one writable collection
  * and, optionally (all three shipped adapters do):
  *   saveMany(changes)       persist several collections as one all-or-nothing write
@@ -30,6 +33,7 @@
 
 import { makeSchemaValidator } from './schema-validator.js';
 import { DomainError, clone } from './util.js';
+import { servingQuantity } from './macros.js';
 
 const COLLECTIONS = {
   coreFoods: { schema: 'food.schema.json', list: true, writable: false },
@@ -38,8 +42,98 @@ const COLLECTIONS = {
   customFoods: { schema: 'food.schema.json', list: true, writable: true },
   savedMeals: { schema: 'meal.schema.json', list: true, writable: true },
   days: { schema: 'day.schema.json', list: true, writable: true },
-  preferences: { schema: 'preferences.schema.json', list: false, writable: true }
+  preferences: { schema: 'preferences.schema.json', list: false, writable: true },
+  userFoodData: { schema: 'user-food-data.schema.json', list: false, writable: true }
 };
+
+// Serving rules the JSON schema cannot express (the validator has no `pattern`, and these
+// need normalisation or comparison across records). The schema covers the rest: required
+// fields, types, grams > 0, non-empty strings, ISO date-times, at least one serving.
+//   - A serving ID, live or retired, is "srv_" + a lowercase UUID, as crypto.randomUUID()
+//     produces it (8-4-4-4-12 lowercase hex).
+//   - Labels are compared after trimming surrounding whitespace and ignoring case: a label
+//     must not be blank, must not be g / gram / grams, and must be unique within its Food.
+// The label is stored as given; only the comparison is normalised.
+const SERVING_ID = /^srv_[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
+const RESERVED_SERVING_LABELS = new Set(['g', 'gram', 'grams']);
+const servingLabelKey = (label) => label.trim().toLowerCase();
+
+// Logged-serving snapshots (V3 Slice 1 · C8). A logged ingredient may carry `serving`: a copy of
+// the serving it was logged with — { id, label, grams, approximate, count: { numerator,
+// denominator } } — taken when it was logged and never read from userFoodData again. The schema
+// covers types and required fields; these rules cover the rest. The label is a historical record:
+// it must not be blank, but it is not checked against today's reserved or duplicate-label rules.
+// The quantity is authoritative and must be exactly what the serving and count come to, by the
+// same rule that logged it (macros.servingQuantity). Nothing is ever repaired.
+const gcd = (a, b) => { while (b) [a, b] = [b, a % b]; return a; };
+const isPlainObject = (v) => v !== null && typeof v === 'object' && !Array.isArray(v);
+
+/** Problems with one logged ingredient's serving snapshot (none for an ingredient without one). */
+function servingSnapshotErrors(ing, where) {
+  if (!isPlainObject(ing) || !('serving' in ing)) return [];
+  const sv = ing.serving;
+  if (!isPlainObject(sv)) return []; // the schema errors already say why
+  const errs = [];
+  if (typeof sv.id === 'string' && !SERVING_ID.test(sv.id)) errs.push(`${where}: serving id ${JSON.stringify(sv.id)} is not srv_<uuid>`);
+  if (typeof sv.label === 'string' && sv.label.trim() === '') errs.push(`${where}: a serving label must not be blank`);
+  if (ing.unit !== 'g') errs.push(`${where}: a serving can only be logged in grams (unit is ${JSON.stringify(ing.unit)})`);
+  const c = sv.count;
+  const n = isPlainObject(c) ? c.numerator : undefined;
+  const d = isPlainObject(c) ? c.denominator : undefined;
+  const whole = (x) => Number.isSafeInteger(x) && x >= 1;
+  if (!whole(n) || !whole(d)) {
+    if (isPlainObject(c)) errs.push(`${where}: serving count must be positive whole numbers no larger than ${Number.MAX_SAFE_INTEGER}`);
+    return errs;
+  }
+  if (gcd(n, d) !== 1) errs.push(`${where}: serving count ${n}/${d} is not in lowest terms`);
+  if (typeof sv.grams === 'number' && Number.isFinite(sv.grams) && sv.grams > 0 && typeof ing.quantity === 'number') {
+    let expected = null;
+    try { expected = servingQuantity(sv.grams, { n: BigInt(n), d: BigInt(d) }).quantity; } catch { expected = null; }
+    if (expected !== ing.quantity) errs.push(`${where}: quantity ${ing.quantity} g is not what the serving comes to (${n}/${d} × ${sv.grams} g = ${expected} g)`);
+  }
+  return errs;
+}
+
+/**
+ * The reserved-serving-ID rule across collections (C8). With
+ *   L = live serving IDs, R = retired serving IDs, H = serving IDs in logged-meal snapshots:
+ *   - H ⊆ L ∪ R: a serving ID a logged meal refers to stays reserved, live or retired
+ *   - one ID, one Food: every logged reference to an ID is for the same Food
+ *   - a referenced ID that is live belongs to that same Food's serving record
+ * (L ∩ R = ∅ is checked with userFoodData.) Checked whenever days or userFoodData change, and
+ * on load. Malformed input is left to the schema and per-collection checks.
+ */
+function servingHistoryErrors(days, userFoodData) {
+  if (!Array.isArray(days) || !isPlainObject(userFoodData) || !Array.isArray(userFoodData.foods) || !Array.isArray(userFoodData.retiredServingIds)) return [];
+  const live = new Map();
+  for (const r of userFoodData.foods) {
+    if (!isPlainObject(r) || !Array.isArray(r.servings)) return [];
+    for (const sv of r.servings) if (isPlainObject(sv)) live.set(sv.id, r.foodId);
+  }
+  const retired = new Set(userFoodData.retiredServingIds);
+  const history = new Map();
+  const errs = [];
+  for (const d of days) {
+    if (!isPlainObject(d) || !Array.isArray(d.mealInstances)) continue;
+    for (const mi of d.mealInstances) {
+      if (!isPlainObject(mi) || !Array.isArray(mi.ingredients)) continue;
+      for (const ing of mi.ingredients) {
+        if (!isPlainObject(ing) || !isPlainObject(ing.serving) || typeof ing.serving.id !== 'string') continue;
+        const id = ing.serving.id;
+        if (!history.has(id)) history.set(id, ing.foodId);
+        else if (history.get(id) !== ing.foodId) errs.push(`logged meals refer to serving id ${id} for more than one Food (${history.get(id)}, ${ing.foodId})`);
+      }
+    }
+  }
+  for (const [id, foodId] of history) {
+    if (live.has(id)) {
+      if (live.get(id) !== foodId) errs.push(`serving id ${id} is logged for ${foodId} but is a live serving of ${live.get(id)}`);
+    } else if (!retired.has(id)) {
+      errs.push(`logged meals refer to serving id ${id}, which is neither a live nor a retired serving`);
+    }
+  }
+  return errs;
+}
 
 export const WRITABLE_COLLECTIONS = Object.keys(COLLECTIONS).filter((c) => COLLECTIONS[c].writable);
 
@@ -93,9 +187,39 @@ export function createStore(adapter) {
         if (d.id !== `day_${d.date}`) errs.push(`Day ${d.date} must have id day_${d.date}`);
         if (d.loggingComplete === true && !d.mealInstances.length) errs.push(`Day ${d.date} is marked done logging but has nothing logged`);
         if (d.priorTargetSnapshots && d.dayType in d.priorTargetSnapshots) errs.push(`Day ${d.date}: priorTargetSnapshots must not hold its current day type (${d.dayType})`);
-        for (const mi of d.mealInstances) instanceIds.push(mi.id);
+        for (const mi of d.mealInstances) {
+          instanceIds.push(mi.id);
+          if (Array.isArray(mi.ingredients)) mi.ingredients.forEach((ing, k) => errs.push(...servingSnapshotErrors(ing, `Day ${d.date} ${mi.id} ingredient ${k}`)));
+        }
       }
       dupes(instanceIds, 'Meal Instance id');
+    }
+    if (collection === 'userFoodData') {
+      // Structure and types are the schema's job; these are the cross-record rules.
+      // A record for a Food that does not exist is allowed (and ignored), so a later
+      // change to Core Foods can never stop the app from starting.
+      const wellFormed = data && Array.isArray(data.foods) && Array.isArray(data.retiredServingIds)
+        && data.retiredServingIds.every((id) => typeof id === 'string')
+        && data.foods.every((r) => r && Array.isArray(r.servings) && r.servings.every((sv) => sv && typeof sv.id === 'string' && typeof sv.label === 'string'));
+      if (!wellFormed) return errs; // the schema errors already say why
+      dupes(data.foods.map((r) => r.foodId), 'serving record for Food');
+      const live = [];
+      for (const r of data.foods) {
+        const labels = new Set();
+        for (const sv of r.servings) {
+          live.push(sv.id);
+          const label = servingLabelKey(sv.label);
+          if (label === '') errs.push(`${r.foodId}: a serving label must not be blank`);
+          else if (RESERVED_SERVING_LABELS.has(label)) errs.push(`${r.foodId}: serving label "${sv.label}" is reserved for grams`);
+          if (label !== '' && labels.has(label)) errs.push(`${r.foodId}: duplicate serving label "${sv.label}" (labels are compared ignoring case and surrounding spaces)`);
+          labels.add(label);
+        }
+      }
+      for (const id of [...live, ...data.retiredServingIds]) if (!SERVING_ID.test(id)) errs.push(`serving id ${JSON.stringify(id)} is not srv_<uuid>`);
+      dupes(live, 'serving id');
+      dupes(data.retiredServingIds, 'retired serving id');
+      const retired = new Set(data.retiredServingIds);
+      for (const id of new Set(live)) if (retired.has(id)) errs.push(`serving id ${id} is both live and retired`);
     }
     return errs;
   }
@@ -117,6 +241,8 @@ export function createStore(adapter) {
       if (!COLLECTIONS[c] || !COLLECTIONS[c].writable) throw new DomainError('READ_ONLY', `collection "${c}" is read-only`);
       errs.push(...nonFiniteErrors(data, c, []), ...schemaErrors(c, data), ...invariantErrors(c, data, next));
     }
+    // One rule spans days and userFoodData: checked against the state the changes produce.
+    if ('days' in changes || 'userFoodData' in changes) errs.push(...servingHistoryErrors(next.days, next.userFoodData));
     return errs;
   }
 
@@ -124,6 +250,7 @@ export function createStore(adapter) {
   {
     const errs = [];
     for (const c of Object.keys(COLLECTIONS)) errs.push(...schemaErrors(c, state[c]), ...invariantErrors(c, state[c], state));
+    errs.push(...servingHistoryErrors(state.days, state.userFoodData));
     if (errs.length) throw new DomainError('DATA_INVALID', `canonical data failed validation (${errs.length} problem(s))`, errs);
   }
 

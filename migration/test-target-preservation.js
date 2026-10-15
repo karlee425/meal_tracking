@@ -12,6 +12,9 @@
  *   3. The migration report is byte-identical whether targets were changed or not.
  *   4. Changed user records (user-data) are likewise preserved and do not break --check.
  *   5. Negative: a data/targets.json with legacy keys fails validation (shape is still enforced).
+ *   6. Clean run with no user-data/ at all: every seed-once user file is created, including
+ *      user-data/user-food-data.json (user-data format 2), and the result is a complete
+ *      current-format checkout that validate.js, --check and the Node file adapter accept.
  * Exit 0 when every case passes, 1 otherwise.
  */
 
@@ -103,6 +106,30 @@ try {
   expect('…and leaves that file untouched', read(c, 'data/targets.json') === legacyShaped);
   const v5 = node(c, 'migration/validate.js');
   expect('validate.js fails on legacy-shaped targets', v5.code !== 0 && /G09/.test(v5.out));
+
+  // Case 6 — a clean migration produces a complete current-format checkout
+  const d = freshCopy(); dirs.push(d);
+  fs.rmSync(path.join(d, 'user-data'), { recursive: true });
+  const r6 = node(d, 'migration/migrate.js');
+  expect('clean run without user-data/ exits 0', r6.code === 0, r6.out.slice(-400));
+  const userFiles = fs.readdirSync(path.join(d, 'user-data')).sort();
+  expect('clean run seeds every user-data file', JSON.stringify(userFiles) === JSON.stringify(['custom-foods.json', 'daily-logs.json', 'preferences.json', 'saved-meals.json', 'user-food-data.json']), userFiles.join(', '));
+  expect('user-food-data.json is seeded empty', read(d, 'user-data/user-food-data.json') === JSON.stringify({ foods: [], retiredServingIds: [] }, null, 2) + '\n', read(d, 'user-data/user-food-data.json'));
+  expect('clean run reports seeding user-food-data.json', /seed-once: seeded user-data\/user-food-data\.json/.test(r6.out));
+  expect('the report lists user-food-data.json as seed-once', JSON.parse(read(d, 'migration/migration-report.json')).seedOnceFiles.files.includes('user-data/user-food-data.json'));
+  expect('report identical to a run over existing user files', read(d, 'migration/migration-report.json') === reportClean);
+  const c6 = node(d, 'migration/migrate.js', '--check');
+  expect('--check passes on the clean checkout', c6.code === 0, c6.out.slice(-400));
+  const v6 = node(d, 'migration/validate.js');
+  expect('validate.js passes on the clean checkout', v6.code === 0, v6.out.slice(-400));
+  const open6 = node(d, '--input-type=module', '-e', [
+    "import { createFileAdapter } from './src/node/file-adapter.js';",
+    "import { createDataLayer } from './src/domain/index.js';",
+    "const data = createDataLayer({ adapter: createFileAdapter(process.cwd()) }).exportUserData().data;",
+    "console.log(JSON.stringify(Object.keys(data)) + ' ' + JSON.stringify(data.userFoodData));"
+  ].join('\n'));
+  expect('the Node file adapter opens the clean checkout in the current format',
+    open6.code === 0 && open6.out.trim() === '["targets","customFoods","savedMeals","days","preferences","userFoodData"] {"foods":[],"retiredServingIds":[]}', open6.out.slice(-400));
 } catch (e) {
   expect('test harness', false, e.stack);
 } finally {

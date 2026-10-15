@@ -18,6 +18,8 @@
  *   - calculateMealMacros never throws: a missing Food or bad quantity is reported so the
  *     caller can show the Meal as invalid and ask for a replacement
  *   - values are returned unrounded; roundMacros is for display only
+ *   - a named serving is resolved to grams here (servingQuantity) before anything else
+ *     sees it; everything downstream still takes grams only
  */
 
 export const MACROS = Object.freeze(['protein', 'carbs', 'fat']);
@@ -211,4 +213,65 @@ export function roundMacros(x, decimals = 1) {
   const out = {};
   for (const m of MACROS) out[m] = Math.round(x[m] * f) / f;
   return out;
+}
+
+/* ---------------- named servings → canonical grams (V3 Slice 1 · C6) ----------------
+ *
+ * Grams stay canonical. A serving is an alternate way to enter an amount: its stored weight
+ * in grams × a count. The result is the gram quantity that preview, logging and the meal
+ * tray all receive — one number, worked out once, here.
+ *
+ *   exact      = serving grams × n / d                (kept as an exact fraction)
+ *   canonical  = exact rounded half-up to 0.01 g      (the quantity passed on)
+ *   text       = canonical as a decimal string, trailing zeros trimmed ("45", "67.5", "33.33")
+ *
+ * The arithmetic is done in integers (BigInt), not binary floating point, so 0.1 × 3 is
+ * 0.3 and 1.005 × 1 rounds to 1.01. The serving weight is read as the decimal JavaScript
+ * prints for it (the shortest text that reads back as the same number), which is the value
+ * that was entered or stored. The count is an exact fraction from the domain's parser.
+ */
+
+/** A positive finite number as an exact decimal: mantissa / 10^scale. null for anything else. */
+function exactDecimal(x) {
+  if (!(typeof x === 'number' && Number.isFinite(x) && x > 0)) return null;
+  const m = /^(\d+)(?:\.(\d+))?(?:e([+-]\d+))?$/.exec(String(x));
+  if (!m) return null;
+  const frac = m[2] || '';
+  let scale = frac.length - Number(m[3] || 0);
+  let mantissa = BigInt(m[1] + frac);
+  if (scale < 0) { mantissa *= 10n ** BigInt(-scale); scale = 0; }
+  return { mantissa, scale };
+}
+
+/** Decimal places in a positive finite number as written (30 → 0, 22.5 → 1, 0.125 → 3). null if not positive and finite. */
+export function decimalPlaces(x) {
+  const d = exactDecimal(x);
+  if (!d) return null;
+  let { mantissa, scale } = d;
+  while (scale > 0 && mantissa % 10n === 0n) { mantissa /= 10n; scale -= 1; }
+  return scale;
+}
+
+/**
+ * servingQuantity(grams, { n, d }) → { quantity, text, centigrams, rounded }
+ *   grams       the serving's stored weight (> 0, finite)
+ *   n, d        the count as a positive BigInt fraction (from parseServingCount)
+ *   quantity    canonical grams (a Number equal to Number(text)); 0 when the amount rounds to nothing
+ *   text        the same value as text, for display and for the grams field / tray
+ *   centigrams  the canonical value in hundredths of a gram (BigInt)
+ *   rounded     true when the exact amount had more than two decimal places
+ * Throws on input outside those types (callers validate first and report domain errors).
+ */
+export function servingQuantity(grams, count) {
+  const g = exactDecimal(grams);
+  if (!g) throw new Error(`serving grams must be a positive finite number, got ${grams}`);
+  const { n, d } = count || {};
+  if (typeof n !== 'bigint' || typeof d !== 'bigint' || n <= 0n || d <= 0n) throw new Error('count must be a positive BigInt fraction');
+  const num = g.mantissa * n * 100n;            // exact centigrams = num / den
+  const den = (10n ** BigInt(g.scale)) * d;
+  const centigrams = (2n * num + den) / (2n * den); // half-up; every term is positive
+  const whole = centigrams / 100n;
+  const cents = centigrams % 100n;
+  const text = cents === 0n ? String(whole) : `${whole}.${String(cents).padStart(2, '0').replace(/0$/, '')}`;
+  return { quantity: Number(text), text, centigrams, rounded: num % den !== 0n };
 }

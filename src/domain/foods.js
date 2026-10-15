@@ -16,11 +16,16 @@ const norm = normText; // shared with searchMeals (util.js)
 export function createFoodsApi(ctx) {
   const { store } = ctx;
 
-  /** Every Food ID that anything refers to — never reuse one for a new Food. */
+  /**
+   * Every Food ID that anything refers to — never reuse one for a new Food. That includes a
+   * serving record in userFoodData whose Food no longer exists (the store allows one), so a
+   * new Food can never silently take over servings it didn't have.
+   */
   function referencedFoodIds() {
     const ids = new Set();
     for (const f of store.get('coreFoods')) ids.add(f.id);
     for (const f of store.get('customFoods')) ids.add(f.id);
+    for (const r of store.get('userFoodData').foods) ids.add(r.foodId);
     for (const m of [...store.get('savedMeals'), ...store.get('libraryMeals')]) for (const i of m.ingredients) ids.add(i.foodId);
     for (const d of store.get('days')) for (const mi of d.mealInstances) for (const i of mi.ingredients) ids.add(i.foodId);
     return ids;
@@ -202,6 +207,9 @@ export function createFoodsApi(ctx) {
      *    Food's name so the user can pick a replacement. Nothing is substituted or removed.
      *  - Logged Meal Instances are untouched (they carry their own snapshot).
      *  - The ID is retired from favorites / dislikes.
+     *  - Its named servings are removed and their IDs retired (userFoodData), so a serving ID
+     *    is never reused — in the same commit as the Food (V3 Slice 1 · C6). A Food with no
+     *    servings writes exactly what it did before.
      * Returns { deletedFoodId, affectedSavedMealIds }.
      */
     deleteCustomFood(id) {
@@ -219,11 +227,21 @@ export function createFoodsApi(ctx) {
       const prefs = clone(store.get('preferences'));
       prefs.favoriteFoods = prefs.favoriteFoods.filter((x) => x !== id);
       prefs.dislikedFoods = prefs.dislikedFoods.filter((x) => x !== id);
-      store.commit({
+      const changes = {
         customFoods: store.get('customFoods').filter((f) => f.id !== id),
         savedMeals,
         preferences: prefs
-      });
+      };
+      const servingData = store.get('userFoodData');
+      const record = servingData.foods.find((r) => r.foodId === id);
+      if (record) {
+        const retired = new Set(servingData.retiredServingIds);
+        changes.userFoodData = {
+          foods: clone(servingData.foods.filter((r) => r.foodId !== id)),
+          retiredServingIds: [...servingData.retiredServingIds, ...record.servings.map((s) => s.id).filter((sid) => !retired.has(sid))]
+        };
+      }
+      store.commit(changes);
       return { deletedFoodId: id, affectedSavedMealIds: affected };
     }
   };

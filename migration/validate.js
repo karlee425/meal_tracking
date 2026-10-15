@@ -13,7 +13,7 @@
  *
  * JSON Schema checking uses the dependency-free subset validator in
  * src/domain/schema-validator.js (shared with the runtime data layer). It supports
- * exactly the keywords the six V2 schemas use and throws on any keyword it does not
+ * exactly the keywords the seven V2 schemas use and throws on any keyword it does not
  * know, so a schema change can never be silently ignored.
  */
 
@@ -44,6 +44,7 @@ const CANONICAL_JSON = [
   'user-data/saved-meals.json',
   'user-data/daily-logs.json',
   'user-data/preferences.json',
+  'user-data/user-food-data.json',
   'migration/migration-report.json',
   'migration/food-id-map.json',
   'migration/meal-id-map.json'
@@ -133,9 +134,9 @@ function validateBundle(bundle) {
   // G01 manifest
   {
     const errs = manifest.requiredFiles.filter((p) => !(p in F) && !fs.existsSync(rel(p))).map((p) => `missing ${p}`);
-    const expectedSchemas = ['day', 'food', 'meal-instance', 'meal', 'preferences', 'targets'].map((n) => `${n}.schema.json`).sort();
+    const expectedSchemas = ['day', 'food', 'meal-instance', 'meal', 'preferences', 'targets', 'user-food-data'].map((n) => `${n}.schema.json`).sort();
     if (!deepEqual(schemaFiles, expectedSchemas)) errs.push(`schema set is ${schemaFiles.join(', ')}`);
-    gate('G01', 'Every file in expected-output-manifest.json exists, and the six schemas are present', errs);
+    gate('G01', 'Every file in expected-output-manifest.json exists, and the seven schemas are present', errs);
   }
 
   const core = F['data/foods/core-foods.json'];
@@ -145,6 +146,7 @@ function validateBundle(bundle) {
   const saved = F['user-data/saved-meals.json'];
   const logs = F['user-data/daily-logs.json'];
   const prefs = F['user-data/preferences.json'];
+  const userFoodData = F['user-data/user-food-data.json'];
 
   // G02 schema validation
   {
@@ -158,6 +160,8 @@ function validateBundle(bundle) {
     else logs.forEach((x, i) => errs.push(...validate(x, 'day.schema.json', `daily-logs[${i}]`)));
     errs.push(...validate(targets, 'targets.schema.json', 'targets'));
     errs.push(...validate(prefs, 'preferences.schema.json', 'preferences'));
+    if (userFoodData === undefined) errs.push('user-data/user-food-data.json is missing (user-data format 2)');
+    else errs.push(...validate(userFoodData, 'user-food-data.schema.json', 'user-food-data'));
     gate('G02', 'Canonical data validates against the V2 JSON schemas', errs);
   }
 

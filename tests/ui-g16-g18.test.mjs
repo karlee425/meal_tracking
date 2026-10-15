@@ -72,7 +72,7 @@ test('G16 — from the picker, Food detail is information-only for Core and Cust
       assert.ok(!text(html).replace('can’t be edited', '').includes(word), `${id}: no "${word}"`);
     }
   }
-  assert.match(renderFoodDetail({ ...foodDetailModel(app, CORE), context: 'picker' }), /App food · can’t be edited/, 'Core Foods stay read-only');
+  assert.match(renderFoodDetail({ ...foodDetailModel(app, CORE), context: 'picker' }), /App food · nutrition can’t be edited/, 'Core Foods stay read-only (C7 subtitle)');
 });
 
 test('G16 — the other contexts keep their approved actions (§7.3 table)', () => {

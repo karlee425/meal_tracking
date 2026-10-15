@@ -8,6 +8,8 @@
  *   don't suggest    setDislikedFood(id, on)      preferences.dislikedFoods; only the Coach reads
  *                                                 it (A-32) — search and Log's lists are unchanged
  *   edit / delete    updateCustomFood / deleteCustomFood (Custom Foods only, A-17)
+ *   servings         createServing / updateServing / deleteServing / setDefaultServing
+ *                    (Core and Custom Foods; userFoodData only, never the Food record — C7)
  * None of these touches a logged meal: history carries its own snapshot (A-13). Values are
  * shown as stored, rounded for display by the domain helper; nothing is converted (A-16).
  */
@@ -32,7 +34,7 @@ export function otherNames(food) {
   return (food.aliases || []).filter((a) => String(a).trim() && String(a).trim().toLowerCase() !== name);
 }
 
-/** What Food detail shows for one Food, or null when it no longer exists. */
+/** What Food detail shows for one Food, or null when it no longer exists. servings: its named servings, default first. */
 export function foodDetailModel(app, foodId) {
   const food = app.getFood(foodId);
   if (!food) return null;
@@ -40,8 +42,73 @@ export function foodDetailModel(app, foodId) {
   return {
     food,
     isFavorite: prefs.favoriteFoods.includes(food.id),
-    isDisliked: prefs.dislikedFoods.includes(food.id)
+    isDisliked: prefs.dislikedFoods.includes(food.id),
+    servings: app.getServings(food.id)
   };
+}
+
+/* ---------------- servings on Food detail (C7, §7.3) ---------------- */
+
+/** Where Food detail manages servings; everywhere else (Coach, Food picker) they're read-only. */
+export const SERVING_MANAGEMENT_CONTEXTS = Object.freeze(['log', 'settings']);
+
+/**
+ * A serving's weight as stored ("170 g"), with ≈ and "estimate" for an approximate one
+ * (screen readers hear "approximately"). Shown as stored, like the rest of Food detail.
+ */
+export function servingWeight(serving) {
+  const grams = `${escapeHtml(String(serving.grams))} g`;
+  return serving.approximate
+    ? `<span aria-hidden="true">≈ </span><span class="visually-hidden">approximately </span>${grams} <span class="estimate-label">estimate</span>`
+    : grams;
+}
+
+/**
+ * The Servings section. manage: Add, Edit, Delete and Make default (Log and Settings); without
+ * it the list is read-only (Coach — an exception to A-47 — and the Food picker, A-46).
+ * Replaced as a whole when servings change (data-sync), so focus is placed afterwards.
+ */
+export function renderServingsSection({ food, servings = [], manage = false }) {
+  const name = escapeHtml(food.name);
+  const rows = servings.map((s, i) => {
+    const label = escapeHtml(s.label);
+    const actions = manage
+      ? `<span class="serving-actions">
+<button type="button" class="link-button" data-action="fd-serving-edit" data-serving="${escapeHtml(s.id)}" aria-label="Edit ${label}">Edit</button>
+${i === 0 ? '' : `<button type="button" class="link-button" data-action="fd-serving-default" data-serving="${escapeHtml(s.id)}" aria-label="Make ${label} the default">Make default</button>\n`}<button type="button" class="link-button" data-action="fd-serving-delete" data-serving="${escapeHtml(s.id)}" aria-label="Delete ${label}">Delete</button>
+</span>`
+      : '';
+    return `<li class="serving-row" data-serving-row="${escapeHtml(s.id)}">
+<span class="serving-main"><span class="serving-label">${label}</span> <span class="serving-weight">${servingWeight(s)}</span>${i === 0 ? ' <span class="marker">Default</span>' : ''}</span>
+${actions}
+</li>`;
+  }).join('\n');
+  const empty = manage
+    ? '<p class="hint">No servings yet. Add one to log this food by serving as well as by weight.</p>'
+    : '<p class="hint">No servings.</p>';
+  return `<section class="food-servings" aria-labelledby="fd-servings-title" data-sync="fd-servings">
+<h3 id="fd-servings-title" class="group-title">Servings</h3>
+${servings.length ? `<ul class="serving-list">\n${rows}\n</ul>` : empty}
+${manage ? `<button type="button" class="button" data-action="fd-serving-add" aria-label="Add a serving for ${name}">Add a serving</button>` : ''}
+</section>`;
+}
+
+/** A stored serving as Edit serving's starting values: the weight exactly as stored (like customFoodValues). */
+export const servingFormValues = (serving) => ({ label: serving.label, grams: String(serving.grams), approximate: serving.approximate === true });
+
+/**
+ * Deleting a serving: "Delete serving? Delete {label} from {food}? Meals you've already logged
+ * aren't affected." (+ which serving becomes the default). Cancel has the focus.
+ */
+export function renderDeleteServing({ food, serving, servings = [] }) {
+  const rest = servings.filter((s) => s.id !== serving.id);
+  const next = servings.length && servings[0].id === serving.id && rest.length
+    ? ` ${escapeHtml(rest[0].label)} becomes the default.`
+    : '';
+  return `${dialogHead('Delete serving?')}
+<p>Delete <em>${escapeHtml(serving.label)}</em> from ${escapeHtml(food.name)}?${next} Meals you’ve already logged aren’t affected.</p>
+${errorSlot}
+<div class="sheet-actions"><button type="button" class="button" data-action="close" data-autofocus>Cancel</button><button type="button" class="button danger" data-action="fd-serving-delete-confirm" data-serving="${escapeHtml(serving.id)}">Delete serving</button></div>`;
 }
 
 /* ---------------- Food detail (§7.3) ---------------- */
@@ -64,13 +131,14 @@ function preferenceControls({ food, isFavorite, isDisliked }) {
 /**
  * Food detail: name, state, category, brand, source, P/C/F per 100 g, other names; Log this
  * food and Add to a meal when opened from Log; Favourite; Don't suggest; Edit · Delete for
- * Custom Foods ("App food · can't be edited" for Core Foods). Food metadata from the migration
+ * Custom Foods ("App food · nutrition can't be edited" for Core Foods); the Servings section
+ * (managed from Log and Settings, read-only elsewhere — C7). Food metadata from the migration
  * (cooked-weight factors, roles, swaps, portion steps) is never shown (I-30).
  *
  * context: 'log' · 'coach' · 'settings' · 'picker' — the §7.3 action table. From the Food picker
  * it's information-only (A-46): no Log, Add, Favourite, Don't suggest, Edit, Delete or choose.
  */
-export function renderFoodDetail({ food, isFavorite, isDisliked, context = 'settings', future = false, note = '' }) {
+export function renderFoodDetail({ food, isFavorite, isDisliked, servings = [], context = 'settings', future = false, note = '' }) {
   const per100 = oneDecimal(food.nutrition);
   const names = otherNames(food);
   const custom = food.source === 'custom';
@@ -87,7 +155,7 @@ export function renderFoodDetail({ food, isFavorite, isDisliked, context = 'sett
 <button type="button" class="button danger" data-action="fd-delete">Delete</button>
 </div>`
     : '';
-  return `${viewHead(food.name, custom ? 'My food' : 'App food · can’t be edited')}
+  return `${viewHead(food.name, custom ? 'My food' : 'App food · nutrition can’t be edited')}
 ${note ? `<p class="note" role="status">${escapeHtml(note)}</p>` : ''}
 <dl class="data-facts food-facts">
 <div><dt>State</dt><dd><span class="state-chip">${escapeHtml(food.state)}</span></dd></div>
@@ -102,6 +170,7 @@ ${names.length ? `<div><dt>Other names</dt><dd>${names.map(escapeHtml).join(', '
 <tbody><tr><td>${per100.protein} g</td><td>${per100.carbs} g</td><td>${per100.fat} g</td></tr></tbody>
 </table></div>
 ${logActions}
+${renderServingsSection({ food, servings, manage: SERVING_MANAGEMENT_CONTEXTS.includes(context) })}
 ${manage ? preferenceControls({ food, isFavorite, isDisliked }) : ''}
 ${ownership}
 ${errorSlot}
@@ -116,14 +185,21 @@ export function foodUsageMeals(app, foodId) {
   return app.getFoodUsage(foodId).savedMealIds.map((id) => app.getMeal(id)).filter(Boolean).map((m) => ({ id: m.id, name: m.name }));
 }
 
-/** "Delete {name}? {n} Saved Meal(s) use it and will need a replacement … Meals you've already logged aren't affected." Cancel has the focus. */
-export function renderDeleteFood({ food, meals }) {
+/**
+ * "Delete {name}? {n} Saved Meal(s) use it and will need a replacement … Its servings will be
+ * deleted too. Meals you've already logged aren't affected." Cancel has the focus.
+ * servingCount: how many servings it has. When it isn't passed, detail.servings (the Food
+ * detail the dialog was opened from) is used — the Coach opens it as { food, meals, detail }.
+ */
+export function renderDeleteFood({ food, meals, servingCount, detail }) {
   const n = meals.length;
   const impact = n
     ? ` ${n} ${plural(n, 'Saved Meal uses it and will need', 'Saved Meals use it and will need')} a replacement before you can log ${plural(n, 'it', 'them')}: ${meals.map((m) => `<strong>${escapeHtml(m.name)}</strong>`).join(', ')}.`
     : '';
+  const count = Number.isInteger(servingCount) ? servingCount : detail && Array.isArray(detail.servings) ? detail.servings.length : 0;
+  const servingsNote = count ? ` ${count === 1 ? 'Its serving' : `Its ${count} servings`} will be deleted too.` : '';
   return `${dialogHead('Delete food?')}
-<p>Delete <em>${escapeHtml(food.name)}</em>?${impact} Meals you’ve already logged aren’t affected.</p>
+<p>Delete <em>${escapeHtml(food.name)}</em>?${impact}${servingsNote} Meals you’ve already logged aren’t affected.</p>
 ${errorSlot}
 <div class="sheet-actions"><button type="button" class="button" data-action="close" data-autofocus>Cancel</button><button type="button" class="button danger" data-action="fd-delete-confirm">Delete food</button></div>`;
 }
@@ -148,10 +224,17 @@ export function renderLinkedMessage(note) {
   return `<p>${escapeHtml(note.message)}${links ? ` ${links}` : ''}</p>`;
 }
 
-/** Leaving the Custom Food form with unsaved edits (§3.2): Keep editing / Discard. created: a new food not yet saved. */
-export function renderDiscardFood({ created = false } = {}) {
+/**
+ * Leaving the Custom Food form (or a serving form, §5.5.2 / §7.3) with unsaved edits (§3.2):
+ * Keep editing / Discard. created: a new food not yet saved. serving: a new serving not yet
+ * saved. editedServing: changes to an existing serving.
+ */
+export function renderDiscardFood({ created = false, serving = false, editedServing = false } = {}) {
+  const what = editedServing ? 'Your changes to this serving haven’t been saved.'
+    : serving ? 'This new serving hasn’t been saved.'
+      : created ? 'This new food hasn’t been saved.' : 'Your changes to this food haven’t been saved.';
   return `${dialogHead('Discard changes?')}
-<p>${created ? 'This new food hasn’t been saved.' : 'Your changes to this food haven’t been saved.'}</p>
+<p>${what}</p>
 <div class="sheet-actions"><button type="button" class="button primary" data-action="keep-editing" data-autofocus>Keep editing</button><button type="button" class="button danger" data-action="discard">Discard</button></div>`;
 }
 
@@ -183,6 +266,23 @@ export function createFoodActions(app) {
       return on ? `${food.name} won’t be suggested in Build My Next Meal.` : `${food.name} can be suggested again.`;
     },
     updateCustomFood: (id, patch) => app.updateCustomFood(id, patch),
+    /* Servings (C7): one domain call each; the result says what to announce and where focus goes. */
+    addServing(food, input) {
+      const serving = app.createServing(food.id, input);
+      return { serving, message: `Saved ${serving.label}.` };
+    },
+    updateServing(food, servingId, patch) {
+      const serving = app.updateServing(food.id, servingId, patch);
+      return { serving, message: `Saved ${serving.label}.` };
+    },
+    deleteServing(food, serving) {
+      const result = app.deleteServing(food.id, serving.id);
+      return { ...result, message: `Deleted ${serving.label}.` };
+    },
+    makeDefaultServing(food, serving) {
+      const result = app.setDefaultServing(food.id, serving.id);
+      return { ...result, message: `${serving.label} is now the default serving.` };
+    },
     deleteCustomFood(food) {
       const result = app.deleteCustomFood(food.id);
       return deletedFoodMessage(app, food, result);
