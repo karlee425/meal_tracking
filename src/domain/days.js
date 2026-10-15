@@ -4,11 +4,20 @@
  *   Meal (Library/Saved) or a single Food
  *     → calculate with the current Foods (macros.js)
  *     → Meal Instance snapshot: Food IDs, Food names, quantities, units, per-ingredient
- *       P/C/F, totals, meal name, slot, source meal ID, loggedAt
+ *       P/C/F, totals, meal name, slot, source meal ID, loggedAt, and for an ingredient
+ *       logged by serving, that serving's snapshot (C8, below)
  *     → stored in the Day
  *
  * After logging, a Meal Instance never reads from Foods or Meals again, so later edits to
  * (or deletion of) a Food, a Saved Meal or current targets cannot change it.
+ *
+ * Logged servings (V3 Slice 1 · C8): logFood({ servingId, count }) resolves the amount through
+ * servings.resolveAmount and keeps, on that ingredient, a copy of the serving as it is now —
+ * serving: { id, label, grams, approximate, count: { numerator, denominator } }. The quantity in
+ * grams stays authoritative; macros come from it exactly as for grams. Only the domain writes a
+ * serving snapshot: createMealInstance never takes one from its caller. Editing a logged
+ * ingredient's grams drops its snapshot (the serving no longer explains the amount); a name or
+ * slot change, or the same grams, keeps it.
  * Days are created when needed; nothing here invents history.
  *
  * Day completeness is the user's explicit declaration (loggingComplete), never inferred
@@ -25,7 +34,7 @@ import { DomainError, clone, assertDate, assertDayType, assertMealSlot } from '.
 import { MEAL_SLOTS } from './constants.js';
 import { calculateMealMacros, rescaleSnapshotIngredient, sumMacros, pickMacros, zeroMacros, targetStatus, MACROS } from './macros.js';
 
-export function createDaysApi(ctx, { meals, targets }) {
+export function createDaysApi(ctx, { meals, targets, servings }) {
   const { store } = ctx;
 
   const findDay = (date) => store.get('days').find((d) => d.date === date) || null;
@@ -87,14 +96,18 @@ export function createDaysApi(ctx, { meals, targets }) {
     }
     if ('ingredients' in patch) {
       if (!Array.isArray(patch.ingredients) || !patch.ingredients.length) throw new DomainError('INVALID_MEAL_INSTANCE', 'a Meal Instance needs at least one ingredient');
-      const unused = out.ingredients.slice();
+      const pairs = pairIngredients(out.ingredients, patch.ingredients);
       const next = patch.ingredients.map((ing, i) => {
         const unit = ing.unit === undefined ? 'g' : ing.unit;
-        const k = unused.findIndex((s) => s.foodId === ing.foodId && s.unit === unit);
-        if (k >= 0) {
-          const [snap] = unused.splice(k, 1);
+        if (pairs[i]) {
+          const snap = out.ingredients[pairs[i].k];
           if (!(typeof ing.quantity === 'number' && Number.isFinite(ing.quantity) && ing.quantity > 0)) throw new DomainError('INVALID_QUANTITY', `ingredient ${i}: quantity must be > 0`);
-          return rescaleSnapshotIngredient(snap, ing.quantity);
+          const row = rescaleSnapshotIngredient(snap, ing.quantity);
+          // A logged serving explains this row only while its grams are unchanged, and only when
+          // the row is certainly the one it was logged on (C8): an explicit snapshotIndex, or the
+          // only row for that Food before and after. Otherwise the snapshot is dropped, never moved.
+          if (!(snap.serving && ing.quantity === snap.quantity && pairs[i].certain)) delete row.serving;
+          return row;
         }
         const calc = calculateMealMacros({ id: mi.id, ingredients: [{ foodId: ing.foodId, quantity: ing.quantity, unit }] }, ctx.lookupFood);
         if (!calc.valid) throw new DomainError(calc.needsReplacement ? 'FOOD_NOT_FOUND' : 'MEAL_INVALID', `ingredient ${i}: ${calc.problems[0].message}`, calc.problems);
@@ -104,6 +117,46 @@ export function createDaysApi(ctx, { meals, targets }) {
       out.totals = sumMacros(next.map(pickMacros));
     }
     return out;
+  }
+
+  /**
+   * Which logged ingredient each patch ingredient continues: [{ k, certain } | null] by patch
+   * position (null: a new ingredient, calculated from the current Food).
+   *   - snapshotIndex (optional, per patch ingredient): the index of the logged ingredient it
+   *     continues; it must exist, be used once, and be the same Food and unit
+   *   - once any patch ingredient gives a snapshotIndex, the caller has named its existing rows:
+   *     a row without one is an added ingredient (null) — calculated from the current Food, never
+   *     matched to a logged (e.g. removed) row, so it takes over neither its values nor its snapshot
+   *   - with no snapshotIndex anywhere, as before C8: the first unused logged ingredient with the
+   *     same Food and unit
+   * certain: an explicit snapshotIndex, or — with no snapshotIndex anywhere — the Food has exactly
+   * one row in the logged meal and one in the patch. Only a certain row may keep a serving snapshot.
+   */
+  function pairIngredients(logged, patched) {
+    const pairs = patched.map(() => null);
+    const used = new Set();
+    const unitOf = (ing) => (ing.unit === undefined ? 'g' : ing.unit);
+    patched.forEach((ing, i) => {
+      if (!ing || ing.snapshotIndex === undefined) return;
+      const k = ing.snapshotIndex;
+      if (!Number.isInteger(k) || k < 0 || k >= logged.length) throw new DomainError('INVALID_MEAL_INSTANCE', `ingredient ${i}: snapshotIndex ${JSON.stringify(k)} is not an ingredient of this logged meal`);
+      if (used.has(k)) throw new DomainError('INVALID_MEAL_INSTANCE', `ingredient ${i}: snapshotIndex ${k} is used more than once`);
+      if (logged[k].foodId !== ing.foodId || logged[k].unit !== unitOf(ing)) throw new DomainError('INVALID_MEAL_INSTANCE', `ingredient ${i}: snapshotIndex ${k} is a different Food or unit`);
+      used.add(k);
+      pairs[i] = { k, certain: true };
+    });
+    // Once the caller names its existing rows, every other row is an added ingredient: it is
+    // calculated from the current Food and never matched to a logged (e.g. removed) row.
+    if (used.size > 0) return pairs;
+    const rows = (list, foodId) => list.filter((x) => x && x.foodId === foodId).length;
+    patched.forEach((ing, i) => {
+      if (pairs[i]) return;
+      const k = logged.findIndex((s, j) => !used.has(j) && s.foodId === ing.foodId && s.unit === unitOf(ing));
+      if (k < 0) return;
+      used.add(k);
+      pairs[i] = { k, certain: rows(logged, ing.foodId) === 1 && rows(patched, ing.foodId) === 1 };
+    });
+    return pairs;
   }
 
   function newInstanceId() {
@@ -128,6 +181,33 @@ export function createDaysApi(ctx, { meals, targets }) {
     if (dayType === undefined) throw new DomainError('DAY_TYPE_REQUIRED', `no Day for ${date} yet; pass dayType (lift | long_run | rest) to create it`);
     assertDayType(dayType);
     return newDay(date, dayType);
+  }
+
+  /**
+   * Log a Meal Instance (createMealInstance's rules). servingSnapshots: null, or one entry per
+   * ingredient — a serving snapshot or null — that logFood resolved itself; never caller data.
+   */
+  function createInstance({ date, mealSlot, mealId, ingredients, mealName, dayType } = {}, servingSnapshots) {
+    assertMealSlot(mealSlot);
+    const day = dayForLogging(date, dayType);
+    const { source, name, calc } = draftInstance({ mealId, ingredients, mealName });
+    if (!calc.valid) {
+      throw new DomainError(calc.needsReplacement ? 'MEAL_NEEDS_REPLACEMENT' : 'MEAL_INVALID', 'cannot log: some ingredients cannot be calculated', calc.problems);
+    }
+    if (!name) throw new DomainError('INVALID_MEAL_INSTANCE', 'mealName is required when logging without a Meal');
+    const snapshot = snapshotFrom(calc);
+    if (servingSnapshots) servingSnapshots.forEach((sv, i) => { if (sv) snapshot.ingredients[i].serving = clone(sv); });
+    const instance = {
+      id: newInstanceId(),
+      sourceMealId: source ? source.id : null,
+      mealName: name,
+      mealSlot,
+      ...snapshot,
+      loggedAt: ctx.now()
+    };
+    day.mealInstances.push(instance);
+    saveDay(day);
+    return clone(instance);
   }
 
   function instanceOrThrow(day, instanceId) {
@@ -269,32 +349,34 @@ export function createDaysApi(ctx, { meals, targets }) {
      *   { date, mealSlot, ingredients, mealName }  log ingredients with no source Meal
      * dayType is needed only when the Day does not exist yet. mealType never restricts the slot.
      */
-    createMealInstance({ date, mealSlot, mealId, ingredients, mealName, dayType } = {}) {
-      assertMealSlot(mealSlot);
-      const day = dayForLogging(date, dayType);
-      const { source, name, calc } = draftInstance({ mealId, ingredients, mealName });
-      if (!calc.valid) {
-        throw new DomainError(calc.needsReplacement ? 'MEAL_NEEDS_REPLACEMENT' : 'MEAL_INVALID', 'cannot log: some ingredients cannot be calculated', calc.problems);
-      }
-      if (!name) throw new DomainError('INVALID_MEAL_INSTANCE', 'mealName is required when logging without a Meal');
-      const instance = {
-        id: newInstanceId(),
-        sourceMealId: source ? source.id : null,
-        mealName: name,
-        mealSlot,
-        ...snapshotFrom(calc),
-        loggedAt: ctx.now()
-      };
-      day.mealInstances.push(instance);
-      saveDay(day);
-      return clone(instance);
+    createMealInstance(args = {}) {
+      return createInstance(args, null);
     },
 
-    /** Log one Food directly, without a Saved Meal. The snapshot is the same shape. */
-    logFood({ date, mealSlot, foodId, quantity, unit = 'g', mealName, dayType } = {}) {
+    /**
+     * Log one Food directly, without a Saved Meal. The snapshot is the same shape.
+     *   { quantity, unit }       grams, as before
+     *   { servingId, count }     one of the Food's servings now × a count typed as text
+     *                            (servings.resolveAmount); the ingredient keeps the serving's
+     *                            snapshot and the exact count (C8)
+     * Exactly one form: both → AMOUNT_AMBIGUOUS; a serving in another unit → UNSUPPORTED_UNIT;
+     * otherwise resolveAmount's errors (SERVING_NOT_FOUND, INVALID_SERVING_COUNT, AMOUNT_TOO_SMALL).
+     * One write; nothing is written on any error.
+     */
+    logFood({ date, mealSlot, foodId, quantity, unit = 'g', servingId, count, mealName, dayType } = {}) {
       const food = ctx.lookupFood(foodId);
       if (!food) throw new DomainError('FOOD_NOT_FOUND', `no Food ${foodId}`);
-      return api.createMealInstance({ date, mealSlot, dayType, mealName: mealName || food.name, ingredients: [{ foodId, quantity, unit }] });
+      const amount = {};
+      if (servingId !== undefined) amount.servingId = servingId;
+      if (count !== undefined) amount.count = count;
+      if (!Object.keys(amount).length) {
+        return createInstance({ date, mealSlot, dayType, mealName: mealName || food.name, ingredients: [{ foodId, quantity, unit }] }, null);
+      }
+      if (quantity !== undefined) throw new DomainError('AMOUNT_AMBIGUOUS', 'give either a quantity in grams or a serving and a count');
+      if (unit !== 'g') throw new DomainError('UNSUPPORTED_UNIT', 'a serving is logged in grams (no silent conversion)');
+      const resolved = servings.resolveAmount(foodId, amount);
+      const snapshot = { ...resolved.serving, count: resolved.count };
+      return createInstance({ date, mealSlot, dayType, mealName: mealName || food.name, ingredients: [{ foodId, quantity: resolved.quantity, unit: 'g' }] }, [snapshot]);
     },
 
     /**

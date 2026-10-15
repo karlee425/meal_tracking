@@ -41,7 +41,7 @@ export { constants };
 export { BACKUP_FORMAT, BACKUP_FORMAT_VERSION, BACKUP_USER_DATA_VERSION, USER_COLLECTIONS, readBackup, olderFormatBackup } from './backup.js';
 export { USER_DATA_FORMAT_VERSION, USER_DATA_COLLECTIONS, upgradeUserData } from './upgrade.js';
 export { carryForwardServingIds } from './serving-ids.js';
-export { SERVING_COUNT_QUICK_PICKS, SERVING_GRAMS_MAX_DECIMALS, parseServingCount, isUnfinishedServingCount, parseServingGrams } from './servings.js';
+export { SERVING_COUNT_QUICK_PICKS, SERVING_GRAMS_MAX_DECIMALS, parseServingCount, isUnfinishedServingCount, parseServingGrams, formatServingCount } from './servings.js';
 
 export function createDataLayer({ adapter, clock = () => new Date(), today, newId, newUuid } = {}) {
   if (!adapter) throw new Error('createDataLayer: adapter is required');
@@ -82,12 +82,12 @@ export function createDataLayer({ adapter, clock = () => new Date(), today, newI
   const meals = createMealsApi(ctx);
   ctx.findMeal = meals._findMeal;
   const targets = createTargetsApi(ctx);
-  const days = createDaysApi(ctx, { meals, targets });
+  const servings = createServingsApi(ctx);
+  const days = createDaysApi(ctx, { meals, targets, servings });
   const progress = createProgressApi(ctx, { days });
   const preferences = createPreferencesApi(ctx);
   const coach = createCoachApi(ctx, { foods, meals, days, targets, preferences });
   const backup = createBackupApi(ctx);
-  const servings = createServingsApi(ctx);
 
   // Persistence status, the same shape for every adapter. File and memory adapters write
   // synchronously and always report 'saved'; the browser adapter reports its queue.

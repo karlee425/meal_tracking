@@ -427,7 +427,7 @@ test('Today G1 — ◀ ▶ step one calendar day through the domain’s date ari
   assert.equal(dayHref(TODAY, TODAY), '#/today', 'today keeps the plain route, so it follows midnight (§4.5.6)');
   assert.equal(dayHref(PAST, TODAY), `#/today?date=${PAST}`);
   const src = fs.readFileSync(path.join(ROOT, 'app/today.js'), 'utf8');
-  assert.match(src, /import \{ macros, constants, addDays \} from '\.\.\/src\/domain\/index\.js';/, 'date stepping is the domain’s addDays');
+  assert.match(src, /import \{ macros, constants, addDays, formatServingCount \} from '\.\.\/src\/domain\/index\.js';/, 'date stepping is the domain’s addDays');
   assert.match(src, /win\.location\.replace\(dayHref\(date, app\.getToday\(\)\)\)/, '◀ ▶ replace the entry, so Back still returns to where Today was opened from (§16)');
   assert.ok(!/setDate\(|getTime\(\) \+|86400000/.test(src), 'no date arithmetic of its own');
 });

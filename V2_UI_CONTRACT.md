@@ -1,7 +1,7 @@
 # V2 UI / Product Contract
 
 **Repository:** `karlee425/meal_tracking` · **Branch:** `v2-data-architecture`
-**Status:** authoritative implementation contract for the V2 UI. Written against the commit that adds this file (on `f040b70`, `2046613`, `2cd7932`). Supersedes `V2_UI_CONTRACT_DRAFT.md` and the review drafts. Amended by "Reconcile V2 product decisions" (A-41–A-45, I-58–I-60) and "Resolve remaining V2 contract ambiguities" (A-46–A-48; A-44 extended); A-46 and A-47 finalized by "Finalize Food picker detail contract".
+**Status:** authoritative implementation contract for the V2 UI. Written against the commit that adds this file (on `f040b70`, `2046613`, `2cd7932`). Supersedes `V2_UI_CONTRACT_DRAFT.md` and the review drafts. Amended by "Reconcile V2 product decisions" (A-41–A-45, I-58–I-60) and "Resolve remaining V2 contract ambiguities" (A-46–A-48; A-44 extended); A-46 and A-47 finalized by "Finalize Food picker detail contract". V3 Slice 1 sections are tagged "[V3 Slice 1 · Cn]"; C8 (logged servings) adds A-49–A-50, I-61–I-62 and F-18.
 
 ---
 
@@ -31,7 +31,7 @@ Where the domain already determines a behaviour, this contract describes what th
 | 1.4 | Targets are floors. Reaching or passing one is shown neutrally, never as an error or overage. | APPROVED A-05 (domain `meetsTarget`) |
 | 1.5 | A slot is a place, not a quota. An empty slot means "not logged", never "0 g". No slot is required. | APPROVED A-06 |
 | 1.6 | A day is complete only when the user says so (Done Logging). | APPROVED A-07 |
-| 1.7 | Logged meals are records. They show what was logged and never change because a Food or Saved Meal changed. | APPROVED A-13 |
+| 1.7 | Logged meals are records. They show what was logged and never change because a Food or Saved Meal changed. A meal logged by serving also keeps that serving as it was then (§4.3.3), whatever later happens to the serving. | APPROVED A-13 · A-49 (V3 Slice 1 · C8) |
 | 1.8 | Every number on screen comes from a domain call or a stored snapshot. Screens format; they never calculate. | APPROVED A-30 |
 | 1.9 | Food state (raw, cooked, dry…) is always visible where a Food is chosen, and never converted. Grams are the canonical quantity; a named serving is only another way to enter grams (§5.5.1). | APPROVED A-16 · V3 Slice 1 · C6 |
 | 1.10 | Saving is visible. The user can always tell whether their data is saved, and a failure is never silent. | APPROVED A-24 |
@@ -175,6 +175,7 @@ From Log the user can pick a **Saved Meal**, a **Library Meal** or a **Food**; a
 |---|---|
 | Name, slot, date, "Logged at {local time}" | snapshot |
 | Ingredient table: food name · grams · P · C · F | snapshot `ingredients[]` (not live Foods) |
+| Under the food name, for an ingredient logged by serving: "{count} × {label} · {grams} g each" (e.g. "1 1/3 × Scoop · 30 g each"); for an approximate serving "≈ {grams} g each" with the **estimate** label, read as "approximately {grams} g each estimate". Nothing for an ingredient logged in grams. The Grams column still shows the logged grams. [V3 Slice 1 · C8 · IMPLEMENTATION NOTE I-61] | the ingredient's own `serving` snapshot (never the Food's servings now); the count's text from `formatServingCount` |
 | Totals: P · C · F | snapshot `totals` |
 | Source line: "From Saved Meal *X*" / "From Library Meal *X*" / "From a meal that's since been deleted" / nothing (logged directly) | `sourceMealId` + `getMeal` |
 | Note: "This is a record of what you logged. Later changes to foods or saved meals don't change it." | static |
@@ -194,6 +195,9 @@ Title "**Edit logged meal**" with "{Slot} · {date}" underneath, never plain "Ed
 | Save | `updateMealInstance(date, id, patch)` |
 
 - The last ingredient can't be removed; its remove control reads "Delete this logged meal instead". [domain: ≥ 1 ingredient]
+- **Ingredients logged by serving** [V3 Slice 1 · C8 · APPROVED A-50]: the row shows "Logged as {count} × {label} · {grams} g each" from its snapshot (as §4.3.3), and its grams field is described by that line. A name or slot change, or saving the same grams, keeps the serving. Changing the row's grams makes it a grams entry: the snapshot is dropped on Save. As soon as the preview (`previewMealInstanceUpdate`) shows that, the row says "Grams changed: this will save as a grams entry." (not a live region; it joins the field's description). Changing the grams back before saving keeps the serving. There is no count field: a logged serving's count can't be edited (F-18).
+- **Which row is which** [V3 Slice 1 · C8 · APPROVED A-50]: each existing row is sent with `snapshotIndex`, its position in the logged meal as it was opened, so the domain continues exactly that row (re-scaled from its own snapshot) however rows are removed or reordered. A row added with the Food picker has no `snapshotIndex`: it is calculated from the current Food and never takes over a logged row's values or serving snapshot, even when the same Food was removed in the same edit. The domain refuses a `snapshotIndex` that is out of range, used twice, or names a different Food or unit (`INVALID_MEAL_INSTANCE`).
+- After **Remove**, focus goes to the grams field now in that place (or the last one). [IMPLEMENTATION NOTE I-62]
 - **After saving an instance whose source is an existing Saved Meal and whose ingredients changed**, one follow-up choice appears [APPROVED A-14]:
   1. **Just this time** (default)
   2. **Save as a new Saved Meal** → name → `createSavedMeal({ name, mealType, ingredients })`
@@ -369,7 +373,7 @@ Tap a Food row → **quantity sheet**. The quantity sheet has a **Food details**
 | **Add a serving** | A link on every quantity sheet → the Add a serving form (§5.5.2), which returns to the sheet as it was left. |
 | State reminder | "Weigh it {state}" (e.g. "Weigh it cooked"). If the user has the other state, they pick the other Food; the app never converts. |
 | Live preview | `previewLogFood({ date, foodId, quantity, dayType? })` → this amount's P / C / F and "After this…" (`day.after`). With no Day yet, the "After this" line waits for the day type. |
-| **Log** | `logFood({ date, mealSlot, foodId, quantity })` → one logged meal named after the Food |
+| **Log** | One logged meal named after the Food. Grams: `logFood({ date, mealSlot, foodId, quantity })`. Serving mode: `logFood({ date, mealSlot, foodId, servingId, count })` with the count as typed; the domain resolves the same grams the preview showed and keeps the serving's snapshot (§5.5.1). [V3 Slice 1 · C8] |
 | **Add to a meal** | Adds Food + grams to a **meal builder tray** instead (below). In serving mode the tray gets the serving's canonical grams as an ordinary grams row, and Log says so: "Added {food} as {n} g." No serving label, "≈" or estimate is kept in the tray. |
 | Validation | Empty, 0, negative or non-numeric → inline "Enter a weight above 0 g"; Log disabled. Domain codes `INVALID_QUANTITY` / `MEAL_INVALID` map to the same message. |
 
@@ -394,9 +398,9 @@ Grams stay canonical. A named serving (a label and its weight in grams, e.g. "sc
 
 **Resolution and rounding (domain: `resolveAmount`, `macros.servingQuantity`).** exact = serving grams × count, as an exact fraction (integer arithmetic, no binary drift). Canonical grams = exact rounded **half-up to 0.01 g**. That one value is what preview, logging and the tray receive; the display text comes from the domain with it. An amount that rounds to 0 g → `AMOUNT_TOO_SMALL` ("That comes to less than 0.01 g. Enter more servings."). New servings take weights with at most 2 decimal places, so one serving always logs exactly its weight; an older or restored weight with more places resolves by the same rule. The UI never converts, multiplies, rounds or formats a quantity.
 
-**What is logged.** Grams only, through the existing `previewLogFood` / `logFood`. The logged meal carries no serving information yet. **Release blocker:** serving-aware logging must not ship until logged-meal snapshots carry serving metadata (C8) and the reserved-ID carry-forward (§11.2) includes serving IDs referenced by logged meals.
+**What is logged** [V3 Slice 1 · C8 · APPROVED A-49]. Grams stay the canonical, authoritative quantity: the preview is `previewLogFood` with the resolved grams, and every P/C/F comes from those grams through the one calculator, exactly as for grams. In serving mode **Log** sends `logFood({ …, servingId, count })` (the count as typed) and the domain does the rest: it resolves the amount again from the serving as stored now, refuses an invalid or incomplete amount (`INVALID_SERVING_COUNT`, `SERVING_NOT_FOUND`, `AMOUNT_TOO_SMALL`, `AMOUNT_AMBIGUOUS`) without writing, and stores on the logged ingredient a snapshot of the serving: `serving: { id, label, grams, approximate, count: { numerator, denominator } }`, the count as an exact fraction in lowest terms (what was typed is not kept, so `1.5` and `1 1/2` are the same count). The UI never builds or sends a snapshot; `createMealInstance` ignores one. A Food logged in grams — in grams mode, or with no servings — has no `serving` at all. The day-type step (§5.2) carries the serving and count through. The snapshot is the record of what was logged: later edits to the serving, its deletion, or the Food's deletion never change it (§7.3.1, §7.6), and its ID stays reserved (§11.2).
 
-**Not in this slice.** Serving rows in the meal tray and serving-aware logged-meal editing (C8); the Coach top-up (§8.4, F-17). Managing servings (add, edit, delete, default) from Food detail is §7.3.1 [V3 Slice 1 · C7].
+**Not in this slice.** Serving rows in the meal tray (it stays grams, as above) and editing a logged serving's count (F-18); the Coach top-up (§8.4, F-17). Managing servings (add, edit, delete, default) from Food detail is §7.3.1 [V3 Slice 1 · C7].
 
 #### 5.5.2 Add a serving [V3 Slice 1 · C6]
 
@@ -580,7 +584,7 @@ A **Servings** section after the Per 100 g table. Servings are user data (`userF
 
 **Make default** → `setDefaultServing`: that serving moves to the front; every serving keeps its ID, definition and timestamps, and the others keep their order. No arbitrary reordering.
 
-**Delete** asks first: "Delete serving? Delete {label} from {food}? Meals you've already logged aren't affected." — with "{next} becomes the default." when it's the default and others remain. Cancel has the focus and changes nothing. **Delete serving** → `deleteServing`: the serving goes and its ID is retired (never reused; kept across restores, §11.2), in one write. Deleting the last serving removes the Food's serving record in that write and shows the empty state; the Food stays. Logged meals hold grams, so none changes.
+**Delete** asks first: "Delete serving? Delete {label} from {food}? Meals you've already logged aren't affected." — with "{next} becomes the default." when it's the default and others remain. Cancel has the focus and changes nothing. **Delete serving** → `deleteServing`: the serving goes and its ID is retired (never reused; kept across restores, §11.2), in one write. Deleting the last serving removes the Food's serving record in that write and shows the empty state; the Food stays. Logged meals keep their own snapshot of the serving and its grams, so none changes; a serving ID a logged meal refers to stays reserved (§11.2). [V3 Slice 1 · C8]
 
 **After each change** Food detail is redrawn from the domain: focus goes to the saved serving's **Edit** (Add, Edit, Make default), or after a delete to the next serving's **Edit**, else **Add a serving**; the polite status line says "Saved {label}.", "{label} is now the default serving." or "Deleted {label}."
 
@@ -590,7 +594,7 @@ A **Servings** section after the Per 100 g table. Servings are user data (`userF
 
 **Stale or failed.** Every control names its serving by ID and is checked against what's stored now: a serving that's gone (e.g. deleted in another tab) changes nothing, and Food detail is redrawn with "That serving no longer exists." A change the domain or store rejects is never announced as saved: "That didn't save. Nothing was changed." (§13.3), and nothing changes. As for every other change in the app, the write to browser storage then happens in the background (§4.8, A-24): if that later fails, the "Saved {label}." line has already been shown and the header's save status turns to "Not saved", with its retry.
 
-**Not here.** Serving-aware logging. Logged meals still store grams only. **Release blocker (C8):** serving-aware logging must not ship until logged-meal snapshots carry serving metadata and the reserved-ID carry-forward (§11.2) also protects serving IDs that logged meals refer to.
+**Logged meals** [V3 Slice 1 · C8]. Editing, renaming or deleting a serving here never changes a meal already logged with it: the logged meal shows the serving as it was when logged (§4.3.3). Logging by serving is §5.5.1.
 
 ### 7.4 Custom Food form [APPROVED rules A-27 · UI IMPLEMENTATION NOTE I-31]
 
@@ -618,7 +622,7 @@ The Log Foods segment in "pick" mode: same search, favourites and recents. Choos
 - Before confirming, show which Saved Meals use the Food: `getFoodUsage(foodId)` → `savedMealIds` (history is never a dependency). [APPROVED A-37]
 - Dialog: "Delete *{name}*? {n} Saved Meal(s) use it and will need a replacement before you can log them: {list}. Meals you've already logged aren't affected."
 - → `deleteCustomFood(id)`. Afterwards: "Deleted. {n} Saved Meal(s) need a fix" with links from `affectedSavedMealIds`.
-- History: logged meals that used it keep showing its snapshot name and values.
+- History: logged meals that used it keep showing its snapshot name and values, including any serving they were logged with; the serving IDs they refer to stay reserved (§11.2). [V3 Slice 1 · C8]
 - Its named servings go with it, in the same write, and their IDs are retired so they are never reused (§5.5.1). [V3 Slice 1 · C6] When it has any, the dialog says so before "Meals you've already logged aren't affected.": "Its serving will be deleted too." / "Its {n} servings will be deleted too." [V3 Slice 1 · C7]
 
 ### 7.7 Units and basis [APPROVED A-16]
@@ -768,7 +772,7 @@ The UI may keep its own small settings in `preferences.appPreferences` via `upda
 | Step | Behaviour |
 |---|---|
 | Start | Settings → Data → **Download backup** |
-| What's exported | `exportUserData()`: targets, Custom Foods, Saved Meals, Days with their logged meals, preferences, and named servings (`userFoodData`). Format `macro-tracker-v2-backup`, version 2 (`BACKUP_FORMAT_VERSION`), `exportedAt`. Not included: Core Foods, Library Meals, schemas (shipped with the app) or anything derived. |
+| What's exported | `exportUserData()`: targets, Custom Foods, Saved Meals, Days with their logged meals (including any logged-serving snapshots), preferences, and named servings (`userFoodData`). Format `macro-tracker-v2-backup`, version 2 (`BACKUP_FORMAT_VERSION`), `exportedAt`. Logged-serving snapshots are an optional field inside format 2 (V3 Slice 1 · C8, before format 2 was released), not a new version. Not included: Core Foods, Library Meals, schemas (shipped with the app) or anything derived. |
 | File | JSON, named `macro-tracker-backup-YYYY-MM-DD.json` (local date) |
 | Before download | A short sheet: "Backup of everything you've entered on this device: {n} logged days, {n} saved meals, {n} of your foods." **Download**. (Counts from `validateBackup(exportUserData()).summary`.) |
 | Success | "Backup downloaded." `appPreferences.lastBackupAt` updated. |
@@ -792,6 +796,8 @@ The UI may keep its own small settings in `preferences.appPreferences` via `upda
 | 6 Failure | A validation failure at this step shows the same messages as 3a, with current data untouched [APPROVED A-26]. If the durable save then fails, the normal save-error banner applies (the restored data is in the app; Try again / Download). |
 
 **Reserved serving IDs [V3 Slice 1 · C5].** A restore keeps every serving ID this device has used: servings here that aren't in the backup are removed but their IDs stay reserved, and a serving deleted here that the backup still has comes back with the backup's definition (same ID). Recovery from stored data that can't be opened, and Start over (§13.1), don't carry reserved IDs forward: there is no readable data to carry them from.
+
+**Logged servings [V3 Slice 1 · C8 · APPROVED A-49].** Every serving ID a logged meal refers to is reserved: it is always a live or a retired serving, for the same Food (the store checks this on every write that changes logged days or servings, and when stored data is opened). A restore also keeps the IDs this device's logged meals refer to, even though the restore replaces those logged meals. A backup must be consistent on its own — each serving ID its logged meals refer to is a serving or retired ID in that backup, for one Food, and each snapshot's grams are what its serving and count come to — or it is `BACKUP_INVALID` and nothing changes; the restore also refuses a result that would leave one of the restored meals' IDs unreserved (`BACKUP_INVALID`), never repairing it. The preview counts keep their C5 meaning: a logged reference is never counted as a serving removed or brought back. A format 1 backup, or a format 2 backup from before C8, has no logged servings and restores as before; nothing is invented for its logged meals.
 
 ### 11.3 Earlier-format copies [V3 Slice 1 · C4]
 
@@ -882,13 +888,14 @@ The UI explains what happened and what to do in plain language. Error codes, IDs
 | `MEAL_NEEDS_REPLACEMENT` | logging an invalid Saved Meal | route to §6.5 |
 | `MEAL_INVALID` | copy/duplicate an invalid meal; bad ingredient | "This meal uses a food that's been deleted. Replace it first." |
 | `INVALID_QUANTITY` / `UNSUPPORTED_UNIT` | gram fields | "Enter a weight above 0 g" |
-| `INVALID_SERVING_COUNT`, `AMOUNT_TOO_SMALL`, `SERVING_NOT_FOUND` | amount control (§5.5.1) | next to the count; Log and Add to a meal disabled |
+| `INVALID_SERVING_COUNT`, `AMOUNT_TOO_SMALL`, `SERVING_NOT_FOUND` | amount control (§5.5.1); also from `logFood` with a serving (V3 Slice 1 · C8) | next to the count; Log and Add to a meal disabled. From Log itself (shouldn't be reachable): the same wording, in the sheet's error line |
+| `AMOUNT_AMBIGUOUS` | `logFood` / `resolveAmount` given grams and a serving together | programming error (the UI sends one or the other); nothing written |
 | `INVALID_SERVING` (with `details[].field`) | Add a serving (§5.5.2), Add / Edit serving on Food detail (§7.3.1) | per-field messages |
 | `SERVING_ID_UNAVAILABLE` | Add a serving | "That serving couldn't be saved. Nothing was changed. Try again." |
 | `SERVING_NOT_FOUND` | Food detail servings (§7.3.1) | Food detail redrawn as stored now: "That serving no longer exists." Nothing changed |
 | `VALIDATION_FAILED`, `PERSIST_FAILED` on a serving change | Food detail servings (§7.3.1) | "That didn't save. Nothing was changed." — never a "Saved" / "Deleted" message. A later background write failure shows in the save status (§4.8) |
 | `INVALID_FOOD` (with `details[].field`) | Custom Food form | per-field messages (§7.4) |
-| `INVALID_MEAL`, `INVALID_MEAL_INSTANCE` | editors | per-field ("Give it a name", "Add at least one ingredient") |
+| `INVALID_MEAL`, `INVALID_MEAL_INSTANCE` | editors | per-field ("Give it a name", "Add at least one ingredient"). A bad `snapshotIndex` in a logged-meal edit (§4.3.4) is a programming error: generic message, nothing written |
 | `INVALID_TARGETS` (with details) | target form | "Targets need to be whole grams, 0 or more" |
 | `FOOD_NOT_FOUND`, `MEAL_NOT_FOUND`, `MEAL_INSTANCE_NOT_FOUND`, `DAY_NOT_FOUND`, `INGREDIENT_NOT_FOUND`, `NOT_FOUND` | stale references | "That {thing} no longer exists." and refresh |
 | `CORE_FOOD_READ_ONLY`, `LIBRARY_MEAL_READ_ONLY`, `IMMUTABLE_ID`, `READ_ONLY`, `INVALID_*` enum codes, `INVALID_ARGUMENT` | programming errors (UI shouldn't allow them) | generic "Something went wrong. Nothing was changed." + Details |
@@ -1007,7 +1014,7 @@ No dead ends: every pushed view has back; every sheet has cancel; every empty st
 | Layout, navigation, focus, copy, accessibility | All P/C/F arithmetic (`macros.js`) |
 | Local date for display; calls `getToday()` for "today" | Validation (schemas, invariants, finite numbers, Custom Food rules) |
 | Parsing text input to numbers; empty → "required" | Day completeness, day-type history and target snapshots |
-| Choosing which domain call to make and when | Historical snapshots; what a logged meal contains |
+| Choosing which domain call to make and when | Historical snapshots; what a logged meal contains, including logged-serving snapshots and the text of their count (`formatServingCount`) |
 | Formatting numbers with `macros.roundMacros` | Coach tiers and ordering; Progress statuses and aggregates |
 | Turning `DomainError.code` into messages | Persistence, atomic writes, revision/conflict detection, save status |
 | File download / file picking for backups | Backup format, validation and atomic restore |
@@ -1025,7 +1032,7 @@ These are enforced by existing tests once the UI directory is classified as `run
 |---|---|
 | **App start** | `openBrowserDataLayer()` → `{ app, adapter }` · `requestPersistentStorage()` · on `DATA_INVALID`: `error.readStoredRecord()` |
 | **Global** | `getPersistenceStatus()` · `onPersistenceChange()` · `flushPersistence()` · `retryPersistence()` · `getToday()` |
-| **Today** | `getDaySummary` · `getDay` · `createDay` · `getAllCurrentTargets` · `getCurrentTargets` · `previewDayTypeChange` · `updateDayType` · `applyCurrentTargetsToToday` · `setDayLoggingComplete` · `updateMealInstance` · `previewMealInstanceUpdate` · `deleteMealInstance` · `deleteDay` · `getMeal` · `createSavedMeal` · `updateSavedMeal` · `macros.roundMacros` |
+| **Today** | `getDaySummary` · `getDay` · `createDay` · `getAllCurrentTargets` · `getCurrentTargets` · `previewDayTypeChange` · `updateDayType` · `applyCurrentTargetsToToday` · `setDayLoggingComplete` · `updateMealInstance` · `previewMealInstanceUpdate` · `deleteMealInstance` · `deleteDay` · `getMeal` · `createSavedMeal` · `updateSavedMeal` · `macros.roundMacros` · `formatServingCount` (V3 C8) |
 | **Log** | `searchFoods` · `getRecentFoods` · `getFood` · `getPreferences` · `getSavedMeals` · `getLibraryMeals` · `getRecentMeals` · `calculateMealMacros` · `previewLogFood` · `previewMealInstance` · `logFood` · `createMealInstance` · `createSavedMeal` · `setFavoriteFood` · `setFavoriteMeal` · `searchMeals` · `getServings` · `createServing` · `resolveAmount` · `SERVING_COUNT_QUICK_PICKS` (V3 C6) · `updateServing` · `deleteServing` · `setDefaultServing` (V3 C7) |
 | **Meals** | `getSavedMeals` · `getLibraryMeals` · `getMeal` · `calculateMealMacros` · `createSavedMeal` · `updateSavedMeal` · `replaceSavedMealIngredient` · `duplicateSavedMeal` · `deleteSavedMeal` · `setFavoriteMeal` · `previewMealInstance` · `createMealInstance` · `searchMeals` |
 | **Foods** | `searchFoods` · `getFood` · `validateCustomFood` · `createCustomFood` · `updateCustomFood` · `deleteCustomFood` · `setFavoriteFood` · `setDislikedFood` · `constants.FOOD_STATES` · `getCustomFoods` · `getFoodUsage` |
@@ -1053,7 +1060,7 @@ These are enforced by existing tests once the UI directory is classified as `run
 | A-10 | Day-type change (today or past): logged food unchanged; replaced snapshot kept; switching back restores it; otherwise current targets; same type = no-op. | Locked; `2046613` |
 | A-11 | `applyCurrentTargetsToToday()` is explicit, today only, changes nothing else. | Locked; `2046613` |
 | A-12 | Changing current targets affects new Days only; never an existing snapshot. | Locked; domain |
-| A-13 | Logged meals are historical snapshots: unaffected by Food/Saved Meal edits or deletions; editing a logged meal never changes its Saved Meal. | Locked; domain |
+| A-13 | Logged meals are historical snapshots: unaffected by Food/Saved Meal edits or deletions; editing a logged meal never changes its Saved Meal. V3 Slice 1 · C8: also unaffected by serving edits or deletions (A-49). | Locked; domain |
 | A-14 | After editing a logged meal: log the change only / save as a new Saved Meal / update the Saved Meal after confirmation. | `schema.md` |
 | A-15 | Library Meals are app-managed, read-only, loggable; Save a copy makes an independent Saved Meal; Library favourites are allowed, stay in Library, and don't carry over to copies. | Locked; `f040b70` |
 | A-16 | Food state explicit and never converted; nutrition per 100 g; quantities in grams (canonical). V3 Slice 1 · C6: a named serving is an alternate way to enter grams, resolved by the domain (§5.5.1); what is logged is still grams. | Locked; domain |
@@ -1066,7 +1073,7 @@ These are enforced by existing tests once the UI directory is classified as `run
 | A-23 | Browser-first; IndexedDB via the browser adapter; canonical data via `src/browser/app-data.js`; stored user data wins over seed; invalid stored data is never silently overwritten. | Locked; `f040b70` |
 | A-24 | Save status `saved` / `saving` / `error` / `conflict` exposed for every adapter through the data layer (`getPersistenceStatus`, `onPersistenceChange`, `flushPersistence`, `retryPersistence`); a failed background save keeps the change in memory and must be visible and actionable. | Approved; domain |
 | A-25 | No authentication or cloud sync in V2; storage stays sync-compatible. | Locked |
-| A-26 | Manual backup/restore; versioned format; restore validates everything before one atomic replace; failure leaves data untouched. | Locked; `2046613` |
+| A-26 | Manual backup/restore; versioned format; restore validates everything before one atomic replace; failure leaves data untouched. V3 Slice 1 · C8: logged-serving IDs are validated and carried forward (§11.2). | Locked; `2046613` |
 | A-27 | Custom Food rules: required name/category/state; P/C/F finite ≥ 0; P + C + F ≤ 100 g per 100 g (+1 g tolerance); names trimmed; duplicate names warn, never block. | Domain |
 | A-28 | Legacy pages are retired reference only; not UI templates. | Locked |
 | A-29 | "Today" is the device's local calendar date (`getToday()`). | Domain; incident rule |
@@ -1089,6 +1096,8 @@ These are enforced by existing tests once the UI directory is classified as `run
 | A-46 | Food detail opened from the Food picker is information-only: no Log this food, Add to a meal, Favourite, Don't suggest, Edit or Delete, and no choose action. Selection stays with the picker; Back returns to it with its search, picker state and the Saved Meal draft kept. V3 Slice 1 · C7: the Food's servings are listed read-only (§7.3.1). | Approved; product decision (finalized) |
 | A-47 | Food detail opened from a Coach top-up Food offers Favourite, Don't suggest and Custom Food Edit and Delete as elsewhere, but not Log this food (the Coach has its own Log for top-ups). Core Foods stay read-only; deletion follows §7.6; Back returns to the Coach. No Coach-specific food management. V3 Slice 1 · C7 exception: servings are listed read-only there, not managed (§7.3.1). | Approved; product decision (finalized) |
 | A-48 | A Custom Food edited from the Log flow returns to the Log quantity sheet for that Food after Save changes (not to a standalone Food detail), keeping the Log context where the session keeps it. | Approved; product decision |
+| A-49 | Logged servings (V3 Slice 1 · C8). Logging by serving stores on that ingredient a domain-made snapshot `serving: { id, label, grams, approximate, count: { numerator, denominator } }` (the count exact, in lowest terms; typed text not kept). Grams stay canonical and authoritative for every macro; a grams entry has no snapshot. History shows the snapshot, never the current serving. Every serving ID a logged meal refers to stays live or retired for the same Food, across deletes and restores. Format 2 is extended in place (it had not been released); no format 3, no new migration. The meal tray stays grams; the Coach is unchanged. | Approved; C8 decisions D1, D3, D4, D5; domain `days.js`, `store.js`, `serving-ids.js` |
+| A-50 | Editing a logged meal (V3 Slice 1 · C8): a name or slot change, or the same grams, keeps a row's serving snapshot; changing that row's grams drops it (the row becomes a grams entry). Existing rows are paired by `snapshotIndex`; an added row never takes over a snapshot. No count editing. | Approved; C8 decision D2; domain `days.js` |
 
 ---
 
@@ -1158,6 +1167,8 @@ How the UI implements the approved decisions. Followed as written.
 | I-58 | Log reaches Food detail through a **Food details** action on the quantity sheet; the Food row keeps opening the quantity sheet. | 5.5, 7.3 |
 | I-59 | **Add to a meal** from Food detail opens the quantity step first (grams are required). | 7.3 |
 | I-60 | An alias identical to the Food's name isn't repeated under other names on Food detail. | 7.3 |
+| I-61 | Logged serving context (V3 C8): "{count} × {label} · {grams} g each" under the food name in the logged-meal detail, and "Logged as …" in the editor; ≈/estimate as elsewhere; "Grams changed: this will save as a grams entry." once the preview drops a snapshot. Count text: whole number, else an exact decimal of at most 2 places, else a fraction ("2", "1.5", "1 1/3"). Not shown on Today's slot rows, Progress or the Coach. | 4.3.3, 4.3.4 |
+| I-62 | Editor and detail tables (V3 C8): after Remove, focus goes to the grams field in that place (or the last); the first data column of `.ingredients` tables doesn't wrap (the grams column; protein in Food detail's per-100 g table). | 4.3.4 |
 
 ---
 
@@ -1200,6 +1211,7 @@ If the UI finds it needs a number or rule the domain doesn't provide, the implem
 | F-15 | Meal and coaching preference toggles |
 | F-16 | Backup reminders and automatic backups |
 | F-17 | Open decision (V3, after C6): may the Coach top-up use the amount control? Opening at one serving could count as a suggested portion under I-38. Until decided, the Coach's quantity sheet stays grams only. |
+| F-18 | V3, after C8: serving rows in the meal tray, and editing a logged serving's count (today a logged serving's grams can be changed, which makes it a grams entry). |
 
 ---
 

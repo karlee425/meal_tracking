@@ -618,6 +618,8 @@ export function logErrorMessage(e) {
     case 'INVALID_SERVING': return 'Check the fields above.';
     case 'SERVING_ID_UNAVAILABLE': return 'That serving couldn’t be saved. Nothing was changed. Try again.';
     case 'SERVING_NOT_FOUND': return 'That serving no longer exists.';
+    case 'INVALID_SERVING_COUNT': return AMOUNT_MESSAGES.INVALID_SERVING_COUNT;
+    case 'AMOUNT_TOO_SMALL': return AMOUNT_MESSAGES.AMOUNT_TOO_SMALL;
     default: return errorMessage(e);
   }
 }
@@ -642,8 +644,18 @@ export function createLogActions(app) {
     logMeal({ date, mealSlot, mealId, ingredients, dayType }) {
       return logged(app.createMealInstance({ date, mealSlot, mealId, ...(ingredients ? { ingredients } : {}), ...withType(dayType) }), date);
     },
-    logFood({ date, mealSlot, foodId, quantity, dayType }) {
-      return logged(app.logFood({ date, mealSlot, foodId, quantity, ...withType(dayType) }), date);
+    /**
+     * One Food, by grams ({ quantity }) or by a serving ({ servingId, count } — the count as typed).
+     * A serving goes to the domain as chosen: it resolves the grams and keeps the serving's snapshot
+     * (C8). Nothing about the serving is built or checked here.
+     */
+    logFood({ date, mealSlot, foodId, quantity, servingId, count, dayType }) {
+      // Each part of the amount is passed on only if given, so the domain sees exactly what was asked
+      // for and refuses anything ambiguous or incomplete (AMOUNT_AMBIGUOUS, INVALID_SERVING_COUNT …).
+      const amount = servingId === undefined && count === undefined
+        ? { quantity }
+        : { ...(quantity !== undefined ? { quantity } : {}), ...(servingId !== undefined ? { servingId } : {}), ...(count !== undefined ? { count } : {}) };
+      return logged(app.logFood({ date, mealSlot, foodId, ...amount, ...withType(dayType) }), date);
     },
     /** The tray as one logged meal; optionally also a new Saved Meal with the same ingredients. */
     logTray({ date, mealSlot, ingredients, mealName, dayType, alsoSave }) {
@@ -1140,7 +1152,7 @@ export const logScreen = {
     function run(spec, dayType) {
       let result;
       if (spec.kind === 'meal') result = actions.logMeal({ date: ctx.date, mealSlot: spec.slot, mealId: spec.mealId, ingredients: spec.ingredients, dayType });
-      else if (spec.kind === 'food') result = actions.logFood({ date: ctx.date, mealSlot: spec.slot, foodId: spec.foodId, quantity: spec.quantity, dayType });
+      else if (spec.kind === 'food') result = actions.logFood({ date: ctx.date, mealSlot: spec.slot, foodId: spec.foodId, ...spec.amount, dayType });
       else {
         result = actions.logTray({ date: ctx.date, mealSlot: spec.slot, ingredients: spec.ingredients, mealName: spec.mealName, alsoSave: spec.alsoSave, dayType });
         state.tray = [];
@@ -1364,7 +1376,10 @@ export const logScreen = {
             if (!ui.resolved) { showAmountError(); break; }
             const slot = requireSlot();
             if (!slot) break;
-            commit({ kind: 'food', slot, foodId: ui.food.id, quantity: ui.resolved.quantity });
+            // A serving is logged as the serving and count chosen (the domain keeps its snapshot, C8);
+            // grams as the grams. The tray stays grams only (Add to a meal, below).
+            const amount = ui.resolved.serving ? { servingId: ui.resolved.serving.id, count: ui.amount.countText } : { quantity: ui.resolved.quantity };
+            commit({ kind: 'food', slot, foodId: ui.food.id, amount });
             break;
           }
           case 'add-to-tray': {

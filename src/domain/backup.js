@@ -133,6 +133,11 @@ export function createBackupApi(ctx) {
     return errors;
   }
 
+  /** The restore's userFoodData and counts, against this device's data at this moment (serving-ids.js). */
+  function carryForward(data) {
+    return carryForwardServingIds(data.userFoodData, store.get('userFoodData'), { currentDays: store.get('days'), restoredDays: data.days });
+  }
+
   function summaryOf(data) {
     return {
       customFoods: data.customFoods.length,
@@ -171,9 +176,16 @@ export function createBackupApi(ctx) {
       if (!errors.length) errors = referenceErrors(data);
       let servingIds = null;
       if (!errors.length) {
-        // Only for a valid backup: the carry-forward is never computed from rejected data.
-        const carried = carryForwardServingIds(data.userFoodData, store.get('userFoodData'));
-        servingIds = { carriedForward: carried.carriedForward, revived: carried.revived };
+        // Only for a valid backup: the carry-forward is never computed from rejected data. Against
+        // this device as it is now, logged-meal serving IDs included (C8); its postcondition refusal
+        // (BACKUP_INVALID) is reported like any other problem with the backup.
+        try {
+          const carried = carryForward(data);
+          servingIds = { carriedForward: carried.carriedForward, revived: carried.revived };
+        } catch (e) {
+          if (!(e instanceof DomainError && e.code === 'BACKUP_INVALID')) throw e;
+          errors = e.details && e.details.length ? e.details : [e.message];
+        }
       }
       return {
         valid: errors.length === 0,
@@ -188,9 +200,12 @@ export function createBackupApi(ctx) {
     /**
      * Replace ALL of the user's data with a backup. Validated in full first; on any problem
      * a DomainError (code as validateBackup) is thrown and nothing changes. Serving IDs this
-     * device had reserved are carried forward (serving-ids.js), against the data as it is at
-     * this moment. The replacement is one atomic write of every user collection, validated
-     * again by the store. Returns { restored: summary, servingIds: { carriedForward, revived } }.
+     * device had reserved — live, retired, or referred to by its logged meals (C8) — are carried
+     * forward (serving-ids.js), recomputed against the data as it is at this moment, never taken
+     * from an earlier preview. The replacement is one atomic write of every user collection,
+     * validated again by the store; a backup the store still refuses is BACKUP_INVALID, and a
+     * failed write is PERSIST_FAILED as before. Returns { restored: summary, servingIds:
+     * { carriedForward, revived } }.
      */
     restoreUserData(input) {
       const result = api.validateBackup(input);
@@ -198,9 +213,14 @@ export function createBackupApi(ctx) {
       const read = readBackup(input);
       const changes = {};
       for (const c of USER_COLLECTIONS) changes[c] = clone(read.data[c]);
-      const carried = carryForwardServingIds(read.data.userFoodData, store.get('userFoodData'));
+      const carried = carryForward(read.data);
       changes.userFoodData = carried.userFoodData;
-      store.commit(changes);
+      try {
+        store.commit(changes);
+      } catch (e) {
+        if (e instanceof DomainError && e.code === 'VALIDATION_FAILED') throw new DomainError('BACKUP_INVALID', `backup not restored: ${e.message}`, e.details);
+        throw e;
+      }
       return { restored: result.summary, servingIds: { carriedForward: carried.carriedForward, revived: carried.revived } };
     }
   };

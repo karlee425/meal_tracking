@@ -5,17 +5,20 @@
  * grams — kept in userFoodData next to the Food it belongs to (by foodId). Core Food and
  * Custom Food records are never changed to add one. Logging still records grams: the
  * serving is resolved to a canonical gram quantity (macros.servingQuantity) before preview,
- * logging or the meal tray see it.
+ * logging or the meal tray see it; a meal logged by serving also keeps a snapshot of it (C8,
+ * days.js logFood), and the tray stays grams.
  *
  *   getServings(foodId)                        the Food's servings, in order; the first is the default
  *   createServing(foodId, { label, grams, approximate })
  *                                              one new serving, appended, in one commit
- *   resolveAmount(foodId, amount)              { quantity, unit: 'g', text, rounded, serving }
+ *   resolveAmount(foodId, amount)              { quantity, unit: 'g', text, rounded, serving[, count] }
  *       amount: { quantity }                    grams, passed through as given
- *            or { servingId, count }            a serving × a count typed as text (parseServingCount)
+ *            or { servingId, count }            a serving × a count typed as text (parseServingCount);
+ *                                              count comes back as the exact reduced fraction (C8)
  *   parseServingCount(text)                    { n, d } (positive BigInts, lowest terms) or null
  *   isUnfinishedServingCount(text)             true while a count is still being typed ("1.", "1/", "1 1/", "0")
  *   parseServingGrams(text)                    a serving weight typed as text → a number, or null
+ *   formatServingCount({ numerator, denominator })  a logged count as text: "2", "1.5", "1/3", "1 1/3" (C8)
  *   updateServing(foodId, servingId, patch)    change label / grams / approximate; same ID, place, createdAt
  *   deleteServing(foodId, servingId)           remove it and retire its ID, in one commit
  *   setDefaultServing(foodId, servingId)       move it to the front (the default); nothing else changes
@@ -23,6 +26,8 @@
  * Deleting a Custom Food retires its serving IDs (foods.js deleteCustomFood). Serving IDs, live
  * and retired, are never reused: a new ID is drawn until it is unused, a bounded number of
  * times, and an ID never changes. Every change is one commit; a rejected one writes nothing.
+ * Logged meals may refer to a serving ID (days.js logFood, C8); the store keeps every such ID
+ * live or retired, and new IDs also avoid them directly.
  */
 
 import { DomainError, clone } from './util.js';
@@ -108,6 +113,36 @@ export function parseServingGrams(text) {
   return Number(t.replace(',', '.'));
 }
 
+/**
+ * A logged serving's exact count (C8: { numerator, denominator }, positive safe integers) as the
+ * text a screen shows. Exact, never rounded, in BigInt arithmetic:
+ *   a whole number                               2
+ *   else a decimal of at most 2 places, if exact  1.5   0.25   0.05
+ *   else a fraction, mixed when above 1           1/3   1 1/3   2/7
+ * A fraction not in lowest terms reads as its lowest terms. Anything else → INVALID_SERVING_COUNT.
+ * The text typed when logging is not kept, so 1.5 and 1 1/2 read the same way afterwards.
+ */
+export function formatServingCount(count) {
+  const ok = (x) => Number.isSafeInteger(x) && x >= 1;
+  if (!count || typeof count !== 'object' || !ok(count.numerator) || !ok(count.denominator)) {
+    throw new DomainError('INVALID_SERVING_COUNT', `not a serving count: ${JSON.stringify(count)}`);
+  }
+  const HUNDREDTHS = 100n;
+  let n = BigInt(count.numerator);
+  let d = BigInt(count.denominator);
+  const g = gcd(n, d);
+  n /= g;
+  d /= g;
+  if (d === 1n) return String(n);
+  if (HUNDREDTHS % d === 0n) {
+    const exact = n * (HUNDREDTHS / d);
+    const places = String(exact % HUNDREDTHS).padStart(2, '0').replace(/0$/, '');
+    return `${exact / HUNDREDTHS}.${places}`;
+  }
+  const whole = n / d;
+  return whole === 0n ? `${n}/${d}` : `${whole} ${n % d}/${d}`;
+}
+
 export function createServingsApi(ctx) {
   const { store } = ctx;
   const userFoodData = () => store.get('userFoodData');
@@ -145,11 +180,16 @@ export function createServingsApi(ctx) {
     return errors;
   }
 
-  /** A serving ID not used by any live or retired serving; SERVING_ID_UNAVAILABLE after SERVING_ID_ATTEMPTS draws. */
+  /**
+   * A serving ID not used by any live or retired serving, nor by any logged meal's serving snapshot
+   * (the store already keeps those live or retired; this is a second guard).
+   * SERVING_ID_UNAVAILABLE after SERVING_ID_ATTEMPTS draws.
+   */
   function newServingId() {
     const ufd = userFoodData();
     const taken = new Set(ufd.retiredServingIds);
     for (const r of ufd.foods) for (const s of r.servings) taken.add(s.id);
+    for (const d of store.get('days')) for (const mi of d.mealInstances) for (const ing of mi.ingredients) if (ing.serving) taken.add(ing.serving.id);
     for (let i = 0; i < SERVING_ID_ATTEMPTS; i++) {
       const id = `srv_${ctx.newUuid()}`;
       if (SERVING_ID.test(id) && !taken.has(id)) return id;
@@ -228,7 +268,8 @@ export function createServingsApi(ctx) {
      * Delete a serving: it leaves the Food's list and its ID is retired (never reused), in one
      * commit. Deleting the Food's last serving removes the Food's whole serving record in that
      * same commit. The Food itself is never touched, and meals already logged are unaffected
-     * (they hold grams). Throws FOOD_NOT_FOUND or SERVING_NOT_FOUND without writing.
+     * (they keep their own snapshot; the retired ID stays reserved). Throws FOOD_NOT_FOUND or
+     * SERVING_NOT_FOUND without writing.
      * Returns { deletedServingId, remaining } — remaining: the Food's servings now, in order.
      */
     deleteServing(foodId, servingId) {
@@ -267,9 +308,12 @@ export function createServingsApi(ctx) {
      *   { servingId, count }   count is the text typed (parseServingCount); the serving must be
      *                          one of this Food's servings now
      * Returns { quantity, unit: 'g', text, rounded, serving }, serving being
-     * { id, label, grams, approximate } or null for grams.
+     * { id, label, grams, approximate } or null for grams; for a serving also count, the exact
+     * fraction in lowest terms as { numerator, denominator } (positive safe integers) — what a
+     * logged meal keeps (C8).
      * Throws AMOUNT_AMBIGUOUS (neither or both forms), FOOD_NOT_FOUND, INVALID_QUANTITY,
-     * SERVING_NOT_FOUND, INVALID_SERVING_COUNT, AMOUNT_TOO_SMALL (rounds to 0 g).
+     * SERVING_NOT_FOUND, INVALID_SERVING_COUNT (also a count whose exact fraction needs numbers
+     * larger than safe integers, however the grams would round), AMOUNT_TOO_SMALL (rounds to 0 g).
      */
     resolveAmount(foodId, amount = {}) {
       const a = amount || {};
@@ -287,10 +331,16 @@ export function createServingsApi(ctx) {
       if (!s) throw new DomainError('SERVING_NOT_FOUND', `no serving ${a.servingId} for ${foodId}`);
       const count = parseServingCount(a.count);
       if (!count) throw new DomainError('INVALID_SERVING_COUNT', `not a serving count: ${JSON.stringify(a.count)}`);
+      const SAFE = BigInt(Number.MAX_SAFE_INTEGER);
+      if (count.n > SAFE || count.d > SAFE) throw new DomainError('INVALID_SERVING_COUNT', 'that count has too many digits');
       const r = servingQuantity(s.grams, count);
       if (r.centigrams > BigInt(Number.MAX_SAFE_INTEGER)) throw new DomainError('INVALID_SERVING_COUNT', 'that amount is too large');
       if (r.centigrams === 0n) throw new DomainError('AMOUNT_TOO_SMALL', 'the amount rounds to 0 g');
-      return { quantity: r.quantity, unit: 'g', text: r.text, rounded: r.rounded, serving: { id: s.id, label: s.label, grams: s.grams, approximate: s.approximate } };
+      return {
+        quantity: r.quantity, unit: 'g', text: r.text, rounded: r.rounded,
+        serving: { id: s.id, label: s.label, grams: s.grams, approximate: s.approximate },
+        count: { numerator: Number(count.n), denominator: Number(count.d) }
+      };
     }
   };
 }

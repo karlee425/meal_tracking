@@ -199,10 +199,13 @@ test('preview, Log and Add to a meal all get the same canonical grams', () => {
     assert.deepEqual(trayIngredients([{ foodId: CORE, foodName: 'x', text: amount.text }]), [{ foodId: CORE, quantity: expected, unit: 'g' }], 'tray');
     const logged = app.logFood({ date: TODAY, mealSlot: 'lunch', foodId: CORE, quantity: amount.quantity });
     assert.equal(logged.ingredients[0].quantity, expected, 'Log');
+    // C8: Log sends the serving and count; the domain resolves the same grams and keeps the snapshot.
+    const bySrv = app.logFood({ date: TODAY, mealSlot: 'lunch', foodId: CORE, servingId: s.id, count });
+    assert.equal(bySrv.ingredients[0].quantity, expected, 'Log by serving');
   }
   // log.js takes the number from the same resolved amount in all three places.
   assert.match(fn('function resolveSheet('), /previewLogFood\(\{ date: ctx\.date, foodId: sheet\.food\.id, quantity: amount\.quantity \}\)/);
-  assert.match(caseBody('log-food'), /resolveSheet\(ui\);[^\n]*\n\s*if \(!ui\.resolved\) \{ showAmountError\(\); break; \}[\s\S]*commit\(\{ kind: 'food', slot, foodId: ui\.food\.id, quantity: ui\.resolved\.quantity \}\);/);
+  assert.match(caseBody('log-food'), /resolveSheet\(ui\);[^\n]*\n\s*if \(!ui\.resolved\) \{ showAmountError\(\); break; \}[\s\S]*const amount = ui\.resolved\.serving \? \{ servingId: ui\.resolved\.serving\.id, count: ui\.amount\.countText \} : \{ quantity: ui\.resolved\.quantity \};\n\s*commit\(\{ kind: 'food', slot, foodId: ui\.food\.id, amount \}\);/, 'C8: a serving is logged as the serving and count; grams as the resolved grams');
   assert.match(caseBody('add-to-tray'), /state\.tray\.push\(\{ foodId: ui\.food\.id, foodName: ui\.food\.name, text: added\.text \}\);\n\s*confirmation = \{ message: `Added \$\{ui\.food\.name\} as \$\{added\.text\} g\.` \};/);
   assert.match(caseBody('add-to-tray'), /const q = added\.quantity; \/\/ grams as typed, exactly as before\n\s*state\.tray\.push\(\{ foodId: ui\.food\.id, foodName: ui\.food\.name, text: String\(q\) \}\);/, 'grams mode adds what it always did, silently');
   assert.ok(!/serving|approximate|≈|estimate/.test(caseBody('add-to-tray').replace(/added\.serving|\/\/[^\n]*/g, '')), 'no serving metadata goes into the tray');
